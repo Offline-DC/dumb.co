@@ -1,0 +1,100 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  height: 100%;
+}
+
+.art {
+  width: 100%;
+}
+
+.cta-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+/* --- Dumb & Co. palette (from the art) --- */
+:root {
+  --ink: #1e2442; /* deep indigo outline */
+  --teal: #3fb9c7; /* ocean teal */
+  --violet: #6c52d6; /* electric violet */
+  --rose: #e45a86; /* hot rose */
+  --gold: #f3c45c; /* parchment gold */
+  --cream: #efe3c6; /* background paper */
+}
+
+/* Glowing Shopify link */
+.cta-link {
+  position: relative;
+  display: inline-block;
+  padding: 16px 24px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #000; /* black text (per your request) */
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  background: var(--gold);
+  text-align: center;
+}
+
+.top {
+  font-size: 2rem;
+}
+
+.cta-link:hover::before {
+  opacity: 0.9;
+}
+
+.page-container {
+  display: relative;
+  padding-bottom: 0.5rem;
+}
+
+/* ✨ Add playful glow + shimmer animation on hover */
+.cta-link {
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-shadow: 0 0 20px var(--gold), 0 0 24px var(--rose), 0 0 36px var(--rose);
+}
+
+.cta-link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* fun glow and subtle lift */
+.cta-link:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+
+/* shiny streak sweep */
+.cta-link:hover::before {
+  opacity: 1;
+  animation: shimmer 1.2s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
