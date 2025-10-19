@@ -38,8 +38,35 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
+
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-6J99WZC0Y0"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-6J99WZC0Y0");
+    </script>
   </head>
   <body>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const shopLink = document.querySelector(".cta-link");
+        if (shopLink) {
+          shopLink.addEventListener("click", function () {
+            gtag("event", "shop_click", {
+              event_category: "engagement",
+              event_label: "Shopify Link",
+              value: 1,
+            });
+          });
+        }
+      });
+    </script>
     <main>
       <div class="page-container">
         <div>
