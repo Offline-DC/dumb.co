@@ -46,20 +46,20 @@ html {
   transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.cta-link .line.big {
+.line.big {
   font-size: 2rem;
   font-weight: 800;
   margin-bottom: 6px;
 }
 
-.cta-link .line.medium {
+.line.medium {
   font-size: 1.6rem;
   font-weight: 700;
   text-decoration: underline;
   margin-bottom: 4px;
 }
 
-.cta-link .line.small {
+.line.small {
   font-size: 1rem;
   font-weight: 500;
   opacity: 0.85;
