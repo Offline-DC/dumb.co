@@ -33,16 +33,22 @@ html {
   padding: 16px 24px;
   border-radius: 14px;
   text-decoration: none;
-  color: #000; /* black text (per your request) */
+  color: #000; /* black text */
   font-weight: 800;
   letter-spacing: 0.2px;
-
-  background: var(--gold);
+  background: #44d62c; /* bright green */
   text-align: center;
+
+  /* Glow effect */
+  box-shadow: 0 0 8px rgba(68, 214, 44, 0.6), 0 0 16px rgba(68, 214, 44, 0.5),
+    0 0 32px rgba(68, 214, 44, 0.4);
+
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .top {
   font-size: 2rem;
+  text-decoration: underline;
 }
 
 .cta-link:hover::before {
@@ -58,7 +64,6 @@ html {
 .cta-link {
   transition: all 0.3s ease;
   overflow: hidden;
-  box-shadow: 0 0 20px var(--gold), 0 0 24px var(--rose), 0 0 36px var(--rose);
 }
 
 .cta-link::before {
@@ -81,7 +86,9 @@ html {
 
 /* fun glow and subtle lift */
 .cta-link:hover {
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 0 12px rgba(68, 214, 44, 0.8), 0 0 24px rgba(68, 214, 44, 0.6),
+    0 0 48px rgba(68, 214, 44, 0.5);
 }
 
 /* shiny streak sweep */
