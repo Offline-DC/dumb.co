@@ -1,26 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>dumb phone I — half-step into dumb livin</title>
-    <meta
-      name="description"
-      content="dumb phone I — a half-step into dumb livin. syncs with your iPhone to help you unplug, stay connected, and live offline."
-    />
-    <meta
-      name="keywords"
-      content="dumb phone, offline living, digital minimalism, minimalist phone, flip phone, month offline, offline community"
-    />
-    <meta name="author" content="offline community" />
-    <meta
-      property="og:title"
-      content="dumb phone I — half-step into dumb livin"
-    />
-    <meta
-      property="og:description"
-      content="syncs with your iPhone to help you unplug and live offline."
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dumb.co</title>
     <meta property="og:image" content="https://dumb.co/art.jpg" />
     <meta property="og:url" content="https://dumb.co" />
     <meta property="og:type" content="website" />
@@ -37,7 +20,6 @@
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="stylesheet" href="styles.css" />
 
     <script
       async
@@ -53,40 +35,7 @@
     </script>
   </head>
   <body>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const shopLink = document.querySelector(".cta-link");
-        if (shopLink) {
-          shopLink.addEventListener("click", function () {
-            gtag("event", "shop_click", {
-              event_category: "engagement",
-              event_label: "Shopify Link",
-              value: 1,
-            });
-          });
-        }
-      });
-    </script>
-    <main>
-      <div class="page-container">
-        <div>
-          <img class="art" src="art.jpg" alt="dumb phone I — promo artwork" />
-        </div>
-        <div class="cta-container">
-          <a
-            class="cta-link"
-            href="https://shop.offline.community/products/dumbphone-1"
-            target="_blank"
-            aria-label="join the dumb community. half-step into dumb livin with dumb phone I — syncs with your iPhone. shop now."
-          >
-            <div class="line big">join the dumb community</div>
-            <div class="line medium">
-              half-step into dumb livin w/ dumb phone I
-            </div>
-            <div class="line small">syncs w/ ur iPhone</div>
-          </a>
-        </div>
-      </div>
-    </main>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

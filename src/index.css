@@ -4,10 +4,23 @@ html {
   padding: 0;
   background-color: black;
   height: 100%;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .art {
   width: 100%;
+}
+
+.ctas-container {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .ctas-container {
+    flex-direction: column;
+    align-items: center; /* centers the buttons in the column */
+  }
 }
 
 .cta-container {
@@ -29,7 +42,8 @@ html {
 /* Glowing Shopify link */
 .cta-link {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   padding: 16px 24px;
   border-radius: 14px;
   text-decoration: none;
@@ -49,7 +63,7 @@ html {
 .line.big {
   font-size: 2rem;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin: auto;
 }
 
 .line.medium {
@@ -62,7 +76,6 @@ html {
 .line.small {
   font-size: 1rem;
   font-weight: 500;
-  opacity: 0.85;
 }
 
 .cta-link:hover::before {
