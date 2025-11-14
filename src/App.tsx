@@ -1,42 +1,60 @@
-import { CTAButton } from "./CTAButton";
+import { useEffect } from "react";
+import Phone from "./Phone/Phone";
+import OfflineMode from "./OfflineMode";
+import DumbDumb from "./DumbDumb.tsx";
+import Dashboard from "./Dashboard.tsx"
+import Support from "./Support"
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import ReactGA from 'react-ga4';
+import "./App.css";
+import { filterProps } from "@mantine/core";
+
+export const OFFLINE_PHONE_NUMBER = "844-633-5463";
+
+function RouteChangeTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
+  return null;
+}
+
+function ExternalRedirect({url}: {url:string}){
+  useEffect(() => {
+    window.location.href = url;
+    }, [url]);
+    return null;
+}
 
 function App() {
+  ReactGA.initialize("G-J6NFHL9D1L");
   return (
-    <main>
-      <div className="page-container">
-        <div>
-          <img
-            className="art"
-            src="art.jpg"
-            alt="dumb phone I — promo artwork"
-          />
-        </div>
-        <CTAButton
-          href="https://shop.offline.community/products/dumbphone-1"
-          title="join the dumb community"
-          ariaLabel="join the dumb community. half-step into dumb livin with dumb phone I — syncs with your iPhone. shop now."
-        >
-          <div className="line medium">
-            half-step into dumb livin w/ dumb phone I
-          </div>
-          <div className="line small">syncs w/ ur iPhone</div>
-        </CTAButton>
-        <div className="ctas-container">
-          <CTAButton
-            href="https://shop.offline.community/products/month-offline-nyc"
-            title="Month Offline – January – NYC"
-          />
-          <CTAButton
-            href="https://shop.offline.community/products/month-offline-dc?utm_source=copyToPasteBoard&utm_medium=product-links&utm_content=web"
-            title="Month Offline – January – DC"
-          />
-          <CTAButton
-            href="https://shop.offline.community/products/month-offline-anywhere"
-            title="Dumb Organizers"
-          />
-        </div>
-      </div>
-    </main>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "auto .5rem",
+        maxWidth: "100%",
+      }}
+    >
+      <BrowserRouter>
+        <RouteChangeTracker />
+        <Routes>
+          <Route path="/" element={<Phone />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dumbdown"element={<DumbDumb />} />   
+          <Route path="/setup" element={<OfflineMode />} />
+          <Route path="/support" element={<Support />} />
+          <Route
+            path="/phone"
+            element={<ExternalRedirect url="https://shop.offline.community/products/offline-dumbphone-1" />}
+          />        
+        </Routes>
+    </BrowserRouter>
+
+
+    </div>
   );
 }
 

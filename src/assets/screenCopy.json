@@ -1,0 +1,8 @@
+{
+    "Home": ["one", "two"],
+    "About": "This is the about screen",
+    "Sign Up": "This is the contact screen",
+    "Operator":"Press 1 to speak with an operator",
+    "Team": ["Danny", "Grant", "Josh"],
+    "FAQ": "Frequently Asked Questions"
+}

@@ -1,0 +1,14 @@
+{
+    "dumbphoneNum": "Enter your dumphone number here e.g. +12024899285...be sure to include the '+1' prefix.",
+    "awayMessage": "Enter your away message here. You can tell anyone trying to get in touch with you how to reach you by including your dumbphone number and any other instructions you might want to give the people in your life instructing them on how to best communicate with you while you are Offline for the Month. Your away message will only send once to each unique number that sends you a text message.",
+    "message": "Hello World!",
+    "sender": "+1234567890",
+    "toggleOffline": "false",
+    "toggleSMS": "false",
+    "toggleAway": "false",
+    "toggleCallForward": "false",
+    "linkStopCallForward": "tel:%23%2321%23",
+    "linkStartCallForward": "tel:%2a%2a21%2a",
+    "senderList": ["+1234567890"],
+    "Instructions": "This DataJar was created by Offline Inc. for Month Offline participants to enable Offline Mode on the iPhone. To use this app, you need to enter your dumbphone number and an away message. You should also be sure to include the shortcodes for call forwarding which will vary based on your mobile network provider. The code for the '#' symbol is %23 and for the '*' operator is %2a. You can also toggle the SMS forwarding and Away message features. The app will help you manage your communication while you are offline for the month. Remember Less is M.O."
+}
