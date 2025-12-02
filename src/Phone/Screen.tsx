@@ -122,7 +122,7 @@ function Screen({ row, setRow, options, setOptions, screen, setScreen, navigatio
     display = "team @ offline • community";
     newOptions = [];
   } else if (screen === "events"){
-    display = <div>Dumb Dating Singles Night<br/>Wed. Nov. 12<br/>7pm until 10pm <br/>@ Hush Harbor<br/> 1337 H St. NE <br/>RSVP @ date.dumb.co<br /></div>
+    display = <div>Phone Free Art<br/>Gallery Party<br/><br/>Thurs. Dec. 11<br/>7pm until 10pm <br/>@ Hush Harbor<br/> 1337 H St. NE <br/><br/>No Phones<br /></div>
   } else if (screen === "Why?"){
     display = "Less is M.O."
   } else if (screen === "About") {
