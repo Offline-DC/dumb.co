@@ -1,39 +1,35 @@
 import { useState, useRef, useEffect } from "react";
 import Screen from "./Screen";
 import Navigation from "./Navigation";
-import Logo from "./Logo"
+import Logo from "./Logo";
 import Footer from "./Footer";
 import { OFFLINE_PHONE_NUMBER } from "../App";
-import Keypad from "./Keypad";
 import ReactGA from "react-ga4";
 
-
-export interface navigationItem{
+export interface navigationItem {
   screen: string;
   row: number;
 }
 
-
 function Phone() {
   const [row, setRow] = useState(0);
-  const [callNum] = useState("");
   const [navigationStack, setNavigationStack] = useState<navigationItem[]>([]);
   const [screen, setScreen] = useState("Home");
   const [keypadNum, setKeypadNum] = useState("");
   const [audioFile, setAudioFile] = useState("");
   const [options, setOptions] = useState<string[]>([]);
-  
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playSound = () => {
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-  }
-  audioRef.current = new Audio(`/audio/${audioFile}`);
-  audioRef.current.play();
-};
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    audioRef.current = new Audio(`/audio/${audioFile}`);
+    audioRef.current.play();
+  };
 
-useEffect(() => {
+  useEffect(() => {
     if (audioFile) {
       playSound();
     }
@@ -46,16 +42,7 @@ useEffect(() => {
     };
   }, [audioFile]);
 
-const stopSound = () => {
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    audioRef.current = null;
-  }
-};
-
   return (
-    
     <div
       style={{
         background: "#333",
@@ -72,7 +59,7 @@ const stopSound = () => {
         maxHeight: "calc(100vh - 20vh)",
       }}
     >
-            <Logo />
+      <Logo />
 
       <div
         style={{
@@ -96,7 +83,6 @@ const stopSound = () => {
           keypadNum={keypadNum}
           setKeypadNum={setKeypadNum}
           setAudioFile={setAudioFile}
-          
         />
       </div>
       <div
@@ -105,7 +91,7 @@ const stopSound = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          paddingTop:"5%",
+          paddingTop: "5%",
           paddingBottom: "5%",
         }}
       >
@@ -128,16 +114,18 @@ const stopSound = () => {
           onCenterClick={() => {
             const prev: navigationItem = {
               screen: screen,
-              row: row
-            }
+              row: row,
+            };
             playSound();
             setNavigationStack([...navigationStack, prev]);
             setRow(0);
             setScreen(options[row]);
           }}
           onCallClick={() => {
-              window.location.href = `tel:${keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER}`;
-              return;
+            window.location.href = `tel:${
+              keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER
+            }`;
+            return;
           }}
         />
         {/*<Keypad setKeypadNum={setKeypadNum} />*/}
