@@ -1,75 +1,74 @@
 .teal {
-    width: 100vw;
-    height: 100vh;
-    background-color: #008080;
-    display: flex;
-    align-items: flex-start;    /* Add this line */
-    justify-content: center;
-    padding-top: 10px;  
-    overflow: hidden;        /* Optional: adjust value as needed */
-
+  width: 100vw;
+  height: 100vh;
+  background-color: #008080;
+  display: flex;
+  align-items: flex-start; /* Add this line */
+  justify-content: center;
+  padding-top: 10px;
+  overflow: hidden; /* Optional: adjust value as needed */
 }
 .setup-container {
-    max-width: 400px;
-    background-color: #c3c3c3;
-    font-family: 'VT323', monospace;
-    display: grid;
-    width: 95vw;
-    height: 625px;
-    margin: 10px;
-    margin-top: 0px;
-    border-top: 2px solid white;
-    border-left: 2px solid white;
-    border-bottom: 2px solid #000;
-    border-right: 2px solid #000;
+  max-width: 400px;
+  background-color: #c3c3c3;
+  font-family: "VT323", monospace;
+  display: grid;
+  width: 95vw;
+  height: 625px;
+  margin: 10px;
+  margin-top: 0px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  border-bottom: 2px solid #000;
+  border-right: 2px solid #000;
 }
 
 .support-window {
-    margin-top: -30px;
-    height: 570px;
+  margin-top: -30px;
+  height: 570px;
 }
 
 .title-bar {
-    background-color: #0218aa;
-    margin: 2px 2px;
-    height: 30px;
-    display: flex;
-    align-items: center;
+  background-color: #0218aa;
+  margin: 2px 2px;
+  height: 30px;
+  display: flex;
+  align-items: center;
 }
 
-.title-bar-buttons{
-    display: flex;
-    margin-left: auto;
-    gap: 1px;
-    margin-right: 5px;
+.title-bar-buttons {
+  display: flex;
+  margin-left: auto;
+  gap: 1px;
+  margin-right: 5px;
 }
 
-.title-bar-button{
-    background-color: #c3c3c3;
-    width: 25px;
-    height: 25px;
-    border-top: 1px solid #b0b0b0;
-    border-left: 1px solid #b0b0b0;
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
+.title-bar-button {
+  background-color: #c3c3c3;
+  width: 25px;
+  height: 25px;
+  border-top: 1px solid #b0b0b0;
+  border-left: 1px solid #b0b0b0;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
 }
 
 .title-bar-button img {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-    object-fit: contain; /* Keeps aspect ratio */
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain; /* Keeps aspect ratio */
 }
 
 .grid-container {
-    display: grid;
-    color:black;
-    grid-template-columns: 1fr; /* 1/5 and 4/5 split */
-    gap: 16px; /* optional, for spacing between columns */
-    margin: 10px;
-    padding-bottom: 30px;
-    border-bottom: #767676 solid 1px;
-    height: 66vh;
+  display: grid;
+  color: black;
+  grid-template-columns: 1fr; /* 1/5 and 4/5 split */
+  gap: 16px; /* optional, for spacing between columns */
+  margin: 10px;
+  padding-bottom: 30px;
+  border-bottom: #767676 solid 1px;
+  height: 66vh;
 }
 
 @supports (-webkit-appearance: none) {
@@ -79,58 +78,59 @@
   }
 }
 
-@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
-    /* CSS rules specific to Internet Explorer */
-    .grid-container {
-        height: 64vh;
-    }
+@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  /* CSS rules specific to Internet Explorer */
+  .grid-container {
+    height: 64vh;
+  }
 }
 
-@-moz-document url-prefix() {  /* CSS rules specific to Firefox */
+@-moz-document url-prefix() {
+  /* CSS rules specific to Firefox */
   .grid-container {
     height: 74vh;
   }
 }
 
 @media screen and (min-width: 992px) {
-    .grid-container {
-        height: 74vh;
-    }
+  .grid-container {
+    height: 74vh;
+  }
 }
 
 .grid-item-1 {
-    padding:10px;
-    height:100%;
-    display: none;
-    background-color: turquoise;
+  padding: 10px;
+  height: 100%;
+  display: none;
+  background-color: turquoise;
 }
 .grid-item-2 {
-    color:black !important;
-    padding:10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  color: black !important;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.grid-item-2 h2{
-    font-size: 2.1em;
-    margin-bottom: 15px;
-    text-align: center;
+.grid-item-2 h2 {
+  font-size: 2.1em;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .grid-item-2 p {
-    font-size: 1.3em;
+  font-size: 1.3em;
 }
 
-.grid-item-2 button{
-    margin: 20px;
-    background-color: #c3c3c3;
-    width: 100px;
-    height: 45px;
-    border-top: 1px solid white;
-    border-left: 1px solid white;
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
+.grid-item-2 button {
+  margin: 20px;
+  background-color: #c3c3c3;
+  width: 100px;
+  height: 45px;
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
 }
 
 .vt323-regular {
@@ -140,69 +140,72 @@
 }
 
 h2 {
-    font-size: 1.3em;
+  font-size: 1.3em;
 }
 
 p {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 .title-bar h3 {
-    color:#fff;
-    margin-left: 10px;
+  color: #fff;
+  margin-left: 10px;
 }
 
 .bottom-navigation {
-    display: flex;
-    justify-content: flex-end; /* Align to the right */
-    height: 100%;             /* Optional: ensure it fills parent height */
-    padding-right: 16px;
-    margin-bottom:10px;      /* Optional: add some space from the right edge */
-    gap: 3px; 
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  height: 100%; /* Optional: ensure it fills parent height */
+  padding-right: 16px;
+  margin-bottom: 10px; /* Optional: add some space from the right edge */
+  gap: 3px;
 }
 
 .bottom-nav-button {
-    background-color: #c3c3c3;
-    width: 100px;
-    height: 45px;
-    border-top: 1px solid white;
-    border-left: 1px solid white;
-    border-bottom: 1px solid #000;
-    border-right: 1px solid #000;
+  background-color: #c3c3c3;
+  width: 100px;
+  height: 45px;
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
 }
 
 button {
-    font-family:'VT323', monospace;
-    font-size:1.4em;
-    color:black;
+  font-family: "VT323", monospace;
+  font-size: 1.4em;
+  color: black;
 }
 
-button:active, 
+button:active,
 button.active {
-    outline: none;
-    border: 2px dotted #000 !important;
+  outline: none;
+  border: 2px dotted #000 !important;
 }
 
 .grid-item-1 img {
-    border:none;
-    box-shadow: none;
-    display: block;
-    height: 100%;
+  border: none;
+  box-shadow: none;
+  display: block;
+  height: 100%;
 }
 
-p,h1,h2,h3 {
-    font-family: 'VT323', monospace;
-    margin: 0;
+p,
+h1,
+h2,
+h3 {
+  font-family: "VT323", monospace;
+  margin: 0;
 }
 
 .gif-button-container {
-    display: flex;
-    align-items: center; /* optional: vertically center them */
-    gap: 5px;           /* optional: space between button and image */
+  display: flex;
+  align-items: center; /* optional: vertically center them */
+  gap: 5px; /* optional: space between button and image */
 }
 
 .gif-button-container img {
-    box-shadow: none;;
+  box-shadow: none;
 }
 
 .progress-bar {
@@ -233,19 +236,22 @@ p,h1,h2,h3 {
 }
 
 a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 a:hover {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -265,20 +271,19 @@ a:hover {
   text-align: center;
 }
 
-.modal-content button{
-
+.modal-content button {
 }
 
 .modal-block {
-    margin: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* optional, for vertical centering if needed */
-    text-align: center;
-    gap: 5px      /* center text inside */
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* optional, for vertical centering if needed */
+  text-align: center;
+  gap: 5px; /* center text inside */
 }
 
-.modal-block p{
-    color: black;
-    font-size: 1.2em;
+.modal-block p {
+  color: black;
+  font-size: 1.2em;
 }
