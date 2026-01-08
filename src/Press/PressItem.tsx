@@ -30,10 +30,8 @@ export default function PressItem({ item, isHighlighted }: Props) {
       <img className={styles.thumb} src={image} alt={title} />
 
       <div className={styles.itemContent}>
-        <div className={styles.itemText}>
-          {title}
-          {source ? <span className={styles.source}> — {source}</span> : null}
-        </div>
+        <div className={styles.itemText}>{title}</div>
+        {source ? <div className={styles.source}> • {source}</div> : null}
       </div>
     </div>
   );
