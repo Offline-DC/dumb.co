@@ -64,7 +64,7 @@ function Screen({
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
   } else if (screen === "press") {
-    return <Press />;
+    return <Press row={row} setRow={setRow} />;
   } else if (screen === "countdown clock") {
     const startDate = "10-30-2025";
     const cutOffDate = "10-24-2025";

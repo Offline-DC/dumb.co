@@ -12,21 +12,19 @@ import {
 } from "@tabler/icons-react";
 
 type Props = {
-  row: number;
-  setRow: Dispatch<SetStateAction<number>>;
-  textCount: number;
   onCenterClick: () => void;
   onBackClick: () => void;
   onCallClick: () => void;
+  onDownClick: () => void;
+  onUpClick: () => void;
 };
 
 function Navigation({
-  row,
-  setRow,
-  textCount,
   onCenterClick,
   onBackClick,
   onCallClick,
+  onDownClick,
+  onUpClick,
 }: Props) {
   return (
     <div
@@ -37,18 +35,12 @@ function Navigation({
       }}
     >
       <div style={{ aspectRatio: "2" }} />
-      <NavButton
-        onClick={() => {
-          if (row > 0) {
-            setRow((row) => (row -= 1));
-          }
-        }}
-      >
+      <NavButton onClick={onUpClick}>
         <IconArrowUp size={25} />
       </NavButton>
       <NavButton onClick={onBackClick}>
         <IconArrowBackUp size={25} />
-      </NavButton >
+      </NavButton>
       <NavButton onClick={onBackClick}>
         <IconArrowLeft size={25} />
       </NavButton>
@@ -61,13 +53,7 @@ function Navigation({
       <NavButton onClick={onCallClick}>
         <IconPhoneRinging size={20} />
       </NavButton>
-      <NavButton
-        onClick={() => {
-          if (row < textCount - 1) {
-            setRow((row) => (row += 1));
-          }
-        }}
-      >
+      <NavButton onClick={onDownClick}>
         <IconArrowDown size={25} />
       </NavButton>
       <NavButton>

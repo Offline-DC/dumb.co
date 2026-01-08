@@ -60,7 +60,6 @@ function Phone() {
       }}
     >
       <Logo />
-
       <div
         style={{
           border: "1px solid grey",
@@ -96,9 +95,6 @@ function Phone() {
         }}
       >
         <Navigation
-          row={row}
-          setRow={setRow}
-          textCount={options.length}
           onBackClick={() => {
             ReactGA.event({
               category: "User",
@@ -112,6 +108,10 @@ function Phone() {
             setKeypadNum("");
           }}
           onCenterClick={() => {
+            if (screen === "press") {
+              console.log("press!!!");
+              return;
+            }
             const prev: navigationItem = {
               screen: screen,
               row: row,
@@ -120,6 +120,16 @@ function Phone() {
             setNavigationStack([...navigationStack, prev]);
             setRow(0);
             setScreen(options[row]);
+          }}
+          onDownClick={() => {
+            if (row < options.length - 1) {
+              setRow((row) => (row += 1));
+            }
+          }}
+          onUpClick={() => {
+            if (row > 0) {
+              setRow((row) => (row -= 1));
+            }
           }}
           onCallClick={() => {
             window.location.href = `tel:${

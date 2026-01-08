@@ -1,8 +1,9 @@
 import type { PressItemData } from "./PressItem";
 
-import image from "../assets/article_one.webp";
-import image2 from "../assets/imrs.webp";
+import image from "./images/article_one.webp";
+import image2 from "./images/imrs.webp";
 import PressList from "./PressList";
+import type { Dispatch, SetStateAction } from "react";
 
 const PRESS_ITEMS: PressItemData[] = [
   {
@@ -29,6 +30,13 @@ const PRESS_ITEMS: PressItemData[] = [
   },
 ];
 
-export default function Press() {
-  return <PressList title="Press" items={PRESS_ITEMS} />;
+type Props = {
+  row: number;
+  setRow: Dispatch<SetStateAction<number>>;
+};
+
+export default function Press({ row, setRow }: Props) {
+  return (
+    <PressList title="Press" items={PRESS_ITEMS} row={row} setRow={setRow} />
+  );
 }
