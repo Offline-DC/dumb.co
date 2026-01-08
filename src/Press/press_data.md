@@ -3,6 +3,11 @@ image_name: article_one.webp
 title: is it cringe to be online? yes. go dumb • nbc news
 href: https://www.nbcnews.com/pop-culture/pop-culture-news/going-analog-2025-trends-phone-free-parties-junk-journals-rcna248499
 
+id: vox2025-news
+image_name: voxarticle.webp
+title: the real attention economy is IRL • vox news
+href: https://www.vox.com/technology/467598/brick-month-offline-digital-detox
+
 id: wapo
 image_name: imrs.webp
 title: can u be dumb 4 1 month? • wash post
