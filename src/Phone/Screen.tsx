@@ -57,14 +57,13 @@ function Screen({
       "Month Offline D.C.",
       "Month Offline NYC",
       "press",
-      "events",
       "contact",
       "about",
     ];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
   } else if (screen === "press") {
-    return <Press row={row} setRow={setRow} />;
+    return <Press row={row} setOptions={setOptions} />;
   } else if (screen === "countdown clock") {
     const startDate = "10-30-2025";
     const cutOffDate = "10-24-2025";
@@ -140,23 +139,6 @@ function Screen({
   } else if (screen === "contact") {
     display = "team @ offline • community";
     newOptions = [];
-  } else if (screen === "events") {
-    display = (
-      <div>
-        Phone Free Art
-        <br />
-        Gallery Party
-        <br />
-        <br />
-        Thurs. Dec. 11
-        <br />
-        7pm until 10pm <br />@ Hush Harbor
-        <br /> 1337 H St. NE <br />
-        <br />
-        No Phones
-        <br />
-      </div>
-    );
   } else if (screen === "Why?") {
     display = "Less is M.O.";
   } else if (screen === "About") {

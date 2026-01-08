@@ -8,19 +8,19 @@ export type PressItemData = {
   source?: string;
   image: string;
   href: string;
-  variant?: PressVariant;
 };
 
 type Props = {
   item: PressItemData;
+  isHighlighted: boolean;
 };
 
-export default function PressItem({ item }: Props) {
-  const { title, source, image, href, variant = "light" } = item;
+export default function PressItem({ item, isHighlighted }: Props) {
+  const { title, source, image, href } = item;
 
   const rowClassName = [
     styles.itemRow,
-    variant === "dark" ? styles.rowDark : styles.rowLight,
+    isHighlighted ? styles.rowDark : styles.rowLight,
   ]
     .filter(Boolean)
     .join(" ");

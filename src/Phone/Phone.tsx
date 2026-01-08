@@ -5,19 +5,29 @@ import Logo from "./Logo";
 import Footer from "./Footer";
 import { OFFLINE_PHONE_NUMBER } from "../App";
 import ReactGA from "react-ga4";
+import rawPressData from "../Press/press_data.md?raw";
+import { openPressItemAtRow } from "../Press/parsePressData";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export interface navigationItem {
   screen: string;
   row: number;
 }
 
-function Phone() {
+type Props = {
+  initialScreen?: string;
+};
+
+function Phone({ initialScreen }: Props) {
   const [row, setRow] = useState(0);
   const [navigationStack, setNavigationStack] = useState<navigationItem[]>([]);
   const [screen, setScreen] = useState("Home");
   const [keypadNum, setKeypadNum] = useState("");
   const [audioFile, setAudioFile] = useState("");
   const [options, setOptions] = useState<string[]>([]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playSound = () => {
@@ -28,6 +38,23 @@ function Phone() {
     audioRef.current = new Audio(`/audio/${audioFile}`);
     audioRef.current.play();
   };
+
+  // ------- START – Supports dedicated /press URL inside of phone ---------
+  useEffect(() => {
+    if (!initialScreen) return;
+    setNavigationStack([{ screen: "Home", row: 0 }]);
+    setRow(0);
+    setScreen(initialScreen);
+  }, [initialScreen]);
+
+  useEffect(() => {
+    const wantPath = screen === "press" ? "/press" : "/";
+
+    if (location.pathname !== wantPath) {
+      navigate(wantPath, { replace: true });
+    }
+  }, [screen, location.pathname, navigate]);
+  // ------- END ---------
 
   useEffect(() => {
     if (audioFile) {
@@ -98,20 +125,31 @@ function Phone() {
           onBackClick={() => {
             ReactGA.event({
               category: "User",
-              action: "Clicked Center Button",
-              label: "Center Buttom",
+              action: "Clicked Back Button",
+              label: "Back Button",
             });
+
             setAudioFile("");
-            setScreen(navigationStack[navigationStack.length - 1].screen);
-            setRow(navigationStack[navigationStack.length - 1].row);
-            setNavigationStack(navigationStack.slice(0, -1));
             setKeypadNum("");
+
+            const last = navigationStack[navigationStack.length - 1];
+            if (!last) {
+              setScreen("Home");
+              setRow(0);
+              setNavigationStack([]);
+              return;
+            }
+
+            setScreen(last.screen);
+            setRow(last.row);
+            setNavigationStack(navigationStack.slice(0, -1));
           }}
           onCenterClick={() => {
             if (screen === "press") {
-              console.log("press!!!");
+              openPressItemAtRow(row, rawPressData);
               return;
             }
+
             const prev: navigationItem = {
               screen: screen,
               row: row,
@@ -138,7 +176,6 @@ function Phone() {
             return;
           }}
         />
-        {/*<Keypad setKeypadNum={setKeypadNum} />*/}
         <Footer />
       </div>
     </div>

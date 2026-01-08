@@ -1,42 +1,21 @@
 import type { PressItemData } from "./PressItem";
 
-import image from "./images/article_one.webp";
-import image2 from "./images/imrs.webp";
 import PressList from "./PressList";
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
+import rawPressData from "./press_data.md?raw";
+import { parsePressMarkdown } from "./parsePressData";
 
-const PRESS_ITEMS: PressItemData[] = [
-  {
-    id: "cringe",
-    title: "is it cringe to be online?",
-    image,
-    href: "#",
-    variant: "dark",
-  },
-  {
-    id: "wp",
-    title: "can u be dumb 4 1 month?",
-    source: "Wash Post",
-    image: image2,
-    href: "#",
-    variant: "light",
-  },
-  {
-    id: "next",
-    title: "lorem ipsum dolor",
-    image,
-    href: "#",
-    variant: "light",
-  },
-];
+export const PRESS_ITEMS: PressItemData[] = parsePressMarkdown(rawPressData);
 
 type Props = {
   row: number;
-  setRow: Dispatch<SetStateAction<number>>;
+  setOptions: Dispatch<SetStateAction<string[]>>;
 };
 
-export default function Press({ row, setRow }: Props) {
-  return (
-    <PressList title="Press" items={PRESS_ITEMS} row={row} setRow={setRow} />
-  );
+export default function Press({ row, setOptions }: Props) {
+  useEffect(() => {
+    setOptions(PRESS_ITEMS.map((item) => item.id));
+  }, [setOptions]);
+
+  return <PressList title="Press" items={PRESS_ITEMS} row={row} />;
 }
