@@ -83,7 +83,7 @@ function Phone({ initialScreen }: Props) {
         flexDirection: "column",
         justifyContent: "space-between",
         boxShadow: "0 6px 12px rgba(0, 0, 0, 0.4)",
-        maxHeight: "calc(100vh - 20vh)",
+        maxHeight: "85vh",
       }}
     >
       <Logo />
