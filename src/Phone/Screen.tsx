@@ -137,7 +137,7 @@ function Screen({
   } else if (screen === "What is Offline?") {
     display = "Less is MO";
   } else if (screen === "contact") {
-    display = "team @ offline • community";
+    display = "hi @ offline • community";
     newOptions = [];
   } else if (screen === "Why?") {
     display = "Less is M.O.";
