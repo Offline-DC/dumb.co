@@ -11,6 +11,7 @@
 
 .title {
   text-align: center;
+  line-height: 0.75;
 }
 
 .list {
@@ -74,4 +75,10 @@
 
 .source {
   padding-bottom: 0.5rem;
+}
+
+.subtitle {
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
 }

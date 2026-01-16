@@ -37,6 +37,7 @@ export default function PressList({ title, items, row }: Props) {
   return (
     <div className={styles.pressCard}>
       <h1 className={styles.title}>{title}</h1>
+      <div className={styles.subtitle}>afreka@offline.community</div>
 
       <div className={styles.list}>
         {visibleItems.map((item, i) => (
