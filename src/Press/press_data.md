@@ -16,6 +16,12 @@ title: can u be dumb 4 1 month?
 href: https://www.washingtonpost.com/podcasts/post-reports/could-you-give-up-your-smartphone-for-a-month/
 source: wapo
 
+id: nbcwashington
+image_name: hushhush.webp
+title: pro presence, anti distractions
+href: https://www.nbcwashington.com/entertainment/the-scene/inside-dcs-1st-phone-free-bar-were-not-anti-tech-were-pro-presence/3986609/
+source: nbcwashington
+
 id: nbc-news
 image_name: article_one.webp
 title: is it cringe to be online? yes. go dumb
