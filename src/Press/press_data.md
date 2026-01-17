@@ -1,5 +1,5 @@
-id: TIME2025-news
-image_name: for time 2025.webp
+id: TIME2025
+image_name: for time 2025.jpg
 title: living dumb = living beyond the screen
 href: https://time.com/7326718/sora-2-ai-fake-videos-social-media/
 source: TIME
