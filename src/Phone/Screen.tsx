@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import PhoneText from "./PhoneText";
 import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
+import DumbHouseModal from "../DumbHouseModal";
 
 type Props = {
   row: number;
@@ -15,6 +16,7 @@ type Props = {
   setKeypadNum: Dispatch<SetStateAction<string>>;
   keypadNum: string;
   setAudioFile: Dispatch<SetStateAction<string>>;
+  clickBackButton: () => void;
 };
 
 function arraysEqual(a: string[], b: string[]) {
@@ -47,6 +49,7 @@ function Screen({
   setScreen,
   setKeypadNum,
   setAudioFile,
+  clickBackButton,
 }: Props) {
   let content;
   let display;
@@ -56,6 +59,7 @@ function Screen({
       "dumbphone I",
       "Month Offline D.C.",
       "Month Offline NYC",
+      "dumbhouse",
       "press",
       "contact",
       "about",
@@ -262,6 +266,13 @@ function Screen({
     setScreen("Home");
   } else if (screen === "snake") {
     display = "snake";
+  } else if (screen === "dumbhouse") {
+    display = (
+      <div>
+        launching dumbhouse...
+        <DumbHouseModal clickBackButton={clickBackButton} />
+      </div>
+    );
   }
 
   if (!arraysEqual(options, newOptions)) {

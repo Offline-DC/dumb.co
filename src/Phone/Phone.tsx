@@ -18,6 +18,11 @@ type Props = {
   initialScreen?: string;
 };
 
+const SCREEN_TO_PATH: Record<string, string> = {
+  press: "/press",
+  dumbhouse: "/dumbhouse",
+};
+
 function Phone({ initialScreen }: Props) {
   const [row, setRow] = useState(0);
   const [navigationStack, setNavigationStack] = useState<navigationItem[]>([]);
@@ -39,6 +44,29 @@ function Phone({ initialScreen }: Props) {
     audioRef.current.play();
   };
 
+  const handleBackButton = () => {
+    ReactGA.event({
+      category: "User",
+      action: "Clicked Back Button",
+      label: "Back Button",
+    });
+
+    setAudioFile("");
+    setKeypadNum("");
+
+    const last = navigationStack[navigationStack.length - 1];
+    if (!last) {
+      setScreen("Home");
+      setRow(0);
+      setNavigationStack([]);
+      return;
+    }
+
+    setScreen(last.screen);
+    setRow(last.row);
+    setNavigationStack(navigationStack.slice(0, -1));
+  };
+
   // ------- START – Supports dedicated /press URL inside of phone ---------
   useEffect(() => {
     if (!initialScreen) return;
@@ -48,7 +76,7 @@ function Phone({ initialScreen }: Props) {
   }, [initialScreen]);
 
   useEffect(() => {
-    const wantPath = screen === "press" ? "/press" : "/";
+    const wantPath = SCREEN_TO_PATH[screen] ?? "/";
 
     if (location.pathname !== wantPath) {
       navigate(wantPath, { replace: true });
@@ -109,6 +137,7 @@ function Phone({ initialScreen }: Props) {
           keypadNum={keypadNum}
           setKeypadNum={setKeypadNum}
           setAudioFile={setAudioFile}
+          clickBackButton={handleBackButton}
         />
       </div>
       <div
@@ -122,29 +151,11 @@ function Phone({ initialScreen }: Props) {
         }}
       >
         <Navigation
-          onBackClick={() => {
-            ReactGA.event({
-              category: "User",
-              action: "Clicked Back Button",
-              label: "Back Button",
-            });
-
-            setAudioFile("");
-            setKeypadNum("");
-
-            const last = navigationStack[navigationStack.length - 1];
-            if (!last) {
-              setScreen("Home");
-              setRow(0);
-              setNavigationStack([]);
+          onBackClick={handleBackButton}
+          onCenterClick={() => {
+            if (screen === "dumbhouse") {
               return;
             }
-
-            setScreen(last.screen);
-            setRow(last.row);
-            setNavigationStack(navigationStack.slice(0, -1));
-          }}
-          onCenterClick={() => {
             if (screen === "press") {
               openPressItemAtRow(row, rawPressData);
               return;

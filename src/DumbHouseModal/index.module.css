@@ -1,0 +1,253 @@
+.window {
+  position: fixed;
+  background: #c0c0c0;
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 14px;
+
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    1px 1px 0 #ffffff,
+    2px 2px 0 #808080,
+    3px 3px 0 #000000;
+}
+
+.titleBar {
+  height: 32px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  cursor: grab;
+  user-select: none;
+}
+
+.titleBar:active {
+  cursor: grabbing;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  background: #c0c0c0;
+  color: black;
+  border: 1px solid black;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.controls {
+  display: flex;
+  gap: 4px;
+}
+
+.button {
+  width: 28px;
+  background: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.button:active {
+  box-shadow:
+    inset -1px -1px 0 #ffffff,
+    inset 1px 1px 0 #808080;
+}
+
+/* Body is now a fixed viewport for the flyer */
+.body {
+  position: relative;
+  padding: 10px;
+  background: #e0e0e0;
+  overflow: hidden;
+
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+.flyer {
+  display: block;
+  width: 100%;
+  height: 92%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Bottom-right resize grip (90s style) */
+.resizeHandle {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  user-select: none;
+
+  /* little diagonal lines */
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 55%,
+      #808080 55% 60%,
+      transparent 60% 70%,
+      #ffffff 70% 75%,
+      transparent 75%
+    ),
+    linear-gradient(
+      135deg,
+      transparent 0 70%,
+      #808080 70% 75%,
+      transparent 75% 85%,
+      #ffffff 85% 90%,
+      transparent 90%
+    );
+}
+
+.applyContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* Web 1.0 flashy button */
+.applyButton {
+  position: relative;
+  display: inline-block;
+  padding: 8px 20px;
+  min-width: 140px;
+  text-align: center;
+
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  /* base "badge" look */
+  background: linear-gradient(#fff7a8, #ffcf3a 55%, #ff7ad9);
+  border: 2px solid #000;
+
+  /* chunky old-school shadow */
+  box-shadow:
+    0 0 0 2px #fff,
+    2px 2px 0 #000,
+    0 0 16px rgba(255, 255, 255, 0.35);
+
+  /* animated color wobble */
+  animation: web10Hue 2.2s linear infinite;
+  will-change: filter, transform;
+}
+
+/* sparkly glitter border */
+.applyButton::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 2px;
+  pointer-events: none;
+
+  background: conic-gradient(
+    from 0deg,
+    #ff00ff,
+    #00ffff,
+    #ffff00,
+    #ff0000,
+    #00ff00,
+    #ff00ff
+  );
+
+  /* show as a border ring */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 3px;
+
+  opacity: 0.9;
+}
+
+/* shiny sweep across the button */
+.applyButton::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 60%;
+  height: 180%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  transform: rotate(18deg);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+/* hover = extra obnoxious (good) */
+.applyButton:hover {
+  transform: scale(1.06) rotate(-1deg);
+  box-shadow:
+    0 0 0 2px #fff,
+    2px 2px 0 #000,
+    0 0 24px rgba(0, 255, 255, 0.45),
+    0 0 28px rgba(255, 0, 255, 0.35);
+}
+
+/* click = classic "pressed" feel + starburst */
+.applyButton:active {
+  transform: translate(1px, 1px) scale(1.02);
+  filter: saturate(1.3) contrast(1.1);
+}
+
+/* Optional: tiny starburst emoji that wiggles on hover (pure CSS) */
+.applyButton .sparkle {
+  display: inline-block;
+  margin-left: 8px;
+  animation: twinkle 0.8s ease-in-out infinite;
+}
+
+@keyframes web10Hue {
+  0% {
+    filter: hue-rotate(0deg) saturate(1.2);
+  }
+  100% {
+    filter: hue-rotate(360deg) saturate(1.2);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(12deg) scale(1.2);
+  }
+}
