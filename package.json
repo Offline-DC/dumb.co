@@ -20,6 +20,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",
+    "react-markdown": "^10.1.0",
     "react-player": "^2.16.0",
     "react-router-dom": "^7.6.2",
     "serve": "^14.2.4"

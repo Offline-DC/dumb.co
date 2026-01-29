@@ -8,12 +8,11 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Link,
   useLocation,
 } from "react-router-dom";
 import ReactGA from "react-ga4";
 import "./App.css";
-import { filterProps } from "@mantine/core";
+\import Internship from "./Internship/Internship.tsx";
 
 export const OFFLINE_PHONE_NUMBER = "844-633-5463";
 
@@ -55,6 +54,7 @@ function App() {
           <Route path="/dumbdown" element={<DumbDumb />} />
           <Route path="/setup" element={<OfflineMode />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/internship" element={<Internship />} />
           <Route
             path="/phone"
             element={
