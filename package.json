@@ -16,6 +16,8 @@
     "@mantine/core": "^8.0.0",
     "@mantine/form": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
+    "@stripe/react-stripe-js": "^5.6.0",
+    "@stripe/stripe-js": "^8.7.0",
     "@tabler/icons-react": "^3.33.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
