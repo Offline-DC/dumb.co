@@ -12,7 +12,7 @@ function PhoneText({ highlight, children }: Props) {
         padding: ".5rem .5rem",
         display: "flex",
         alignItems: "center",
-        fontSize: "1.25rem",
+        fontSize: "1.3rem",
       }}
     >
       {highlight ? "> " : ""}

@@ -61,6 +61,10 @@ function App() {
             path="/dumbhouse"
             element={<Phone initialScreen="dumbhouse" />}
           />
+          <Route
+            path="/intern"
+            element={<Phone initialScreen="internship" />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

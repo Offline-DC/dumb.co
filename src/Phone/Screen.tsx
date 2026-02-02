@@ -3,6 +3,7 @@ import PhoneText from "./PhoneText";
 import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
+import InternshipModal from "../InternshipModal/InternshipModal";
 
 type Props = {
   row: number;
@@ -61,8 +62,7 @@ function Screen({
       "Month Offline NYC",
       "dumbhouse",
       "press",
-      "contact",
-      "about",
+      "team & careers",
     ];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
@@ -83,8 +83,10 @@ function Screen({
         to sign up
       </div>
     );
-  } else if (screen === "about") {
-    newOptions = ["team", "operator"]; //FAQs coming soon
+  } else if (screen === "careers") {
+    newOptions = ["internship"];
+  } else if (screen === "team & careers") {
+    newOptions = ["team", "careers", "operator", "contact"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
     window.location.href =
       "https://shop.offline.community/products/offline-dumbphone-1";
@@ -271,6 +273,13 @@ function Screen({
       <div>
         launching dumbhouse...
         <DumbHouseModal clickBackButton={clickBackButton} />
+      </div>
+    );
+  } else if (screen === "internship") {
+    display = (
+      <div>
+        launching internship...
+        <InternshipModal clickBackButton={clickBackButton} />
       </div>
     );
   }
