@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
 import "./App.css";
 import Internship from "./Internship/Internship.tsx";
+import NotFound from "./NotFound";
 
 export const OFFLINE_PHONE_NUMBER = "844-633-5463";
 
@@ -65,6 +66,7 @@ function App() {
             path="/intern"
             element={<Phone initialScreen="internship" />}
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
