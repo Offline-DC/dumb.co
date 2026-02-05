@@ -315,6 +315,19 @@
   color: #e74c3c;
 }
 
+.shipping-message {
+  color: #3498db;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.shipping-error {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .checkout-content {

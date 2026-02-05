@@ -1,12 +1,10 @@
 import React, { useState, useEffect, type JSX } from "react";
 import './Confirmation.css';
 
-const paymentApiUrl = import.meta.env.VITE_PAYMENT_API_URL;
-
 const Complete = () => {
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [paymentIntentId, setPaymentIntentId] = useState('');
-  const [paymentStatus, setPaymentStatus] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [paymentIntentStatus, setPaymentIntentStatus] = useState('');
   const [iconColor, setIconColor] = useState('');
   const [icon, setIcon] = useState<JSX.Element | null>(null);
@@ -26,9 +24,15 @@ const Complete = () => {
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get('session_id');
 
-    fetch(`${paymentApiUrl}/session-status?session_id=${sessionId}`)
-      .then((res) => res.json())
+    console.log('Session ID from URL:', sessionId);
+
+    fetch(`http://localhost:3000/stripe/session-status?session_id=${sessionId}`)
+      .then((res) => {
+        console.log('Response status:', res.status);
+        return res.json();
+      })
       .then((data) => {
+        console.log('Session status data:', data);
         setStatus(data.status);
         setPaymentStatus(data.payment_status);
 
@@ -41,6 +45,12 @@ const Complete = () => {
           setIcon(ErrorIcon);
           setText('Something went wrong, please try again.');
         }
+      })
+      .catch((error) => {
+        console.error('Error fetching session status:', error);
+        setIconColor('#DF1B41');
+        setIcon(ErrorIcon);
+        setText('Error loading payment status');
       });
   }, []);
 
