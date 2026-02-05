@@ -1,5 +1,5 @@
 import WindowModal from "../WindowModal/WindowModal";
-import flyer from "./dumbhouseflyer.webp";
+import flyer from "./dumbhouseflyer.jpg";
 
 type DumbHouseModalProps = {
   clickBackButton: () => void;
