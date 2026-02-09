@@ -4,6 +4,7 @@ import OfflineMode from "./OfflineMode";
 import DumbDumb from "./DumbDumb.tsx";
 import Dashboard from "./Dashboard.tsx";
 import Support from "./Support";
+import FAQs from "./FAQs";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
 import "./App.css";
@@ -47,6 +48,7 @@ function App() {
         <RouteChangeTracker />
         <Routes>
           <Route path="/" element={<Phone />} />
+          <Route path="/faqs" element={<FAQs />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dumbdown" element={<DumbDumb />} />
           <Route path="/setup" element={<OfflineMode />} />
