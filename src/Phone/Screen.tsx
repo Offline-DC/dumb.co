@@ -4,6 +4,7 @@ import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import InternshipModal from "../InternshipModal/InternshipModal";
+import DumbphoneOneModal from "../DumbphoneOneModal";
 
 type Props = {
   row: number;
@@ -244,10 +245,12 @@ function Screen({
     );
     setKeypadNum("1844OFFLINE,4");
   } else if (screen === "dumbphone I") {
-    window.location.href =
-      "https://shop.offline.community/products/dumbphone-1";
-    setRow(0);
-    setScreen("Home");
+    display = (
+      <div>
+        launching dumbphone I...
+        <DumbphoneOneModal clickBackButton={clickBackButton} />
+      </div>
+    );
   } else if (screen === "Month Offline D.C.") {
     window.location.href =
       "https://shop.offline.community/products/month-offline-september-in-dc";

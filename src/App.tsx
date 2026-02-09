@@ -51,12 +51,6 @@ function App() {
           <Route path="/setup" element={<OfflineMode />} />
           <Route path="/support" element={<Support />} />
           <Route path="/internship" element={<Internship />} />
-          <Route
-            path="/phone"
-            element={
-              <ExternalRedirect url="https://shop.offline.community/products/offline-dumbphone-1" />
-            }
-          />
           <Route path="/press" element={<Phone initialScreen="press" />} />
           <Route
             path="/dumbhouse"
@@ -65,6 +59,10 @@ function App() {
           <Route
             path="/intern"
             element={<Phone initialScreen="internship" />}
+          />
+          <Route
+            path="/phone"
+            element={<Phone initialScreen="dumbphone I" />}
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
