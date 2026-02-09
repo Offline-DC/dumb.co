@@ -9,6 +9,7 @@ import ReactGA from "react-ga4";
 import "./App.css";
 import Internship from "./Internship/Internship.tsx";
 import NotFound from "./NotFound";
+import AndroidDownload from "./Android/AndroidDownload.tsx";
 
 export const OFFLINE_PHONE_NUMBER = "844-633-5463";
 
@@ -66,6 +67,7 @@ function App() {
             path="/intern"
             element={<Phone initialScreen="internship" />}
           />
+          <Route path="/android" element={<AndroidDownload />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
