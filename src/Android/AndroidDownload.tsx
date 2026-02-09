@@ -130,25 +130,25 @@ export default function AndroidDownload() {
           {downloadLabel}
         </a>
 
-        <div className={styles.metaRow}>
-          <div className={styles.metaItem}>
-            <div className={styles.metaLabel}>Direct link</div>
-            <div className={styles.linkRow}>
-              <code className={styles.codeSmall}>{APK_URL}</code>
-              <button
-                className={styles.copyBtn}
-                onClick={copyLink}
-                type="button"
-              >
-                {copied ? "Copied" : "Copy"}
-              </button>
-            </div>
+        <div className={styles.metaCol}>
+          <div className={styles.notice}>
+            <div className={styles.metaTitle}>Direct link</div>
+
+            <div className={styles.monoBox}>{APK_URL}</div>
+
+            <button
+              className={styles.copyBtnFull}
+              onClick={copyLink}
+              type="button"
+            >
+              {copied ? "Copied" : "Copy link"}
+            </button>
           </div>
 
           {sha256 && sha256 !== "—" && (
-            <div className={styles.metaItem}>
-              <div className={styles.metaLabel}>SHA-256</div>
-              <code className={styles.code}>{sha256}</code>
+            <div className={styles.notice}>
+              <div className={styles.metaTitle}>SHA-256</div>
+              <div className={styles.monoBox}>{sha256}</div>
             </div>
           )}
         </div>

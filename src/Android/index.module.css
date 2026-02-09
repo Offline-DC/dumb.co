@@ -20,28 +20,18 @@
 }
 
 .page {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #0b0f14;
+  box-sizing: border-box;
+  width: 100%;
   color: #e9eef5;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    "Apple Color Emoji",
-    "Segoe UI Emoji";
 }
 
 .card {
-  width: 100%;
-  max-width: 720px;
+  width: 720px;
+  max-width: 100%;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -129,25 +119,60 @@
   flex-wrap: wrap;
 }
 
-.code {
-  display: inline-block;
-  font-size: 13px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow-x: auto;
-  max-width: 100%;
+/* Stack meta blocks like the notice box */
+.metaCol {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
 }
 
-.codeSmall {
+/* Simple label inside the notice box */
+.metaTitle {
   font-size: 12px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow-x: auto;
-  max-width: 520px;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+/* A “notice-like” mono pill that wraps safely */
+.monoBox {
+  width: 100%;
+  max-width: 100%;
+
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.35;
+
+  /* critical: prevent overflow */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Full-width button like a simple action row */
+.copyBtnFull {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e9eef5;
+
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* optional: slightly tighter on small screens */
+@media (max-width: 520px) {
+  .page {
+    padding: 12px;
+  }
+  .card {
+    padding: 16px;
+  }
 }
 
 .copyBtn {
@@ -191,6 +216,7 @@
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
   font-size: 0.95em;
+  line-break: anywhere;
 }
 
 .markdown :global(a) {
@@ -213,4 +239,29 @@
 
 .footerLink {
   color: #e9eef5;
+}
+
+@media (max-width: 520px) {
+  .metaRow {
+    gap: 10px;
+  }
+
+  .linkRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .codeSmall {
+    display: block;
+    width: 100%;
+    white-space: normal; /* wrap instead of forcing scroll */
+    word-break: break-word; /* break long URLs */
+    overflow-x: hidden;
+  }
+
+  .copyBtn {
+    width: 100%;
+    text-align: center;
+  }
 }
