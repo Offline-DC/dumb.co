@@ -1,7 +1,7 @@
 {
   "latest_version": "2.0.0",
   "version_code": 7,
-  "apk_url": "https://dumb.co/downloads/DumbCo-Android-latest.apk",
+  "apk_url": "https://dumb.co/downloads/DumbDown-Android-latest.apk",
   "sha256": "75a887aec61f9cc401e1f0f77b880cb78f35e6958cf2f4c502098afedfcca328",
   "required": false,
   "notes": "Initial public Android release.",

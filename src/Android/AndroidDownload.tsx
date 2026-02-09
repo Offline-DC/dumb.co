@@ -14,7 +14,7 @@ type VersionInfo = {
   published_at?: string;
 } | null;
 
-const APK_URL = "https://dumb.co/downloads/DumbCo-Android-latest.apk";
+const APK_URL = "https://dumb.co/downloads/DumbDown-Android-latest.apk";
 const VERSION_URL = "https://dumb.co/downloads/version.json";
 
 function isAndroidUA(): boolean {
