@@ -1,9 +1,9 @@
 {
-  "latest_version": "2.0.0",
-  "version_code": 7,
+  "latest_version": "2.1.0",
+  "version_code": 8,
   "apk_url": "https://dumb.co/downloads/DumbDown-Android-latest.apk",
-  "sha256": "75a887aec61f9cc401e1f0f77b880cb78f35e6958cf2f4c502098afedfcca328",
+  "sha256": "e2630ad8137828008b886545e1693ac962df44546f924d672f27a9e9c2fb8a4c",
   "required": false,
-  "notes": "Initial public Android release.",
+  "notes": "Add auto-update modal",
   "published_at": "2026-02-09"
 }
