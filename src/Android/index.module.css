@@ -43,6 +43,11 @@
   margin-bottom: 12px;
 }
 
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+}
+
 .badge {
   display: inline-block;
   font-size: 12px;

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import contentRaw from "./android.md?raw";
 import styles from "./index.module.css";
+import launchIcon from "./LaunchIcon.png";
 
 type VersionInfo = {
   latest_version?: string;
@@ -109,8 +110,21 @@ export default function AndroidDownload() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <div className={styles.badge}>Android</div>
-          <h1 className={styles.h1}>Install Dumb Down App</h1>
+          <div className={styles.headerRow}>
+            <div>
+              <div className={styles.badge}>Android</div>
+              <h1 className={styles.h1}>Install Dumb Down App</h1>
+            </div>
+
+            <img
+              src={launchIcon}
+              height={64}
+              width={64}
+              className={styles.launchIcon}
+              alt="Dumb Down app icon"
+              draggable={false}
+            />
+          </div>
         </div>
 
         {!isAndroid && (
