@@ -58,9 +58,9 @@ function Screen({
   if (screen === "Home") {
     newOptions = [
       "dumbphone I",
-      "Month Offline D.C.",
-      "Month Offline NYC",
+      "Month Offline",
       "dumbhouse",
+      "dumb organizers",
       "press",
       "team & careers",
     ];
@@ -68,6 +68,11 @@ function Screen({
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
   } else if (screen === "press") {
     return <Press row={row} setOptions={setOptions} />;
+  } else if (screen === "Month Offline") {
+    newOptions = [
+      "M.O. DC",
+      "M.O. NYC"
+    ]
   } else if (screen === "countdown clock") {
     const startDate = "10-30-2025";
     const cutOffDate = "10-24-2025";
@@ -85,6 +90,8 @@ function Screen({
     );
   } else if (screen === "careers") {
     newOptions = ["internship"];
+  } else if (screen === "dumb organizers") {
+    display = <div>want 2 organize a dumb experience w/ ur group? <br/><br/> email<br/> lydia @ <br/>offline • community</div>;
   } else if (screen === "team & careers") {
     newOptions = ["team", "careers", "operator", "contact"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
@@ -248,12 +255,12 @@ function Screen({
       "https://shop.offline.community/products/dumbphone-1";
     setRow(0);
     setScreen("Home");
-  } else if (screen === "Month Offline D.C.") {
+  } else if (screen === "M.O. DC") {
     window.location.href =
       "https://shop.offline.community/products/month-offline-september-in-dc";
     setRow(0);
     setScreen("Home");
-  } else if (screen === "Month Offline NYC") {
+  } else if (screen === "M.O. NYC") {
     window.location.href =
       "https://shop.offline.community/products/month-offline-nyc";
     setRow(0);
