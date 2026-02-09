@@ -92,6 +92,11 @@
   pointer-events: none;
 }
 
+.downloadButton {
+  background: #f5d90a;
+  color: #0b0f14;
+}
+
 .metaRow {
   margin-top: 14px;
   display: grid;

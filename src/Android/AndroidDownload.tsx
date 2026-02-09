@@ -122,7 +122,7 @@ export default function AndroidDownload() {
 
         <a
           href={APK_URL}
-          className={`${styles.button} ${!isAndroid ? styles.buttonDisabled : ""}`}
+          className={`${styles.button} ${!isAndroid ? styles.buttonDisabled : ""} ${styles.downloadButton}`}
           onClick={(e) => {
             if (!isAndroid) e.preventDefault();
           }}
