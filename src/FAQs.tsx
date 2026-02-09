@@ -41,14 +41,6 @@ const FAQ_ITEMS: FaqItem[] = [
     ],
   },
   {
-    question: "What if I run out of the 100 hrs of data?",
-    answers: [],
-  },
-  {
-    question: "Help, I'm a victim of 2-factor authentication!!",
-    answers: [],
-  },
-  {
     question: "What are The Dumbphone I subscription terms?",
     answers: [
       "The Dumbphone I includes a 3-month minimum commitment.",
@@ -131,13 +123,12 @@ function FAQs() {
     setOpenIndexes((prev) =>
       prev.includes(index) ? prev.filter((item) => item !== index) : [...prev, index]
     );
-  };
+  }; 
 
   return (
     <div className="faq-page">
       <div className="faq-card">
         <div className="faq-header">
-          <p className="faq-kicker">dumb.co/faq</p>
           <h1>FREQUENTLY ASKED QUESTIONS</h1>
         </div>
         <div className="faq-list" role="list">
