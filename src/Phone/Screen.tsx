@@ -252,7 +252,7 @@ function Screen({
     setKeypadNum("1844OFFLINE,4");
   } else if (screen === "dumbphone I") {
     window.location.href =
-      "https://shop.offline.community/products/dumbphone-1";
+      "https://buy.stripe.com/aFa6oA8tO7b4aTNeAU8N200";
     setRow(0);
     setScreen("Home");
   } else if (screen === "M.O. DC") {
