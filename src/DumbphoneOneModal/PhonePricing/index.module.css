@@ -2,3 +2,154 @@
   width: 100%;
   height: 100%;
 }
+
+.board {
+  margin: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.headerRow {
+  padding-top: 1rem;
+  flex: 0 0 auto; /* don't grow */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.toggleBtn.active {
+  background-color: rgb(79, 79, 56);
+  color: white;
+}
+
+.subheadRow {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.list > *:nth-child(-n + 2) {
+  grid-column: span 3; /* 2 items → each takes half (3 of 6 columns) */
+}
+
+.list > *:nth-child(n + 3) {
+  grid-column: span 3; /* 3 items → each takes 1/3 (2 of 6 columns) */
+}
+
+.listMobile {
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
+}
+
+.optionRow {
+  position: relative;
+  padding: 1.75rem 0;
+  width: 100%;
+  height: 100%;
+}
+
+.optionRow.mobile {
+  position: relative;
+  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+
+.optionRight {
+  display: flex;
+  justify-content: center;
+}
+
+.mobileRow {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.mobileRow .optionRow {
+  flex: 1;
+}
+
+/* Big friendly tap target */
+.infoButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
+
+  background: #f2f2f2;
+  border-radius: 6px;
+
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.infoButton:active {
+  transform: translateY(1px);
+}
+
+.optionRight,
+.optionLeft {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobileAccordion {
+  width: 100%;
+}
+
+.mobileRow {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+/* small square info button */
+.infoButton {
+  padding: 0.5rem 1rem;
+  color: #000;
+  font-weight: 900;
+}
+
+/* accordion panel */
+.description {
+  padding: 0.5rem;
+  background: rgb(242, 242, 242);
+  color: #000;
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-align: left;
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
+}

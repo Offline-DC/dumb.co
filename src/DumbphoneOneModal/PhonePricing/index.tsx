@@ -1,14 +1,73 @@
-import { apiFetch } from "../../utils/fetchHeper";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCheckoutProducts } from "../../hooks/useCheckoutProducts";
 import styles from "./index.module.css";
-import { useQuery } from "@tanstack/react-query";
+import type { CheckoutProduct, StripePrice } from "../../hooks/types/stripe";
+import PricingHeader from "./PricingHeader";
+import BillingToggle from "./BillingToggle";
+import PricingList from "./PricingList";
+
+export type BillingView = "year" | "month";
+
+function pickPriceForInterval(
+  product: CheckoutProduct,
+  interval: BillingView,
+): StripePrice | null {
+  const recurring = product.prices.filter(
+    (p) => p.type === "recurring" && p.recurring?.interval,
+  );
+
+  const target = recurring.find((p) => p.recurring?.interval === interval);
+  if (target) return target;
+
+  if (recurring.length > 0) {
+    return [...recurring].sort(
+      (a, b) => (a.unit_amount ?? Infinity) - (b.unit_amount ?? Infinity),
+    )[0]!;
+  }
+
+  return null;
+}
 
 export default function PhonePricing() {
-  const { data } = useQuery({
-    queryKey: ["something"],
-    queryFn: () => apiFetch("/api/something"),
-  });
+  const navigate = useNavigate();
+  const { data: products = [], isLoading, isError } = useCheckoutProducts();
+  const [billing, setBilling] = useState<BillingView>("year");
 
-  console.log(data);
+  const rows = useMemo(() => {
+    return products
+      .map((product) => {
+        const price = pickPriceForInterval(product, billing);
+        return { product, price };
+      })
+      .filter((r) => r.price !== null) as Array<{
+      product: CheckoutProduct;
+      price: StripePrice;
+    }>;
+  }, [products, billing]);
 
-  return <div className={styles.container}>Hiii</div>;
+  const onSelectPrice = (priceId: string) => {
+    navigate(`/checkout?price_id=${encodeURIComponent(priceId)}`);
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.board}>
+        <div className={styles.headerRow}>
+          <PricingHeader title="DP info" />
+          <BillingToggle billing={billing} onChange={setBilling} />
+          <div className={styles.subheadRow}>
+            <div className={styles.colLabelLeft}>dumb plan + perks</div>
+          </div>
+        </div>
+        <PricingList
+          rows={rows}
+          billing={billing}
+          isLoading={isLoading}
+          isError={isError}
+          onSelectPrice={onSelectPrice}
+        />
+      </div>
+    </div>
+  );
 }

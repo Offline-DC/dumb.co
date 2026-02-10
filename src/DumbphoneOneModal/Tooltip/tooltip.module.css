@@ -1,0 +1,33 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(130% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 10px 14px;
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
+
+  background: rgb(242, 242, 242);
+
+  max-width: min(260px, 90vw);
+  width: max-content;
+
+  white-space: normal;
+  word-wrap: break-word;
+
+  text-align: center;
+  z-index: 9999;
+}

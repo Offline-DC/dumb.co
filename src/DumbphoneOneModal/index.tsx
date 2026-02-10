@@ -9,7 +9,7 @@ export default function DumbphoneOneModal({ clickBackButton }: Props) {
   return (
     <WindowModal
       title="DumbPhoneI.exe"
-      content={<FlyerContainer />}
+      content={() => <FlyerContainer />}
       onClose={clickBackButton}
     />
   );

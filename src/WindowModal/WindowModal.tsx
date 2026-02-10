@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./index.module.css";
 
+type ModalSize = { w: number; h: number };
+
 type Props = {
   title?: string;
 
   // One of these:
   imageSrc?: string;
   imageAlt?: string;
-  content?: ReactNode;
+  content?:
+    | ReactNode
+    | ((ctx: { size: ModalSize; isMobile: boolean }) => ReactNode);
 
   buttonText?: string;
   buttonHref?: string;
@@ -58,7 +62,6 @@ export default function WindowModal({
   } | null>(null);
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
-  const hasButton = !!(buttonText && buttonHref);
 
   const maximize = () => {
     restoreRef.current = { position, size };
@@ -165,6 +168,9 @@ export default function WindowModal({
     };
   }, [resizing, maximized, position.x, position.y]);
 
+  const renderedContent =
+    typeof content === "function" ? content({ size, isMobile }) : content;
+
   return (
     <div
       ref={windowRef}
@@ -224,7 +230,7 @@ export default function WindowModal({
         style={isMobile ? undefined : { height: size.h - TITLE_BAR_H }}
       >
         {content ? (
-          <div className={styles.flyer}>{content}</div>
+          <div className={styles.flyer}>{renderedContent}</div>
         ) : imageSrc ? (
           <div className={styles.flyer}>
             <img src={imageSrc} alt={imageAlt} draggable={false} />

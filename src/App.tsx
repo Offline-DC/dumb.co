@@ -109,11 +109,7 @@ function CheckoutWrapper() {
   if (isLoading) return <div>Loading checkout...</div>;
 
   if (error || !clientSecret) {
-    return (
-      <div style={{ color: "white" }}>
-        Error: {error || "Failed to initialize checkout"}
-      </div>
-    );
+    return <div>Error: {error || "Failed to initialize checkout"}</div>;
   }
 
   return (

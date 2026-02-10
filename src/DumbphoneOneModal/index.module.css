@@ -25,7 +25,6 @@
   height: auto;
 
   object-fit: contain;
-  user-select: none;
 }
 
 .overlayBox {
@@ -36,6 +35,5 @@
   height: 39%;
 
   border: 2px solid rgba(0, 0, 0, 0.55);
-  pointer-events: none;
   background-color: white;
 }
