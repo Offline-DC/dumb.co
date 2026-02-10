@@ -1,15 +1,11 @@
 .checkout-container {
   background-color: #f7f7f7;
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  margin: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
+  padding: 0 1rem;
 }
 
 .checkout-header {
@@ -34,12 +30,11 @@
 .checkout-form {
   max-width: 1200px;
   width: 100%;
-  padding: 0 2rem;
-  flex: 1;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  min-height: 0;
+  box-sizing: border-box;
+  padding-bottom: 1rem;
 }
 
 .checkout-footer {
@@ -52,6 +47,7 @@
   font-size: 0.875rem;
   color: #666;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .checkout-footer-left {
@@ -108,6 +104,7 @@
   border-radius: 4px;
   font-size: 1rem;
   background-color: #fff;
+  box-sizing: border-box;
 }
 
 .checkout-form input.error {
@@ -201,7 +198,7 @@
 #payment-message {
   color: #e74c3c;
   font-size: 0.875rem;
-  margin-top: 0.5rem;
+  margin-top: -0.5rem;
 }
 
 .checkout-button-container {
@@ -272,7 +269,9 @@
 .checkout-form button#submit:hover:not(:disabled) {
   transform: scale(1.05);
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .checkout-form button#submit:disabled {
@@ -291,8 +290,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-container,
@@ -334,26 +337,22 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .checkout-container {
-    padding: 1rem 0;
+    padding: 1rem;
   }
-  
-  .checkout-form {
-    padding: 0 1rem;
-  }
-  
+
   .checkout-form button#submit {
     width: 100%;
   }
-  
+
   .checkout-footer {
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem 1rem;
     text-align: center;
   }
-  
+
   .checkout-footer-right {
     flex-direction: column;
     gap: 0.75rem;
