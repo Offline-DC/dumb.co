@@ -26,7 +26,7 @@ const Complete = () => {
 
     console.log('Session ID from URL:', sessionId);
 
-    fetch(`http://localhost:3000/stripe/session-status?session_id=${sessionId}`)
+    fetch(`${import.meta.env.VITE_PAYMENT_API_URL}/stripe/session-status?session_id=${sessionId}`)
       .then((res) => {
         console.log('Response status:', res.status);
         return res.json();

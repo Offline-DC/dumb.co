@@ -209,7 +209,7 @@ const handleShippingAddressChange = async (event: any) => {
                 throw new Error('Session ID not found');
             }
 
-            const response = await fetch('http://localhost:3000/stripe/update-shipping', {
+            const response = await fetch(`${import.meta.env.VITE_PAYMENT_API_URL}/stripe/update-shipping`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -295,7 +295,7 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
                 ? Math.round(subtotalAmount * 0.06)
                 : 0;
 
-            const finalizeResponse = await fetch('http://localhost:3000/stripe/finalize-session', {
+            const finalizeResponse = await fetch(`${import.meta.env.VITE_PAYMENT_API_URL}/stripe/finalize-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
