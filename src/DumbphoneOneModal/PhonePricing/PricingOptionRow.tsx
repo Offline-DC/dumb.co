@@ -1,7 +1,5 @@
-import { useMemo } from "react";
 import type { CheckoutProduct, StripePrice } from "../../hooks/types/stripe";
 import type { BillingView } from "../PhonePricing";
-import Tooltip from "../Tooltip";
 import styles from "./index.module.css";
 
 function formatUsdCents(cents: number | null | undefined): string {
@@ -26,10 +24,12 @@ export default function PricingOptionRow({
   isExpanded = false,
   onToggleInfo,
 }: Props) {
-  const description = useMemo(
-    () => (product.description ?? "").trim(),
-    [product.description],
-  );
+  const rawDescription = product.description ?? "";
+
+  const descriptionItems = rawDescription
+    ?.split("///")
+    ?.map((s) => s.trim())
+    ?.filter(Boolean);
 
   const rowButton = (
     <button
@@ -55,11 +55,11 @@ export default function PricingOptionRow({
           type="button"
           className={styles.infoButton}
           aria-label={`${isExpanded ? "Hide" : "Show"} info about ${product.name}`}
-          aria-expanded={description ? isExpanded : undefined}
+          aria-expanded={descriptionItems ? isExpanded : undefined}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            if (!description) return;
+            if (!descriptionItems) return;
             onToggleInfo?.();
           }}
         >
@@ -69,13 +69,17 @@ export default function PricingOptionRow({
         {rowButton}
       </div>
 
-      {description && isExpanded && (
+      {descriptionItems.length > 0 && isExpanded && (
         <div
           className={styles.description}
           role="region"
           aria-label={`${product.name} description`}
         >
-          {description}
+          <ul className={styles.descriptionList}>
+            {descriptionItems.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

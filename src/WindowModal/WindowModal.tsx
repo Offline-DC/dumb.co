@@ -250,23 +250,6 @@ export default function WindowModal({
             </a>
           </div>
         )}
-
-        {!maximized && (
-          <div
-            className={styles.resizeHandle}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              resizeStart.current = {
-                mouseX: e.clientX,
-                mouseY: e.clientY,
-                w: size.w,
-                h: size.h,
-              };
-              setResizing(true);
-            }}
-          />
-        )}
       </div>
     </div>
   );

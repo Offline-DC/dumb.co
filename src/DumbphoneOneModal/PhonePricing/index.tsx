@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useCheckoutProducts } from "../../hooks/useCheckoutProducts";
 import styles from "./index.module.css";
 import type { CheckoutProduct, StripePrice } from "../../hooks/types/stripe";
-import PricingHeader from "./PricingHeader";
 import BillingToggle from "./BillingToggle";
 import PricingList from "./PricingList";
 
@@ -54,11 +53,7 @@ export default function PhonePricing() {
     <div className={styles.container}>
       <div className={styles.board}>
         <div className={styles.headerRow}>
-          <PricingHeader title="DP info" />
           <BillingToggle billing={billing} onChange={setBilling} />
-          <div className={styles.subheadRow}>
-            <div className={styles.colLabelLeft}>dumb plan + perks</div>
-          </div>
         </div>
         <PricingList
           rows={rows}
