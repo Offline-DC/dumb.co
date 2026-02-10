@@ -1,0 +1,91 @@
+#payment-status {
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#status-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+#status-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+#status-text {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+#details-table {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 400px;
+}
+
+#details-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#details-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#details-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+#details-table td {
+  padding: 1rem 0;
+}
+
+.TableLabel {
+  font-weight: 600;
+  color: #666;
+  padding-right: 2rem;
+}
+
+.TableContent {
+  color: #333;
+  text-align: right;
+  text-transform: capitalize;
+}
+
+@media (max-width: 768px) {
+  #payment-status {
+    padding: 1rem;
+  }
+  
+  #status-text {
+    font-size: 1.5rem;
+  }
+  
+  #details-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 400px;
+    padding: 1.5rem;
+  }
+}
