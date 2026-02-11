@@ -176,7 +176,7 @@ export default function WindowModal({
       ref={windowRef}
       className={styles.window}
       style={
-        isMobile
+        isMobile && typeof content === "function"
           ? {
               left: "0",
               top: "0",
