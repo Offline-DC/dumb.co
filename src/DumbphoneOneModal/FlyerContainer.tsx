@@ -6,7 +6,7 @@ type Props = {
   isMobile: boolean;
 };
 
-export default function FlyerContainer({ isMobile }: Props) {
+export default function FlyerContainer() {
   return (
     <div className={styles.root}>
       <div className={styles.frame}>

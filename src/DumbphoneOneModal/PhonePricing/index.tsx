@@ -57,6 +57,10 @@ export default function PhonePricing() {
           isLoading={isLoading}
           isError={isError}
         />
+        <div className={styles.footer}>
+          dumb means every1. if u r under 25 or need financial aid, email
+          milk@offline.community
+        </div>
       </div>
     </div>
   );

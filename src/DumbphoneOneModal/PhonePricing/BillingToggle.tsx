@@ -8,33 +8,37 @@ type Props = {
 };
 
 export default function BillingToggle({ billing, onChange }: Props) {
-  const navigate = useNavigate();
   return (
     <div className={styles.toggle}>
-      <div></div>
+      <div className={styles.faqButtonContainer}>
+        <a
+          className={styles.faqButton}
+          href="/faqs"
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      </div>
       <div>
         <button
           type="button"
-          className={`${styles.toggleBtn} ${billing === "month" ? styles.active : ""}`}
+          className={`${styles.toggleBtn} ${
+            billing === "month" ? styles.active : ""
+          }`}
           onClick={() => onChange("month")}
         >
           monthly
         </button>
+
         <button
           type="button"
-          className={`${styles.toggleBtn} ${billing === "year" ? styles.active : ""}`}
+          className={`${styles.toggleBtn} ${
+            billing === "year" ? styles.active : ""
+          }`}
           onClick={() => onChange("year")}
         >
           yearly
         </button>
       </div>
-      <button
-        type="button"
-        onClick={() => navigate("/faqs")}
-        style={{ all: "unset", cursor: "pointer" }}
-      >
-        FAQ
-      </button>{" "}
     </div>
   );
 }
