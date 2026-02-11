@@ -2,10 +2,6 @@ import flyer from "./productpageextendoooooo.jpg";
 import styles from "./index.module.css";
 import PhonePricing from "./PhonePricing";
 
-type Props = {
-  isMobile: boolean;
-};
-
 export default function FlyerContainer() {
   return (
     <div className={styles.root}>

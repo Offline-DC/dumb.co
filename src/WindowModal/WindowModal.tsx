@@ -9,9 +9,7 @@ type Props = {
   // One of these:
   imageSrc?: string;
   imageAlt?: string;
-  content?:
-    | ReactNode
-    | ((ctx: { size: ModalSize; isMobile: boolean }) => ReactNode);
+  content?: (ctx: { size: ModalSize; isMobile: boolean }) => ReactNode;
 
   buttonText?: string;
   buttonHref?: string;
@@ -35,6 +33,7 @@ export default function WindowModal({
   buttonHref,
   onClose,
 }: Props) {
+  const isInteractiveImage = !!content;
   const windowRef = useRef<HTMLDivElement | null>(null);
 
   const dragOffset = useRef({ x: 0, y: 0 });
@@ -52,7 +51,7 @@ export default function WindowModal({
 
   const [size, setSize] = useState(() => ({
     w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
-    h: Math.floor(window.innerHeight * 0.95),
+    h: Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.9)),
   }));
 
   const [maximized, setMaximized] = useState(false);
@@ -168,15 +167,16 @@ export default function WindowModal({
     };
   }, [resizing, maximized, position.x, position.y]);
 
-  const renderedContent =
-    typeof content === "function" ? content({ size, isMobile }) : content;
+  const renderedContent = isInteractiveImage
+    ? content({ size, isMobile })
+    : content;
 
   return (
     <div
       ref={windowRef}
       className={styles.window}
       style={
-        isMobile && typeof content === "function"
+        isMobile && isInteractiveImage
           ? {
               left: "0",
               top: "0",

@@ -29,7 +29,6 @@ function pickPriceForInterval(
 }
 
 export default function PhonePricing() {
-  const navigate = useNavigate();
   const { data: products = [], isLoading, isError } = useCheckoutProducts();
   const [billing, setBilling] = useState<BillingView>("year");
 
