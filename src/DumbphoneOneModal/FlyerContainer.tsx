@@ -2,7 +2,12 @@ import flyer from "./productpageextendoooooo.jpg";
 import styles from "./index.module.css";
 import PhonePricing from "./PhonePricing";
 
-export default function FlyerContainer() {
+type Props = {
+  modalWidth: number;
+};
+
+export default function FlyerContainer({ modalWidth }: Props) {
+  console.log(modalWidth * 0.72);
   return (
     <div className={styles.root}>
       <div className={styles.frame}>
@@ -12,7 +17,10 @@ export default function FlyerContainer() {
           draggable={false}
           className={styles.image}
         />
-        <div className={styles.overlayBox}>
+        <div
+          style={{ top: `${modalWidth * 0.7}px` }}
+          className={styles.overlayBox}
+        >
           <PhonePricing />
         </div>
       </div>
