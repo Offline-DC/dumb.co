@@ -58,8 +58,18 @@ export default function PhonePricing() {
           isError={isError}
         />
         <div className={styles.footer}>
-          dumb means every1. if u r under 25 or need financial aid, email
-          milk@offline.community
+          <div className={styles.faqButtonContainer}>
+            <a
+              className={styles.faqButton}
+              href="/faqs"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          </div>
+          <div>
+            dumb means every1. if u r under 25 or need financial aid, email
+            milk@offline.community
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import type { BillingView } from "../PhonePricing";
 import styles from "./index.module.css";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   billing: BillingView;
@@ -10,14 +9,6 @@ type Props = {
 export default function BillingToggle({ billing, onChange }: Props) {
   return (
     <div className={styles.toggle}>
-      <div className={styles.faqButtonContainer}>
-        <a
-          className={styles.faqButton}
-          href="/faqs"
-          target="_blank"
-          rel="noopener noreferrer"
-        />
-      </div>
       <div>
         <button
           type="button"

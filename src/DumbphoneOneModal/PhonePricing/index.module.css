@@ -32,7 +32,7 @@
 
 .toggle {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
 }
 
@@ -165,7 +165,7 @@ button:hover {
   padding: 0 0.5rem;
   background: rgb(242, 242, 242);
   color: #000;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   overflow-wrap: anywhere;
   text-align: left;
