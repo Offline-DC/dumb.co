@@ -23,6 +23,10 @@
   flex-direction: column;
 }
 
+.toggleBtn {
+  padding: 0.5rem 1rem;
+}
+
 .toggleBtn.active {
   background-color: rgb(79, 79, 56);
   color: white;

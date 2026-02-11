@@ -70,7 +70,6 @@
 .body {
   position: relative;
   background: #e0e0e0;
-  overflow: hidden;
 
   border-top: 2px solid #808080;
   border-left: 2px solid #808080;
@@ -84,8 +83,6 @@
 .flyer {
   position: relative;
   width: 100%;
-  overflow: scroll;
-
   flex: 1 1 auto;
   min-height: 0;
   min-width: 0; /* ✅ important for flex children */

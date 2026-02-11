@@ -21,7 +21,9 @@ export default function PricingList({
   isError,
   onSelectPrice,
 }: Props) {
-  const [openProductId, setOpenProductId] = useState<string | null>(null);
+  const [openProductId, setOpenProductId] = useState<string | null>(
+    "prod_Tq5pnPvibIdvNg",
+  );
 
   if (isLoading) return <div className={styles.muted}>Loading…</div>;
   if (isError)
@@ -41,7 +43,7 @@ export default function PricingList({
           isExpanded={openProductId === product.id}
           onToggleInfo={() =>
             setOpenProductId((prev) =>
-              prev === product.id ? null : product.id,
+              prev === product.id ? prev : product.id,
             )
           }
         />
