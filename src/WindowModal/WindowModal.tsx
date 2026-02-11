@@ -1,12 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./index.module.css";
 
-type WindowModalProps = {
+type ModalSize = { w: number; h: number };
+
+type Props = {
   title?: string;
-  imageSrc: string;
+
+  // One of these:
+  imageSrc?: string;
   imageAlt?: string;
-  buttonText: string;
-  buttonHref: string;
+  content?:
+    | ReactNode
+    | ((ctx: { size: ModalSize; isMobile: boolean }) => ReactNode);
+
+  buttonText?: string;
+  buttonHref?: string;
+
   onClose: () => void;
 };
 
@@ -21,10 +30,11 @@ export default function WindowModal({
   title = "Window.exe",
   imageSrc,
   imageAlt = "Modal image",
+  content,
   buttonText,
   buttonHref,
   onClose,
-}: WindowModalProps) {
+}: Props) {
   const windowRef = useRef<HTMLDivElement | null>(null);
 
   const dragOffset = useRef({ x: 0, y: 0 });
@@ -33,14 +43,16 @@ export default function WindowModal({
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
 
-  const [position, setPosition] = useState({
-    x: window.innerWidth < 600 ? 0 : 80,
-    y: 0,
+  const [position, setPosition] = useState(() => {
+    return {
+      x: window.innerWidth < 800 ? 0 : 80,
+      y: 10,
+    };
   });
 
   const [size, setSize] = useState(() => ({
-    w: Math.min(640, Math.floor(window.innerWidth * 0.98)),
-    h: Math.floor(window.innerHeight * 0.9),
+    w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
+    h: Math.floor(window.innerHeight * 0.97),
   }));
 
   const [maximized, setMaximized] = useState(false);
@@ -48,6 +60,8 @@ export default function WindowModal({
     position: typeof position;
     size: typeof size;
   } | null>(null);
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 700;
 
   const maximize = () => {
     restoreRef.current = { position, size };
@@ -154,16 +168,29 @@ export default function WindowModal({
     };
   }, [resizing, maximized, position.x, position.y]);
 
+  const renderedContent =
+    typeof content === "function" ? content({ size, isMobile }) : content;
+
   return (
     <div
       ref={windowRef}
       className={styles.window}
-      style={{
-        left: position.x,
-        top: position.y,
-        width: size.w,
-        zIndex: 999999,
-      }}
+      style={
+        isMobile
+          ? {
+              left: "0",
+              top: "0",
+              width: "98vw",
+              height: "98vh",
+              zIndex: 999999,
+            }
+          : {
+              left: position.x,
+              top: position.y,
+              width: size.w,
+              zIndex: 999999,
+            }
+      }
     >
       <div
         className={styles.titleBar}
@@ -198,41 +225,30 @@ export default function WindowModal({
         </div>
       </div>
 
-      <div className={styles.body} style={{ height: size.h - TITLE_BAR_H }}>
-        <img
-          className={styles.flyer}
-          src={imageSrc}
-          alt={imageAlt}
-          draggable={false}
-        />
+      <div
+        className={styles.body}
+        style={isMobile ? undefined : { height: size.h - TITLE_BAR_H }}
+      >
+        {content ? (
+          <div className={styles.flyer}>{renderedContent}</div>
+        ) : imageSrc ? (
+          <div className={styles.flyer}>
+            <img src={imageSrc} alt={imageAlt} draggable={false} />
+          </div>
+        ) : null}
 
-        <div className={styles.applyContainer}>
-          <a
-            href={buttonHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.applyButton}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {buttonText}
-          </a>
-        </div>
-
-        {!maximized && (
-          <div
-            className={styles.resizeHandle}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              resizeStart.current = {
-                mouseX: e.clientX,
-                mouseY: e.clientY,
-                w: size.w,
-                h: size.h,
-              };
-              setResizing(true);
-            }}
-          />
+        {buttonText && buttonHref && (
+          <div className={styles.applyContainer}>
+            <a
+              href={buttonHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.applyButton}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {buttonText}
+            </a>
+          </div>
         )}
       </div>
     </div>

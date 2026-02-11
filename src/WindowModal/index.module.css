@@ -1,7 +1,6 @@
 .window {
   position: fixed;
   background: #c0c0c0;
-  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
   font-size: 14px;
 
   border: 2px solid #c0c0c0;
@@ -68,29 +67,49 @@
     inset 1px 1px 0 #808080;
 }
 
-/* Body is now a fixed viewport for the flyer */
 .body {
   position: relative;
-  padding: 10px;
   background: #e0e0e0;
-  overflow: hidden;
 
   border-top: 2px solid #808080;
   border-left: 2px solid #808080;
   border-right: 2px solid #ffffff;
   border-bottom: 2px solid #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .flyer {
-  display: block;
+  position: relative;
   width: 100%;
-  height: 92%;
-  object-fit: contain;
-  user-select: none;
-  pointer-events: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0; /* ✅ important for flex children */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: auto; /* ✅ only scrolls if needed */
 }
 
-/* Bottom-right resize grip (90s style) */
+.flyer img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.flyer > * {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0; /* ✅ */
+}
+
 .resizeHandle {
   position: absolute;
   right: 2px;
@@ -134,7 +153,6 @@
   min-width: 140px;
   text-align: center;
 
-  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.4px;
@@ -249,5 +267,17 @@
   }
   50% {
     transform: rotate(12deg) scale(1.2);
+  }
+}
+
+@media (max-width: 700px) {
+  .body {
+    overflow: hidden; /* optional: prevents weird clipping on short content */
+  }
+
+  .flyer img {
+    height: auto; /* ✅ let image dictate height */
+    width: 100%;
+    object-fit: contain;
   }
 }

@@ -4,6 +4,7 @@ import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import InternshipModal from "../InternshipModal/InternshipModal";
+import DumbphoneOneModal from "../DumbphoneOneModal";
 
 type Props = {
   row: number;
@@ -250,6 +251,13 @@ function Screen({
       </div>
     );
     setKeypadNum("1844OFFLINE,4");
+  } else if (screen === "dumbphone I test") {
+    display = (
+      <div>
+        launching dumbphone I...
+        <DumbphoneOneModal clickBackButton={clickBackButton} />
+      </div>
+    );
   } else if (screen === "dumbphone I") {
     window.location.href =
       "https://buy.stripe.com/aFa6oA8tO7b4aTNeAU8N200";

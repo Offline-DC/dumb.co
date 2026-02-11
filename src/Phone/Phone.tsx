@@ -22,6 +22,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
   intern: "/intern",
+  ["dumbphone I test"]: "/phone",
 };
 
 function Phone({ initialScreen }: Props) {
@@ -154,7 +155,11 @@ function Phone({ initialScreen }: Props) {
         <Navigation
           onBackClick={handleBackButton}
           onCenterClick={() => {
-            if (screen === "dumbhouse" || screen === "internship") {
+            if (
+              screen === "dumbhouse" ||
+              screen === "internship" ||
+              screen === "dumbphone I"
+            ) {
               return;
             }
             if (screen === "press") {
