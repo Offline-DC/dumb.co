@@ -87,10 +87,16 @@ function FAQs() {
         const dataRows = isHeaderRow ? restRows : rows;
 
         const nextItems: FaqItem[] = dataRows
-          .map((row) => ({
-            question: row[0]?.trim() ?? "",
-            answers: row[1] ? [row[1].trim()] : [],
-          }))
+          .map((row) => {
+            const question = row[0]?.trim() ?? "";
+            const answers = [
+              row[1]?.trim(),
+              row[2]?.trim(),
+              row[3]?.trim(),
+            ].filter((answer): answer is string => Boolean(answer));
+            
+            return { question, answers };
+          })
           .filter((item) => item.question && item.answers.length > 0);
 
         if (isActive) {
@@ -152,7 +158,12 @@ function FAQs() {
                 >
                   {item.answers.length > 0 ? (
                     item.answers.map((answer, answerIndex) => (
-                      <p key={answerIndex}>{answer}</p>
+                      <div key={answerIndex}>
+                        <p>{answer}</p>
+                        {answerIndex < item.answers.length - 1 && (
+                          <div className="faq-answer-separator" />
+                        )}
+                      </div>
                     ))
                   ) : (
                     <p className="faq-empty" aria-hidden="true"></p>
