@@ -107,7 +107,7 @@ function CheckoutWrapper() {
 
   const appearance = { theme: "flat" as const };
 
-  if (isLoading) return <div>Loading checkout...</div>;
+  if (isLoading) return <div style={{ color: "white" }}>Loading...</div>;
 
   if (error || !clientSecret) {
     return <div>Error: {error || "Failed to initialize checkout"}</div>;
