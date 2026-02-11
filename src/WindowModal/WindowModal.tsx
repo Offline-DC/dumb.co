@@ -51,7 +51,7 @@ export default function WindowModal({
 
   const [size, setSize] = useState(() => ({
     w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
-    h: Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.9)),
+    h: Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.85)),
   }));
 
   const [maximized, setMaximized] = useState(false);

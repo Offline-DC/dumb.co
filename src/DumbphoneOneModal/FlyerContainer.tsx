@@ -7,7 +7,6 @@ type Props = {
 };
 
 export default function FlyerContainer({ modalWidth }: Props) {
-  console.log(modalWidth * 0.72);
   return (
     <div className={styles.root}>
       <div className={styles.frame}>
