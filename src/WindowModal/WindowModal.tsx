@@ -45,14 +45,14 @@ export default function WindowModal({
 
   const [position, setPosition] = useState(() => {
     return {
-      x: window.innerWidth < 600 ? 0 : 80,
-      y: 0,
+      x: window.innerWidth < 800 ? 0 : 80,
+      y: 10,
     };
   });
 
   const [size, setSize] = useState(() => ({
     w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
-    h: Math.floor(window.innerHeight * 0.98),
+    h: Math.floor(window.innerHeight * 0.97),
   }));
 
   const [maximized, setMaximized] = useState(false);
@@ -61,7 +61,7 @@ export default function WindowModal({
     size: typeof size;
   } | null>(null);
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 700;
 
   const maximize = () => {
     restoreRef.current = { position, size };
@@ -178,10 +178,10 @@ export default function WindowModal({
       style={
         isMobile
           ? {
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
+              left: "0",
+              top: "0",
               width: "98vw",
+              height: "98vh",
               zIndex: 999999,
             }
           : {

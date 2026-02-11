@@ -30,10 +30,10 @@
 .overlayBox {
   position: absolute;
   left: 50%;
-  top: 73%;
+  top: 75%;
   transform: translate(-50%, -50%);
 
-  width: 87%;
+  width: 90%;
   border: 2px solid rgba(0, 0, 0, 0.55);
   background-color: white;
 }

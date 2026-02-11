@@ -45,10 +45,6 @@ export default function PhonePricing() {
     }>;
   }, [products, billing]);
 
-  const onSelectPrice = (priceId: string) => {
-    navigate(`/checkout?price_id=${encodeURIComponent(priceId)}`);
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.board}>
@@ -60,7 +56,6 @@ export default function PhonePricing() {
           billing={billing}
           isLoading={isLoading}
           isError={isError}
-          onSelectPrice={onSelectPrice}
         />
       </div>
     </div>

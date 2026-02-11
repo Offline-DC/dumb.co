@@ -11,7 +11,6 @@ type Props = {
   product: CheckoutProduct;
   price: StripePrice;
   billing: BillingView;
-  onClick: () => void;
   isExpanded?: boolean;
   onToggleInfo?: () => void;
 };
@@ -20,22 +19,25 @@ export default function PricingOptionRow({
   product,
   price,
   billing,
-  onClick,
   isExpanded = false,
   onToggleInfo,
 }: Props) {
   const rawDescription = product.description ?? "";
 
   const descriptionItems = rawDescription
-    ?.split("///")
-    ?.map((s) => s.trim())
-    ?.filter(Boolean);
+    .split("///")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const checkoutUrl = `/checkout?price_id=${encodeURIComponent(price.id)}`;
 
   const rowButton = (
     <button
       type="button"
       className={`${styles.optionRow} ${styles.mobile}`}
-      onClick={onClick}
+      onClick={() => {
+        window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+      }}
     >
       <div className={styles.optionLeft}>
         <div className={styles.optionName}>{product.name}</div>
@@ -55,11 +57,12 @@ export default function PricingOptionRow({
           type="button"
           className={styles.infoButton}
           aria-label={`${isExpanded ? "Hide" : "Show"} info about ${product.name}`}
-          aria-expanded={descriptionItems ? isExpanded : undefined}
+          aria-expanded={descriptionItems.length > 0 ? isExpanded : undefined}
           onClick={(e) => {
             e.stopPropagation();
+            // prevent triggering the row's click behavior in some browsers/layouts
             e.preventDefault();
-            if (!descriptionItems) return;
+            if (descriptionItems.length === 0) return;
             onToggleInfo?.();
           }}
         >

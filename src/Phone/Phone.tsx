@@ -22,7 +22,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
   intern: "/intern",
-  ["dumbphone I"]: "/phone",
+  ["dumbphone I test"]: "/phone",
 };
 
 function Phone({ initialScreen }: Props) {

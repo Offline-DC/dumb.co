@@ -78,6 +78,7 @@
 
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .flyer {
@@ -90,6 +91,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  overflow: auto; /* ✅ only scrolls if needed */
 }
 
 .flyer img {
@@ -267,14 +270,9 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .body {
-    overflow: visible; /* optional: prevents weird clipping on short content */
-  }
-
-  .flyer {
-    flex: 0 0 auto; /* ✅ do not grow to fill */
-    min-height: unset;
+    overflow: hidden; /* optional: prevents weird clipping on short content */
   }
 
   .flyer img {

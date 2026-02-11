@@ -22,7 +22,6 @@ import NotFound from "./NotFound";
 
 import CheckoutForm from "./Stripe/CheckoutForm.tsx";
 import Confirmation from "./Stripe/Confirmation.tsx";
-import Products from "./Stripe/Products.tsx";
 
 import "./App.css";
 import CenteredShell from "./CenteredLayout.tsx";
@@ -140,7 +139,6 @@ function App() {
         <Routes>
           <Route element={<CenteredShell />}>
             <Route path="/" element={<Phone />} />
-            <Route path="/products" element={<Products />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dumbdown" element={<DumbDumb />} />
             <Route path="/setup" element={<OfflineMode />} />
@@ -157,7 +155,7 @@ function App() {
             />
             <Route
               path="/phone"
-              element={<Phone initialScreen="dumbphone I" />}
+              element={<Phone initialScreen="dumbphone I test" />}
             />
             <Route path="*" element={<NotFound />} />
           </Route>

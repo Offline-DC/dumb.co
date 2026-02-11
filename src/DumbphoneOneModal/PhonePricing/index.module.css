@@ -16,11 +16,24 @@
   width: 100%;
 }
 
+.muted {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  color: white;
+}
+
 .headerRow {
   flex: 0 0 auto; /* don't grow */
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .toggleBtn {
@@ -149,7 +162,7 @@ button:hover {
 
 /* accordion panel */
 .description {
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   background: rgb(242, 242, 242);
   color: #000;
   font-size: 13px;

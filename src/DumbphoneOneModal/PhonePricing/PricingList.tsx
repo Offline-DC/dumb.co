@@ -11,7 +11,6 @@ type Props = {
   billing: BillingView;
   isLoading: boolean;
   isError: boolean;
-  onSelectPrice: (priceId: string) => void;
 };
 
 export default function PricingList({
@@ -19,7 +18,6 @@ export default function PricingList({
   billing,
   isLoading,
   isError,
-  onSelectPrice,
 }: Props) {
   const [openProductId, setOpenProductId] = useState<string | null>(
     "prod_Tq5pnPvibIdvNg",
@@ -39,7 +37,6 @@ export default function PricingList({
           product={product}
           price={price}
           billing={billing}
-          onClick={() => onSelectPrice(price.id)}
           isExpanded={openProductId === product.id}
           onToggleInfo={() =>
             setOpenProductId((prev) =>

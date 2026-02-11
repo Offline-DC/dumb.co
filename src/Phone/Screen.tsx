@@ -244,13 +244,18 @@ function Screen({
       </div>
     );
     setKeypadNum("1844OFFLINE,4");
-  } else if (screen === "dumbphone I") {
+  } else if (screen === "dumbphone I test") {
     display = (
       <div>
         launching dumbphone I...
         <DumbphoneOneModal clickBackButton={clickBackButton} />
       </div>
     );
+  } else if (screen === "dumbphone I") {
+    window.location.href =
+      "https://shop.offline.community/products/dumbphone-1";
+    setRow(0);
+    setScreen("Home");
   } else if (screen === "Month Offline D.C.") {
     window.location.href =
       "https://shop.offline.community/products/month-offline-september-in-dc";
