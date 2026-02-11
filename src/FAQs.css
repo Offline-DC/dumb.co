@@ -1,0 +1,134 @@
+.faq-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px 64px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.faq-card {
+  width: 100%;
+  max-width: 900px !important;
+  max-width: min(900px, 100vw);
+  min-width: 0;
+  box-sizing: border-box;
+  background: #f2efe4;
+  border: 2px solid #1d1d1d;
+  box-shadow: 6px 6px 0 #1d1d1d;
+  padding: 28px 24px 32px;
+  overflow-x: hidden;
+}
+
+.faq-header {
+  border-bottom: 2px solid #1d1d1d;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.faq-kicker {
+  font-size: 0.9rem;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+}
+
+.faq-header h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  text-transform: uppercase;
+}
+
+.faq-list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.faq-item {
+  max-width: 100%;
+  border: 1px solid #1d1d1d;
+  background: #f9f7ee;
+  overflow-x: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: transparent;
+  border: none;
+  padding: 14px 16px;
+  font-size: 2.5rem;
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.faq-question span:first-child {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.faq-question:focus-visible {
+  outline: 2px dashed #1d1d1d;
+  outline-offset: 2px;
+}
+
+.faq-indicator {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.faq-panel {
+  padding: 0 16px 16px;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+}
+
+.faq-panel p {
+  margin: 8px 0 0;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.faq-panel a {
+  color: #1d1d1d;
+  text-decoration: underline;
+}
+
+.faq-answer-separator {
+  margin: 12px 0;
+  height: 1px;
+  background: #d4d1c6;
+  border: none;
+}
+
+.faq-empty {
+  height: 0;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .faq-card {
+    padding: 22px 18px 28px;
+    box-shadow: 4px 4px 0 #1d1d1d;
+  }
+
+  .faq-question {
+    font-size: 0.95rem;
+  }
+}

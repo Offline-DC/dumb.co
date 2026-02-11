@@ -16,7 +16,8 @@ export default function CenteredShell() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          margin: "auto .5rem",
+          margin: "auto 0rem",
+          backgroundColor: "rgb(51, 51, 51)",
           maxWidth: "100%",
           width: "100%",
         }}

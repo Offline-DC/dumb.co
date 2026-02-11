@@ -19,12 +19,14 @@ import Dashboard from "./Dashboard.tsx";
 import Support from "./Support";
 import Internship from "./Internship/Internship.tsx";
 import NotFound from "./NotFound";
+import AndroidDownload from "./Android/AndroidDownload.tsx";
 
 import CheckoutForm from "./Stripe/CheckoutForm.tsx";
 import Confirmation from "./Stripe/Confirmation.tsx";
 
 import "./App.css";
 import CenteredShell from "./CenteredLayout.tsx";
+import FAQs from "./FAQs.tsx";
 
 export const OFFLINE_PHONE_NUMBER = "844-633-5463";
 
@@ -157,6 +159,8 @@ function App() {
               path="/phone"
               element={<Phone initialScreen="dumbphone I test" />}
             />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/android" element={<AndroidDownload />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 

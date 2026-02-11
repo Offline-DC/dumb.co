@@ -9,7 +9,7 @@ Please include:
 - Contact info
 - Which position you are applying for
 - A CV
-- A short few paragraphs about your interest in dumb.co and an offline life
+- Do you have a dumb phone? Have you ordered the dumb.co dumb phone I? Why are you interested in dumb living? Why do you want to intern at dumb.co?
 
 We aim to respond within **2 weeks**.
 
