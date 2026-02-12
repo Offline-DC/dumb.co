@@ -49,6 +49,26 @@ export default function WindowModal({
     };
   });
 
+  useEffect(() => {
+    const body = document.body;
+
+    const prevOverflow = body.style.overflow;
+    const prevPaddingRight = body.style.paddingRight;
+
+    const scrollBarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    body.style.overflow = "hidden";
+    if (scrollBarWidth > 0) {
+      body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = prevOverflow;
+      body.style.paddingRight = prevPaddingRight;
+    };
+  }, []);
+
   const [size, setSize] = useState(() => ({
     w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
     h: Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.85)),
