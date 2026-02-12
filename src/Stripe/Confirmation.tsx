@@ -75,6 +75,25 @@ const Complete = () => {
           </tbody>
         </table>
       </div>
+      <div id="home-link">
+        <a 
+          href="/" 
+          style={{
+            backgroundColor: '#800000',
+            color: 'white',
+            padding: '12px 24px',
+            textDecoration: 'none',
+            fontFamily: 'Arial Black, sans-serif',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            borderRadius: '4px',
+            display: 'inline-block',
+            marginTop: '20px'
+          }}
+        >
+          Return Home
+        </a>
+      </div>
      </div>
     )
 }

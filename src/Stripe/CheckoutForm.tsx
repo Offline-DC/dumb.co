@@ -156,12 +156,6 @@ const CheckoutForm = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sameAsShipping, setSameAsShipping] = useState(true);
-  const [isUpdatingShipping, setIsUpdatingShipping] = useState(false);
-  const [shippingError, setShippingError] = useState<string | null>(null);
-  const [shippingCost, setShippingCost] = useState<number | null>(null);
-  const [shippingProductId, setShippingProductId] = useState<string | null>(
-    null,
-  );
   const [billingState, setBillingState] = useState<string | null>(null);
 
   const checkoutState = useCheckout();
@@ -169,9 +163,6 @@ const CheckoutForm = () => {
   // Debug: Log checkout state structure
   useEffect(() => {
     if (checkoutState.type === "success") {
-      console.log("Checkout state structure:", checkoutState.checkout);
-      console.log("Session ID:", checkoutState.checkout.id);
-      console.log("Shipping rate:", checkoutState.checkout.total?.shippingRate);
     }
   }, [checkoutState]);
 
@@ -195,101 +186,40 @@ const CheckoutForm = () => {
       message: string;
     };
   }
-
-  const handleShippingAddressChange = async (event: any) => {
-    console.log("Full address change event:", JSON.stringify(event, null, 2));
-    console.log("Event.value:", event.value);
-    console.log("Event.complete:", event.complete);
-
-    // Try to extract postal code from various possible locations
-    const postalCode =
-      event.value?.address?.postalCode ||
-      event.value?.postalCode ||
-      event.value?.address?.postal_code;
-
-    // Extract billing state for tax calculation
-    const state = event.value?.address?.state || event.value?.address?.region;
-    if (state) {
-      console.log("Billing state:", state);
-      setBillingState(state);
-    }
-
-    console.log("Extracted postal code:", postalCode);
-
-    // Trigger update if we have a postal code (don't wait for complete)
-    if (postalCode && postalCode.length >= 5) {
-      console.log("Postal code found, updating shipping...");
-
-      setIsUpdatingShipping(true);
-      setShippingError(null);
-
-      try {
-        // Get the session ID from the checkout state
-        if (checkoutState.type !== "success") {
-          throw new Error("Checkout not ready");
-        }
-
-        const sessionId = checkoutState.checkout.id;
-        console.log("Using session ID:", sessionId);
-
-        if (!sessionId) {
-          throw new Error("Session ID not found");
-        }
-
-        const response = await fetch(
-          `${import.meta.env.VITE_PAYMENT_API_URL}/stripe/update-shipping`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              sessionId: sessionId,
-              destinationZIPCode: postalCode,
-            }),
-          },
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Server error:", errorData);
-          throw new Error(errorData.error || "Failed to update shipping rate");
-        }
-
-        const data = await response.json();
-        console.log("Shipping updated successfully:", data);
-
-        // Store the shipping cost and product ID locally
-        setShippingCost(data.shippingAmount);
-        setShippingProductId(data.productId);
-      } catch (error) {
-        console.error("Error updating shipping:", error);
-        setShippingError(
-          error instanceof Error
-            ? error.message
-            : "Failed to calculate shipping rate. Please try again.",
-        );
-      } finally {
-        setIsUpdatingShipping(false);
-      }
-    } else {
-      console.log(
-        "No valid postal code yet. Waiting for user to enter complete zip code...",
-      );
-    }
-  };
-
   const handleBillingAddressChange = async (event: any) => {
-    console.log("Billing address change event:", event);
-
-    // Extract billing state for tax calculation
+    // Track billing state for tax calculation
     const state = event.value?.address?.state || event.value?.address?.region;
     if (state) {
-      console.log("Billing state:", state);
       setBillingState(state);
     }
+    
+    // If billing = shipping, update shipping address with billing address
+    if (sameAsShipping && event.complete && event.value?.address) {
+      const { checkout } = checkoutState;
+      const address = event.value.address;
+      
+      try {
+        const updateResult = await checkout.updateShippingAddress({
+          name: event.value.name || "",
+          address: {
+            line1: address.line1 || "",
+            line2: address.line2 || "",
+            city: address.city || "",
+            state: address.state || "",
+            postal_code: address.postalCode || address.postal_code || "",
+            country: address.country || "",
+          },
+        });
+        
+        if (updateResult.type === "error") {
+          console.error("Error updating shipping address:", updateResult.error);
+        } else {
+          console.log("Shipping address updated successfully");}
+      } catch (error) {
+        console.error("Error updating shipping address:", error);
+      }
+    }
   };
-
   const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
     e.preventDefault();
 
@@ -328,43 +258,6 @@ const CheckoutForm = () => {
     // Store the cleaned phone number
     setPhone(cleanedPhone);
 
-    // Finalize session with shipping and tax before confirming
-    try {
-      const subtotalAmount = parseInt(
-        checkoutState.checkout.total.total.amount.replace(/[^0-9]/g, ""),
-      );
-      const taxAmount =
-        billingState &&
-        (billingState.toUpperCase() === "DC" ||
-          billingState.toUpperCase() === "DISTRICT OF COLUMBIA")
-          ? Math.round(subtotalAmount * 0.06)
-          : 0;
-
-      const finalizeResponse = await fetch(
-        `${import.meta.env.VITE_PAYMENT_API_URL}/stripe/finalize-session`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId: checkoutState.checkout.id,
-            shippingAmount: shippingCost || 0,
-            taxAmount: taxAmount,
-            billingState: billingState,
-          }),
-        },
-      );
-
-      if (!finalizeResponse.ok) {
-        console.error("Failed to finalize session");
-      } else {
-        console.log("Session finalized with shipping and tax");
-      }
-    } catch (error) {
-      console.error("Error finalizing session:", error);
-    }
-
     const confirmResult: ConfirmResult = await checkout.confirm();
 
     // This point will only be reached if there is an immediate error when
@@ -374,9 +267,11 @@ const CheckoutForm = () => {
     // redirected to the `return_url`.
     if (confirmResult.type === "error" && confirmResult.error) {
       setMessage(confirmResult.error.message);
+      setIsSubmitting(false);
+    } else if (confirmResult.type === "success") {
+      // On success, redirect to the session's return URL
+      window.location.href = "/confirmation";
     }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -427,37 +322,17 @@ const CheckoutForm = () => {
             {sameAsShipping ? (
               <div>
                 <h4>Billing Address</h4>
-                <BillingAddressElement onChange={handleShippingAddressChange} />
-                {isUpdatingShipping && (
-                  <div className="shipping-message">
-                    Calculating shipping...
-                  </div>
-                )}
-                {shippingError && (
-                  <div className="shipping-error">{shippingError}</div>
-                )}
+                <BillingAddressElement onChange={handleBillingAddressChange} />
               </div>
             ) : (
               <>
                 <div>
                   <h4>Shipping Address</h4>
-                  <ShippingAddressElement
-                    onChange={handleShippingAddressChange}
-                  />
-                  {isUpdatingShipping && (
-                    <div className="shipping-message">
-                      Calculating shipping...
-                    </div>
-                  )}
-                  {shippingError && (
-                    <div className="shipping-error">{shippingError}</div>
-                  )}
+                  <ShippingAddressElement />
                 </div>
                 <div>
                   <h4>Billing Address</h4>
-                  <BillingAddressElement
-                    onChange={handleBillingAddressChange}
-                  />
+                  <BillingAddressElement onChange={handleBillingAddressChange} />
                 </div>
               </>
             )}
@@ -471,49 +346,63 @@ const CheckoutForm = () => {
               <div className="order-details">
                 {checkoutState.checkout.lineItems?.map(
                   (item: any, index: number) => {
-                    const isShipping =
-                      item.name === "USPS Ground Advantage Shipping";
-                    if (isShipping) return null;
-
+                    const itemName = item.name?.toLowerCase() || '';
+                    const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                    
+                    // Extract numeric amount from string like "$26.49"
+                    const amount = parseFloat(
+                      item.total.amount.replace(/[^0-9.]/g, "")
+                    );
+                    
+                    // For product items (non-shipping), remove tax to show base price
+                    // For shipping items, show as-is
+                    let displayAmount = amount;
+                    if (!isShipping && billingState && 
+                        (billingState.toUpperCase() === "DC" || 
+                         billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
+                      // Remove 6% tax to get base price
+                      displayAmount = amount / 1.06;
+                    }
+                    
                     return (
                       <div key={index} className="order-item">
                         <span className="item-description">{item.name}</span>
-                        <span className="item-amount">{item.total.amount}</span>
+                        <span className="item-amount">${displayAmount.toFixed(2)}</span>
                       </div>
                     );
                   },
-                )}
-                {shippingCost !== null && (
-                  <div className="order-item">
-                    <span className="item-description">Shipping</span>
-                    <span className="item-amount">
-                      ${(shippingCost / 100).toFixed(2)}
-                    </span>
-                  </div>
                 )}
                 <div className="order-item">
                   <span className="item-description">Tax</span>
                   <span className="item-amount">
                     {(() => {
-                      if (!billingState) return "Enter billing address";
-
-                      // Calculate 6% tax for DC on item cost only (excluding shipping)
-                      if (
-                        billingState.toUpperCase() === "DC" ||
-                        billingState.toUpperCase() === "DISTRICT OF COLUMBIA"
-                      ) {
-                        const subtotalAmount =
-                          parseInt(
-                            checkoutState.checkout.total.total.amount.replace(
-                              /[^0-9]/g,
-                              "",
-                            ),
-                          ) / 100;
-                        const taxAmount = subtotalAmount * 0.06;
-                        return `$${taxAmount.toFixed(2)}`;
+                      // Only calculate tax if billing state is DC
+                      if (!billingState || 
+                          (billingState.toUpperCase() !== "DC" && 
+                           billingState.toUpperCase() !== "DISTRICT OF COLUMBIA")) {
+                        return "$0.00";
                       }
-
-                      return "$0.00";
+                      
+                      // Calculate 6% tax on non-shipping items only (base price)
+                      const taxableAmount = checkoutState.checkout.lineItems?.reduce(
+                        (sum: number, item: any) => {
+                          // Skip shipping items
+                          const itemName = item.name?.toLowerCase() || '';
+                          const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                          if (isShipping) return sum;
+                          
+                          // Extract amount and remove tax to get base price
+                          const amount = parseFloat(
+                            item.total.amount.replace(/[^0-9.]/g, "")
+                          );
+                          const baseAmount = amount / 1.06;
+                          return sum + baseAmount;
+                        },
+                        0
+                      ) || 0;
+                      
+                      const taxAmount = taxableAmount * 0.06;
+                      return `$${taxAmount.toFixed(2)}`;
                     })()}
                   </span>
                 </div>
@@ -521,26 +410,56 @@ const CheckoutForm = () => {
                   <span className="total-label">Total</span>
                   <span className="total-amount">
                     {(() => {
-                      const subtotalAmount =
-                        parseInt(
-                          checkoutState.checkout.total.total.amount.replace(
-                            /[^0-9]/g,
-                            "",
-                          ),
-                        ) / 100;
-                      const shippingAmount = (shippingCost || 0) / 100;
-                      let total = subtotalAmount + shippingAmount;
-
-                      // Add 6% tax for DC on item cost only (excluding shipping)
-                      if (
-                        billingState &&
-                        (billingState.toUpperCase() === "DC" ||
-                          billingState.toUpperCase() === "DISTRICT OF COLUMBIA")
-                      ) {
-                        const taxAmount = subtotalAmount * 0.06;
-                        total = total + taxAmount;
+                      // Calculate base subtotal (product base price + shipping)
+                      let subtotal = 0;
+                      checkoutState.checkout.lineItems?.forEach(
+                        (item: any) => {
+                          const itemName = item.name?.toLowerCase() || '';
+                          const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                          
+                          const amount = parseFloat(
+                            item.total.amount.replace(/[^0-9.]/g, "")
+                          );
+                          
+                          if (isShipping) {
+                            // Add shipping as-is
+                            subtotal += amount;
+                          } else if (billingState && 
+                                     (billingState.toUpperCase() === "DC" || 
+                                      billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
+                            // Add base price (remove tax)
+                            subtotal += amount / 1.06;
+                          } else {
+                            // No tax, add as-is
+                            subtotal += amount;
+                          }
+                        }
+                      );
+                      
+                      // Calculate tax on base product price only
+                      let taxAmount = 0;
+                      if (billingState && 
+                          (billingState.toUpperCase() === "DC" || 
+                           billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
+                        const taxableAmount = checkoutState.checkout.lineItems?.reduce(
+                          (sum: number, item: any) => {
+                            const itemName = item.name?.toLowerCase() || '';
+                            const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                            if (isShipping) return sum;
+                            
+                            const amount = parseFloat(
+                              item.total.amount.replace(/[^0-9.]/g, "")
+                            );
+                            const baseAmount = amount / 1.06;
+                            return sum + baseAmount;
+                          },
+                          0
+                        ) || 0;
+                        taxAmount = taxableAmount * 0.06;
                       }
-
+                      
+                      const total = subtotal + taxAmount;
+                      
                       return `$${total.toFixed(2)}`;
                     })()}
                   </span>
