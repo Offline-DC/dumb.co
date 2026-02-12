@@ -157,7 +157,7 @@ function App() {
             />
             <Route
               path="/phone"
-              element={<Phone initialScreen="dumbphone I test" />}
+              element={<Phone initialScreen="dumbphone I" />}
             />
             <Route path="/faqs" element={<FAQs />} />
             <Route path="/android" element={<AndroidDownload />} />
