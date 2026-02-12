@@ -148,6 +148,7 @@ button:hover {
   align-items: center;
   font-size: 18px;
   font-family: "Rubik Spray Paint", cursive;
+  margin-right: 4px;
 }
 
 .mobileAccordion {
