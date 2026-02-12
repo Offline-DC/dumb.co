@@ -157,12 +157,22 @@ const CheckoutForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sameAsShipping, setSameAsShipping] = useState(true);
   const [billingState, setBillingState] = useState<string | null>(null);
+  const [promoCode, setPromoCode] = useState("");
+  const [promoMessage, setPromoMessage] = useState<string | null>(null);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   const checkoutState = useCheckout();
+
+  // Get applyPromotionCode from checkout if available
+  const applyPromotionCode = checkoutState.type === "success" 
+    ? checkoutState.checkout.applyPromotionCode 
+    : null;
 
   // Debug: Log checkout state structure
   useEffect(() => {
     if (checkoutState.type === "success") {
+      console.log("Full checkout object:", checkoutState.checkout);
+      console.log("Checkout total:", checkoutState.checkout.total);
     }
   }, [checkoutState]);
 
@@ -220,6 +230,42 @@ const CheckoutForm = () => {
       }
     }
   };
+
+  const handlePromoCodeApply = async () => {
+    console.log("handlePromoCodeApply called");
+    
+    if (!promoCode.trim()) {
+      setPromoMessage("Please enter a promo code");
+      return;
+    }
+
+    if (!applyPromotionCode) {
+      console.error("applyPromotionCode is not available");
+      setPromoMessage("Unable to apply promotion code at this time");
+      return;
+    }
+
+    setIsApplyingPromo(true);
+    setPromoMessage(null);
+
+    try {
+      console.log("Applying promo code:", promoCode);
+      const result = await applyPromotionCode(promoCode);
+      console.log("Promo code result:", result);
+      
+      if (result.type === "error") {
+        setPromoMessage(result.error.message || "Invalid promotion code");
+      } else {
+        setPromoMessage("Promotion code applied!");
+      }
+    } catch (error) {
+      console.error("Error applying promo code:", error);
+      setPromoMessage("Failed to apply promotion code. Please try again.");
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
+
   const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
     e.preventDefault();
 
@@ -349,29 +395,33 @@ const CheckoutForm = () => {
                     const itemName = item.name?.toLowerCase() || '';
                     const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
                     
-                    // Extract numeric amount from string like "$26.49"
-                    const amount = parseFloat(
-                      item.total.amount.replace(/[^0-9.]/g, "")
-                    );
-                    
-                    // For product items (non-shipping), remove tax to show base price
-                    // For shipping items, show as-is
-                    let displayAmount = amount;
-                    if (!isShipping && billingState && 
-                        (billingState.toUpperCase() === "DC" || 
-                         billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
-                      // Remove 6% tax to get base price
-                      displayAmount = amount / 1.06;
-                    }
+                    // Get the original price from subtotal if available, otherwise use total
+                    // This shows the price BEFORE any discount is applied
+                    let priceString = item.subtotal?.amount || item.total.amount;
+                    const amount = parseFloat(priceString.replace(/[^0-9.]/g, ""));
                     
                     return (
                       <div key={index} className="order-item">
                         <span className="item-description">{item.name}</span>
-                        <span className="item-amount">${displayAmount.toFixed(2)}</span>
+                        <span className="item-amount">${amount.toFixed(2)}</span>
                       </div>
                     );
                   },
                 )}
+                {(() => {
+                  // Display discount from checkout.total.discount
+                  const discount = checkoutState.checkout.total?.discount;
+                  if (discount && discount.minorUnitsAmount > 0) {
+                    const discountAmount = discount.minorUnitsAmount / 100;
+                    return (
+                      <div className="order-item">
+                        <span className="item-description">Discount ({promoCode})</span>
+                        <span className="item-amount">-${discountAmount.toFixed(2)}</span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
                 <div className="order-item">
                   <span className="item-description">Tax</span>
                   <span className="item-amount">
@@ -383,24 +433,20 @@ const CheckoutForm = () => {
                         return "$0.00";
                       }
                       
-                      // Calculate 6% tax on non-shipping items only (base price)
-                      const taxableAmount = checkoutState.checkout.lineItems?.reduce(
-                        (sum: number, item: any) => {
-                          // Skip shipping items
-                          const itemName = item.name?.toLowerCase() || '';
-                          const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
-                          if (isShipping) return sum;
-                          
-                          // Extract amount and remove tax to get base price
-                          const amount = parseFloat(
-                            item.total.amount.replace(/[^0-9.]/g, "")
-                          );
-                          const baseAmount = amount / 1.06;
-                          return sum + baseAmount;
-                        },
-                        0
-                      ) || 0;
+                      // Calculate 6% tax on non-shipping items (BEFORE discount)
+                      let taxableAmount = 0;
+                      checkoutState.checkout.lineItems?.forEach((item: any) => {
+                        const itemName = item.name?.toLowerCase() || '';
+                        const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                        if (isShipping) return;
+                        
+                        // Use subtotal (original price) if available
+                        const priceString = item.subtotal?.amount || item.total.amount;
+                        const amount = parseFloat(priceString.replace(/[^0-9.]/g, ""));
+                        taxableAmount += amount;
+                      });
                       
+                      // Do NOT subtract discount - tax is on original price
                       const taxAmount = taxableAmount * 0.06;
                       return `$${taxAmount.toFixed(2)}`;
                     })()}
@@ -410,51 +456,37 @@ const CheckoutForm = () => {
                   <span className="total-label">Total</span>
                   <span className="total-amount">
                     {(() => {
-                      // Calculate base subtotal (product base price + shipping)
+                      // Sum up original line item prices
                       let subtotal = 0;
-                      checkoutState.checkout.lineItems?.forEach(
-                        (item: any) => {
-                          const itemName = item.name?.toLowerCase() || '';
-                          const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
-                          
-                          const amount = parseFloat(
-                            item.total.amount.replace(/[^0-9.]/g, "")
-                          );
-                          
-                          if (isShipping) {
-                            // Add shipping as-is
-                            subtotal += amount;
-                          } else if (billingState && 
-                                     (billingState.toUpperCase() === "DC" || 
-                                      billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
-                            // Add base price (remove tax)
-                            subtotal += amount / 1.06;
-                          } else {
-                            // No tax, add as-is
-                            subtotal += amount;
-                          }
-                        }
-                      );
+                      checkoutState.checkout.lineItems?.forEach((item: any) => {
+                        const priceString = item.subtotal?.amount || item.total.amount;
+                        const amount = parseFloat(priceString.replace(/[^0-9.]/g, ""));
+                        subtotal += amount;
+                      });
                       
-                      // Calculate tax on base product price only
+                      // Subtract discount
+                      const discount = checkoutState.checkout.total?.discount;
+                      if (discount && discount.minorUnitsAmount > 0) {
+                        subtotal -= (discount.minorUnitsAmount / 100);
+                      }
+                      
+                      // Add tax for DC (calculated on original price, not discounted)
                       let taxAmount = 0;
                       if (billingState && 
                           (billingState.toUpperCase() === "DC" || 
                            billingState.toUpperCase() === "DISTRICT OF COLUMBIA")) {
-                        const taxableAmount = checkoutState.checkout.lineItems?.reduce(
-                          (sum: number, item: any) => {
-                            const itemName = item.name?.toLowerCase() || '';
-                            const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
-                            if (isShipping) return sum;
-                            
-                            const amount = parseFloat(
-                              item.total.amount.replace(/[^0-9.]/g, "")
-                            );
-                            const baseAmount = amount / 1.06;
-                            return sum + baseAmount;
-                          },
-                          0
-                        ) || 0;
+                        let taxableAmount = 0;
+                        checkoutState.checkout.lineItems?.forEach((item: any) => {
+                          const itemName = item.name?.toLowerCase() || '';
+                          const isShipping = itemName.includes('shipping') || itemName.includes('usps') || itemName.includes('ground');
+                          if (isShipping) return;
+                          
+                          const priceString = item.subtotal?.amount || item.total.amount;
+                          const amount = parseFloat(priceString.replace(/[^0-9.]/g, ""));
+                          taxableAmount += amount;
+                        });
+                        
+                        // Do NOT subtract discount from tax calculation
                         taxAmount = taxableAmount * 0.06;
                       }
                       
@@ -465,6 +497,36 @@ const CheckoutForm = () => {
                   </span>
                 </div>
               </div>
+            </div>
+
+            <div className="promo-code-section">
+              <div>
+                <input
+                  type="text"
+                  placeholder="enter ur discount code"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  disabled={isApplyingPromo}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handlePromoCodeApply();
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handlePromoCodeApply}
+                  disabled={isApplyingPromo}
+                >
+                  {isApplyingPromo ? "Applying..." : "Apply"}
+                </button>
+              </div>
+              {promoMessage && (
+                <div className={`promo-message ${promoMessage.includes("applied") ? "success" : "error"}`}>
+                  {promoMessage}
+                </div>
+              )}
             </div>
 
             <div>
