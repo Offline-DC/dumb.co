@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useCheckoutProducts } from "../../hooks/useCheckoutProducts";
 import styles from "./index.module.css";
 import type { CheckoutProduct, StripePrice } from "../../hooks/types/stripe";
 import BillingToggle from "./BillingToggle";
 import PricingList from "./PricingList";
+import "@fontsource/biorhyme/400.css";
+import "@fontsource/biorhyme/700.css";
+import "@fontsource/rubik-spray-paint/400.css";
 
 export type BillingView = "year" | "month";
 

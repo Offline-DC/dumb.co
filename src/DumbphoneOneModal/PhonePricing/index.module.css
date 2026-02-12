@@ -38,11 +38,12 @@
 
 .toggleBtn {
   padding: 0.5rem 1rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-family: "Rubik Spray Paint", cursive;
 }
 
 .toggleBtn.active {
-  background-color: rgb(79, 79, 56);
+  background-color: #631819;
   color: white;
 }
 
@@ -130,7 +131,9 @@ button:hover {
   border-radius: 6px;
 
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+
+  font-family: "Rubik Spray Paint", cursive;
 }
 
 .infoButton:active {
@@ -142,7 +145,8 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-family: "Rubik Spray Paint", cursive;
 }
 
 .mobileAccordion {
@@ -176,6 +180,7 @@ button:hover {
   box-shadow:
     inset 1px 1px 0 #ffffff,
     inset -1px -1px 0 #808080;
+  font-family: "BioRhyme", cursive;
 }
 
 .footer {
@@ -186,6 +191,7 @@ button:hover {
   align-items: center;
   text-align: center;
   font-weight: 600;
+  font-family: "BioRhyme", cursive;
 }
 
 .faqButtonContainer {

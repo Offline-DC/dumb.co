@@ -13,6 +13,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource/biorhyme": "^5.2.9",
+    "@fontsource/rubik-spray-paint": "^5.2.7",
     "@mantine/core": "^8.0.0",
     "@mantine/form": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
