@@ -18,3 +18,4 @@ This residency is about exploring **offline life, slowness, presence, and human 
 - Eager to make art
 - Open to experimenting with low-tech, tactile, or IRL-first approaches
 - Interested in themes around attention, technology, and human connection
+- Attach your portfolio or a collection of works with your application
