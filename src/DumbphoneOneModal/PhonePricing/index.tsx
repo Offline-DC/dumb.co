@@ -6,7 +6,8 @@ import BillingToggle from "./BillingToggle";
 import PricingList from "./PricingList";
 import "@fontsource/biorhyme/400.css";
 import "@fontsource/biorhyme/700.css";
-import "@fontsource/rubik-spray-paint/400.css";
+import "@fontsource/rubik/700.css";
+import "@fontsource/rubik/400.css";
 
 export type BillingView = "year" | "month";
 
