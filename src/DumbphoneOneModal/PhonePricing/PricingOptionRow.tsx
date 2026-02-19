@@ -15,6 +15,19 @@ type Props = {
   onToggleInfo?: () => void;
 };
 
+const priceIDPaymentLinkMap: Record<string, string> = {
+  'price_1SsPe46YQdMFHNu4pI8p7hrm': 'https://buy.stripe.com/aFa6oA8tO7b4aTNeAU8N200',
+  'price_1Sx7yp6YQdMFHNu4KkhnTmGW':'https://buy.stripe.com/8x29AM11mcvo6Dx50k8N202',
+  'price_1Sx8YC6YQdMFHNu4vCoJFwcQ':'https://buy.stripe.com/00w14g11mdzs0f9gJ28N203',//student monthly,
+  'price_1Sx8Z66YQdMFHNu4RFIEORO8':'https://buy.stripe.com/28E5kwfWg7b46DxgJ28N207',//student yearly,
+  'price_1Sx8Um6YQdMFHNu4QjPoEQ2m':'https://buy.stripe.com/fZubIUcK41QK3rlcsM8N205',//sponsor monthly,
+  'price_1Sx8VY6YQdMFHNu4Y8MgL8Pz':'https://buy.stripe.com/cNi28kfWg3YSd1VcsM8N208',//sponsor yearly,
+  'price_1Sx8X36YQdMFHNu42TCLkgIX':'https://buy.stripe.com/dRm7sEcK48f8bXReAU8N204',//patron monthly,
+  'price_1Sx8XQ6YQdMFHNu4NqhLyGS0':'https://buy.stripe.com/6oU28kdO8brk3rldwQ8N209',//patron yearly,
+  'price_1Sx8Q76YQdMFHNu4vg2hggTq':'https://buy.stripe.com/14A00c25q670fa30K48N206',//family monthly,
+  'price_1Sx8Si6YQdMFHNu41TPhuYDk':'https://buy.stripe.com/00weV625q9jce5Z3Wg8N20a'//family yearly,
+};
+
 export default function PricingOptionRow({
   product,
   price,
@@ -29,7 +42,7 @@ export default function PricingOptionRow({
     .map((s) => s.trim())
     .filter(Boolean);
 
-  const checkoutUrl = `/checkout?price_id=${encodeURIComponent(price.id)}`;
+  const checkoutUrl = priceIDPaymentLinkMap[price.id];
 
   const rowButton = (
     <button
