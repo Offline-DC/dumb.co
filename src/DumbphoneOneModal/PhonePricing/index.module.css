@@ -39,7 +39,8 @@
 .toggleBtn {
   padding: 0.5rem 1rem;
   font-size: 18px;
-  font-family: "Rubik Spray Paint", cursive;
+  font-family: "Rubik", cursive;
+  font-weight: 700;
 }
 
 .toggleBtn.active {
@@ -134,7 +135,7 @@ button:hover {
   font-weight: 700;
   font-size: 18px;
 
-  font-family: "Rubik Spray Paint", cursive;
+  font-family: "Rubik", cursive;
 }
 
 .infoButton:active {
@@ -147,8 +148,12 @@ button:hover {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  font-family: "Rubik Spray Paint", cursive;
+  font-family: "Rubik", cursive;
   margin-right: 4px;
+}
+
+.optionLeft {
+  font-weight: 700;
 }
 
 .mobileAccordion {

@@ -70,10 +70,7 @@ function Screen({
   } else if (screen === "press") {
     return <Press row={row} setOptions={setOptions} />;
   } else if (screen === "Month Offline") {
-    newOptions = [
-      "M.O. DC",
-      "M.O. NYC"
-    ]
+    newOptions = ["M.O. DC", "M.O. NYC"];
   } else if (screen === "countdown clock") {
     const startDate = "10-30-2025";
     const cutOffDate = "10-24-2025";
@@ -92,7 +89,14 @@ function Screen({
   } else if (screen === "careers") {
     newOptions = ["internship"];
   } else if (screen === "dumb organizers") {
-    display = <div>want 2 organize a dumb experience w/ ur group? <br/><br/> email<br/> lydia @ <br/>offline • community</div>;
+    display = (
+      <div>
+        want 2 organize a dumb experience w/ ur group? <br />
+        <br /> email
+        <br /> lydia @ <br />
+        offline • community
+      </div>
+    );
   } else if (screen === "team & careers") {
     newOptions = ["team", "careers", "operator", "contact"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
@@ -251,18 +255,13 @@ function Screen({
       </div>
     );
     setKeypadNum("1844OFFLINE,4");
-  } else if (screen === "dumbphone I test") {
+  } else if (screen === "dumbphone I") {
     display = (
       <div>
         launching dumbphone I...
         <DumbphoneOneModal clickBackButton={clickBackButton} />
       </div>
     );
-  } else if (screen === "dumbphone I") {
-    window.location.href =
-      "https://buy.stripe.com/aFa6oA8tO7b4aTNeAU8N200";
-    setRow(0);
-    setScreen("Home");
   } else if (screen === "M.O. DC") {
     window.location.href =
       "https://shop.offline.community/products/month-offline-september-in-dc";
