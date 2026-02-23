@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import "./FAQs.css";
 
 type FaqItem = {
@@ -59,6 +59,31 @@ const parseCsv = (text: string): string[][] => {
   }
 
   return rows;
+};
+
+const parseMarkdownLinks = (text: string): ReactNode[] => {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    parts.push(
+      <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
+        {match[1]}
+      </a>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [text];
 };
 
 function FAQs() {
@@ -159,7 +184,7 @@ function FAQs() {
                   {item.answers.length > 0 ? (
                     item.answers.map((answer, answerIndex) => (
                       <div key={answerIndex}>
-                        <p>{answer}</p>
+                        <p>{parseMarkdownLinks(answer)}</p>
                         {answerIndex < item.answers.length - 1 && (
                           <div className="faq-answer-separator" />
                         )}
@@ -177,6 +202,13 @@ function FAQs() {
               {loadError}
             </p>
           ) : null}
+        </div>
+        <div className="faq-contact">
+          <p>
+            Questions? Contact{" "}
+            <a href="mailto:support@offline.community">support@offline.community</a>{" "}
+            or call us: <a href="tel:404-716-3605">404-716-3605</a> M-F 9-5 EST
+          </p>
         </div>
       </div>
     </div>

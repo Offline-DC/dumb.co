@@ -122,6 +122,25 @@
   margin: 0;
 }
 
+.faq-contact {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #d4d1c6;
+  text-align: center;
+}
+
+.faq-contact p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #1d1d1d;
+}
+
+.faq-contact a {
+  color: #1d1d1d;
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .faq-card {
     padding: 22px 18px 28px;
