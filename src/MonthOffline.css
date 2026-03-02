@@ -1,13 +1,13 @@
 .month-offline {
   width: 100vw;
   min-height: 100vh;
-  background-color: #008080;
+  background-color: #FFE800;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: 40px 20px;
-  font-family: "VT323", monospace;
+  font-family: "Syne Mono", monospace;
   box-sizing: border-box;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .month-offline-title-bar {
-  background-color: #0218aa;
+  background-color: #0000FF;
   padding: 8px 12px;
   display: flex;
   align-items: center;
@@ -33,6 +33,7 @@
   color: white;
   font-size: 1.2em;
   margin: 0;
+  font-family: "Workbench", monospace;
 }
 
 .month-offline-content {
@@ -53,6 +54,7 @@
   color: #000;
   font-size: 2em;
   margin-bottom: 20px;
+  font-family: "Workbench", monospace;
 }
 
 .month-offline-content p {
@@ -73,6 +75,7 @@
   color: #000;
   font-size: 1.5em;
   margin-bottom: 15px;
+  font-family: "Workbench", monospace;
 }
 
 .month-offline-features ul {
@@ -94,7 +97,7 @@
 
 .month-offline-features li::before {
   content: "► ";
-  color: #0218aa;
+  color: #0000FF;
 }
 
 .register-button {
@@ -102,7 +105,7 @@
   background-color: #c3c3c3;
   padding: 15px 40px;
   font-size: 1.5em;
-  font-family: "VT323", monospace;
+  font-family: "Syne Mono", monospace;
   border-top: 2px solid white;
   border-left: 2px solid white;
   border-bottom: 2px solid #000;
@@ -138,9 +141,10 @@
 }
 
 .included-header {
-  color: #0218aa;
+  color: #0000FF;
   font-size: 1.5em;
   margin: 0 0 5px 0;
+  font-family: "Workbench", monospace;
 }
 
 .included-subtext {
@@ -202,7 +206,7 @@
 }
 
 .reservation-notice .discount-info a {
-  color: #0218aa;
+  color: #0000FF;
   text-decoration: underline;
 }
 
@@ -221,9 +225,10 @@
 
 .schedule-header {
   font-size: 1.8em;
-  color: #0218aa;
+  color: #0000FF;
   margin-bottom: 25px;
   text-align: center;
+  font-family: "Workbench", monospace;
 }
 
 .schedule-grid {
@@ -252,7 +257,7 @@
 }
 
 .schedule-card-header {
-  background: linear-gradient(135deg, #0218aa 0%, #4a5fd8 100%);
+  background: linear-gradient(135deg, #0000FF 0%, #4a5fd8 100%);
   padding: 12px 15px;
   display: flex;
   align-items: center;
@@ -264,6 +269,7 @@
   margin: 0;
   font-size: 1.6em;
   letter-spacing: 2px;
+  font-family: "Workbench", monospace;
 }
 
 .location-icon {
@@ -293,7 +299,7 @@
 }
 
 .schedule-list li em {
-  color: #0218aa;
+  color: #0000FF;
   font-style: normal;
   font-weight: bold;
 }
