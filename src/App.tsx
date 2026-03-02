@@ -18,7 +18,6 @@ import DumbDumb from "./DumbDumb.tsx";
 import Dashboard from "./Dashboard.tsx";
 import Support from "./Support";
 import MonthOffline from "./MonthOffline.tsx";
-import Internship from "./Internship/Internship.tsx";
 import NotFound from "./NotFound";
 import AndroidDownload from "./Android/AndroidDownload.tsx";
 
@@ -146,7 +145,6 @@ function App() {
             <Route path="/dumbdown" element={<DumbDumb />} />
             <Route path="/setup" element={<OfflineMode />} />
             <Route path="/support" element={<Support />} />
-            <Route path="/internship" element={<Internship />} />
             <Route path="/month-offline" element={<MonthOffline />} />
             <Route path="/press" element={<Phone initialScreen="press" />} />
             <Route
