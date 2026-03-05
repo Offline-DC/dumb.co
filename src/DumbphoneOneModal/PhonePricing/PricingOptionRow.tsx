@@ -68,7 +68,7 @@ export default function PricingOptionRow({
       <div className={styles.mobileRow}>
         <button
           type="button"
-          className={styles.infoButton}
+          className={`${styles.infoButton} ${isExpanded ? styles.expanded : ''}`}
           aria-label={`${isExpanded ? "Hide" : "Show"} info about ${product.name}`}
           aria-expanded={descriptionItems.length > 0 ? isExpanded : undefined}
           onClick={(e) => {
@@ -79,23 +79,29 @@ export default function PricingOptionRow({
             onToggleInfo?.();
           }}
         >
-          i
+          ›
         </button>
 
         {rowButton}
       </div>
 
-      {descriptionItems.length > 0 && isExpanded && (
+      {descriptionItems.length > 0 && (
         <div
-          className={styles.description}
-          role="region"
-          aria-label={`${product.name} description`}
+          className={`${styles.descriptionWrapper} ${isExpanded ? styles.open : ''}`}
         >
-          <ul className={styles.descriptionList}>
-            {descriptionItems.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
+          <div className={styles.descriptionInner}>
+            <div
+              className={styles.description}
+              role="region"
+              aria-label={`${product.name} description`}
+            >
+              <ul className={styles.descriptionList}>
+                {descriptionItems.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       )}
     </div>

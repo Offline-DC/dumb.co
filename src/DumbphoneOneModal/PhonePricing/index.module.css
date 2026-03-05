@@ -136,10 +136,19 @@ button:hover {
   font-size: 18px;
 
   font-family: "Rubik", cursive;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .infoButton:active {
   transform: translateY(1px);
+}
+
+.infoButton.expanded {
+  transform: rotate(90deg);
+}
+
+.infoButton.expanded:active {
+  transform: rotate(90deg) translateY(1px);
 }
 
 .optionRight,
@@ -171,6 +180,21 @@ button:hover {
   padding: 0.5rem 1rem;
   color: #000;
   font-weight: 900;
+}
+
+/* accordion panel wrapper for smooth animation */
+.descriptionWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.descriptionWrapper.open {
+  grid-template-rows: 1fr;
+}
+
+.descriptionInner {
+  overflow: hidden;
 }
 
 /* accordion panel */
