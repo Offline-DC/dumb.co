@@ -1,20 +1,20 @@
 {
   "apps": {
     "dumb-down-launcher": {
-      "latest_version": "2.3",
+      "latest_version": "2.4",
       "version_code": 7,
       "download_url": "https://dumb.co/downloads/dumb-down-launcher.apk",
-      "sha256": "",
+      "sha256": "096ac86ba871fdead01985acf5d0b4248ec492fd75196b3b1ede14f83e11f043",
       "notes": "Initial release",
-      "published_at": "2026-03-05T00:00:00Z"
+      "published_at": "2026-03-05T19:48:19Z"
     },
     "dumb-contacts-sync": {
       "latest_version": "2.0",
       "version_code": 2,
       "download_url": "https://dumb.co/downloads/dumb-contacts-sync.apk",
-      "sha256": "",
+      "sha256": "dd17d3006f8c8a6aa8f00e700ffee708914cd19a18ce46e61599e71c815514bb",
       "notes": "Initial release",
-      "published_at": "2026-03-05T00:00:00Z"
+      "published_at": "2026-03-05T19:50:38Z"
     }
   }
 }
