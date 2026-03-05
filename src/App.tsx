@@ -20,6 +20,7 @@ import Support from "./Support";
 import MonthOffline from "./MonthOffline.tsx";
 import NotFound from "./NotFound";
 import AndroidDownload from "./Android/AndroidDownload.tsx";
+import AppsDownload from "./Android/AppsDownload.tsx";
 
 import CheckoutForm from "./Stripe/CheckoutForm.tsx";
 import Confirmation from "./Stripe/Confirmation.tsx";
@@ -161,6 +162,7 @@ function App() {
             />
             <Route path="/faqs" element={<FAQs />} />
             <Route path="/android" element={<AndroidDownload />} />
+            <Route path="/apps" element={<AppsDownload />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
