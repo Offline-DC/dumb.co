@@ -69,7 +69,10 @@ function Screen({
   } else if (screen === "press") {
     return <Press row={row} setOptions={setOptions} />;
   } else if (screen === "Month Offline") {
-    newOptions = ["M.O. DC", "M.O. NYC"];
+    window.location.href =
+      "https://offline.community";
+    setRow(0);
+    setScreen("Home");
   } else if (screen === "countdown clock") {
     const startDate = "10-30-2025";
     const cutOffDate = "10-24-2025";
