@@ -2,24 +2,29 @@
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 
-const APPS_JSON_URL = "https://dumb.co/downloads/apps.json";
-
-type AppEntry = {
-  latest_version: string;
-  version_code: number;
-  download_url: string;
-  sha256: string;
-  notes: string;
-  published_at: string;
+type AppSpec = {
+  repo: string;
+  displayName: string;
+  apkName: string;
 };
 
-type AppsManifest = {
-  apps: Record<string, AppEntry>;
-};
+const APPS: AppSpec[] = [
+  {
+    repo: "Offline-DC/dumb-down-launcher",
+    displayName: "Dumb Down Launcher",
+    apkName: "dumb-down-launcher.apk",
+  },
+  {
+    repo: "Offline-DC/dumb-contacts-sync-android",
+    displayName: "Dumb Contacts Sync",
+    apkName: "dumb-contacts-sync.apk",
+  },
+];
 
-const APP_DISPLAY_NAMES: Record<string, string> = {
-  "dumb-down-launcher": "Dumb Down Launcher",
-  "dumb-contacts-sync": "Dumb Contacts Sync",
+type ReleaseInfo = {
+  versionName: string;
+  downloadUrl: string;
+  publishedAt: string;
 };
 
 function isAndroidUA(): boolean {
@@ -27,16 +32,41 @@ function isAndroidUA(): boolean {
   return /Android/i.test(navigator.userAgent);
 }
 
-function AppCard({ appKey, entry }: { appKey: string; entry: AppEntry }) {
-  const displayName = APP_DISPLAY_NAMES[appKey] ?? appKey;
+async function fetchRelease(repo: string, apkName: string): Promise<ReleaseInfo | null> {
+  try {
+    const r = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!r.ok) return null;
+    const json = await r.json();
+    const tagName: string = json.tag_name ?? "";
+    const versionName = tagName.replace(/^v/, "");
+    const asset = json.assets?.find((a: { name: string }) => a.name === apkName);
+    if (!asset) return null;
+    return {
+      versionName,
+      downloadUrl: asset.browser_download_url,
+      publishedAt: json.published_at ?? "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function AppCard({ spec }: { spec: AppSpec }) {
+  const [release, setRelease] = useState<ReleaseInfo | null | "loading">("loading");
   const isAndroid = isAndroidUA();
+
+  useEffect(() => {
+    fetchRelease(spec.repo, spec.apkName).then(setRelease);
+  }, [spec.repo, spec.apkName]);
 
   return (
     <div className={styles.card} style={{ marginBottom: 20 }}>
       <div className={styles.header}>
         <div className={styles.badge}>Android</div>
         <h2 className={styles.h1} style={{ fontSize: 22 }}>
-          {displayName}
+          {spec.displayName}
         </h2>
       </div>
 
@@ -47,51 +77,39 @@ function AppCard({ appKey, entry }: { appKey: string; entry: AppEntry }) {
         </div>
       )}
 
-      <a
-        href={entry.download_url}
-        className={`${styles.button} ${!isAndroid ? styles.buttonDisabled : ""} ${styles.downloadButton}`}
-        onClick={(e) => {
-          if (!isAndroid) e.preventDefault();
-        }}
-      >
-        Download APK &bull; v{entry.latest_version}
-      </a>
+      {release === "loading" && (
+        <div style={{ opacity: 0.5, marginTop: 12 }}>Loading...</div>
+      )}
 
-      <div className={styles.metaCol}>
-        {entry.notes && (
-          <div className={styles.notice}>
-            <div className={styles.metaTitle}>Release notes</div>
-            <div>{entry.notes}</div>
-          </div>
-        )}
-
-        {entry.sha256 && (
-          <div className={styles.notice}>
-            <div className={styles.metaTitle}>SHA-256</div>
-            <div className={styles.monoBox}>{entry.sha256}</div>
-          </div>
-        )}
-
-        <div className={styles.notice}>
-          <div className={styles.metaTitle}>Published</div>
-          <div>{new Date(entry.published_at).toLocaleDateString()}</div>
+      {release === null && (
+        <div className={styles.notice} style={{ marginTop: 12 }}>
+          Could not load release info.
         </div>
-      </div>
+      )}
+
+      {release && release !== "loading" && (
+        <>
+          <a
+            href={release.downloadUrl}
+            className={`${styles.button} ${!isAndroid ? styles.buttonDisabled : ""} ${styles.downloadButton}`}
+            onClick={(e) => { if (!isAndroid) e.preventDefault(); }}
+          >
+            Download APK &bull; v{release.versionName}
+          </a>
+
+          <div className={styles.metaCol}>
+            <div className={styles.notice}>
+              <div className={styles.metaTitle}>Published</div>
+              <div>{new Date(release.publishedAt).toLocaleDateString()}</div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 export default function AppsDownload() {
-  const [manifest, setManifest] = useState<AppsManifest | null>(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    fetch(APPS_JSON_URL, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((j) => setManifest(j as AppsManifest))
-      .catch(() => setError(true));
-  }, []);
-
   return (
     <div className={styles.page} style={{ flexDirection: "column", gap: 0 }}>
       <div style={{ width: 720, maxWidth: "100%", marginBottom: 24 }}>
@@ -102,23 +120,9 @@ export default function AppsDownload() {
         </p>
       </div>
 
-      {error && (
-        <div
-          className={styles.notice}
-          style={{ width: 720, maxWidth: "100%" }}
-        >
-          Failed to load app listing. Try refreshing.
-        </div>
-      )}
-
-      {!manifest && !error && (
-        <div style={{ color: "rgba(255,255,255,0.5)" }}>Loading...</div>
-      )}
-
-      {manifest &&
-        Object.entries(manifest.apps).map(([key, entry]) => (
-          <AppCard key={key} appKey={key} entry={entry} />
-        ))}
+      {APPS.map((spec) => (
+        <AppCard key={spec.repo} spec={spec} />
+      ))}
     </div>
   );
 }
