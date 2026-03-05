@@ -1,12 +1,12 @@
 {
   "apps": {
     "dumb-down-launcher": {
-      "latest_version": "2.3",
+      "latest_version": "2.4",
       "version_code": 7,
       "download_url": "https://dumb.co/downloads/dumb-down-launcher.apk",
-      "sha256": "",
+      "sha256": "096ac86ba871fdead01985acf5d0b4248ec492fd75196b3b1ede14f83e11f043",
       "notes": "Initial release",
-      "published_at": "2026-03-05T00:00:00Z"
+      "published_at": "2026-03-05T19:48:19Z"
     },
     "dumb-contacts-sync": {
       "latest_version": "2.0",
