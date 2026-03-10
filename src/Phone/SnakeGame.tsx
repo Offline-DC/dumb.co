@@ -142,14 +142,14 @@ function SnakeGame({ dirInput, onGameEnd }: Props) {
           padding: "1rem",
         }}
       >
-        <div style={{ fontSize: "1.2rem", fontWeight: "bold", letterSpacing: "0.05em" }}>
+        <div style={{ fontSize: "1.5rem", fontWeight: "bold", letterSpacing: "0.05em" }}>
           GAME OVER
         </div>
         <div style={{ fontSize: "1rem" }}>
-          <IconDeviceMobile size={14} style={{ verticalAlign: "middle", marginRight: 4 }} />
+          <IconDeviceMobile size={18} style={{ verticalAlign: "middle", marginRight: 4 }} />
           {score}
         </div>
-        <div style={{ fontSize: "0.65rem", marginTop: "8px", color: "#444" }}>
+        <div style={{ fontSize: "0.95rem", marginTop: "8px", color: "#444" }}>
           returning to menu...
         </div>
       </div>
@@ -186,7 +186,7 @@ function SnakeGame({ dirInput, onGameEnd }: Props) {
       <div
         style={{
           textAlign: "center",
-          fontSize: "0.65rem",
+          fontSize: "0.95rem",
           color: "#333",
           padding: "2px 0",
           borderBottom: "1px solid rgba(0,0,0,0.2)",
@@ -197,7 +197,7 @@ function SnakeGame({ dirInput, onGameEnd }: Props) {
           flexShrink: 0,
         }}
       >
-        <IconDeviceMobile size={10} />
+        <IconDeviceMobile size={16} />
         {score}
       </div>
       <div
