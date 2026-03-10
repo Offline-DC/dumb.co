@@ -8,6 +8,7 @@ import ReactGA from "react-ga4";
 import rawPressData from "../Press/press_data.md?raw";
 import { openPressItemAtRow } from "../Press/parsePressData";
 import { useNavigate, useLocation } from "react-router-dom";
+import type { DirInput } from "./SnakeGame";
 
 export interface navigationItem {
   screen: string;
@@ -25,6 +26,8 @@ const SCREEN_TO_PATH: Record<string, string> = {
   ["dumbphone I test"]: "/phone",
 };
 
+const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
+
 function Phone({ initialScreen }: Props) {
   const [row, setRow] = useState(0);
   const [navigationStack, setNavigationStack] = useState<navigationItem[]>([]);
@@ -32,11 +35,14 @@ function Phone({ initialScreen }: Props) {
   const [keypadNum, setKeypadNum] = useState("");
   const [audioFile, setAudioFile] = useState("");
   const [options, setOptions] = useState<string[]>([]);
+  const [snakeDirInput, setSnakeDirInput] = useState<DirInput | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const sequenceBuffer = useRef<string[]>([]);
+
   const playSound = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -44,6 +50,20 @@ function Phone({ initialScreen }: Props) {
     }
     audioRef.current = new Audio(`/audio/${audioFile}`);
     audioRef.current.play();
+  };
+
+  // Clear sequence buffer when navigating away from Home
+  useEffect(() => {
+    if (screen !== "Home") {
+      sequenceBuffer.current = [];
+    }
+  }, [screen]);
+
+  const appendSequence = (dir: string): boolean => {
+    sequenceBuffer.current = [...sequenceBuffer.current, dir].slice(
+      -SNAKE_SEQUENCE.length
+    );
+    return sequenceBuffer.current.join(",") === SNAKE_SEQUENCE.join(",");
   };
 
   const handleBackButton = () => {
@@ -55,6 +75,13 @@ function Phone({ initialScreen }: Props) {
 
     setAudioFile("");
     setKeypadNum("");
+
+    if (screen === "snake") {
+      setScreen("Home");
+      setRow(0);
+      setSnakeDirInput(null);
+      return;
+    }
 
     const last = navigationStack[navigationStack.length - 1];
     if (!last) {
@@ -69,7 +96,101 @@ function Phone({ initialScreen }: Props) {
     setNavigationStack(navigationStack.slice(0, -1));
   };
 
-  // ------- START – Supports dedicated /press URL inside of phone ---------
+  const handleCenterClick = () => {
+    if (
+      screen === "dumbhouse" ||
+      screen === "internship" ||
+      screen === "dumbphone I"
+    ) {
+      return;
+    }
+    if (screen === "press") {
+      openPressItemAtRow(row, rawPressData);
+      return;
+    }
+
+    const prev: navigationItem = {
+      screen: screen,
+      row: row,
+    };
+    playSound();
+    setNavigationStack([...navigationStack, prev]);
+    setRow(0);
+    setScreen(options[row]);
+  };
+
+  const handleUpClick = () => {
+    if (screen === "snake") {
+      setSnakeDirInput((prev) => ({ dir: "up", n: (prev?.n ?? 0) + 1 }));
+      return;
+    }
+    if (screen === "Home") {
+      if (appendSequence("up")) {
+        sequenceBuffer.current = [];
+        setScreen("snake");
+        return;
+      }
+    }
+    if (row > 0) {
+      setRow((r) => r - 1);
+    }
+  };
+
+  const handleDownClick = () => {
+    if (screen === "snake") {
+      setSnakeDirInput((prev) => ({ dir: "down", n: (prev?.n ?? 0) + 1 }));
+      return;
+    }
+    if (screen === "Home") {
+      if (appendSequence("down")) {
+        sequenceBuffer.current = [];
+        setScreen("snake");
+        return;
+      }
+    }
+    if (row < options.length - 1) {
+      setRow((r) => r + 1);
+    }
+  };
+
+  const handleLeftClick = () => {
+    if (screen === "snake") {
+      setSnakeDirInput((prev) => ({ dir: "left", n: (prev?.n ?? 0) + 1 }));
+      return;
+    }
+    if (screen === "Home") {
+      if (appendSequence("left")) {
+        sequenceBuffer.current = [];
+        setScreen("snake");
+        return;
+      }
+    }
+    handleBackButton();
+  };
+
+  const handleRightClick = () => {
+    if (screen === "snake") {
+      setSnakeDirInput((prev) => ({ dir: "right", n: (prev?.n ?? 0) + 1 }));
+      return;
+    }
+    if (screen === "Home") {
+      if (appendSequence("right")) {
+        sequenceBuffer.current = [];
+        setScreen("snake");
+        return;
+      }
+    }
+    handleCenterClick();
+  };
+
+  const handleSnakeGameEnd = () => {
+    setScreen("Home");
+    setRow(0);
+    setSnakeDirInput(null);
+    sequenceBuffer.current = [];
+  };
+
+  // ------- START – Supports dedicated /press URL inside of phone ---------
   useEffect(() => {
     if (!initialScreen) return;
     setNavigationStack([{ screen: "Home", row: 0 }]);
@@ -140,6 +261,8 @@ function Phone({ initialScreen }: Props) {
           setKeypadNum={setKeypadNum}
           setAudioFile={setAudioFile}
           clickBackButton={handleBackButton}
+          snakeDirInput={snakeDirInput}
+          onSnakeGameEnd={handleSnakeGameEnd}
         />
       </div>
       <div
@@ -154,38 +277,11 @@ function Phone({ initialScreen }: Props) {
       >
         <Navigation
           onBackClick={handleBackButton}
-          onCenterClick={() => {
-            if (
-              screen === "dumbhouse" ||
-              screen === "internship" ||
-              screen === "dumbphone I"
-            ) {
-              return;
-            }
-            if (screen === "press") {
-              openPressItemAtRow(row, rawPressData);
-              return;
-            }
-
-            const prev: navigationItem = {
-              screen: screen,
-              row: row,
-            };
-            playSound();
-            setNavigationStack([...navigationStack, prev]);
-            setRow(0);
-            setScreen(options[row]);
-          }}
-          onDownClick={() => {
-            if (row < options.length - 1) {
-              setRow((row) => (row += 1));
-            }
-          }}
-          onUpClick={() => {
-            if (row > 0) {
-              setRow((row) => (row -= 1));
-            }
-          }}
+          onCenterClick={handleCenterClick}
+          onDownClick={handleDownClick}
+          onUpClick={handleUpClick}
+          onLeftClick={handleLeftClick}
+          onRightClick={handleRightClick}
           onCallClick={() => {
             window.location.href = `tel:${
               keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER

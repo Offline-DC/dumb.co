@@ -4,6 +4,8 @@ import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
+import SnakeGame from "./SnakeGame";
+import type { DirInput } from "./SnakeGame";
 
 type Props = {
   row: number;
@@ -18,6 +20,8 @@ type Props = {
   keypadNum: string;
   setAudioFile: Dispatch<SetStateAction<string>>;
   clickBackButton: () => void;
+  snakeDirInput: DirInput | null;
+  onSnakeGameEnd: () => void;
 };
 
 function arraysEqual(a: string[], b: string[]) {
@@ -51,6 +55,8 @@ function Screen({
   setKeypadNum,
   setAudioFile,
   clickBackButton,
+  snakeDirInput,
+  onSnakeGameEnd,
 }: Props) {
   let content;
   let display;
@@ -281,7 +287,22 @@ function Screen({
     setRow(0);
     setScreen("Home");
   } else if (screen === "snake") {
-    display = "snake";
+    return (
+      <div
+        style={{
+          background: "rgb(128, 123, 95)",
+          height: "100%",
+          borderRadius: "0.25rem",
+          boxShadow: "inset 0 0 6px rgba(0, 0, 0, 0.6)",
+          border: "1px solid #333",
+          padding: "0.125rem",
+          fontSize: "1.5rem",
+          overflow: "hidden",
+        }}
+      >
+        <SnakeGame dirInput={snakeDirInput} onGameEnd={onSnakeGameEnd} />
+      </div>
+    );
   } else if (screen === "dumbhouse") {
     display = (
       <div>

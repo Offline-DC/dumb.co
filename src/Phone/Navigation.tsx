@@ -17,6 +17,8 @@ type Props = {
   onCallClick: () => void;
   onDownClick: () => void;
   onUpClick: () => void;
+  onLeftClick?: () => void;
+  onRightClick?: () => void;
 };
 
 function Navigation({
@@ -25,6 +27,8 @@ function Navigation({
   onCallClick,
   onDownClick,
   onUpClick,
+  onLeftClick,
+  onRightClick,
 }: Props) {
   return (
     <div
@@ -41,13 +45,13 @@ function Navigation({
       <NavButton onClick={onBackClick}>
         <IconArrowBackUp size={25} />
       </NavButton>
-      <NavButton onClick={onBackClick}>
+      <NavButton onClick={onLeftClick ?? onBackClick}>
         <IconArrowLeft size={25} />
       </NavButton>
       <NavButton onClick={onCenterClick}>
         <IconCircleFilled size={15} />
       </NavButton>
-      <NavButton onClick={onCenterClick}>
+      <NavButton onClick={onRightClick ?? onCenterClick}>
         <IconArrowRight size={25} />
       </NavButton>
       <NavButton onClick={onCallClick}>

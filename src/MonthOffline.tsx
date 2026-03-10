@@ -66,7 +66,7 @@ function MonthOffline() {
               <div className="schedule-card">
                 <div className="schedule-card-header">
                   <span className="location-icon">🗽</span>
-                  <h3>NYC</h3>
+                  <h3>NYC - Brooklyn</h3>
                 </div>
                 <ul className="schedule-list">
                   <li><span className="star">✰</span> may 2nd – 7pm, <em>orientation</em></li>
