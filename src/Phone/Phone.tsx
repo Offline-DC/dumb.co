@@ -61,7 +61,7 @@ function Phone({ initialScreen }: Props) {
 
   const appendSequence = (dir: string): boolean => {
     sequenceBuffer.current = [...sequenceBuffer.current, dir].slice(
-      -SNAKE_SEQUENCE.length
+      -SNAKE_SEQUENCE.length,
     );
     return sequenceBuffer.current.join(",") === SNAKE_SEQUENCE.join(",");
   };
@@ -277,42 +277,11 @@ function Phone({ initialScreen }: Props) {
       >
         <Navigation
           onBackClick={handleBackButton}
-<<<<<<< Updated upstream
           onCenterClick={handleCenterClick}
           onDownClick={handleDownClick}
           onUpClick={handleUpClick}
           onLeftClick={handleLeftClick}
           onRightClick={handleRightClick}
-=======
-          onCenterClick={() => {
-            if (screen === "dumbhouse" || screen === "dumbphone I") {
-              return;
-            }
-            if (screen === "press") {
-              openPressItemAtRow(row, rawPressData);
-              return;
-            }
-
-            const prev: navigationItem = {
-              screen: screen,
-              row: row,
-            };
-            playSound();
-            setNavigationStack([...navigationStack, prev]);
-            setRow(0);
-            setScreen(options[row]);
-          }}
-          onDownClick={() => {
-            if (row < options.length - 1) {
-              setRow((row) => (row += 1));
-            }
-          }}
-          onUpClick={() => {
-            if (row > 0) {
-              setRow((row) => (row -= 1));
-            }
-          }}
->>>>>>> Stashed changes
           onCallClick={() => {
             window.location.href = `tel:${
               keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER
