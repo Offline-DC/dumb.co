@@ -1,3 +1,15 @@
+id: DAZEDNYFW2026
+image_name: nyfw dazed mag.avif
+title: nyfw goes dumb with dumb.co 
+href: https://time.com/7326718/sora-2-ai-fake-videos-social-media/
+source: DAZED MAG
+
+id: OfficeMag2026
+image_name: office mag nyfw 2026.jpg
+title: nyfw says no to the doomscroll
+href: https://time.com/7326718/sora-2-ai-fake-videos-social-media/
+source: Office MAG
+
 id: TIME2025
 image_name: for time 2025.jpg
 title: living dumb = living beyond the screen
