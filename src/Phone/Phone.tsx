@@ -61,7 +61,7 @@ function Phone({ initialScreen }: Props) {
 
   const appendSequence = (dir: string): boolean => {
     sequenceBuffer.current = [...sequenceBuffer.current, dir].slice(
-      -SNAKE_SEQUENCE.length
+      -SNAKE_SEQUENCE.length,
     );
     return sequenceBuffer.current.join(",") === SNAKE_SEQUENCE.join(",");
   };
