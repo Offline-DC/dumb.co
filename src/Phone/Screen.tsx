@@ -67,8 +67,8 @@ function Screen({
       "Month Offline",
       "dumbhouse",
       "dumb organizers",
-      "press",
       "team & contact",
+      "press",
     ];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];

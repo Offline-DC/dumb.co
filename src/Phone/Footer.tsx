@@ -9,7 +9,7 @@ function Footer() {
     const currentYear = new Date().getFullYear();
     return (
         <div style={footerStyle}>
-            © {currentYear} Offline Inc.
+            © {currentYear} Dumb & Co.
         </div>
     );
 }
