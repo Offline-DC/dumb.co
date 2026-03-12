@@ -104,7 +104,7 @@ function Screen({
       </div>
     );
   } else if (screen === "team & contact") {
-    newOptions = ["team", "operator", "contact"]; //FAQs coming soon
+    newOptions = ["team", "contact"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
     window.location.href =
       "https://shop.offline.community/products/offline-dumbphone-1";
