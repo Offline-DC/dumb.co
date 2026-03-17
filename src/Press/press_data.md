@@ -1,3 +1,9 @@
+id: DAZEDFEATURE2026
+image_name: dazed mag flip.webp
+title: could u try a Month Offline with dumb.co?
+href: https://www.dazeddigital.com/life-culture/article/69882/1/month-offline-smartphone-support-group-unplugging-flip-offline-detox 
+source: DAZED MAG
+
 id: DAZEDNYFW2026
 image_name: nyfw dazed mag.avif
 title: nyfw goes dumb with dumb.co 
@@ -40,8 +46,27 @@ title: is it cringe to be online? yes. go dumb
 href: https://www.nbcnews.com/pop-culture/pop-culture-news/going-analog-2025-trends-phone-free-parties-junk-journals-rcna248499
 source: nbc
 
+id: Southern Living 2025
+image_name: Southern Living 2025.webp
+title: dc bar dumbs down
+href: https://www.southernliving.com/dc-phone-free-bar-hush-harbor-11810523
+source: Southern Living
+
 id: hushharbor-1
 image_name: wiz-primary.svg
 title: hush harbor reclaims 3rd spaces
 href: https://www.nba.com/wizards/videos/black-owned-dmv-hush-harbor
 source: nba
+
+id: Eater 2025
+image_name: Eater 2025.webp
+title: scroll less, dance more
+href: https://dc.eater.com/restaurant-news/163917/no-phones-bar-hush-harbor-unplugged-opening-h-street
+source: Eater
+
+id: Popville2025
+image_name: MO Popville.jpg
+title: ur neighbours r at Month Offline w dumb.co
+href: https://www.popville.com/announcements/month-offline-exhibition-999/
+source: PopVille
+
