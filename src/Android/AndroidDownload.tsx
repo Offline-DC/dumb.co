@@ -177,7 +177,7 @@ export default function AndroidDownload() {
           <span className={styles.footerText}>
             Questions? Email{" "}
             <a className={styles.footerLink} href="mailto:support@dumb.co">
-              support@offline.community
+              support@dumb.co
             </a>
           </span>
         </div>

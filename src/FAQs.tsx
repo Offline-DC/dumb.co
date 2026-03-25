@@ -206,7 +206,7 @@ function FAQs() {
         <div className="faq-contact">
           <p>
             Questions? Contact{" "}
-            <a href="mailto:support@offline.community">support@offline.community</a>{" "}
+            <a href="mailto:support@dumb.co">support@dumb.co</a>{" "}
             or call us: <a href="tel:404-716-3605">404-716-3605</a> M-F 9-5 EST
           </p>
         </div>
