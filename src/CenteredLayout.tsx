@@ -6,7 +6,7 @@ export default function CenteredShell() {
       style={{
         height: "100vh",
         width: "100%",
-        backgroundColor: "rgb(51, 51, 51)",
+        backgroundColor: "#F9F594",
         display: "flex",
         margin: "auto",
       }}
@@ -17,7 +17,7 @@ export default function CenteredShell() {
           justifyContent: "center",
           alignItems: "center",
           margin: "auto 0rem",
-          backgroundColor: "rgb(51, 51, 51)",
+          backgroundColor: "#F9F594",
           maxWidth: "100%",
           width: "100%",
         }}

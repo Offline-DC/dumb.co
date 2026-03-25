@@ -33,7 +33,7 @@ function pickPriceForInterval(
 
 export default function PhonePricing() {
   const { data: products = [], isLoading, isError } = useCheckoutProducts();
-  const [billing, setBilling] = useState<BillingView>("year");
+  const [billing, setBilling] = useState<BillingView>("month");
 
   const rows = useMemo(() => {
     return products
@@ -70,7 +70,7 @@ export default function PhonePricing() {
           </div>
           <div>
             dumb means every1. if u r under 25 or need financial aid, email
-            milk@offline.community
+            milk@dumb.co
           </div>
         </div>
       </div>

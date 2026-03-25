@@ -57,8 +57,12 @@ export default function PricingOptionRow({
       </div>
 
       <div className={styles.optionRight}>
-        <div className={styles.price}>{formatUsdCents(price.unit_amount)}</div>
-        <div className={styles.per}>/{billing === "year" ? "yr" : "mo"}</div>
+        <div className={styles.price}>
+          {billing === "year"
+            ? formatUsdCents(price.unit_amount != null ? Math.round(price.unit_amount / 12) : null)
+            : formatUsdCents(price.unit_amount)}
+        </div>
+        <div className={styles.per}>/mo</div>
       </div>
     </button>
   );
