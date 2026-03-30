@@ -4,6 +4,12 @@ title: could u try a Month Offline with dumb.co?
 href: https://www.dazeddigital.com/life-culture/article/69882/1/month-offline-smartphone-support-group-unplugging-flip-offline-detox 
 source: DAZED MAG
 
+id: DAZEDMOFEATURE2026
+image_name: dazed month offline mag.avif
+title: young Americans get dumb
+href: https://www.dazeddigital.com/life-culture/article/69969/1/how-to-get-offline-spend-less-time-on-phone-brick-opal-print-media
+source: DAZED MAG
+
 id: DAZEDNYFW2026
 image_name: nyfw dazed mag.avif
 title: nyfw goes dumb with dumb.co 
