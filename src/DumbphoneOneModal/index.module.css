@@ -33,6 +33,16 @@
   transform: translate(-50%, 0);
 
   width: 90%;
-  border: 2px solid rgba(0, 0, 0, 0.55);
-  background-color: white;
+}
+
+.supportLine {
+  position: relative;
+  text-align: center;
+  font-family: "BioRhyme", cursive;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  -webkit-text-stroke: 10px black;
+  paint-order: stroke fill;
+  padding: 0.5rem;
 }

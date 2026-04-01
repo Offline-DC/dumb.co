@@ -21,6 +21,9 @@ export default function FlyerContainer({ modalWidth }: Props) {
           className={styles.overlayBox}
         >
           <PhonePricing />
+          <div className={styles.supportLine}>
+            human support 24/7 support@offline.community or 404-716-3605
+          </div>
         </div>
       </div>
     </div>
