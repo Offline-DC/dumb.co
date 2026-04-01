@@ -207,8 +207,9 @@ function FAQs() {
           <p>
             Questions? Contact{" "}
             <a href="mailto:support@dumb.co">support@dumb.co</a>{" "}
-            or call us: <a href="tel:404-716-3605">404-716-3605</a> M-F 9-5 EST
+            or call us: <a href="tel:404-716-3605">404-716-3605</a>
           </p>
+          <p>24/7 Human Support</p>
         </div>
       </div>
     </div>
