@@ -69,8 +69,8 @@ export default function PhonePricing() {
             />
           </div>
           <div>
-            dumb means every1. if u r under 25 or need financial aid, email
-            milk@dumb.co
+            4 month membership, then month-2-month. buy 2+ & save $5/mo. for
+            financial aid, email milk@dumb.co
           </div>
         </div>
       </div>
