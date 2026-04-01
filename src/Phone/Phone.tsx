@@ -23,7 +23,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
   intern: "/intern",
-  ["dumbphone I test"]: "/phone",
+  ["dumbphone 2 test"]: "/phone",
 };
 
 const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
@@ -100,7 +100,7 @@ function Phone({ initialScreen }: Props) {
     if (
       screen === "dumbhouse" ||
       screen === "internship" ||
-      screen === "dumbphone I"
+      screen === "dumbphone 2"
     ) {
       return;
     }

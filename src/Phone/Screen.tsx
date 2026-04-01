@@ -63,7 +63,7 @@ function Screen({
   let newOptions: string[] = [];
   if (screen === "Home") {
     newOptions = [
-      "dumbphone I",
+      "dumbphone 2",
       "Month Offline",
       "dumbhouse",
       "dumb organizers",
@@ -304,10 +304,10 @@ function Screen({
       </div>
     );
     setKeypadNum("1844OFFLINE,4");
-  } else if (screen === "dumbphone I") {
+  } else if (screen === "dumbphone 2") {
     display = (
       <div>
-        launching dumbphone II...
+        launching dumbphone 2...
         <DumbphoneOneModal clickBackButton={clickBackButton} />
       </div>
     );
