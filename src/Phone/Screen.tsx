@@ -75,8 +75,7 @@ function Screen({
   } else if (screen === "press") {
     return <Press row={row} setOptions={setOptions} />;
   } else if (screen === "Month Offline") {
-    window.location.href =
-      "https://offline.community";
+    window.location.href = "https://offline.community";
     setRow(0);
     setScreen("Home");
   } else if (screen === "countdown clock") {
@@ -308,7 +307,7 @@ function Screen({
   } else if (screen === "dumbphone I") {
     display = (
       <div>
-        launching dumbphone I...
+        launching dumbphone II...
         <DumbphoneOneModal clickBackButton={clickBackButton} />
       </div>
     );
