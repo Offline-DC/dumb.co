@@ -23,7 +23,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
   intern: "/intern",
-  ["dumbphone 2 test"]: "/phone",
+  "dumbphone 2": "/phone",
 };
 
 const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];

@@ -14,6 +14,9 @@ type Props = {
   buttonText?: string;
   buttonHref?: string;
 
+  /** When true the modal shrinks to fit its content instead of using a fixed height */
+  autoHeight?: boolean;
+
   onClose: () => void;
 };
 
@@ -23,6 +26,12 @@ function clamp(value: number, min: number, max: number) {
 
 const PADDING = 8;
 const TITLE_BAR_H = 32;
+// Gap on right + bottom so the Win95 box-shadow (3px offset) isn't clipped by the viewport on mobile
+const MOBILE_GAP = 4;
+// The .window CSS has `border: 2px` — without box-sizing:border-box this adds to the outer height.
+// We force border-box on mobile and subtract the borders (2px top + 2px bottom = 4px) from body height.
+const WINDOW_BORDER = 2;
+const MOBILE_BODY_OFFSET = TITLE_BAR_H + MOBILE_GAP + WINDOW_BORDER * 2; // 40px
 
 export default function WindowModal({
   title = "Window.exe",
@@ -31,6 +40,7 @@ export default function WindowModal({
   content,
   buttonText,
   buttonHref,
+  autoHeight = false,
   onClose,
 }: Props) {
   const isInteractiveImage = !!content;
@@ -42,12 +52,20 @@ export default function WindowModal({
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
 
-  const [position, setPosition] = useState(() => {
-    return {
-      x: window.innerWidth < 800 ? 0 : 80,
-      y: 10,
-    };
-  });
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 700;
+
+  const [position, setPosition] = useState(() => ({
+    x: window.innerWidth < 800 ? 0 : 80,
+    y: 10,
+  }));
+
+  // On mobile, account for the right gap so FlyerContainer's overlay math matches the real rendered width
+  const [size, setSize] = useState(() => ({
+    w: isMobile ? window.innerWidth - MOBILE_GAP : Math.min(700, Math.floor(window.innerWidth * 0.98)),
+    h: isMobile
+      ? window.innerHeight - MOBILE_BODY_OFFSET
+      : Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.85)),
+  }));
 
   useEffect(() => {
     const body = document.body;
@@ -69,18 +87,11 @@ export default function WindowModal({
     };
   }, []);
 
-  const [size, setSize] = useState(() => ({
-    w: Math.min(700, Math.floor(window.innerWidth * 0.98)),
-    h: Math.floor(window.innerHeight * (isInteractiveImage ? 0.98 : 0.85)),
-  }));
-
   const [maximized, setMaximized] = useState(false);
   const restoreRef = useRef<{
     position: typeof position;
     size: typeof size;
   } | null>(null);
-
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 700;
 
   const maximize = () => {
     restoreRef.current = { position, size };
@@ -118,6 +129,15 @@ export default function WindowModal({
         return;
       }
 
+      // On mobile, always track the full viewport so overlay positioning recalculates correctly
+      if (window.innerWidth < 700) {
+        setSize({
+          w: window.innerWidth - MOBILE_GAP,
+          h: window.innerHeight - MOBILE_BODY_OFFSET,
+        });
+        return;
+      }
+
       setSize((s) => ({
         w: clamp(s.w, 260, window.innerWidth - PADDING * 2),
         h: clamp(s.h, 220, window.innerHeight - PADDING * 2),
@@ -133,10 +153,12 @@ export default function WindowModal({
     return () => window.removeEventListener("resize", handleResize);
   }, [maximized, size.w, size.h]);
 
+  // Mouse drag (desktop) — use actual rendered height for y-clamp so autoHeight works correctly
   useEffect(() => {
-    if (!dragging || maximized) return;
+    if (!dragging || maximized || isMobile) return;
 
     const handleMouseMove = (e: MouseEvent) => {
+      const modalH = windowRef.current?.offsetHeight ?? size.h;
       setPosition({
         x: clamp(
           e.clientX - dragOffset.current.x,
@@ -146,7 +168,7 @@ export default function WindowModal({
         y: clamp(
           e.clientY - dragOffset.current.y,
           PADDING,
-          window.innerHeight - size.h - PADDING,
+          window.innerHeight - modalH - PADDING,
         ),
       });
     };
@@ -159,7 +181,7 @@ export default function WindowModal({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging, maximized, size.w, size.h]);
+  }, [dragging, maximized, isMobile, size.w, size.h]);
 
   useEffect(() => {
     if (!resizing || maximized) return;
@@ -191,32 +213,37 @@ export default function WindowModal({
     ? content({ size, isMobile })
     : content;
 
+  // Mobile: fill screen minus a gap on right + bottom so the Win95 box-shadow (3px) stays visible.
+  // boxSizing:border-box ensures the height value is the OUTER height (including the 2px borders),
+  // so the element's bottom edge is exactly MOBILE_GAP px above the viewport bottom.
+  const windowStyle = isMobile
+    ? { left: 0, top: 0, right: MOBILE_GAP, height: `calc(100dvh - ${MOBILE_GAP}px)`, boxSizing: "border-box" as const, zIndex: 999999 }
+    : { left: position.x, top: position.y, width: size.w, zIndex: 999999 };
+
+  const bodyStyle = isMobile
+    ? { height: `calc(100dvh - ${MOBILE_BODY_OFFSET}px)`, overflowY: "auto" as const }
+    : autoHeight
+      ? { height: "auto" }
+      : { height: size.h - TITLE_BAR_H };
+
+  // On mobile the body scrolls, so the flyer must not clip or constrain content
+  const flyerStyle = isMobile
+    ? { flex: "0 0 auto", overflow: "visible" as const }
+    : autoHeight
+      ? { flex: "0 0 auto", overflow: "visible" as const }
+      : undefined;
+
   return (
     <div
       ref={windowRef}
       className={styles.window}
-      style={
-        isMobile && isInteractiveImage
-          ? {
-              left: "0",
-              top: "0",
-              width: "98vw",
-              height: "98vh",
-              zIndex: 999999,
-            }
-          : {
-              left: position.x,
-              top: position.y,
-              width: size.w,
-              zIndex: 999999,
-            }
-      }
+      style={windowStyle}
     >
       <div
         className={styles.titleBar}
-        onDoubleClick={toggleMaximize}
+        onDoubleClick={isMobile ? undefined : toggleMaximize}
         onMouseDown={(e) => {
-          if (resizing || maximized) return;
+          if (isMobile || resizing || maximized) return;
           const rect = (
             windowRef.current ?? e.currentTarget
           ).getBoundingClientRect();
@@ -245,12 +272,11 @@ export default function WindowModal({
         </div>
       </div>
 
-      <div
-        className={styles.body}
-        style={isMobile ? undefined : { height: size.h - TITLE_BAR_H }}
-      >
+      <div className={styles.body} style={bodyStyle}>
         {content ? (
-          <div className={styles.flyer}>{renderedContent}</div>
+          <div className={styles.flyer} style={flyerStyle}>
+            {renderedContent}
+          </div>
         ) : imageSrc ? (
           <div className={styles.flyer}>
             <img src={imageSrc} alt={imageAlt} draggable={false} />
