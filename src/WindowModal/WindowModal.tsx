@@ -220,10 +220,12 @@ export default function WindowModal({
     ? { left: 0, top: 0, right: MOBILE_GAP, height: `calc(100dvh - ${MOBILE_GAP}px)`, boxSizing: "border-box" as const, zIndex: 999999 }
     : { left: position.x, top: position.y, width: size.w, zIndex: 999999 };
 
+  const maxBodyH = window.innerHeight - position.y - TITLE_BAR_H - PADDING - WINDOW_BORDER * 2;
+
   const bodyStyle = isMobile
     ? { height: `calc(100dvh - ${MOBILE_BODY_OFFSET}px)`, overflowY: "auto" as const }
     : autoHeight
-      ? { height: "auto" }
+      ? { height: "auto", maxHeight: maxBodyH, overflowY: "auto" as const }
       : { height: size.h - TITLE_BAR_H };
 
   // On mobile the body scrolls, so the flyer must not clip or constrain content
