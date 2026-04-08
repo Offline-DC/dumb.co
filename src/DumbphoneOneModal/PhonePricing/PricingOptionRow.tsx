@@ -48,6 +48,18 @@ const priceIDPaymentLinkMap: Record<string, string> = {
     "https://buy.stripe.com/dRm14g9xSeDw7HB0K48N20g", //dumbest monthly,
   price_1THSkK6YQdMFHNu42d0i1jon:
     "https://buy.stripe.com/dRmeV67pKgLE7HB3Wg8N20h", //dumbest yearly,
+  price_1TJgFl6YQdMFHNu4ysVh5VGD:
+    "https://buy.stripe.com/3cIcMY9xSgLE3rldwQ8N20t", //dumb monthly,
+  price_1TJgFl6YQdMFHNu4kt7gPZ3B:
+    "https://buy.stripe.com/fZufZaaBWeDw5ztdwQ8N20u", //dumb yearly,
+  price_1TJgJh6YQdMFHNu4oGuFM1Mu:
+    "https://buy.stripe.com/cNi5kw6lGeDw2nh8cw8N20r", //dumber monthly,
+  price_1TJgJh6YQdMFHNu4Kg9bmehb:
+    "https://buy.stripe.com/3cI6oA9xSang7HB0K48N20s", //dumber yearly,
+  price_1TJgNY6YQdMFHNu4ZSUINfcr:
+    "https://buy.stripe.com/8x2aEQdO82UO2nhakE8N20p", //dumbest monthly,
+  price_1TJgNY6YQdMFHNu4NGmJwH8E:
+    "https://buy.stripe.com/28EeV69xS52W6Dx50k8N20q", //dumbest yearly,
 };
 
 export default function PricingOptionRow({
