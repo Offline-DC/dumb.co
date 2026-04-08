@@ -16,6 +16,7 @@ export type StripeRecurring = {
 export type StripeProductMetadata = {
   dumbco_website_checkout?: string;
   dumbco_website_row?: string;
+  dumbco_website_price?: string;
 } & Record<string, unknown>;
 
 export type StripeProduct = {

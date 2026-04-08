@@ -92,7 +92,9 @@ export default function PricingOptionRow({
 
       <div className={styles.optionRight}>
         <div className={styles.price}>
-          {formatUsdCents(price.unit_amount)}
+          {formatUsdCents(
+            price.unit_amount ?? product?.metadata?.dumbco_website_price,
+          )}
         </div>
         <div className={styles.per}>/{billing === "year" ? "yr" : "mo"}</div>
       </div>
