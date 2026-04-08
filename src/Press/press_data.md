@@ -1,7 +1,7 @@
 id: CNNDOCMENTION2026_2
 image_name: bill weir dumbco.jpeg
 title: Bill Weir dumbs down w/ dumbco, u should 2
-href: https:https://www.instagram.com/reel/DWrxCZnjNPH/ 
+href: https://www.instagram.com/reel/DWrxCZnjNPH/ 
 source: CNN
 
 id: CNNDOCMENTION2026
