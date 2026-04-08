@@ -12,7 +12,7 @@ source: CNN
 
 id: CNNBILLWEIR2026
 image_name: cnn dumbphones.avif
-title: Bill Weir's brain does better on dumbphones
+title: Bill Weir's brain does better on dumbphones??
 href: https://www.facebook.com/cnn/videos/cnns-billweircnn-spends-half-a-month-without-his-iphone-and-scans-of-his-brain-b/1561313594960987/ 
 source: CNN
 
