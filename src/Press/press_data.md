@@ -1,3 +1,21 @@
+id: CNNDOCMENTION2026
+image_name: bill weir dumbco.jpeg
+title: Bill Weir dumbs down w/ dumbco, u should 2
+href: https:https://www.instagram.com/reel/DWrxCZnjNPH/ 
+source: CNN
+
+id: CNNDOCMENTION2026
+image_name: bill weir dumbsdown.jpeg
+title: smartphones altered society, get dumb instead
+href: https://www.facebook.com/AC360/videos/cnns-bill-weir-takes-a-fascinating-look-back-at-50-years-of-apple-and-how-the-te/1613153189891532/ 
+source: CNN
+
+id: CNNBILLWEIR2026
+image_name: cnn dumbphones.avif
+title: Bill Weir's brain does better on dumbphones
+href: https://www.facebook.com/cnn/videos/cnns-billweircnn-spends-half-a-month-without-his-iphone-and-scans-of-his-brain-b/1561313594960987/ 
+source: CNN
+
 id: DAZEDFEATURE2026
 image_name: dazed mag flip.webp
 title: could u try a Month Offline with dumb.co?
