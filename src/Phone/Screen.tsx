@@ -162,7 +162,12 @@ function Screen({
   } else if (screen === "What is Offline?") {
     display = "Less is MO";
   } else if (screen === "contact") {
-    display = "hi @ offline • community";
+    display = (
+      <div>
+        <div>hi@dumb.co</div>
+        <div>404-716-3605</div>
+      </div>
+    );
     newOptions = [];
   } else if (screen === "Why?") {
     display = "Less is M.O.";
