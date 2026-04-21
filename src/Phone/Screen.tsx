@@ -164,7 +164,7 @@ function Screen({
   } else if (screen === "contact") {
     display = (
       <div>
-        <div>hi@dumb.co</div>
+        <div>team@dumb.co</div>
         <div>404-716-3605</div>
       </div>
     );
