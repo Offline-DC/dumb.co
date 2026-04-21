@@ -262,7 +262,7 @@
 }
 .signatures .signature:nth-child(8) {
   transform: rotate(1deg);
-  height: clamp(40px, 6vw, 64px);
+  height: clamp(43px, 10vw, 98px);
 }
 .signatures .signature:nth-child(9) {
   transform: rotate(-2deg);
