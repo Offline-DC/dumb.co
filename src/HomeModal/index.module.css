@@ -1,0 +1,288 @@
+/*
+ * Styles for the HomeModal content.
+ * Mirrors DumbphoneOneModal/index.module.css so the look & feel
+ * stays consistent with the dumbphone 2 modal.
+ */
+
+.root {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+  min-height: 0;
+}
+
+.frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+ * Polaroid-style hero: white frame with small border radius, the_fun_percent
+ * image sitting inside (also slight border radius), "make your move." overlay
+ * text on the image, and the dumb.co logo beneath.
+ * -------------------------------------------------------------------------- */
+
+.polaroid {
+  width: 100%;
+  max-width: 820px;
+  /* No top margin — sits flush against the title bar, no gray gap above. */
+  margin: 0 auto;
+  padding: 1rem;
+
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  box-sizing: border-box;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  line-height: 0; /* kill stray inline-image baseline gap */
+}
+
+/*
+ * Nested under .polaroid to outrank WindowModal's `.flyer img { width: auto }`
+ * (and its mobile `.flyer img { width: 100% }`) which would otherwise win
+ * on specificity (0,1,1) vs our plain-class selector at (0,1,0).
+ */
+.polaroid .image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  max-width: 100%;
+}
+
+.overlayText {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translateY(-50%);
+
+  color: #ffffff;
+  font-weight: 700;
+  font-size: clamp(16px, 3.2vw, 32px);
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/*
+ * Nested under .polaroid for the same reason as .image above — otherwise
+ * WindowModal's `.flyer img` rule (0,1,1) overrides our width/max-width.
+ */
+.polaroid .logo {
+  display: block;
+  align-self: flex-start; /* pin to the left inside the column flex polaroid */
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  /* Smaller + bottom-left, matching the original polaroid reference. */
+  margin: 0.25rem 0 0 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Cheltenham Extra Condensed Bold — used for the "hello from the flip side."
+ * title. File lives at src/Cheltenham Extra Condensed Bold.otf; Vite will
+ * hash/bundle it from the url() below.
+ * -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Cheltenham";
+  src: url("../Cheltenham Extra Condensed Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+ * "hello from the flip side." section — pink card with two columns on
+ * desktop (text left, polaroid right); on mobile the polaroid stacks above
+ * the text via column-reverse.
+ * -------------------------------------------------------------------------- */
+.helloFlipSide {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto 0 auto;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+
+  background: #ee7bee; /* hot pink matching the reference */
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  box-sizing: border-box;
+}
+
+.flipTextCol {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.flipTitle {
+  font-family: "Cheltenham", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: #000;
+  padding-top: 1rem;
+  margin: 0;
+}
+
+.flipBody {
+  font-family: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.45;
+  color: #000;
+  margin: 0;
+  font-weight: 500;
+}
+
+.flipPolaroidCol {
+  flex: 0 0 42%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  /* Positioning context for the absolutely-placed "made in D.C." overlay. */
+  position: relative;
+}
+
+/*
+ * Nested under .flipPolaroidCol to beat WindowModal's `.flyer img` rule
+ * (same specificity fix as the hero polaroid images).
+ */
+.flipPolaroidCol .flipPolaroidImage {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/*
+ * "made in D.C." handwritten caption — overlaid on top of the polaroid
+ * rather than stacked beneath it. Positioned in the upper-right area
+ * to match the reference design. Tune top/right/width to taste.
+ */
+.flipPolaroidCol .madeInDc {
+  position: absolute;
+  top: 80%;
+  right: 20%;
+  width: 60%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+ * Signatures strip — sits beneath the pink "hello from the flip side"
+ * section on the modal's neutral body background. Flex-wraps across lines
+ * on narrower widths; slight per-item rotation/size variation keeps it
+ * looking organically scattered rather than rigidly aligned.
+ * -------------------------------------------------------------------------- */
+.signatures {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 1.25rem 1.5rem 1.25rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  gap: 0.75rem 1.25rem;
+
+  box-sizing: border-box;
+
+  background-color: #ee7bee;
+}
+
+/*
+ * Same specificity trick as the other polaroid images — nested under
+ * .signatures so we outrank WindowModal's `.flyer img` rule.
+ */
+.signatures .signature {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 56px;
+  flex: 0 0 auto;
+  transform-origin: center;
+}
+
+/* Light scatter — vary size + rotation per slot so the row reads as
+ * handwritten rather than grid-aligned. */
+.signatures .signature:nth-child(1) {
+  transform: rotate(-3deg);
+}
+.signatures .signature:nth-child(2) {
+  transform: rotate(2deg) translateY(-2px);
+  height: clamp(40px, 6vw, 64px);
+}
+.signatures .signature:nth-child(3) {
+  transform: rotate(-1deg);
+}
+.signatures .signature:nth-child(4) {
+  transform: rotate(4deg) translateY(2px);
+  height: clamp(42px, 6.5vw, 68px);
+}
+.signatures .signature:nth-child(5) {
+  transform: rotate(-2deg);
+}
+.signatures .signature:nth-child(6) {
+  transform: rotate(3deg);
+  height: clamp(38px, 5.8vw, 60px);
+}
+.signatures .signature:nth-child(7) {
+  transform: rotate(-4deg) translateY(-1px);
+}
+.signatures .signature:nth-child(8) {
+  transform: rotate(1deg);
+  height: clamp(40px, 6vw, 64px);
+}
+.signatures .signature:nth-child(9) {
+  transform: rotate(-2deg);
+}
+
+/* --- mobile: polaroid on top, text below ---------------------------------- */
+@media (max-width: 700px) {
+  .helloFlipSide {
+    flex-direction: column-reverse;
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .flipPolaroidCol {
+    flex: 0 0 auto;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .flipPolaroidCol .flipPolaroidImage {
+    max-width: 80%;
+  }
+}

@@ -9,6 +9,7 @@ import rawPressData from "../Press/press_data.md?raw";
 import { openPressItemAtRow } from "../Press/parsePressData";
 import { useNavigate, useLocation } from "react-router-dom";
 import type { DirInput } from "./SnakeGame";
+import HomeModal from "../HomeModal";
 
 export interface navigationItem {
   screen: string;
@@ -36,6 +37,11 @@ function Phone({ initialScreen }: Props) {
   const [audioFile, setAudioFile] = useState("");
   const [options, setOptions] = useState<string[]>([]);
   const [snakeDirInput, setSnakeDirInput] = useState<DirInput | null>(null);
+
+  // Open the home modal by default when landing on dumb.co ("/") — i.e.
+  // when no `initialScreen` is provided. It's a one-shot: once the user
+  // clicks × we never re-open it during this mount.
+  const [showHomeModal, setShowHomeModal] = useState<boolean>(!initialScreen);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -221,7 +227,11 @@ function Phone({ initialScreen }: Props) {
   }, [audioFile]);
 
   return (
-    <div
+    <>
+      {showHomeModal && (
+        <HomeModal onClose={() => setShowHomeModal(false)} />
+      )}
+      <div
       style={{
         background: "#333",
         borderRadius: "2rem",
@@ -292,6 +302,7 @@ function Phone({ initialScreen }: Props) {
         <Footer />
       </div>
     </div>
+    </>
   );
 }
 
