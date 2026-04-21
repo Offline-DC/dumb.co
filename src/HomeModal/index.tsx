@@ -24,6 +24,7 @@ export default function HomeModal({ onClose }: Props) {
         <HomeModalContent
           modalWidth={size.w}
           containerHeight={isMobile ? size.h : undefined}
+          onClose={onClose}
         />
       )}
       onClose={onClose}

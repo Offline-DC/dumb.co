@@ -268,6 +268,78 @@
   transform: rotate(-2deg);
 }
 
+/* --------------------------------------------------------------------------
+ * "see more" close button — classic Win95 raised-bevel aesthetic.
+ * Sits at the very bottom of the modal, centered. Click closes the modal.
+ * -------------------------------------------------------------------------- */
+.seeMoreContainer {
+  width: 100%;
+  padding: 0.5rem 1rem 1.5rem 1rem;
+  display: flex;
+  justify-content: center;
+
+  box-sizing: border-box;
+  background-color: #ee7bee;
+}
+
+.seeMoreButton {
+  /* Font: classic system sans-serif à la MS Sans Serif / Tahoma. */
+  font-family: "Tahoma", "MS Sans Serif", "Segoe UI", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+
+  padding: 6px 22px;
+  min-width: 120px;
+
+  background: #c0c0c0;
+  border: 2px solid;
+  /* Raised bevel: light on top/left, dark on bottom/right. */
+  border-color: #ffffff #808080 #808080 #ffffff;
+  box-shadow:
+    inset 1px 1px 0 #dfdfdf,
+    inset -1px -1px 0 #404040;
+
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+/* Subtle hover — slight brighten of the gray fill plus a dotted inner outline,
+ * mimicking the way classic Win95 buttons hinted at focus / pointer-over. */
+.seeMoreButton:hover {
+  background: #d4d0c8;
+}
+
+.seeMoreButton:hover::after {
+  /* Hair-thin dotted inner border — the classic "focus rectangle" look. */
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px dotted #000;
+  pointer-events: none;
+}
+
+/* Position the ::after relative to the button. */
+.seeMoreButton {
+  position: relative;
+}
+
+/* Pressed-in look on click — swap the bevel highlights. */
+.seeMoreButton:active {
+  border-color: #808080 #ffffff #ffffff #808080;
+  box-shadow:
+    inset 1px 1px 0 #404040,
+    inset -1px -1px 0 #dfdfdf;
+  padding: 7px 21px 5px 23px; /* subtle 1px down-right nudge */
+}
+
+/* Keyboard focus: dotted outline like the real Win95 buttons. */
+.seeMoreButton:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
 /* --- mobile: polaroid on top, text below ---------------------------------- */
 @media (max-width: 700px) {
   .helloFlipSide {

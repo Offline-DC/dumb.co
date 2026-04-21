@@ -40,6 +40,8 @@ type Props = {
    * Undefined on desktop (modal uses autoHeight).
    */
   containerHeight?: number;
+  /** Closes the modal (wired through from WindowModal.onClose). */
+  onClose: () => void;
 };
 
 /**
@@ -58,6 +60,7 @@ export default function HomeModalContent({
   // FlyerContainer's. Remove the underscore prefix when actually consumed.
   modalWidth: _modalWidth,
   containerHeight,
+  onClose,
 }: Props) {
   return (
     <div
@@ -144,6 +147,18 @@ export default function HomeModalContent({
               draggable={false}
             />
           ))}
+        </div>
+
+        {/* Basic 90s-style close button — classic Win95 raised bevel.
+            Closes the modal so the user can explore the rest of the site. */}
+        <div className={styles.seeMoreContainer}>
+          <button
+            type="button"
+            className={styles.seeMoreButton}
+            onClick={onClose}
+          >
+            see more
+          </button>
         </div>
       </div>
     </div>
