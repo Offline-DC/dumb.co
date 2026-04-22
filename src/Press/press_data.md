@@ -4,6 +4,12 @@ title: Bill Weir dumbs down w/ dumbco, u should 2
 href: https://www.instagram.com/reel/DWrxCZnjNPH/ 
 source: CNN
 
+id: Business Insider MO Spring 2026
+image_name: business insider 2026 maneesha.webp
+title: dumbphone users love dumb.co
+href: https://www.businessinsider.com/millennial-switched-to-flip-phone-for-month-2026-4
+source: Business Insider
+
 id: CNNDOCMENTION2026
 image_name: bill weir dumbsdown.jpeg
 title: smartphones altered society, get dumb instead
