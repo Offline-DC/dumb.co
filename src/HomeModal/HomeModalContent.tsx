@@ -113,9 +113,14 @@ export default function HomeModalContent({
               dumb.co was born in Washington, DC in 2025 after a small group of
               neighbors came together to form Month Offline: a 30-day challenge
               to ditch our smartphones. we learned a lot along the way, and
-              decided to design a device that&apos;s just dumb enough. our
-              little team is stoked that you&apos;re part of the growing
-              movement of dumb ppl choosing to dumb down.
+              decided to design a device that&apos;s just dumb enough. the
+              dumbphone 2 is a companion device that syncs with ur smartphone
+              and includes maps, music, uber, and all ur messages (but only if u
+              want). our little team is stoked that ur part of the growing
+              movement of dumb ppl choosing dumb down.
+            </p>
+            <p style={{ marginBottom: "1rem" }} className={styles.flipBody}>
+              quack,
             </p>
           </div>
           <div className={styles.flipPolaroidCol}>
