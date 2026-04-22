@@ -22,6 +22,7 @@ import NotFound from "./NotFound";
 import AndroidDownload from "./Android/AndroidDownload.tsx";
 import AppsDownload from "./Android/AppsDownload.tsx";
 import AppRedirect from "./AppRedirect.tsx";
+import MobileRedirect from "./MobileRedirect.tsx";
 
 import CheckoutForm from "./Stripe/CheckoutForm.tsx";
 import Confirmation from "./Stripe/Confirmation.tsx";
@@ -161,6 +162,7 @@ function App() {
             <Route path="/android" element={<AndroidDownload />} />
             <Route path="/apps" element={<AppsDownload />} />
             <Route path="/app" element={<AppRedirect />} />
+            <Route path="/mobile" element={<MobileRedirect />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
