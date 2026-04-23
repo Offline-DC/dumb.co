@@ -10,6 +10,12 @@ title: dumbphone users love dumb.co
 href: https://www.businessinsider.com/millennial-switched-to-flip-phone-for-month-2026-4
 source: Business Insider
 
+id: AFP YAHOO SPRING 2026
+image_name: afp yahoo lol.webp
+title: young can't get off dumbphone by dumb.co
+href: https://shorturl.at/8MDed
+source: Yahoo! 
+
 id: CNNDOCMENTION2026
 image_name: bill weir dumbsdown.jpeg
 title: smartphones altered society, get dumb instead
