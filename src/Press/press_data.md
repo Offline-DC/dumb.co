@@ -12,7 +12,7 @@ source: Business Insider
 
 id: AFP YAHOO SPRING 2026
 image_name: afp yahoo lol.webp
-title: young can't get off dumbphone by dumb.co
+title: young ppl can't get off dumbphones by dumb.co
 href: https://shorturl.at/8MDed
 source: Yahoo! 
 
