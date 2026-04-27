@@ -1,3 +1,9 @@
+id: THEATLANTICSPRING2026
+image_name: atlantic flip phone.avif
+title: dumb down ur life, get a flip phone
+href: https://www.theatlantic.com/technology/2026/04/month-offline-smartphone-detox/686911/ 
+source: The Atlantic
+
 id: CNNDOCMENTION2026_2
 image_name: bill weir dumbco.jpeg
 title: Bill Weir dumbs down w/ dumbco, u should 2
@@ -12,7 +18,7 @@ source: Business Insider
 
 id: AFP YAHOO SPRING 2026
 image_name: afp yahoo lol.webp
-title: young can't get off dumbphone by dumb.co
+title: young ppl can't get off dumbphones by dumb.co
 href: https://shorturl.at/8MDed
 source: Yahoo! 
 
