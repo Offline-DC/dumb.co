@@ -15,7 +15,7 @@ export default function PhonePricing() {
         <PricingList prices={prices} isLoading={isLoading} isError={isError} />
         <div className={styles.footer}>
           <div style={{ paddingLeft: ".5rem" }}>
-            buy 2+ & save $10. for financial aid, email milk@dumb.co
+            for financial aid, email milk@dumb.co
           </div>
           <a
             className={styles.faqLink}
