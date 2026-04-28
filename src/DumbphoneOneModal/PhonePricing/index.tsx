@@ -1,64 +1,18 @@
-import { useMemo, useState } from "react";
 import { useCheckoutProducts } from "../../hooks/useCheckoutProducts";
 import styles from "./index.module.css";
-import type { CheckoutProduct, StripePrice } from "../../hooks/types/stripe";
-import BillingToggle from "./BillingToggle";
 import PricingList from "./PricingList";
 import "@fontsource/biorhyme/400.css";
 import "@fontsource/biorhyme/700.css";
 import "@fontsource/rubik/700.css";
 import "@fontsource/rubik/400.css";
 
-export type BillingView = "year" | "month";
-
-function pickPriceForInterval(
-  product: CheckoutProduct,
-  interval: BillingView,
-): StripePrice | null {
-  const recurring = product.prices.filter(
-    (p) => p.type === "recurring" && p.recurring?.interval,
-  );
-
-  const target = recurring.find((p) => p.recurring?.interval === interval);
-  if (target) return target;
-
-  if (recurring.length > 0) {
-    return [...recurring].sort(
-      (a, b) => (a.unit_amount ?? Infinity) - (b.unit_amount ?? Infinity),
-    )[0]!;
-  }
-
-  return null;
-}
-
 export default function PhonePricing() {
-  const { data: products = [], isLoading, isError } = useCheckoutProducts();
-  const [billing, setBilling] = useState<BillingView>("month");
-
-  const rows = useMemo(() => {
-    return products
-      .map((product) => {
-        const price = pickPriceForInterval(product, billing);
-        return { product, price };
-      })
-      .filter((r) => r.price !== null) as Array<{
-      product: CheckoutProduct;
-      price: StripePrice;
-    }>;
-  }, [products, billing]);
+  const { data: prices = [], isLoading, isError } = useCheckoutProducts();
 
   return (
     <div className={styles.container}>
       <div className={styles.board}>
-        <div className={styles.headerRow}>
-          <BillingToggle billing={billing} onChange={setBilling} />
-        </div>
-        <PricingList
-          rows={rows}
-          billing={billing}
-          isLoading={isLoading}
-          isError={isError}
-        />
+        <PricingList prices={prices} isLoading={isLoading} isError={isError} />
         <div className={styles.footer}>
           <div className={styles.faqButtonContainer}>
             <a
@@ -68,9 +22,8 @@ export default function PhonePricing() {
               rel="noopener noreferrer"
             />
           </div>
-          <div>
-            4 month membership, then month-2-month. buy 2+ & save $5/mo. for
-            financial aid, email milk@dumb.co
+          <div style={{ paddingRight: ".5rem" }}>
+            buy 2+ & save $10. for financial aid, email milk@dumb.co
           </div>
         </div>
       </div>

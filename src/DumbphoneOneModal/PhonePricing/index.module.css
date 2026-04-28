@@ -25,36 +25,6 @@
   color: white;
 }
 
-.headerRow {
-  flex: 0 0 auto; /* don't grow */
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.toggle {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.toggleBtn {
-  padding: 0.5rem 1rem;
-  font-size: 18px;
-  font-family: "Rubik", cursive;
-  font-weight: 700;
-}
-
-.toggleBtn.active {
-  background-color: #631819;
-  color: white;
-}
-
-.subheadRow {
-  display: flex;
-  justify-content: center;
-}
-
 button {
   border: 2px solid #c0c0c0;
   box-shadow:
@@ -120,39 +90,6 @@ button:hover {
   flex: 1;
 }
 
-/* Big friendly tap target */
-.infoButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 2px solid #c0c0c0;
-  box-shadow:
-    inset 1px 1px 0 #ffffff,
-    inset -1px -1px 0 #808080;
-
-  background: #f2f2f2;
-  border-radius: 6px;
-
-  font-weight: 700;
-  font-size: 18px;
-
-  font-family: "Rubik", cursive;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.infoButton:active {
-  transform: translateY(1px);
-}
-
-.infoButton.expanded {
-  transform: rotate(90deg);
-}
-
-.infoButton.expanded:active {
-  transform: rotate(90deg) translateY(1px);
-}
-
 .optionRight,
 .optionLeft {
   display: flex;
@@ -161,6 +98,7 @@ button:hover {
   font-size: 18px;
   font-family: "Rubik", cursive;
   margin-right: 4px;
+  padding-left: 0.5rem;
 }
 
 .optionLeft {
@@ -177,29 +115,6 @@ button:hover {
   gap: 0;
 }
 
-/* small square info button */
-.infoButton {
-  padding: 0.5rem 1rem;
-  color: #000;
-  font-weight: 900;
-}
-
-/* accordion panel wrapper for smooth animation */
-.descriptionWrapper {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.descriptionWrapper.open {
-  grid-template-rows: 1fr;
-}
-
-.descriptionInner {
-  overflow: hidden;
-}
-
-/* accordion panel */
 .description {
   padding: 0 0.5rem;
   background: rgb(242, 242, 242);
@@ -219,7 +134,7 @@ button:hover {
 .footer {
   padding: 0.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   color: black;
   align-items: center;
   text-align: center;

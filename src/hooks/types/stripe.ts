@@ -66,7 +66,3 @@ export type StripePrice = {
 };
 
 export type PricesResponse = StripeList<StripePrice>;
-
-export type CheckoutProduct = StripeProduct & {
-  prices: StripePrice[];
-};
