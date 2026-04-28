@@ -141,21 +141,38 @@ button:hover {
   font-weight: 600;
   font-family: "BioRhyme", cursive;
   font-size: 14px;
+  padding-right: 0;
 }
 
 .faqLink {
   font-family: "Rubik", cursive;
   font-weight: 700;
-  font-size: 18px;
-  color: #000;
+  font-size: 22px;
+  color: #1a4fd6;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
-  padding: 0 0.5rem;
+  padding: 0.35rem 0.85rem;
+  margin: 0 0.25rem;
   white-space: nowrap;
+
+  background: #f2f2f2;
+  border: 2px solid #c0c0c0;
+  border-radius: 4px;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
 }
 
 .faqLink:hover {
-  color: #631819;
+  color: #0a2fa8;
+  background: #ffffff;
   text-decoration-thickness: 2px;
+}
+
+.faqLink:active {
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 #ffffff;
+  transform: translateY(1px);
 }
