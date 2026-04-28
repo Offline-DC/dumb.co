@@ -14,17 +14,17 @@ export default function PhonePricing() {
       <div className={styles.board}>
         <PricingList prices={prices} isLoading={isLoading} isError={isError} />
         <div className={styles.footer}>
-          <div className={styles.faqButtonContainer}>
-            <a
-              className={styles.faqButton}
-              href="/faqs"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          </div>
-          <div style={{ paddingRight: ".5rem" }}>
+          <div style={{ paddingLeft: ".5rem" }}>
             buy 2+ & save $10. for financial aid, email milk@dumb.co
           </div>
+          <a
+            className={styles.faqLink}
+            href="/faqs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            questions?
+          </a>
         </div>
       </div>
     </div>

@@ -143,24 +143,19 @@ button:hover {
   font-size: 14px;
 }
 
-.faqButtonContainer {
-  display: flex;
-  justify-content: end;
-}
-
-.faqButton {
-  all: unset;
+.faqLink {
+  font-family: "Rubik", cursive;
+  font-weight: 700;
+  font-size: 18px;
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
-  background-image: url("./faq_rest.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  transition: background-image 0.15s ease;
-  height: 40px;
-  width: 80px;
+  padding: 0 0.5rem;
+  white-space: nowrap;
 }
 
-.faqButton:hover {
-  background-image: url("./faq_motion.png");
+.faqLink:hover {
+  color: #631819;
+  text-decoration-thickness: 2px;
 }
