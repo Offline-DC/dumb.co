@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <rect x="4" y="4" width="40" height="40" rx="6" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <path d="M27.5 8C23.5 8 21 10.5 21 14.5L21 19L16 19L16 24L21 24L21 40L27 40L27 24L31.5 24L32.5 19L27 19L27 14.5C27 13.2 27.6 12.5 29 12.5L33 12.5L33 8Z" fill="#ffffff"/>
+  <!-- hand-drawn X: bottom-left to top-right -->
+  <path d="M6.5 45.5 C9 42, 11 39.5, 13.5 36 C15 33, 17.5 31, 19 28.5 C21 26, 22.5 24.5, 24.5 22 C26 19.5, 27 18, 29.5 15 C31 12.5, 33.5 10, 35.5 7.5 C37 5.5, 39.5 3.5, 41.5 2.5" stroke="#FF69B4" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M8 44 C10.5 41, 12.5 38, 14 35.5 C16.5 32, 18 30, 20.5 27 C22 24.5, 24 22.5, 25.5 20.5 C27.5 17.5, 29 15.5, 31 13 C33 10, 35 7.5, 37 5.5 C39 4, 40.5 3, 42 2" stroke="#FF69B4" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+  <!-- hand-drawn X: bottom-right to top-left -->
+  <path d="M41.5 45.5 C39 42, 37 39.5, 34.5 36 C33 33, 30.5 31, 29 28.5 C27 26, 25.5 24.5, 23.5 22 C22 19.5, 21 18, 18.5 15 C17 12.5, 14.5 10, 12.5 7.5 C11 5.5, 8.5 3.5, 6.5 2.5" stroke="#FF69B4" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M40 44 C37.5 41, 35.5 38, 34 35.5 C31.5 32, 30 30, 27.5 27 C26 24.5, 24 22.5, 22.5 20.5 C20.5 17.5, 19 15.5, 17 13 C15 10, 13 7.5, 11 5.5 C9 4, 7.5 3, 6 2" stroke="#FF69B4" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+</svg>
