@@ -57,7 +57,7 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
         >
           <PhonePricing />
           <div className={styles.supportLine}>
-            human support 24/7 support@offline.community or 404-716-3605
+            human support 24/7 support@dumb.co or 404-716-3605
           </div>
         </div>
       </div>
