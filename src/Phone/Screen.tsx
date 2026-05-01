@@ -4,6 +4,7 @@ import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
+import DumbInternationalModal from "../DumbInternationalModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
 
@@ -103,7 +104,7 @@ function Screen({
       </div>
     );
   } else if (screen === "team & contact") {
-    newOptions = ["team", "contact"]; //FAQs coming soon
+    newOptions = ["team", "contact", "dumb international"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
     window.location.href =
       "https://shop.offline.community/products/offline-dumbphone-1";
@@ -164,7 +165,7 @@ function Screen({
   } else if (screen === "contact") {
     display = (
       <div>
-        <div>team@dumb.co</div>
+        <div>support@dumb.co</div>
         <div>404-716-3605</div>
       </div>
     );
@@ -358,6 +359,13 @@ function Screen({
         <DumbHouseModal clickBackButton={clickBackButton} />
       </div>
     );
+  } else if (screen === "dumb international") {
+    display = (
+      <div>
+        launching dumb international...
+        <DumbInternationalModal clickBackButton={clickBackButton} />
+      </div>
+    );
   }
 
   if (!arraysEqual(options, newOptions)) {
@@ -381,7 +389,7 @@ function Screen({
           style={{
             textAlign: "right",
             padding: "1rem",
-            fontSize: screen === "contact" ? "2rem" : "1.3rem",
+            fontSize: screen === "contact" ? "1.75rem" : "1.3rem",
             color: "#000000",
           }}
         >

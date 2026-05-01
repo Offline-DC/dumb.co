@@ -1,8 +1,26 @@
+id: THEATLANTICSPRING2026
+image_name: atlantic flip phone.avif
+title: dumb down ur life, get a flip phone
+href: https://www.theatlantic.com/technology/2026/04/month-offline-smartphone-detox/686911/ 
+source: The Atlantic
+
 id: CNNDOCMENTION2026_2
 image_name: bill weir dumbco.jpeg
 title: Bill Weir dumbs down w/ dumbco, u should 2
 href: https://www.instagram.com/reel/DWrxCZnjNPH/ 
 source: CNN
+
+id: Business Insider MO Spring 2026
+image_name: business insider 2026 maneesha.webp
+title: dumbphone users love dumb.co
+href: https://www.businessinsider.com/millennial-switched-to-flip-phone-for-month-2026-4
+source: Business Insider
+
+id: AFP YAHOO SPRING 2026
+image_name: afp yahoo lol.webp
+title: young ppl can't get off dumbphones by dumb.co
+href: https://shorturl.at/8MDed
+source: Yahoo! 
 
 id: CNNDOCMENTION2026
 image_name: bill weir dumbsdown.jpeg
