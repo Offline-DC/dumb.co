@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import Phone from "./Phone/Phone";
 import OfflineMode from "./OfflineMode";
 import DumbDumb from "./DumbDumb.tsx";
-import Dashboard from "./Dashboard.tsx";
 import Support from "./Support";
 import MonthOffline from "./MonthOffline.tsx";
 import NotFound from "./NotFound";
@@ -144,7 +143,6 @@ function App() {
         <Routes>
           <Route element={<CenteredShell />}>
             <Route path="/" element={<Phone />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dumbdown" element={<DumbDumb />} />
             <Route path="/setup" element={<OfflineMode />} />
             <Route path="/support" element={<Support />} />
