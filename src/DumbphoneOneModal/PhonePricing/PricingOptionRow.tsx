@@ -41,6 +41,12 @@ export default function PricingOptionRow({ price }: Props) {
     </button>
   );
 
+  const buyNowButton = (
+    <button type="button" className={styles.buyNowButton} onClick={handleClick}>
+      click here 2 buy!!!
+    </button>
+  );
+
   return (
     <div className={styles.mobileAccordion}>
       <div className={styles.mobileRow}>{rowButton}</div>
@@ -58,6 +64,8 @@ export default function PricingOptionRow({ price }: Props) {
           </ul>
         </div>
       )}
+
+      {buyNowButton}
     </div>
   );
 }

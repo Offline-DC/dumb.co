@@ -83,7 +83,7 @@ button:hover {
 .mobileRow {
   display: flex;
   align-items: stretch;
-  gap: 0.5rem;
+  gap: 0;
 }
 
 .mobileRow .optionRow {
@@ -115,6 +115,95 @@ button:hover {
   gap: 0;
 }
 
+/* Web 1.0 flashy button — matches DumbHouse "Apply Now" */
+.buyNowButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 20px;
+  text-align: center;
+
+  font-family: "Rubik", cursive;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+
+  /* base "badge" look */
+  background: linear-gradient(#fff7a8, #ffcf3a 55%, #ff7ad9);
+  border: 2px solid #000;
+  border-radius: 0;
+
+  /* chunky old-school shadow */
+  box-shadow:
+    0 0 0 2px #fff,
+    2px 2px 0 #000,
+    0 0 16px rgba(255, 255, 255, 0.35);
+
+  will-change: filter, transform;
+}
+
+/* sparkly glitter border */
+.buyNowButton::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 2px;
+  pointer-events: none;
+
+  background: conic-gradient(
+    from 0deg,
+    #ff00ff,
+    #00ffff,
+    #ffff00,
+    #ff0000,
+    #00ff00,
+    #ff00ff
+  );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 3px;
+
+  opacity: 0.9;
+}
+
+/* hover = extra obnoxious (good) — rainbow kicks in here */
+.buyNowButton:hover {
+  transform: scale(1.06);
+  animation: buyNowHue 2.2s linear infinite;
+  box-shadow:
+    0 0 0 2px #fff,
+    2px 2px 0 #000,
+    0 0 24px rgba(0, 255, 255, 0.45),
+    0 0 28px rgba(255, 0, 255, 0.35);
+}
+
+/* click = classic "pressed" feel */
+.buyNowButton:active {
+  transform: translate(1px, 1px) scale(1.02);
+  filter: saturate(1.3) contrast(1.1);
+}
+
+@keyframes buyNowHue {
+  0% {
+    filter: hue-rotate(0deg) saturate(1.2);
+  }
+  100% {
+    filter: hue-rotate(360deg) saturate(1.2);
+  }
+}
+
 .description {
   padding: 0 0.5rem;
   background: rgb(242, 242, 242);
@@ -141,7 +230,7 @@ button:hover {
   font-weight: 600;
   font-family: "BioRhyme", cursive;
   font-size: 14px;
-  padding-right: 0;
+  padding-left: 0;
 }
 
 .faqLink {

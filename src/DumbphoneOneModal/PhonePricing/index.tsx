@@ -14,9 +14,6 @@ export default function PhonePricing() {
       <div className={styles.board}>
         <PricingList prices={prices} isLoading={isLoading} isError={isError} />
         <div className={styles.footer}>
-          <div style={{ paddingLeft: ".5rem" }}>
-            for financial aid, email milk@dumb.co
-          </div>
           <a
             className={styles.faqLink}
             href="/faqs"
@@ -25,6 +22,9 @@ export default function PhonePricing() {
           >
             questions?
           </a>
+          <div style={{ paddingRight: ".5rem" }}>
+            for financial aid, email milk@dumb.co
+          </div>
         </div>
       </div>
     </div>
