@@ -65,11 +65,12 @@ function Screen({
   if (screen === "Home") {
     newOptions = [
       "dumbphone 2",
+      "FAQ",
       "Month Offline",
-      "dumbhouse",
       "dumb organizers",
       "team & contact",
       "press",
+      "dumbhouse",
     ];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
@@ -329,6 +330,10 @@ function Screen({
     setScreen("Home");
   } else if (screen === "support") {
     window.location.href = "/support";
+    setRow(0);
+    setScreen("Home");
+  } else if (screen === "FAQ") {
+    window.location.href = "/faqs";
     setRow(0);
     setScreen("Home");
   } else if (screen === "setup") {
