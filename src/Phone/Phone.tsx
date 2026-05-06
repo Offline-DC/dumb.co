@@ -23,8 +23,17 @@ type Props = {
 const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
+  "dumb house": "/dumbhouse",
   intern: "/intern",
   "dumbphone 2": "/phone",
+};
+
+// Maps a screen reached via direct URL (initialScreen) to the parent menu
+// it should "back" into. Anything not in this map backs straight to Home.
+const SCREEN_PARENT: Record<string, string> = {
+  dumbhouse: "get involved",
+  "dumb house": "get involved",
+  "dumb international": "get involved",
 };
 
 const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
@@ -105,9 +114,11 @@ function Phone({ initialScreen }: Props) {
   const handleCenterClick = () => {
     if (
       screen === "dumbhouse" ||
+      screen === "dumb house" ||
       screen === "internship" ||
       screen === "dumbphone 2" ||
-      screen === "dumb international"
+      screen === "dumb international" ||
+      screen === "FAQ"
     ) {
       return;
     }
@@ -200,7 +211,12 @@ function Phone({ initialScreen }: Props) {
   // ------- START – Supports dedicated /press URL inside of phone ---------
   useEffect(() => {
     if (!initialScreen) return;
-    setNavigationStack([{ screen: "Home", row: 0 }]);
+    const stack: navigationItem[] = [{ screen: "Home", row: 0 }];
+    const parent = SCREEN_PARENT[initialScreen];
+    if (parent) {
+      stack.push({ screen: parent, row: 0 });
+    }
+    setNavigationStack(stack);
     setRow(0);
     setScreen(initialScreen);
   }, [initialScreen]);

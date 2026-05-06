@@ -5,6 +5,7 @@ import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbInternationalModal from "../DumbInternationalModal";
+import FAQModal from "../FAQModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
 
@@ -67,11 +68,14 @@ function Screen({
       "dumbphone 2",
       "FAQ",
       "Month Offline",
-      "dumb organizers",
-      "team & contact",
+      "get involved",
+      "contact us",
       "press",
-      "dumbhouse",
     ];
+  } else if (screen === "get involved") {
+    newOptions = ["dumb organizers", "dumb house", "dumb international"];
+  } else if (screen === "contact us") {
+    newOptions = ["team", "contact"];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
   } else if (screen === "press") {
@@ -104,8 +108,6 @@ function Screen({
         offline • community
       </div>
     );
-  } else if (screen === "team & contact") {
-    newOptions = ["team", "contact", "dumb international"]; //FAQs coming soon
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
     window.location.href =
       "https://shop.offline.community/products/offline-dumbphone-1";
@@ -125,7 +127,6 @@ function Screen({
   } else if (screen === "team") {
     newOptions = [
       "Daniel Hogenkamp",
-      "Grant Besner",
       "Jack Nugent",
       "Lydia Peabody",
       "Milk DiDonato",
@@ -197,14 +198,6 @@ function Screen({
         src="/img/Danny.png"
         alt="Grant"
         style={{ boxShadow: "none", width: "100%", height: "auto" }}
-      />
-    );
-  } else if (screen === "Grant Besner") {
-    display = (
-      <img
-        src="/img/Grant.png"
-        alt="Grant"
-        style={{ boxShadow: "none", width: "110%", height: "auto" }}
       />
     );
   } else if (screen === "Josh Morin") {
@@ -333,9 +326,12 @@ function Screen({
     setRow(0);
     setScreen("Home");
   } else if (screen === "FAQ") {
-    window.location.href = "/faqs";
-    setRow(0);
-    setScreen("Home");
+    display = (
+      <div>
+        launching FAQ...
+        <FAQModal clickBackButton={clickBackButton} />
+      </div>
+    );
   } else if (screen === "setup") {
     window.location.href = "/setup";
     setRow(0);
@@ -357,10 +353,10 @@ function Screen({
         <SnakeGame dirInput={snakeDirInput} onGameEnd={onSnakeGameEnd} />
       </div>
     );
-  } else if (screen === "dumbhouse") {
+  } else if (screen === "dumbhouse" || screen === "dumb house") {
     display = (
       <div>
-        launching dumbhouse...
+        launching dumb house...
         <DumbHouseModal clickBackButton={clickBackButton} />
       </div>
     );
