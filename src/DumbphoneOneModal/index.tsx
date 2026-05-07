@@ -8,7 +8,7 @@ type Props = {
 export default function DumbphoneOneModal({ clickBackButton }: Props) {
   return (
     <WindowModal
-      title="DumbPhoneI.exe"
+      title="DumbPhoneII.exe"
       content={({ size, isMobile }) => (
         <FlyerContainer
           modalWidth={size.w}
