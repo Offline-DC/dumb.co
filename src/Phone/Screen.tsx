@@ -390,7 +390,7 @@ function Screen({
           style={{
             textAlign: "right",
             padding: "1rem",
-            fontSize: screen === "contact" ? "1.75rem" : "1.3rem",
+            fontSize: screen === "contact" ? "1.65rem" : "1.3rem",
             color: "#000000",
           }}
         >

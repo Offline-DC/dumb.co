@@ -217,7 +217,8 @@ button:hover {
   box-shadow:
     inset 1px 1px 0 #ffffff,
     inset -1px -1px 0 #808080;
-  font-family: "BioRhyme", cursive;
+  font-family: var(--font-helvetica);
+  font-weight: 400;
 }
 
 .footer {
