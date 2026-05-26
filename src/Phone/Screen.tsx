@@ -5,6 +5,7 @@ import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbInternationalModal from "../DumbInternationalModal";
+import InternshipModal from "../InternshipModal/InternshipModal";
 import FAQModal from "../FAQModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
@@ -73,7 +74,12 @@ function Screen({
       "press",
     ];
   } else if (screen === "get involved") {
-    newOptions = ["dumb organizers", "dumb house", "dumb international"];
+    newOptions = [
+      "dumb organizers",
+      "dumb house",
+      "dumb international",
+      "internship",
+    ];
   } else if (screen === "contact us") {
     newOptions = ["team", "contact"];
   } else if (screen === "sign up") {
@@ -365,6 +371,13 @@ function Screen({
       <div>
         launching dumb international...
         <DumbInternationalModal clickBackButton={clickBackButton} />
+      </div>
+    );
+  } else if (screen === "internship") {
+    display = (
+      <div>
+        launching internship...
+        <InternshipModal clickBackButton={clickBackButton} />
       </div>
     );
   }
