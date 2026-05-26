@@ -12,7 +12,7 @@ const PAGE_SIZE = 3;
 export function getSnappedItems<T>(
   items: ReadonlyArray<T>,
   row: number,
-  pageSize: number = PAGE_SIZE
+  pageSize: number = PAGE_SIZE,
 ) {
   const n = items.length;
   if (n === 0) return { visibleItems: [] as T[], highlightedIndex: 0 };
@@ -37,7 +37,7 @@ export default function PressList({ title, items, row }: Props) {
   return (
     <div className={styles.pressCard}>
       <h1 className={styles.title}>{title}</h1>
-      <div className={styles.subtitle}>afreka@offline.community</div>
+      <div className={styles.subtitle}>afreka@dumb.co</div>
 
       <div className={styles.list}>
         {visibleItems.map((item, i) => (
