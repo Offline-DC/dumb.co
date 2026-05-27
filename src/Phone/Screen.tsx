@@ -5,7 +5,6 @@ import Press from "../Press/Press";
 import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbInternationalModal from "../DumbInternationalModal";
-import InternshipModal from "../InternshipModal/InternshipModal";
 import FAQModal from "../FAQModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
@@ -374,12 +373,9 @@ function Screen({
       </div>
     );
   } else if (screen === "internship") {
-    display = (
-      <div>
-        launching internship...
-        <InternshipModal clickBackButton={clickBackButton} />
-      </div>
-    );
+    window.location.href = "/internship";
+    setRow(0);
+    setScreen("Home");
   }
 
   if (!arraysEqual(options, newOptions)) {
