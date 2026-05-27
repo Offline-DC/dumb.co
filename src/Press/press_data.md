@@ -10,6 +10,12 @@ title: Bill Weir dumbs down w/ dumbco, u should 2
 href: https://www.instagram.com/reel/DWrxCZnjNPH/ 
 source: CNN
 
+id: AXIOSSPRING2026
+image_name: axios 2026.webp
+title: DumbCo leads drive away from smartphones
+href: https://www.axios.com/2026/05/07/gen-z-leads-drive-away-from-social-media  
+source: AXIOS
+
 id: Business Insider MO Spring 2026
 image_name: business insider 2026 maneesha.webp
 title: dumbphone users love dumb.co
