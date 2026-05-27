@@ -71,10 +71,6 @@ function App() {
               element={<Phone initialScreen="dumbhouse" />}
             />
             <Route
-              path="/intern"
-              element={<Phone initialScreen="internship" />}
-            />
-            <Route
               path="/phone"
               element={<Phone initialScreen="dumbphone 2" />}
             />

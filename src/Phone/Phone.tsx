@@ -24,7 +24,6 @@ const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
   dumbhouse: "/dumbhouse",
   "dumb house": "/dumbhouse",
-  internship: "/intern",
   "dumbphone 2": "/phone",
 };
 
@@ -34,7 +33,6 @@ const SCREEN_PARENT: Record<string, string> = {
   dumbhouse: "get involved",
   "dumb house": "get involved",
   "dumb international": "get involved",
-  internship: "get involved",
 };
 
 const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
