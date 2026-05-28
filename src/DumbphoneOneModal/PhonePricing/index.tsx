@@ -23,7 +23,7 @@ export default function PhonePricing() {
             questions?
           </a>
           <div style={{ paddingRight: ".5rem" }}>
-            for financial aid, email milk@dumb.co
+            for financial aid, email support@dumb.co
           </div>
         </div>
       </div>
