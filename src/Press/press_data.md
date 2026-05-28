@@ -4,6 +4,12 @@ title: dumb down ur life, get a flip phone
 href: https://www.theatlantic.com/technology/2026/04/month-offline-smartphone-detox/686911/ 
 source: The Atlantic
 
+id: THEGUARDIANSPRING2026
+image_name: theguardianmay2026.avif
+title: so dumb...and its actually working
+href: https://www.theguardian.com/technology/ng-interactive/2026/may/28/dumb-flip-phone 
+source: The Guardian
+
 id: CNNDOCMENTION2026_2
 image_name: bill weir dumbco.jpeg
 title: Bill Weir dumbs down w/ dumbco, u should 2
