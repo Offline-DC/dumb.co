@@ -1,6 +1,6 @@
-# dumb.co Summer Internships
+# dumb.co Fall Internships
 
-**dumb.co is the hottest tech company in the DMV. Apply for a summer internship and come join our team!**
+**dumb.co is the hottest tech company in the DMV. Apply for a fall internship and come join our team!**
 
 ## Qualifications / Characteristics
 
@@ -12,9 +12,9 @@ No prior job experience or formal education is required, but strong preference w
 
 ## Information
 
-- **Dates:** June 1 – August 28, 2k26
+- **Dates:** September 1 – December 20, 2k26
 - **Location:** Chinatown HQ, downtown DC
 - **Schedule:** M–F, 9–5
-- **Pay:** $20/hour, 40 hours/week
+- **Pay:** $20/hour, 40 hours/week (Graduate); Student: $1000/month and a minimum of 20 hours/week
 
 ---
