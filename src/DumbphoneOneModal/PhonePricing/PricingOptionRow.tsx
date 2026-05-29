@@ -20,30 +20,43 @@ export default function PricingOptionRow({ price }: Props) {
     .filter(Boolean);
 
   const checkoutUrl = "https://buy.stripe.com/00w3cocK48f87HBakE8N20D";
+  const ukPreorderUrl = "https://buy.stripe.com/dRm9AM7pK0MG6Dx78s8N20K";
 
   const handleClick = () => {
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
   };
 
+  const handleUkClick = () => {
+    window.open(ukPreorderUrl, "_blank", "noopener,noreferrer");
+  };
+
   const rowButton = (
-    <button
-      type="button"
-      className={`${styles.optionRow} ${styles.mobile}`}
-      onClick={handleClick}
-    >
+    <div className={`${styles.optionRow} ${styles.mobile}`}>
       <div className={styles.optionLeft}>
-        <div className={styles.optionName}>{product.name}</div>
+        <div className={styles.optionName}>dumbphone 2</div>
       </div>
 
       <div className={styles.optionRight}>
         <div className={styles.price}>{formatUsdCents(price.unit_amount)}</div>
       </div>
-    </button>
+    </div>
   );
 
   const buyNowButton = (
     <button type="button" className={styles.buyNowButton} onClick={handleClick}>
       click here 2 buy!!!
+      <span className={styles.buttonSubtext}>(US-only, ships by july 15)</span>
+    </button>
+  );
+
+  const ukPreorderButton = (
+    <button
+      type="button"
+      className={styles.ukPreorderButton}
+      onClick={handleUkClick}
+    >
+      click here 2 pre-order!!!
+      <span className={styles.buttonSubtext}>(UK, ships by sept 1)</span>
     </button>
   );
 
@@ -66,6 +79,7 @@ export default function PricingOptionRow({ price }: Props) {
       )}
 
       {buyNowButton}
+      {ukPreorderButton}
     </div>
   );
 }

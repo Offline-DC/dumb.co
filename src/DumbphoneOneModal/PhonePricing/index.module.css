@@ -73,6 +73,11 @@ button:hover {
   display: flex;
   justify-content: space-between;
   margin: 0;
+  background: #efefef;
+  border: 2px solid #c0c0c0;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #808080;
 }
 
 .optionRight {
@@ -133,7 +138,7 @@ button:hover {
   text-decoration: none;
   cursor: pointer;
   user-select: none;
-  white-space: nowrap;
+  white-space: normal;
 
   /* base "badge" look */
   background: linear-gradient(#fff7a8, #ffcf3a 55%, #ff7ad9);
@@ -203,6 +208,56 @@ button:hover {
   }
 }
 
+/* Secondary button — same width, flush with primary, a bit more presence */
+.ukPreorderButton {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 8px 20px;
+  text-align: center;
+
+  font-family: "Rubik", cursive;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+
+  color: #000;
+  background: linear-gradient(#eaeaea, #c8c8c8);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: normal;
+
+  border: 2px solid #000;
+  border-radius: 0;
+  box-shadow:
+    0 0 0 2px #fff,
+    2px 2px 0 #000;
+}
+
+.ukPreorderButton:hover {
+  background: linear-gradient(#f5f5f5, #d8d8d8);
+  color: #000;
+}
+
+.ukPreorderButton:active {
+  transform: translate(1px, 1px);
+  box-shadow:
+    0 0 0 2px #fff,
+    1px 1px 0 #000;
+}
+
+/* secondary line inside both buttons — parenthetical detail on its own line */
+.buttonSubtext {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  opacity: 0.9;
+}
+
 .description {
   padding: 0 0.5rem;
   background: rgb(242, 242, 242);
@@ -243,7 +298,7 @@ button:hover {
   cursor: pointer;
   padding: 0.35rem 0.85rem;
   margin: 0 0.25rem;
-  white-space: nowrap;
+  white-space: normal;
 
   background: #f2f2f2;
   border: 2px solid #c0c0c0;
