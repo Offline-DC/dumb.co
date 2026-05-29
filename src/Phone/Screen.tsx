@@ -65,7 +65,7 @@ function Screen({
   let newOptions: string[] = [];
   if (screen === "Home") {
     newOptions = [
-      "dumbphone 2",
+      "buy dumbphone 2",
       "FAQ",
       "Month Offline",
       "get involved",
@@ -309,7 +309,7 @@ function Screen({
       </div>
     );
     setKeypadNum("1844OFFLINE,4");
-  } else if (screen === "dumbphone 2") {
+  } else if (screen === "buy dumbphone 2") {
     display = (
       <div>
         launching dumbphone 2...
