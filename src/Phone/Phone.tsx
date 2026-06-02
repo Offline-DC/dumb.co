@@ -25,6 +25,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
   dumbhouse: "/dumbhouse",
   "dumb house": "/dumbhouse",
   "dumbphone 2": "/phone",
+  FAQ: "/faq",
 };
 
 // Maps a screen reached via direct URL (initialScreen) to the parent menu
@@ -39,8 +40,24 @@ const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
 
 function Phone({ initialScreen }: Props) {
   const [row, setRow] = useState(0);
-  const [navigationStack, setNavigationStack] = useState<navigationItem[]>([]);
-  const [screen, setScreen] = useState("Home");
+  // Seed nav stack from initialScreen so a deep-linked URL (e.g. /faq) has
+  // a sensible "back" target on its very first render. Mirrors the
+  // initialScreen useEffect below — kept in useState so the first render
+  // already has the right stack instead of needing a follow-up update.
+  const [navigationStack, setNavigationStack] = useState<navigationItem[]>(
+    () => {
+      if (!initialScreen) return [];
+      const stack: navigationItem[] = [{ screen: "Home", row: 0 }];
+      const parent = SCREEN_PARENT[initialScreen];
+      if (parent) stack.push({ screen: parent, row: 0 });
+      return stack;
+    },
+  );
+  // Initialize directly from initialScreen so the URL-sync effect below
+  // doesn't briefly see screen="Home" on a deep-link load and `navigate("/")`
+  // — which was wiping the `#slug` hash from URLs like /faq#some-question
+  // before FAQContent could read it.
+  const [screen, setScreen] = useState(initialScreen ?? "Home");
   const [keypadNum, setKeypadNum] = useState("");
   const [audioFile, setAudioFile] = useState("");
   const [options, setOptions] = useState<string[]>([]);

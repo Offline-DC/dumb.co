@@ -22,7 +22,6 @@ import MobileRedirect from "./MobileRedirect.tsx";
 
 import "./App.css";
 import CenteredShell from "./CenteredLayout.tsx";
-import FAQs from "./FAQs.tsx";
 
 export const OFFLINE_PHONE_NUMBER = "844-633-5463";
 
@@ -74,7 +73,8 @@ function App() {
               path="/phone"
               element={<Phone initialScreen="dumbphone 2" />}
             />
-            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/faq" element={<Phone initialScreen="FAQ" />} />
+            <Route path="/faqs" element={<Phone initialScreen="FAQ" />} />
             <Route path="/android" element={<AndroidDownload />} />
             <Route path="/apps" element={<AppsDownload />} />
             <Route path="/app" element={<AppRedirect />} />

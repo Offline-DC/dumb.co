@@ -16,7 +16,7 @@ export default function PhonePricing() {
         <div className={styles.footer}>
           <a
             className={styles.faqLink}
-            href="/faqs"
+            href="/faq"
             target="_blank"
             rel="noopener noreferrer"
           >
