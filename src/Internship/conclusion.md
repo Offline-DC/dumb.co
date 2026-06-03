@@ -1,6 +1,6 @@
 # Application Process
 
-Email [people@offline.community](mailto:people@offline.community) to apply!  
+Email [marlee@dumb.co](mailto:marlee@dumb.co) to apply!  
 **Deadline:** End of June 2026
 
 Please include:
