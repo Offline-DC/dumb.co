@@ -37,7 +37,56 @@
   overflow-x: hidden;
 }
 
+.faq-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+
+.faq-tab {
+  background: #f9f7ee;
+  border: 2px solid #1d1d1d;
+  padding: 8px 16px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: #1d1d1d;
+  box-shadow: 3px 3px 0 #1d1d1d;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.faq-tab:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 #1d1d1d;
+}
+
+.faq-tab.active {
+  background: #1d1d1d;
+  color: #f2efe4;
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+.faq-tab:focus-visible {
+  outline: 2px dashed #1d1d1d;
+  outline-offset: 2px;
+}
+
+.faq-empty-tab {
+  margin: 12px 0;
+  font-size: 1.1rem;
+  color: #1d1d1d;
+  opacity: 0.7;
+}
+
 .faq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   border-bottom: 2px solid #1d1d1d;
   padding-bottom: 16px;
   margin-bottom: 20px;
@@ -183,6 +232,13 @@
   .faq-question {
     font-size: 1.125rem;
   }
+
+  /* Stack the tabs below the title on small screens. */
+  .faq-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
 /* Compact variant — used inside the WindowModal so the FAQ content
@@ -199,6 +255,11 @@
 
 .faq-card--compact .faq-header h1 {
   font-size: 1.75rem;
+}
+
+.faq-card--compact .faq-tab {
+  font-size: 0.85rem;
+  padding: 6px 12px;
 }
 
 .faq-card--compact .faq-question {

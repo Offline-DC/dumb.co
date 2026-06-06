@@ -13,10 +13,27 @@ const setUrlHash = (slug: string | null) => {
   window.history.replaceState(null, "", next);
 };
 
+type FaqCategory = "general" | "tech";
+
 type FaqItem = {
   question: string;
   answers: string[];
+  category: FaqCategory;
 };
+
+const TABS: { id: FaqCategory; label: string }[] = [
+  { id: "general", label: "General" },
+  { id: "tech", label: "Tech Help" },
+];
+
+/**
+ * Maps a free-text Category cell to one of our tabs. Anything that mentions
+ * "tech" (e.g. "tech help", "Tech Help", "technical") lands in Tech Help;
+ * everything else — including a blank cell — defaults to General. This keeps
+ * the sheet forgiving: existing rows with no Category stay in General.
+ */
+const categoryFromCell = (value: string | undefined): FaqCategory =>
+  value && value.toLowerCase().includes("tech") ? "tech" : "general";
 
 const FAQ_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTWuMc1UItkIUZusBTqpN10gkWT0q8RXvxPb6muvfWAUdKCODYkaT5_PUmZMIkbqPBl-K_A2asfTJuB/pub?output=csv";
@@ -134,9 +151,11 @@ type Props = {
 
 export default function FAQContent({ compact = false }: Props) {
   // Accordion: at most one question open at a time. `null` = all collapsed.
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  // Keyed by slug (not index) so the open state survives tab filtering.
+  const [openSlug, setOpenSlug] = useState<string | null>(null);
   const [items, setItems] = useState<FaqItem[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<FaqCategory>("general");
 
   // Track whether we've already auto-opened/scrolled to the hash item, so
   // we don't keep yanking the page around on re-renders.
@@ -162,6 +181,18 @@ export default function FAQContent({ compact = false }: Props) {
           firstRow?.some((value) => value.trim().toLowerCase() === "answer");
         const dataRows = isHeaderRow ? restRows : rows;
 
+        // Locate the category column by header name so it can live anywhere in
+        // the sheet. We accept either "Type" or "Category" as the header. Falls
+        // back to the column after "Answer 3" (index 4) when there's no header,
+        // which is where we append it by convention.
+        const headerCategoryIndex = isHeaderRow
+          ? firstRow.findIndex((value) => {
+              const name = value.trim().toLowerCase();
+              return name === "type" || name === "category";
+            })
+          : -1;
+        const categoryIndex = headerCategoryIndex >= 0 ? headerCategoryIndex : 4;
+
         const nextItems: FaqItem[] = dataRows
           .map((row) => {
             const question = row[0]?.trim() ?? "";
@@ -170,8 +201,9 @@ export default function FAQContent({ compact = false }: Props) {
               row[2]?.trim(),
               row[3]?.trim(),
             ].filter((answer): answer is string => Boolean(answer));
+            const category = categoryFromCell(row[categoryIndex]?.trim());
 
-            return { question, answers };
+            return { question, answers, category };
           })
           .filter((item) => item.question && item.answers.length > 0);
 
@@ -195,11 +227,22 @@ export default function FAQContent({ compact = false }: Props) {
   }, []);
 
   // Memoize slugs so they're stable across renders and match between the
-  // hash-open effect and the rendered ids.
+  // hash-open effect and the rendered ids. Computed over the full item list
+  // so a slug is the same regardless of which tab is active.
   const slugs = useMemo(() => buildUniqueSlugs(items), [items]);
 
+  // Look up an item's slug and category by its question text.
+  const metaByQuestion = useMemo(() => {
+    const map = new Map<string, { slug: string; category: FaqCategory }>();
+    items.forEach((item, index) => {
+      map.set(item.question, { slug: slugs[index], category: item.category });
+    });
+    return map;
+  }, [items, slugs]);
+
   // After items load (and on hash changes), open + scroll to the matching
-  // question if there's a `#slug` in the URL.
+  // question if there's a `#slug` in the URL. Also switches to whichever tab
+  // the linked question lives in, so deep links to Tech Help work.
   useEffect(() => {
     if (items.length === 0) return;
 
@@ -210,7 +253,8 @@ export default function FAQContent({ compact = false }: Props) {
       const index = slugs.findIndex((slug) => slug === target);
       if (index === -1) return;
 
-      setOpenIndex(index);
+      setActiveTab(items[index].category);
+      setOpenSlug(slugs[index]);
 
       // Defer scroll until after the panel paints open.
       window.requestAnimationFrame(() => {
@@ -236,28 +280,51 @@ export default function FAQContent({ compact = false }: Props) {
   // Toggle a question. Opening one closes whatever was open before
   // (accordion behavior) and pushes its slug into the URL hash so the
   // address bar itself becomes the shareable link.
-  const toggleIndex = (index: number) => {
-    setOpenIndex((prev) => {
-      if (prev === index) {
+  const toggleSlug = (slug: string | null) => {
+    setOpenSlug((prev) => {
+      if (prev === slug) {
         setUrlHash(null);
         return null;
       }
-      setUrlHash(slugs[index] ?? null);
-      return index;
+      setUrlHash(slug);
+      return slug;
     });
   };
 
   const cardClass = compact ? "faq-card faq-card--compact" : "faq-card";
+  const visibleItems = items.filter((item) => item.category === activeTab);
 
   return (
     <div className={cardClass}>
       <div className="faq-header">
         <h1>frequently asked questions.</h1>
+        <div className="faq-tabs" role="tablist" aria-label="FAQ categories">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              id={`faq-tab-${tab.id}`}
+              className={`faq-tab ${activeTab === tab.id ? "active" : ""}`}
+              role="tab"
+              type="button"
+              aria-selected={activeTab === tab.id}
+              aria-controls="faq-list"
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="faq-list" role="list">
-        {items.map((item, index) => {
-          const isOpen = openIndex === index;
-          const slug = slugs[index];
+      <div
+        className="faq-list"
+        id="faq-list"
+        role="tabpanel"
+        aria-labelledby={`faq-tab-${activeTab}`}
+      >
+        {visibleItems.map((item) => {
+          const meta = metaByQuestion.get(item.question);
+          const slug = meta?.slug ?? slugify(item.question);
+          const isOpen = openSlug === slug;
           const panelId = `faq-panel-${slug}`;
           const buttonId = `faq-button-${slug}`;
           const itemId = `faq-item-${slug}`;
@@ -275,7 +342,7 @@ export default function FAQContent({ compact = false }: Props) {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 type="button"
-                onClick={() => toggleIndex(index)}
+                onClick={() => toggleSlug(slug)}
               >
                 <span>{item.question}</span>
                 <span className="faq-indicator">{isOpen ? "-" : "+"}</span>
@@ -306,6 +373,13 @@ export default function FAQContent({ compact = false }: Props) {
         {loadError ? (
           <p className="faq-empty" role="status">
             {loadError}
+          </p>
+        ) : null}
+        {!loadError && visibleItems.length === 0 ? (
+          <p className="faq-empty-tab" role="status">
+            {items.length === 0
+              ? "Loading…"
+              : "No questions here yet — check back soon."}
           </p>
         ) : null}
       </div>
