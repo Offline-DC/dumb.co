@@ -68,11 +68,6 @@ export default function DesktopDownload() {
       <div style={{ width: 720, maxWidth: "100%", marginBottom: 24 }}>
         <div className={styles.badge}>Desktop</div>
         <h1 className={styles.h1}>Sign in from your computer</h1>
-        <p style={{ opacity: 0.7, margin: "4px 0 0" }}>
-          Hitting “this browser or app may not be secure” when signing into
-          Google on your phone? Use this little Mac/Windows app instead — sign in
-          on your computer and it sends the login to your dumb phone.
-        </p>
       </div>
 
       <div className={styles.card} style={{ marginBottom: 20 }}>
@@ -128,8 +123,7 @@ export default function DesktopDownload() {
 
       <div style={{ width: 720, maxWidth: "100%", opacity: 0.75, fontSize: 14, lineHeight: 1.6 }}>
         <strong>How it works:</strong> open the app, sign into Google, and it
-        shows a QR code. On your dumb phone, open Smart Txt → “scan desktop
-        code,” and point it at the QR. Nothing is stored on our servers.
+        shows a QR code. Nothing is stored on our servers.
       </div>
     </div>
   );

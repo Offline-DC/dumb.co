@@ -10,6 +10,7 @@ name: Build desktop sign-in app
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     tags:
       - "desktop-v*"
 

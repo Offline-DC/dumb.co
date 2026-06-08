@@ -26,16 +26,17 @@
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
-  color: #e9eef5;
+  color: #0b0f14;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .card {
   width: 720px;
   max-width: 100%;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
   padding: 22px;
 }
 
@@ -53,8 +54,8 @@
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.06);
   margin-bottom: 10px;
 }
 
@@ -74,8 +75,8 @@
   margin-top: 14px;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.06);
   line-height: 1.4;
 }
 
@@ -111,8 +112,8 @@
 .metaItem {
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .metaLabel {
@@ -165,9 +166,9 @@
   width: 100%;
   text-align: center;
 
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: #e9eef5;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.06);
+  color: #0b0f14;
 
   border-radius: 12px;
   padding: 10px 12px;
@@ -186,9 +187,9 @@
 }
 
 .copyBtn {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: #e9eef5;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  background: rgba(0, 0, 0, 0.06);
+  color: #0b0f14;
   border-radius: 12px;
   padding: 8px 12px;
   cursor: pointer;
@@ -197,7 +198,7 @@
 
 .hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
   margin: 18px 0;
 }
 
@@ -248,7 +249,7 @@
 }
 
 .footerLink {
-  color: #e9eef5;
+  color: #0b0f14;
 }
 
 @media (max-width: 520px) {
