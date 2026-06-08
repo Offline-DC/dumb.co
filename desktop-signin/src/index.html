@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dumb Down Sign In</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Dumb Down Sign In</h1>
+      <p class="sub">
+        Sign in to Google here, then scan the code with the Dumb Down app on
+        your phone. Nothing is stored on our servers.
+      </p>
+
+      <section>
+        <button id="open-login" class="primary">Open Google sign-in</button>
+        <p class="hint" id="qr-hint" hidden>
+          Once you finish signing in, a big QR code opens automatically. On your
+          smart phone, tap “scan desktop code,” then point it at the QR.
+        </p>
+      </section>
+
+      <div id="status" class="status" hidden></div>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>

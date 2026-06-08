@@ -1,0 +1,9 @@
+# Rust / Tauri build output
+src-tauri/target/
+src-tauri/gen/
+
+# generated icons can be committed, but the build dir is not needed
+**/*.rs.bk
+
+# OS
+.DS_Store
