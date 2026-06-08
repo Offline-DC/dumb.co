@@ -1,157 +1,100 @@
-// DesktopDownload.tsx — /desktop
-// Download page for the "Dumb Down — Google Messages sign-in" desktop helper.
-// Mirrors AppsDownload.tsx: reads the latest GitHub Release and offers
-// Mac/Windows installers. Installers live as Release assets (too big for the
-// gh-pages repo).
+// DesktopDownload.tsx — /signin (also /desktop, /desktop-signin)
+// Sign-in helper page. Google blocks Google-account login inside embedded
+// webviews, so a downloadable desktop app can't sign you in. Instead we point
+// users at the Chrome extension, which runs in their REAL Chrome where Google
+// login works normally, reads the session cookies, and shows a QR the Dumb
+// Down app scans. This page just gets them to the extension — and tells them
+// it has to be Google Chrome.
 import { useEffect, useState } from "react";
 import styles from "../Android/index.module.css";
 
-// The repo whose GitHub Releases host the desktop installers. The CI workflow
-// (.github/workflows/desktop.yml) builds + uploads them here via tauri-action.
-const DESKTOP_REPO = "Offline-DC/dumb.co";
+// Chrome Web Store listing for the "Dumb Down — Google Messages login helper".
+const EXTENSION_URL =
+  "https://chromewebstore.google.com/detail/dumb-down-%E2%80%94-google-messag/jpdaemdfdgcolaakbdmkcolcdgfchjaa";
 
-type Os = "mac" | "windows" | "other";
+// Headers use Helvetica (overrides the site's default typewriter heading font).
+const HELVETICA = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
-function detectOs(): Os {
-  if (typeof navigator === "undefined") return "other";
-  const p = `${navigator.platform} ${navigator.userAgent}`.toLowerCase();
-  if (p.includes("mac")) return "mac";
-  if (p.includes("win")) return "windows";
-  return "other";
-}
-
-type Release = {
-  versionName: string;
-  publishedAt: string;
-  macUrl: string | null;
-  winUrl: string | null;
-};
-
-async function fetchRelease(): Promise<Release | null> {
-  try {
-    const r = await fetch(
-      `https://api.github.com/repos/${DESKTOP_REPO}/releases/latest`,
-      { headers: { Accept: "application/vnd.github+json" } }
-    );
-    if (!r.ok) return null;
-    const json = await r.json();
-    const assets: { name: string; browser_download_url: string }[] =
-      json.assets ?? [];
-    // Match by extension — tauri-action names assets with productName+version,
-    // so we don't hard-code exact filenames.
-    const bySuffix = (suffix: string) =>
-      assets.find((a) => a.name.toLowerCase().endsWith(suffix))
-        ?.browser_download_url ?? null;
-    return {
-      versionName: (json.tag_name ?? "").replace(/^(v|desktop-v?)/, ""),
-      publishedAt: json.published_at ?? "",
-      macUrl: bySuffix(".dmg"),
-      winUrl: bySuffix(".exe"),
-    };
-  } catch {
-    return null;
-  }
+// Chromium-based desktop browsers (Chrome, Edge, Brave, Arc, Opera) can install
+// Chrome Web Store extensions. Firefox/Safari and all mobile browsers can't.
+function isChromeCapable(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
+  const isChromiumOniOS = /CriOS|EdgiOS|FxiOS/i.test(ua); // Chrome-on-iOS, etc.
+  return /Chrome\//.test(ua) && !isChromiumOniOS && !isMobile;
 }
 
 export default function DesktopDownload() {
-  const [release, setRelease] = useState<Release | null | "loading">("loading");
-  const os = detectOs();
+  const [chromeOk, setChromeOk] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetchRelease().then(setRelease);
+    setChromeOk(isChromeCapable());
   }, []);
-
-  const primaryOs: Exclude<Os, "other"> = os === "windows" ? "windows" : "mac";
 
   return (
     <div className={styles.page} style={{ flexDirection: "column", gap: 0 }}>
       <div style={{ width: 720, maxWidth: "100%", marginBottom: 24 }}>
-        <div className={styles.badge}>Desktop</div>
-        <h1 className={styles.h1}>Sign in from your computer</h1>
+        <div className={styles.badge}>Chrome extension</div>
+        <h1 className={styles.h1} style={{ fontFamily: HELVETICA }}>
+          Sign in with the Chrome extension
+        </h1>
       </div>
 
       <div className={styles.card} style={{ marginBottom: 20 }}>
         <div className={styles.header}>
-          <div className={styles.badge}>
-            {primaryOs === "windows" ? "Windows" : "macOS"}
-          </div>
-          <h2 className={styles.h1} style={{ fontSize: 22 }}>
-            Dumb Down — Google sign-in
+          <h2
+            className={styles.h1}
+            style={{ fontSize: 22, fontFamily: HELVETICA }}
+          >
+            Dumb Down — Google Messages login helper
           </h2>
         </div>
 
-        {release === "loading" && (
-          <div style={{ opacity: 0.5, marginTop: 12 }}>Loading…</div>
-        )}
-
-        {release === null && (
+        {chromeOk === false && (
           <div className={styles.notice} style={{ marginTop: 12 }}>
-            No release available yet — check back soon.
+            <strong>This only works in Google Chrome on a computer.</strong> You
+            don't appear to be using Chrome right now. Open{" "}
+            <code>dumb.co/signin</code> in Chrome, then come back to this button.
           </div>
         )}
 
-        {release && release !== "loading" && (
-          <>
-            <DownloadButton
-              label={`Download for Mac${
-                release.versionName ? ` • v${release.versionName}` : ""
-              }`}
-              url={release.macUrl}
-              highlight={primaryOs === "mac"}
-            />
-            <DownloadButton
-              label={`Download for Windows${
-                release.versionName ? ` • v${release.versionName}` : ""
-              }`}
-              url={release.winUrl}
-              highlight={primaryOs === "windows"}
-            />
+        <a
+          href={EXTENSION_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${styles.button} ${styles.downloadButton}`}
+          style={chromeOk === false ? { opacity: 0.85 } : undefined}
+        >
+          {chromeOk === false
+            ? "Open the extension page (needs Chrome) ↗"
+            : "Add to Chrome ↗"}
+        </a>
 
-            {release.publishedAt && (
-              <div className={styles.metaCol}>
-                <div className={styles.notice}>
-                  <div className={styles.metaTitle}>Published</div>
-                  <div>
-                    {new Date(release.publishedAt).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+        <hr className={styles.hr} />
 
-      <div style={{ width: 720, maxWidth: "100%", opacity: 0.75, fontSize: 14, lineHeight: 1.6 }}>
-        <strong>How it works:</strong> open the app, sign into Google, and it
-        shows a QR code. Nothing is stored on our servers.
+        <div className={styles.markdown}>
+          <h2 style={{ fontFamily: HELVETICA }}>How it works</h2>
+          <ol>
+            <li>
+              In <strong>Google Chrome</strong>, click “Add to Chrome” above and
+              install the extension.
+            </li>
+            <li>
+              Sign into your Google account at{" "}
+              <code>messages.google.com</code>.
+            </li>
+            <li>
+              Click the Dumb Down extension icon — a big QR code opens in a new
+              tab.
+            </li>
+            <li>
+              In the Dumb Down app on your phone, tap “scan desktop code” and
+              point the camera at the QR.
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
-  );
-}
-
-function DownloadButton({
-  label,
-  url,
-  highlight,
-}: {
-  label: string;
-  url: string | null;
-  highlight: boolean;
-}) {
-  const disabled = !url;
-  return (
-    <a
-      href={url ?? "#"}
-      className={`${styles.button} ${disabled ? styles.buttonDisabled : ""} ${
-        styles.downloadButton
-      }`}
-      style={highlight ? undefined : { opacity: 0.85 }}
-      onClick={(e) => {
-        if (disabled) e.preventDefault();
-      }}
-    >
-      {label}
-      {disabled ? " (coming soon)" : ""}
-    </a>
   );
 }
