@@ -53,17 +53,18 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # --- Code signing (optional). Add these as repo secrets to ship
-          # --- signed builds; without them the apps still build but show
-          # --- Gatekeeper / SmartScreen warnings. Uncomment when ready.
+          # --- Code signing. macOS is wired up below (Developer ID +
+          # --- notarization). Windows stays commented until set up.
           #
-          # macOS (Developer ID + notarization):
-          # APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}              # base64 of the .p12
-          # APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          # APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}    # "Developer ID Application: Name (TEAMID)"
-          # APPLE_ID: ${{ secrets.APPLE_ID }}                               # your Apple ID email
-          # APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}                   # app-specific password
-          # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # macOS: a runner has no Keychain, so the cert is provided as
+          # base64 of a .p12 export; tauri-action imports it into a temp
+          # keychain before signing, then notarizes with the Apple ID creds.
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}              # base64 of the .p12
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}    # "Developer ID Application: OFFLINE DC INC (C2N6F9LCV4)"
+          APPLE_ID: ${{ secrets.APPLE_ID }}                               # jack@offline.community
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}                   # app-specific password
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}                     # C2N6F9LCV4
           #
           # Windows (Azure Trusted Signing — cheapest, no hardware token):
           # AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
