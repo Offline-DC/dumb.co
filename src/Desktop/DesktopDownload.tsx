@@ -1,10 +1,13 @@
 // DesktopDownload.tsx — /signin (also /desktop, /desktop-signin)
 // Sign-in helper page. Google blocks Google-account login inside embedded
 // webviews, so a downloadable desktop app can't sign you in. Instead we point
-// users at the Chrome extension, which runs in their REAL Chrome where Google
-// login works normally, reads the session cookies, and shows a QR the Dumb
-// Down app scans. This page just gets them to the extension — and tells them
-// it has to be Google Chrome.
+// users at the Chrome extension, which signs you in inside a private
+// (Incognito) window, reads that window's session cookies, and shows a QR the
+// Dumb Down app scans. Incognito is required: Google rotates the session
+// cookie ~every 30 min and only one holder can rotate it, so a login taken
+// from the everyday profile gets the flip phone signed out shortly after.
+// This page just gets them to the extension — and tells them it has to be
+// Google Chrome.
 import { useEffect, useState } from "react";
 import styles from "../Android/index.module.css";
 
@@ -76,21 +79,21 @@ export default function DesktopDownload() {
         <div className={styles.markdown}>
           <h2 style={{ fontFamily: HELVETICA }}>How it works</h2>
           <ol>
+            <li>Click “Add to Chrome” above to install the extension.</li>
             <li>
-              In <strong>Google Chrome</strong>, click “Add to Chrome” above and
-              install the extension.
+              When prompted, turn on <strong>“Allow in Incognito.”</strong>
             </li>
             <li>
-              Sign into your Google account at{" "}
-              <code>messages.google.com</code>.
+              Click the extension icon — sign into Google in the{" "}
+              <strong>private window</strong> it opens.
+            </li>
+            <li>Click the icon again to show the QR code.</li>
+            <li>
+              In the Dumb Down app, tap “scan desktop code” and scan it.
             </li>
             <li>
-              Click the Dumb Down extension icon — a big QR code opens in a new
-              tab.
-            </li>
-            <li>
-              In the Dumb Down app on your phone, tap “scan desktop code” and
-              point the camera at the QR.
+              Once your phone confirms, <strong>close the private window</strong>{" "}
+              (red button on the QR page) — this keeps your phone signed in.
             </li>
           </ol>
         </div>
