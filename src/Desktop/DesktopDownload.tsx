@@ -85,9 +85,9 @@ export default function DesktopDownload() {
             </li>
             <li>
               Click the extension icon — sign into Google in the{" "}
-              <strong>private window</strong> it opens.
+              <strong>private window</strong> it opens. The QR code then appears
+              there automatically.
             </li>
-            <li>Click the icon again to show the QR code.</li>
             <li>
               In the Dumb Down app, tap “scan desktop code” and scan it.
             </li>
