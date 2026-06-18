@@ -22,7 +22,21 @@ export function useCheckoutProducts() {
         `${apiUrl}/stripe/prices`,
       );
 
-      return response.data.filter(isCheckoutProductPrice);
+      const matching = response.data.filter(isCheckoutProductPrice);
+
+      // A single product can have multiple active prices in Stripe, which would
+      // otherwise render one duplicate card per price. Keep just one price per
+      // product (preferring the product's default price) so it shows once.
+      const byProduct = new Map<string, StripePrice>();
+      for (const price of matching) {
+        const existing = byProduct.get(price.product.id);
+        const isDefault = price.product.default_price === price.id;
+        if (!existing || isDefault) {
+          byProduct.set(price.product.id, price);
+        }
+      }
+
+      return Array.from(byProduct.values());
     },
     staleTime: 5 * 60 * 1000,
   });
