@@ -12,10 +12,10 @@
 import { useEffect, useState } from "react";
 import styles from "../Android/index.module.css";
 
-// Mozilla-signed .xpi for the "Dumb Down — Google Messages login helper".
-// Linking straight to this AMO download URL triggers Firefox's install dialog.
-const FIREFOX_XPI_URL =
-  "https://addons.mozilla.org/firefox/downloads/file/4863858/2363302ec7ea468cab47-1.5.6.xpi";
+// Mozilla-signed .xpi, self-hosted on dumb.co (downloaded from AMO and committed
+// under public/downloads/). Firefox installs it from any HTTPS origin because
+// it's Mozilla-signed.
+const FIREFOX_XPI_URL = "https://dumb.co/downloads/dumb-down-login-1.5.6.xpi";
 
 // Headers use Helvetica (overrides the site's default typewriter heading font).
 const HELVETICA = '"Helvetica Neue", Helvetica, Arial, sans-serif';
