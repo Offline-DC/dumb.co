@@ -2,7 +2,6 @@ import type { Dispatch, SetStateAction } from "react";
 import PhoneText from "./PhoneText";
 import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
-import DumbHouseModal from "../DumbHouseModal";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbInternationalModal from "../DumbInternationalModal";
 import FAQModal from "../FAQModal";
@@ -75,7 +74,6 @@ function Screen({
   } else if (screen === "get involved") {
     newOptions = [
       "dumb organizers",
-      "dumb house",
       "dumb international",
       "internship",
     ];
@@ -356,13 +354,6 @@ function Screen({
         }}
       >
         <SnakeGame dirInput={snakeDirInput} onGameEnd={onSnakeGameEnd} />
-      </div>
-    );
-  } else if (screen === "dumbhouse" || screen === "dumb house") {
-    display = (
-      <div>
-        launching dumb house...
-        <DumbHouseModal clickBackButton={clickBackButton} />
       </div>
     );
   } else if (screen === "dumb international") {
