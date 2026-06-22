@@ -22,8 +22,6 @@ type Props = {
 
 const SCREEN_TO_PATH: Record<string, string> = {
   press: "/press",
-  dumbhouse: "/dumbhouse",
-  "dumb house": "/dumbhouse",
   "dumbphone 2": "/phone",
   FAQ: "/faq",
 };
@@ -31,8 +29,6 @@ const SCREEN_TO_PATH: Record<string, string> = {
 // Maps a screen reached via direct URL (initialScreen) to the parent menu
 // it should "back" into. Anything not in this map backs straight to Home.
 const SCREEN_PARENT: Record<string, string> = {
-  dumbhouse: "get involved",
-  "dumb house": "get involved",
   "dumb international": "get involved",
 };
 
@@ -129,8 +125,6 @@ function Phone({ initialScreen }: Props) {
 
   const handleCenterClick = () => {
     if (
-      screen === "dumbhouse" ||
-      screen === "dumb house" ||
       screen === "internship" ||
       screen === "dumbphone 2" ||
       screen === "dumb international" ||
