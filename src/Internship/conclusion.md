@@ -1,7 +1,7 @@
 # Application Process
 
 Email [marlee@dumb.co](mailto:marlee@dumb.co) to apply!  
-**Deadline:** End of June 2026
+**Deadline:** End of July 2026
 
 Please include:
 
