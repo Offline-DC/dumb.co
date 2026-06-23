@@ -4,6 +4,12 @@ title: dumb down ur life, get a flip phone
 href: https://www.theatlantic.com/technology/2026/04/month-offline-smartphone-detox/686911/ 
 source: The Atlantic
 
+id: THEWASHINGTONPOSTSUMMER2026
+image_name: wapo2026.webp
+title: cool ppl r on dumbphones
+href: https://www.washingtonpost.com/style/trends/2026/06/22/activists-launch-irl-push-tech-free-summer/ 
+source: WaPo
+
 id: THEGUARDIANSPRING2026
 image_name: theguardianmay2026.avif
 title: so dumb...and its actually working
@@ -86,7 +92,7 @@ id: wapo
 image_name: imrs.webp
 title: can u be dumb 4 1 month?
 href: https://www.washingtonpost.com/podcasts/post-reports/could-you-give-up-your-smartphone-for-a-month/
-source: wapo
+source: WaPo
 
 id: nbcwashington
 image_name: hushhush.webp
