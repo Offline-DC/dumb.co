@@ -1,5 +1,14 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import "./FAQs.css";
+import VideoList from "./FAQVideos/VideoList";
+import tvIcon from "./FAQVideos/tv-icon-black.png";
 
 /**
  * Update the URL hash without triggering a navigation/scroll-jump. We use
@@ -14,6 +23,31 @@ const setUrlHash = (slug: string | null) => {
 };
 
 type FaqCategory = "general" | "tech";
+
+// The "videos" tab (the SHOW ME HOW button) lives alongside the FAQ
+// categories but renders the in-page video player instead of questions.
+type FaqTab = FaqCategory | "videos";
+
+/** Canonical path for the videos view. Pasting this URL opens that tab. */
+const VIDEOS_PATH = "/faq/videos";
+const FAQ_PATH = "/faq";
+
+/** Does the current URL point at the videos view? */
+const isVideosPath = () =>
+  typeof window !== "undefined" &&
+  window.location.pathname.replace(/\/+$/, "").endsWith("/faq/videos");
+
+/**
+ * Point the address bar at the right tab without a react-router navigation
+ * (same replaceState trick as setUrlHash, so the Phone shell's path-sync
+ * effect doesn't fight us). Switching to videos drops any open-question hash;
+ * switching back to a category preserves the rest of the URL.
+ */
+const setUrlForTab = (tab: FaqTab) => {
+  const { search } = window.location;
+  const next = tab === "videos" ? `${VIDEOS_PATH}${search}` : `${FAQ_PATH}${search}`;
+  window.history.replaceState(null, "", next);
+};
 
 type FaqItem = {
   question: string;
@@ -155,7 +189,18 @@ export default function FAQContent({ compact = false }: Props) {
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const [items, setItems] = useState<FaqItem[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<FaqCategory>("general");
+  // Seed from the URL so a deep link to /faq/videos opens the videos tab on
+  // first paint (mirrors how the hash deep-link seeds an open question).
+  const [activeTab, setActiveTab] = useState<FaqTab>(() =>
+    isVideosPath() ? "videos" : "general",
+  );
+
+  // Switch tabs and keep the address bar in sync, so the videos view is a
+  // shareable /faq/videos link and the category tabs fall back to /faq.
+  const selectTab = (tab: FaqTab) => {
+    setActiveTab(tab);
+    setUrlForTab(tab);
+  };
 
   // Track whether we've already auto-opened/scrolled to the hash item, so
   // we don't keep yanking the page around on re-renders.
@@ -308,11 +353,29 @@ export default function FAQContent({ compact = false }: Props) {
               type="button"
               aria-selected={activeTab === tab.id}
               aria-controls="faq-list"
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => selectTab(tab.id)}
             >
               {tab.label}
             </button>
           ))}
+          <button
+            id="faq-tab-videos"
+            className={`faq-tab faq-tab--videos ${
+              activeTab === "videos" ? "active" : ""
+            }`}
+            role="tab"
+            type="button"
+            aria-selected={activeTab === "videos"}
+            aria-controls="faq-list"
+            onClick={() => selectTab("videos")}
+          >
+            <span
+              className="faq-tab-tv"
+              style={{ "--tv-mask": `url(${tvIcon})` } as CSSProperties}
+              aria-hidden="true"
+            />
+            Show Me How
+          </button>
         </div>
       </div>
       <div
@@ -321,6 +384,10 @@ export default function FAQContent({ compact = false }: Props) {
         role="tabpanel"
         aria-labelledby={`faq-tab-${activeTab}`}
       >
+        {activeTab === "videos" ? (
+          <VideoList />
+        ) : (
+          <>
         {visibleItems.map((item) => {
           const meta = metaByQuestion.get(item.question);
           const slug = meta?.slug ?? slugify(item.question);
@@ -382,6 +449,8 @@ export default function FAQContent({ compact = false }: Props) {
               : "No questions here yet — check back soon."}
           </p>
         ) : null}
+          </>
+        )}
       </div>
       <div className="faq-contact">
         <p>

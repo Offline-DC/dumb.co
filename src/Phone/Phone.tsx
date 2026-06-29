@@ -234,6 +234,11 @@ function Phone({ initialScreen }: Props) {
   useEffect(() => {
     const wantPath = SCREEN_TO_PATH[screen] ?? "/";
 
+    // The FAQ screen owns its own sub-routes (e.g. /faq/videos, managed by
+    // FAQContent via history.replaceState). Don't yank a deep-linked
+    // /faq/videos back to /faq before FAQContent can read it.
+    if (screen === "FAQ" && location.pathname.startsWith("/faq")) return;
+
     if (location.pathname !== wantPath) {
       navigate(wantPath, { replace: true });
     }
