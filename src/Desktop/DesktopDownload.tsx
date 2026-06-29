@@ -15,7 +15,7 @@ import styles from "../Android/index.module.css";
 // Mozilla-signed .xpi, self-hosted on dumb.co (downloaded from AMO and committed
 // under public/downloads/). Firefox installs it from any HTTPS origin because
 // it's Mozilla-signed.
-const FIREFOX_XPI_URL = "https://dumb.co/downloads/dumb-down-login-1.5.8.xpi";
+const FIREFOX_XPI_URL = "https://dumb.co/downloads/dumb-down-login-1.5.6.xpi";
 
 // Headers use Helvetica (overrides the site's default typewriter heading font).
 const HELVETICA = '"Helvetica Neue", Helvetica, Arial, sans-serif';
