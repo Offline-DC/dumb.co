@@ -11,7 +11,7 @@ import styles from "./internship.module.css";
 const JOBS = [
   { value: "tech", label: "🛠 Tech Intern", md: techRaw },
   { value: "ops", label: "📦 Business & Operations Intern", md: opsRaw },
-  // { value: "marketing", label: "📣 Marketing Intern", md: marketingRaw },
+  { value: "marketing", label: "📣 Marketing Intern", md: marketingRaw },
   { value: "air", label: "🎨 Artist-in-Residence", md: airRaw },
 ];
 
