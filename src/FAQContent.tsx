@@ -132,25 +132,32 @@ const parseCsv = (text: string): string[][] => {
  */
 const splitIntoSentences = (text: string): string[] =>
   text
-    .split(/(?<=[^0-9][.!?])\s+|\n/)
+    .split(/\n/)
     .map((sentence) => sentence.trim())
     .filter(Boolean);
 
 const parseMarkdownLinks = (text: string): ReactNode[] => {
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  // Match **bold** and [text](url) in one pass
+  const tokenRegex = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\)/g;
   const parts: ReactNode[] = [];
   let lastIndex = 0;
   let match;
 
-  while ((match = linkRegex.exec(text)) !== null) {
+  while ((match = tokenRegex.exec(text)) !== null) {
     if (match.index > lastIndex) {
       parts.push(text.slice(lastIndex, match.index));
     }
-    parts.push(
-      <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
-        {match[1]}
-      </a>
-    );
+    if (match[1] !== undefined) {
+      // **bold**
+      parts.push(<strong key={match.index}>{match[1]}</strong>);
+    } else {
+      // [text](url)
+      parts.push(
+        <a key={match.index} href={match[3]} target="_blank" rel="noopener noreferrer">
+          {match[2]}
+        </a>
+      );
+    }
     lastIndex = match.index + match[0].length;
   }
 
