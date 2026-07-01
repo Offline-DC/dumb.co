@@ -11,12 +11,11 @@ export default function DumbphoneOneModal({ clickBackButton }: Props) {
       title="DumbPhoneII.exe"
       content={({ size, isMobile }) => (
         <FlyerContainer
-          modalWidth={size.w}
+          modalWidth={isMobile ? size.w : 700}
           containerHeight={isMobile ? size.h : undefined}
         />
       )}
       onClose={clickBackButton}
-      autoHeight
     />
   );
 }

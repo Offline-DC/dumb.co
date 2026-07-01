@@ -38,9 +38,10 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
         className={styles.frame}
         style={{
           display: "block",
-          width: "100%",
+          width: modalWidth,
           height: frameHeight > 0 ? frameHeight : undefined,
           overflow: "hidden",
+          flexShrink: 0,
         }}
       >
         <img
@@ -48,7 +49,7 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
           alt="Dumb phone flyer"
           draggable={false}
           className={styles.image}
-          style={{ width: "100%", height: "auto", maxHeight: "none" }}
+          style={{ width: modalWidth, height: "auto", maxHeight: "none" }}
         />
         <div
           ref={overlayRef}
