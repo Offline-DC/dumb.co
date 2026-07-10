@@ -1,3 +1,27 @@
+id: TECHCRUNCHJUL20262
+image_name: techcrunchjul1.webp
+title: dumb co dared me 2 join the fun percent
+href: https://techcrunch.com/2026/07/10/dumb-co-dared-me-to-trade-my-iphone-for-a-hacked-flip-phone/ 
+source: Tech Crunch
+
+id: USATODAY1
+image_name: usatodayjuly2.webp
+title: dumbco all the rage w/ Gen Z
+href: https://www.usatoday.com/picture-gallery/life/health-wellness/2026/07/09/people-are-ditching-smartphones-for-dumb-phones-flip-phones-landlines/90853022007/ 
+source: USAToday
+
+id: USATODAY2
+image_name: usatoday jul article 1.webp
+title: dumbphones change lives? ya
+href: https://www.usatoday.com/story/life/health-wellness/2026/07/09/swapped-smartphone-for-dumb-phone-for-a-month/90577821007/
+source: USAToday
+
+id: TECHCRUNCHJUL20261
+image_name: techcrunchjul2.webp
+title: cut your screentime with dumbco
+href: https://techcrunch.com/2026/06/24/if-you-want-to-cut-your-screen-time-just-get-a-brick/ 
+source: Tech Crunch
+
 id: THEATLANTICSPRING2026
 image_name: atlantic flip phone.avif
 title: dumb down ur life, get a flip phone
