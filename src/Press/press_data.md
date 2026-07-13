@@ -16,6 +16,12 @@ title: dumbphones change lives? ya
 href: https://www.usatoday.com/story/life/health-wellness/2026/07/09/swapped-smartphone-for-dumb-phone-for-a-month/90577821007/
 source: USAToday
 
+id: THINGTESTING2026
+image_name: DumbphoneinAir copy.jpeg
+title: dumb co gets Gen Z on flip phones
+href: https://thingtesting.com/stories/dumbphones-vs-smartphones 
+source: Thingtesting
+
 id: TECHCRUNCHJUL20261
 image_name: techcrunchjul2.webp
 title: cut your screentime with dumbco
