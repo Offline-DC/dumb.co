@@ -4,6 +4,12 @@ title: dumb co dared me 2 join the fun percent
 href: https://techcrunch.com/2026/07/10/dumb-co-dared-me-to-trade-my-iphone-for-a-hacked-flip-phone/ 
 source: Tech Crunch
 
+id: YAHOO2026
+image_name: dumb-phone.webp
+title: dumb co phones on the rise
+href: https://tech.yahoo.com/phones/articles/dumb-co-dared-trade-iphone-160649244.html 
+source: Yahoo
+
 id: USATODAY1
 image_name: usatodayjuly2.webp
 title: dumbco all the rage w/ Gen Z
