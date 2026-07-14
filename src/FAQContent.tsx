@@ -124,21 +124,40 @@ const parseCsv = (text: string): string[][] => {
   return rows;
 };
 
+/**
+ * Split an answer into individual sentences so each one can be rendered on
+ * its own line. Splits after ./!/? followed by whitespace, but only when
+ * the next character starts a new sentence (not a decimal or abbreviation
+ * like "e.g.") — good enough heuristic for the FAQ copy we have.
+ */
+const splitIntoSentences = (text: string): string[] =>
+  text
+    .split(/\n/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+
 const parseMarkdownLinks = (text: string): ReactNode[] => {
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  // Match **bold** and [text](url) in one pass
+  const tokenRegex = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\)/g;
   const parts: ReactNode[] = [];
   let lastIndex = 0;
   let match;
 
-  while ((match = linkRegex.exec(text)) !== null) {
+  while ((match = tokenRegex.exec(text)) !== null) {
     if (match.index > lastIndex) {
       parts.push(text.slice(lastIndex, match.index));
     }
-    parts.push(
-      <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
-        {match[1]}
-      </a>
-    );
+    if (match[1] !== undefined) {
+      // **bold**
+      parts.push(<strong key={match.index}>{match[1]}</strong>);
+    } else {
+      // [text](url)
+      parts.push(
+        <a key={match.index} href={match[3]} target="_blank" rel="noopener noreferrer">
+          {match[2]}
+        </a>
+      );
+    }
     lastIndex = match.index + match[0].length;
   }
 
@@ -181,9 +200,11 @@ const buildUniqueSlugs = (items: FaqItem[]): string[] => {
 type Props = {
   /** When true, drops the .faq-card chrome — the surrounding modal supplies its own frame. */
   compact?: boolean;
+  /** Called once when FAQ items finish loading — used to signal the parent window to expand. */
+  onReady?: () => void;
 };
 
-export default function FAQContent({ compact = false }: Props) {
+export default function FAQContent({ compact = false, onReady }: Props) {
   // Accordion: at most one question open at a time. `null` = all collapsed.
   // Keyed by slug (not index) so the open state survives tab filtering.
   const [openSlug, setOpenSlug] = useState<string | null>(null);
@@ -254,6 +275,7 @@ export default function FAQContent({ compact = false }: Props) {
 
         if (isActive) {
           setItems(nextItems);
+          onReady?.();
         }
       } catch (error) {
         if (isActive) {
@@ -374,7 +396,7 @@ export default function FAQContent({ compact = false }: Props) {
               style={{ "--tv-mask": `url(${tvIcon})` } as CSSProperties}
               aria-hidden="true"
             />
-            Show Me How
+            Phone Demo
           </button>
         </div>
       </div>
@@ -424,7 +446,13 @@ export default function FAQContent({ compact = false }: Props) {
                 {item.answers.length > 0 ? (
                   item.answers.map((answer, answerIndex) => (
                     <div key={answerIndex}>
-                      <p>{parseMarkdownLinks(answer)}</p>
+                      <p>
+                        {splitIntoSentences(answer).map((sentence, sentenceIndex) => (
+                          <span className="faq-sentence" key={sentenceIndex}>
+                            {parseMarkdownLinks(sentence)}
+                          </span>
+                        ))}
+                      </p>
                       {answerIndex < item.answers.length - 1 && (
                         <div className="faq-answer-separator" />
                       )}

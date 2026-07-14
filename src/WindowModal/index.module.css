@@ -8,6 +8,8 @@
     1px 1px 0 #ffffff,
     2px 2px 0 #808080,
     3px 3px 0 #000000;
+
+  overflow: hidden;
 }
 
 .titleBar {
