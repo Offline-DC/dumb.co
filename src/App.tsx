@@ -70,6 +70,7 @@ function App() {
             />
             <Route path="/faq" element={<Phone initialScreen="FAQ" />} />
             <Route path="/faqs" element={<Phone initialScreen="FAQ" />} />
+            <Route path="/faq/videos" element={<Phone initialScreen="FAQ" />} />
             <Route path="/android" element={<AndroidDownload />} />
             <Route path="/apps" element={<AppsDownload />} />
             <Route path="/signin" element={<DesktopDownload />} />
