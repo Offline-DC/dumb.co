@@ -19,3 +19,7 @@
 id: setting-up-dumb-phone-2
 title: Setting up the dumphone 2
 link: https://vimeo.com/1205491825
+
+id: setting-up-dumb-plan
+title: Setting up the dumb plan
+link: https://vimeo.com/1209576549
