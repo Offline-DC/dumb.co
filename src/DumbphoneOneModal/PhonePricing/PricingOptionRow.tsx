@@ -45,7 +45,6 @@ export default function PricingOptionRow({ price }: Props) {
   const buyNowButton = (
     <button type="button" className={styles.buyNowButton} onClick={handleClick}>
       click here 2 buy!!!
-      <span className={styles.buttonSubtext}>(US-only, ships by july 15)</span>
     </button>
   );
 
