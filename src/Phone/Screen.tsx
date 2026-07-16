@@ -4,6 +4,7 @@ import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbInternationalModal from "../DumbInternationalModal";
+import DumbCampusModal from "../DumbCampusModal";
 import FAQModal from "../FAQModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
@@ -75,6 +76,7 @@ function Screen({
     newOptions = [
       "dumb organizers",
       "dumb international",
+      "dumb campus",
       "internship",
     ];
   } else if (screen === "contact us") {
@@ -361,6 +363,13 @@ function Screen({
       <div>
         launching dumb international...
         <DumbInternationalModal clickBackButton={clickBackButton} />
+      </div>
+    );
+  } else if (screen === "dumb campus") {
+    display = (
+      <div>
+        launching dumb campus...
+        <DumbCampusModal clickBackButton={clickBackButton} />
       </div>
     );
   } else if (screen === "internship") {
