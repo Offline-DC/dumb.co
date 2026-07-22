@@ -33,7 +33,10 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
   const frameHeight = Math.max(croppedHeight, containerHeight ?? 0);
 
   return (
-    <div className={styles.root} style={{ height: "auto", alignItems: "flex-start" }}>
+    <div
+      className={styles.root}
+      style={{ height: "auto", alignItems: "flex-start" }}
+    >
       <div
         className={styles.frame}
         style={{
@@ -58,7 +61,7 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
         >
           <PhonePricing />
           <div className={styles.supportLine}>
-            human support 24/7 support@dumb.co or 404-716-3605
+            human support support@dumb.co or 404-716-3605
           </div>
         </div>
       </div>

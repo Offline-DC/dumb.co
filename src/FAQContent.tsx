@@ -45,7 +45,8 @@ const isVideosPath = () =>
  */
 const setUrlForTab = (tab: FaqTab) => {
   const { search } = window.location;
-  const next = tab === "videos" ? `${VIDEOS_PATH}${search}` : `${FAQ_PATH}${search}`;
+  const next =
+    tab === "videos" ? `${VIDEOS_PATH}${search}` : `${FAQ_PATH}${search}`;
   window.history.replaceState(null, "", next);
 };
 
@@ -153,9 +154,14 @@ const parseMarkdownLinks = (text: string): ReactNode[] => {
     } else {
       // [text](url)
       parts.push(
-        <a key={match.index} href={match[3]} target="_blank" rel="noopener noreferrer">
+        <a
+          key={match.index}
+          href={match[3]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {match[2]}
-        </a>
+        </a>,
       );
     }
     lastIndex = match.index + match[0].length;
@@ -243,7 +249,9 @@ export default function FAQContent({ compact = false, onReady }: Props) {
 
         const [firstRow, ...restRows] = rows;
         const isHeaderRow =
-          firstRow?.some((value) => value.trim().toLowerCase() === "question") ||
+          firstRow?.some(
+            (value) => value.trim().toLowerCase() === "question",
+          ) ||
           firstRow?.some((value) => value.trim().toLowerCase() === "answer");
         const dataRows = isHeaderRow ? restRows : rows;
 
@@ -257,7 +265,8 @@ export default function FAQContent({ compact = false, onReady }: Props) {
               return name === "type" || name === "category";
             })
           : -1;
-        const categoryIndex = headerCategoryIndex >= 0 ? headerCategoryIndex : 4;
+        const categoryIndex =
+          headerCategoryIndex >= 0 ? headerCategoryIndex : 4;
 
         const nextItems: FaqItem[] = dataRows
           .map((row) => {
@@ -279,7 +288,8 @@ export default function FAQContent({ compact = false, onReady }: Props) {
         }
       } catch (error) {
         if (isActive) {
-          const message = error instanceof Error ? error.message : "Failed to load FAQs";
+          const message =
+            error instanceof Error ? error.message : "Failed to load FAQs";
           setLoadError(message);
           setItems([]);
         }
@@ -410,83 +420,88 @@ export default function FAQContent({ compact = false, onReady }: Props) {
           <VideoList />
         ) : (
           <>
-        {visibleItems.map((item) => {
-          const meta = metaByQuestion.get(item.question);
-          const slug = meta?.slug ?? slugify(item.question);
-          const isOpen = openSlug === slug;
-          const panelId = `faq-panel-${slug}`;
-          const buttonId = `faq-button-${slug}`;
-          const itemId = `faq-item-${slug}`;
+            {visibleItems.map((item) => {
+              const meta = metaByQuestion.get(item.question);
+              const slug = meta?.slug ?? slugify(item.question);
+              const isOpen = openSlug === slug;
+              const panelId = `faq-panel-${slug}`;
+              const buttonId = `faq-button-${slug}`;
+              const itemId = `faq-item-${slug}`;
 
-          return (
-            <div
-              key={slug}
-              id={itemId}
-              className="faq-item"
-              role="listitem"
-            >
-              <button
-                id={buttonId}
-                className="faq-question"
-                aria-expanded={isOpen}
-                aria-controls={panelId}
-                type="button"
-                onClick={() => toggleSlug(slug)}
-              >
-                <span>{item.question}</span>
-                <span className="faq-indicator">{isOpen ? "-" : "+"}</span>
-              </button>
-              <div
-                id={panelId}
-                className={`faq-panel ${isOpen ? "open" : ""}`}
-                role="region"
-                aria-labelledby={buttonId}
-                hidden={!isOpen}
-              >
-                {item.answers.length > 0 ? (
-                  item.answers.map((answer, answerIndex) => (
-                    <div key={answerIndex}>
-                      <p>
-                        {splitIntoSentences(answer).map((sentence, sentenceIndex) => (
-                          <span className="faq-sentence" key={sentenceIndex}>
-                            {parseMarkdownLinks(sentence)}
-                          </span>
-                        ))}
-                      </p>
-                      {answerIndex < item.answers.length - 1 && (
-                        <div className="faq-answer-separator" />
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p className="faq-empty" aria-hidden="true"></p>
-                )}
-              </div>
-            </div>
-          );
-        })}
-        {loadError ? (
-          <p className="faq-empty" role="status">
-            {loadError}
-          </p>
-        ) : null}
-        {!loadError && visibleItems.length === 0 ? (
-          <p className="faq-empty-tab" role="status">
-            {items.length === 0
-              ? "Loading…"
-              : "No questions here yet — check back soon."}
-          </p>
-        ) : null}
+              return (
+                <div
+                  key={slug}
+                  id={itemId}
+                  className="faq-item"
+                  role="listitem"
+                >
+                  <button
+                    id={buttonId}
+                    className="faq-question"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    type="button"
+                    onClick={() => toggleSlug(slug)}
+                  >
+                    <span>{item.question}</span>
+                    <span className="faq-indicator">{isOpen ? "-" : "+"}</span>
+                  </button>
+                  <div
+                    id={panelId}
+                    className={`faq-panel ${isOpen ? "open" : ""}`}
+                    role="region"
+                    aria-labelledby={buttonId}
+                    hidden={!isOpen}
+                  >
+                    {item.answers.length > 0 ? (
+                      item.answers.map((answer, answerIndex) => (
+                        <div key={answerIndex}>
+                          <p>
+                            {splitIntoSentences(answer).map(
+                              (sentence, sentenceIndex) => (
+                                <span
+                                  className="faq-sentence"
+                                  key={sentenceIndex}
+                                >
+                                  {parseMarkdownLinks(sentence)}
+                                </span>
+                              ),
+                            )}
+                          </p>
+                          {answerIndex < item.answers.length - 1 && (
+                            <div className="faq-answer-separator" />
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="faq-empty" aria-hidden="true"></p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {loadError ? (
+              <p className="faq-empty" role="status">
+                {loadError}
+              </p>
+            ) : null}
+            {!loadError && visibleItems.length === 0 ? (
+              <p className="faq-empty-tab" role="status">
+                {items.length === 0
+                  ? "Loading…"
+                  : "No questions here yet — check back soon."}
+              </p>
+            ) : null}
           </>
         )}
       </div>
       <div className="faq-contact">
         <p>
           questions? contact{" "}
-          <a href="mailto:support@dumb.co">support@dumb.co</a>{" "}
-          or call us: <a href="tel:404-716-3605">404-716-3605</a>
+          <a href="mailto:support@dumb.co">support@dumb.co</a> or call us:{" "}
+          <a href="tel:404-716-3605">404-716-3605</a>
         </p>
-        <p>24/7 human support</p>
+        <p>human support</p>
       </div>
     </div>
   );
