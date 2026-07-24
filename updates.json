@@ -1,0 +1,17 @@
+{
+  "addons": {
+    "gmessages-login-help@dumb.co": {
+      "updates": [
+        {
+          "version": "1.5.8",
+          "update_link": "https://dumb.co/downloads/dumb-down-login-1.5.8.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "142.0"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
