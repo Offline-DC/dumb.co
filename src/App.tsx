@@ -17,6 +17,7 @@ import NotFound from "./NotFound";
 import AndroidDownload from "./Android/AndroidDownload.tsx";
 import AppsDownload from "./Android/AppsDownload.tsx";
 import DesktopDownload from "./Desktop/DesktopDownload.tsx";
+import FSADownload from "./FSA/FSADownload.tsx";
 import AppRedirect from "./AppRedirect.tsx";
 import MobileRedirect from "./MobileRedirect.tsx";
 
@@ -76,6 +77,7 @@ function App() {
             <Route path="/signin" element={<DesktopDownload />} />
             <Route path="/desktop-signin" element={<DesktopDownload />} />
             <Route path="/desktop" element={<DesktopDownload />} />
+            <Route path="/fsa" element={<FSADownload />} />
             <Route path="/app" element={<AppRedirect />} />
             <Route path="/mobile" element={<MobileRedirect />} />
             <Route path="*" element={<NotFound />} />
