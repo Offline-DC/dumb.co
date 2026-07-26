@@ -8,25 +8,98 @@
 <link rel="icon" type="image/png" href="/favicon.png" />
 <!-- GOOGLE-SITE-VERIFICATION: paste the meta tag from Search Console on the line below if you verify by HTML tag -->
 <style>
-  :root { --ink:#141414; --muted:#5c5c5c; --line:#e6e6e6; --accent:#111; }
+  /* ── Fonts: the same two families the app ships (DumbTheme.Header / .Body) ── */
+  @font-face {
+    font-family:"Cheltenham XCond";
+    src:url("/fonts/CheltenhamExtraCondensed-Bold.otf") format("opentype");
+    font-weight:700; font-display:swap;
+  }
+  @font-face {
+    font-family:"Helvetica Now Text Black";
+    src:url("/fonts/HelveticaNowText-Black.ttf") format("truetype");
+    font-weight:400; font-display:swap;
+  }
+
+  /* ── Palette: verbatim from DumbTheme.Colors ── */
+  :root {
+    --yellow:#FAF594;                    /* Colors.Yellow — brand highlight / selection */
+    --dim:rgba(250,245,148,0.65);
+    --black:#000000;                     /* Colors.Black  — background */
+    --white:#FFFFFF;                     /* Colors.White  — primary text */
+    --gray:#AAAAAA;                      /* Colors.Gray   — secondary / hint text */
+    --red:#E53935;                       /* Colors.Red    — destructive */
+    --line:#333333;
+    --head:"Cheltenham XCond", "Helvetica Neue Condensed", Impact, sans-serif;
+    --body:"Helvetica Now Text Black", Helvetica, Arial, sans-serif;
+  }
+
   * { box-sizing:border-box; }
-  body { margin:0; background:#faf9f6; color:var(--ink);
-         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.6; }
-  .wrap { max-width:760px; margin:0 auto; padding:40px 22px 80px; }
-  .brand { font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-           font-weight:700; font-size:18px; letter-spacing:.5px; text-decoration:none; color:var(--accent); }
-  header { border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:28px;
+  body { margin:0; background:var(--black); color:#EDEDED;
+         font-family:var(--body); font-weight:400; line-height:1.68;
+         letter-spacing:.1px; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:760px; margin:0 auto; padding:34px 22px 80px; }
+
+  header { border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:30px;
            display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  header .nav a { color:var(--muted); text-decoration:none; font-size:13px; margin-left:16px; }
-  header .nav a:hover { color:var(--ink); }
-  h1 { font-size:34px; margin:0 0 6px; }
-  .tagline { color:var(--muted); font-size:17px; margin:0 0 30px; }
-  h2 { font-size:19px; margin:34px 0 8px; }
-  p, li { font-size:15.5px; }
-  a { color:#1a56db; }
+  .brand { font-family:var(--body); font-size:17px; letter-spacing:.6px;
+           text-decoration:none; color:var(--yellow); }
+  header .nav a { color:var(--gray); text-decoration:none; font-size:12.5px; margin-left:16px; }
+  header .nav a:hover { color:var(--white); }
+
+  h1 { font-family:var(--head); font-weight:700; font-size:52px; line-height:1.02;
+       margin:0 0 8px; color:var(--yellow); letter-spacing:.5px; }
+  h2 { font-family:var(--head); font-weight:700; font-size:27px; line-height:1.1;
+       margin:44px 0 10px; color:var(--yellow); letter-spacing:.4px; }
+  .tagline { color:var(--gray); font-size:16px; margin:0 0 26px; }
+  p, li { font-size:15px; }
+  p { margin:0 0 14px; }
   ul { padding-left:20px; }
-  .card { background:#fff; border:1px solid var(--line); border-radius:8px; padding:18px 20px; margin:18px 0; }
-  footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+  li { margin:8px 0; }
+  strong { color:var(--white); }
+  a { color:var(--yellow); text-decoration:underline; text-underline-offset:2px; }
+  a:hover { color:var(--white); }
+
+  .card { background:rgba(250,245,148,0.06); border:2px solid var(--yellow);
+          border-radius:4px; padding:18px 20px; margin:22px 0; font-size:14.5px; }
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--line);
+           color:var(--gray); font-size:12.5px; }
+  footer a { color:var(--gray); }
+
+  /* ── Phone mockups: same chrome as DUMB_CALENDAR_MOCKUPS.html ── */
+  .shots { display:flex; flex-wrap:wrap; gap:30px; margin:26px 0 8px; }
+  .unit { width:252px; }
+  .cap { font-size:12px; color:var(--gray); margin:9px 0 0; letter-spacing:.2px; }
+  .phone { width:240px; height:320px; background:#000; border-radius:10px;
+           border:6px solid #1c1c1c; box-shadow:0 8px 22px rgba(0,0,0,.6);
+           position:relative; overflow:hidden; color:#fff; font-family:var(--body); }
+  .htitle { font-family:var(--head); font-size:19px; color:var(--yellow);
+            padding:8px 9px 5px; letter-spacing:.3px; }
+  .listlabel { font-size:11px; color:var(--yellow); padding:6px 9px 2px; }
+
+  .ev { display:flex; padding:6px 8px; border:2px solid transparent; align-items:flex-start; }
+  .ev.sel { border-color:var(--yellow); background:rgba(250,245,148,.12); }
+  .ev .g { width:42px; flex:none; color:var(--yellow); font-size:10.5px; line-height:1.15; padding-top:2px; }
+  .ev .dot { width:7px; height:7px; border-radius:50%; flex:none; margin:5px 6px 0 0; }
+  .ev .body { flex:1; }
+  .ev .t { font-size:12.5px; color:#fff; line-height:1.22; }
+  .ev .m { font-size:10px; color:var(--gray); }
+
+  .softbar { position:absolute; bottom:0; left:0; right:0; height:24px; display:flex;
+             align-items:center; padding:0 9px; background:#000; border-top:1px solid #111; }
+  .softbar span { flex:1; font-size:11px; color:var(--dim); }
+  .softbar .c { text-align:center; } .softbar .r { text-align:right; }
+
+  .p { padding:7px 11px; font-size:12px; color:#ddd; line-height:1.38; }
+  .p.small { font-size:10.5px; color:var(--gray); padding-bottom:1px; }
+  .url { color:var(--yellow); font-size:14px; padding:0 11px 6px; }
+  .bigcode { font-size:29px; color:var(--yellow); text-align:center;
+             letter-spacing:3px; padding:6px 0 2px; }
+
+  @media (max-width:560px) {
+    h1 { font-size:42px; }
+    h2 { font-size:24px; }
+    .shots { gap:22px; }
+  }
 </style>
 </head>
 <body>
@@ -44,6 +117,51 @@
     from Offline DC. It shows your schedule at a glance — a today agenda, a month grid, a day view,
     and event details — designed for the phone's d-pad and buttons, no touchscreen required.
   </p>
+
+  <div class="shots">
+    <div class="unit">
+      <div class="phone">
+        <div class="htitle">calendar</div>
+        <div class="p small" style="padding-top:0">to show your schedule, connect your google calendar.</div>
+        <div class="p small">on your phone or computer, go to:</div>
+        <div class="url">google.com/device</div>
+        <div class="p small">and enter this code:</div>
+        <div class="bigcode">K7Q-M4WP</div>
+        <div class="softbar"><span>new code</span><span class="c"></span><span class="r">back</span></div>
+      </div>
+      <p class="cap">Sign in once, on the device.</p>
+    </div>
+
+    <div class="unit">
+      <div class="phone">
+        <div class="htitle">calendar</div>
+        <div class="listlabel">today · sun jul 26</div>
+        <div class="ev sel">
+          <div class="g">9:00<br>am</div>
+          <div class="dot" style="background:#0B8043"></div>
+          <div class="body"><div class="t">standup</div><div class="m">video call</div></div>
+        </div>
+        <div class="ev">
+          <div class="g">12:30<br>pm</div>
+          <div class="dot" style="background:#4C8BF5"></div>
+          <div class="body"><div class="t">lunch w/ sam</div><div class="m">tail up goat</div></div>
+        </div>
+        <div class="ev">
+          <div class="g">4:00<br>pm</div>
+          <div class="dot" style="background:#F4511E"></div>
+          <div class="body"><div class="t">pick up dry cleaning</div></div>
+        </div>
+        <div class="listlabel">tomorrow</div>
+        <div class="ev">
+          <div class="g">all<br>day</div>
+          <div class="dot" style="background:#4C8BF5"></div>
+          <div class="body"><div class="t">flight to chicago</div></div>
+        </div>
+        <div class="softbar"><span>month</span><span class="c">open</span><span class="r">back</span></div>
+      </div>
+      <p class="cap">Your day, the moment you open it.</p>
+    </div>
+  </div>
 
   <h2>What it does</h2>
   <ul>
