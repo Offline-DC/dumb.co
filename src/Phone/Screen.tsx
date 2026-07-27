@@ -77,7 +77,7 @@ function Screen({
       "dumb organizers",
       "dumb international",
       "dumb campus",
-      "internship",
+      // "internship",
     ];
   } else if (screen === "contact us") {
     newOptions = ["team", "contact"];
