@@ -48,17 +48,6 @@ export default function PricingOptionRow({ price }: Props) {
     </button>
   );
 
-  const ukPreorderButton = (
-    <button
-      type="button"
-      className={styles.ukPreorderButton}
-      onClick={handleUkClick}
-    >
-      click here 2 pre-order!!!
-      <span className={styles.buttonSubtext}>(UK, ships by sept 1)</span>
-    </button>
-  );
-
   return (
     <div className={styles.mobileAccordion}>
       <div className={styles.mobileRow}>{rowButton}</div>
@@ -78,7 +67,6 @@ export default function PricingOptionRow({ price }: Props) {
       )}
 
       {buyNowButton}
-      {ukPreorderButton}
     </div>
   );
 }
