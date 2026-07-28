@@ -42,7 +42,7 @@
   font-size: 14px;
   font-weight: 700;
   color: white;
-  -webkit-text-stroke: 10px black;
+  -webkit-text-stroke: 13px black;
   paint-order: stroke fill;
   padding: 0.5rem;
 }

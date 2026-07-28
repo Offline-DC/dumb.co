@@ -174,6 +174,8 @@ function Screen({
       <div>
         <div>support@dumb.co</div>
         <div>404-716-3605</div>
+        <div style={{ fontSize: "14px" }}>8am-9pm EST Mon-Fri</div>
+        <div style={{ fontSize: "14px" }}>10am-2pm EST Sat-Sun</div>
       </div>
     );
     newOptions = [];
