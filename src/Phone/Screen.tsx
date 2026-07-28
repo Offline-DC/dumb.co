@@ -76,7 +76,7 @@ function Screen({
     newOptions = [
       "dumb organizers",
       "dumb international",
-      "dumb campus",
+      "dumb on campus",
       // "internship",
     ];
   } else if (screen === "contact us") {
@@ -367,10 +367,10 @@ function Screen({
         <DumbInternationalModal clickBackButton={clickBackButton} />
       </div>
     );
-  } else if (screen === "dumb campus") {
+  } else if (screen === "dumb on campus") {
     display = (
       <div>
-        launching dumb campus...
+        launching dumb on campus...
         <DumbCampusModal clickBackButton={clickBackButton} />
       </div>
     );

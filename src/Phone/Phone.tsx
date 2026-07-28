@@ -128,7 +128,7 @@ function Phone({ initialScreen }: Props) {
       screen === "internship" ||
       screen === "dumbphone 2" ||
       screen === "dumb international" ||
-      screen === "dumb campus" ||
+      screen === "dumb on campus" ||
       screen === "FAQ"
     ) {
       return;
@@ -261,80 +261,78 @@ function Phone({ initialScreen }: Props) {
 
   return (
     <>
-      {showHomeModal && (
-        <HomeModal onClose={() => setShowHomeModal(false)} />
-      )}
-      <div
-      style={{
-        background: "#333",
-        borderRadius: "2rem",
-        padding: "2rem",
-        paddingBottom: "1rem",
-        margin: ".5rem",
-        aspectRatio: "9 / 20",
-        width: "clamp(250px, 100vw, 275px)",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.4)",
-        maxHeight: "82vh",
-      }}
-    >
-      <Logo />
+      {showHomeModal && <HomeModal onClose={() => setShowHomeModal(false)} />}
       <div
         style={{
-          border: "1px solid grey",
-          borderRadius: ".25rem",
+          background: "#333",
+          borderRadius: "2rem",
+          padding: "2rem",
+          paddingBottom: "1rem",
+          margin: ".5rem",
+          aspectRatio: "9 / 20",
+          width: "clamp(250px, 100vw, 275px)",
           display: "flex",
           flexDirection: "column",
-          height: "50%",
-          overflowY: "hidden",
+          justifyContent: "space-between",
+          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.4)",
+          maxHeight: "82vh",
         }}
       >
-        <Screen
-          row={row}
-          setRow={setRow}
-          options={options}
-          setOptions={setOptions}
-          screen={screen}
-          setScreen={setScreen}
-          navigationStack={navigationStack}
-          setNavigationStack={setNavigationStack}
-          keypadNum={keypadNum}
-          setKeypadNum={setKeypadNum}
-          setAudioFile={setAudioFile}
-          clickBackButton={handleBackButton}
-          snakeDirInput={snakeDirInput}
-          onSnakeGameEnd={handleSnakeGameEnd}
-        />
-      </div>
-      <div
-        style={{
-          height: "30%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          paddingTop: "5%",
-          paddingBottom: "5%",
-        }}
-      >
-        <Navigation
-          onBackClick={handleBackButton}
-          onCenterClick={handleCenterClick}
-          onDownClick={handleDownClick}
-          onUpClick={handleUpClick}
-          onLeftClick={handleLeftClick}
-          onRightClick={handleRightClick}
-          onCallClick={() => {
-            window.location.href = `tel:${
-              keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER
-            }`;
-            return;
+        <Logo />
+        <div
+          style={{
+            border: "1px solid grey",
+            borderRadius: ".25rem",
+            display: "flex",
+            flexDirection: "column",
+            height: "50%",
+            overflowY: "hidden",
           }}
-        />
-        <Footer />
+        >
+          <Screen
+            row={row}
+            setRow={setRow}
+            options={options}
+            setOptions={setOptions}
+            screen={screen}
+            setScreen={setScreen}
+            navigationStack={navigationStack}
+            setNavigationStack={setNavigationStack}
+            keypadNum={keypadNum}
+            setKeypadNum={setKeypadNum}
+            setAudioFile={setAudioFile}
+            clickBackButton={handleBackButton}
+            snakeDirInput={snakeDirInput}
+            onSnakeGameEnd={handleSnakeGameEnd}
+          />
+        </div>
+        <div
+          style={{
+            height: "30%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            paddingTop: "5%",
+            paddingBottom: "5%",
+          }}
+        >
+          <Navigation
+            onBackClick={handleBackButton}
+            onCenterClick={handleCenterClick}
+            onDownClick={handleDownClick}
+            onUpClick={handleUpClick}
+            onLeftClick={handleLeftClick}
+            onRightClick={handleRightClick}
+            onCallClick={() => {
+              window.location.href = `tel:${
+                keypadNum ? keypadNum : OFFLINE_PHONE_NUMBER
+              }`;
+              return;
+            }}
+          />
+          <Footer />
+        </div>
       </div>
-    </div>
     </>
   );
 }
