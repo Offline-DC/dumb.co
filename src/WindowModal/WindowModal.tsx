@@ -87,6 +87,18 @@ export default function WindowModal({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expanded]);
 
+  // Close the window on Escape, mirroring the × button.
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   useEffect(() => {
     const body = document.body;
     const prevOverflow = body.style.overflow;
@@ -232,6 +244,7 @@ export default function WindowModal({
       ref={windowRef}
       className={styles.window}
       style={windowStyle}
+      data-window-modal
     >
       <div
         className={styles.titleBar}

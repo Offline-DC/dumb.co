@@ -69,6 +69,24 @@ function Phone({ initialScreen }: Props) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sequenceBuffer = useRef<string[]>([]);
+  // Holds the latest navigation handlers so the mount-time keydown listener
+  // always calls the current closures (which read up-to-date state) without
+  // re-binding the listener on every render.
+  const keyHandlers = useRef<{
+    up: () => void;
+    down: () => void;
+    left: () => void;
+    right: () => void;
+    center: () => void;
+    back: () => void;
+  }>({
+    up: () => {},
+    down: () => {},
+    left: () => {},
+    right: () => {},
+    center: () => {},
+    back: () => {},
+  });
 
   const playSound = () => {
     if (audioRef.current) {
@@ -218,6 +236,72 @@ function Phone({ initialScreen }: Props) {
     setSnakeDirInput(null);
     sequenceBuffer.current = [];
   };
+
+  // Keep the ref pointing at the current handlers on every render so the
+  // keydown listener below (bound once on mount) invokes fresh closures.
+  keyHandlers.current = {
+    up: handleUpClick,
+    down: handleDownClick,
+    left: handleLeftClick,
+    right: handleRightClick,
+    center: handleCenterClick,
+    back: handleBackButton,
+  };
+
+  // Allow arrow keys / Enter to drive the phone, mirroring the on-screen
+  // D-pad and center button. Bound once on mount.
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user is typing in a real input, or when
+      // a modifier is held (e.g. browser/OS shortcuts).
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      switch (e.key) {
+        case "ArrowUp":
+          e.preventDefault();
+          keyHandlers.current.up();
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          keyHandlers.current.down();
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          keyHandlers.current.left();
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          keyHandlers.current.right();
+          break;
+        case "Enter":
+          e.preventDefault();
+          keyHandlers.current.center();
+          break;
+        case "Escape":
+          // Only go "back" when no WindowModal is open — an open window
+          // handles Escape itself (closing/backing out via its own handler).
+          if (!document.querySelector("[data-window-modal]")) {
+            e.preventDefault();
+            keyHandlers.current.back();
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // ------- START – Supports dedicated /press URL inside of phone ---------
   useEffect(() => {
