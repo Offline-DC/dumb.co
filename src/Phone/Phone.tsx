@@ -28,9 +28,7 @@ const SCREEN_TO_PATH: Record<string, string> = {
 
 // Maps a screen reached via direct URL (initialScreen) to the parent menu
 // it should "back" into. Anything not in this map backs straight to Home.
-const SCREEN_PARENT: Record<string, string> = {
-  "dumb international": "get involved",
-};
+const SCREEN_PARENT: Record<string, string> = {};
 
 const SNAKE_SEQUENCE = ["up", "up", "down", "down", "left", "right"];
 
@@ -127,7 +125,6 @@ function Phone({ initialScreen }: Props) {
     if (
       screen === "internship" ||
       screen === "dumbphone 2" ||
-      screen === "dumb international" ||
       screen === "dumb on campus" ||
       screen === "FAQ"
     ) {

@@ -3,7 +3,6 @@ import PhoneText from "./PhoneText";
 import type { navigationItem } from "./Phone";
 import Press from "../Press/Press";
 import DumbphoneOneModal from "../DumbphoneOneModal";
-import DumbInternationalModal from "../DumbInternationalModal";
 import DumbCampusModal from "../DumbCampusModal";
 import FAQModal from "../FAQModal";
 import SnakeGame from "./SnakeGame";
@@ -68,19 +67,12 @@ function Screen({
       "buy dumbphone 2",
       "FAQ",
       "Month Offline",
-      "get involved",
+      "dumb on campus",
       "contact us",
       "press",
     ];
-  } else if (screen === "get involved") {
-    newOptions = [
-      "dumb organizers",
-      "dumb international",
-      "dumb on campus",
-      // "internship",
-    ];
   } else if (screen === "contact us") {
-    newOptions = ["team", "contact"];
+    newOptions = ["team", "support", "organize"];
   } else if (screen === "sign up") {
     newOptions = ["Washington D.C.", "Anywhere, U.S.A."];
   } else if (screen === "press") {
@@ -102,15 +94,6 @@ function Screen({
         <br />
         press return <br />
         to sign up
-      </div>
-    );
-  } else if (screen === "dumb organizers") {
-    display = (
-      <div>
-        want 2 organize a dumb experience w/ ur group? <br />
-        <br /> email
-        <br /> lydia @ <br />
-        offline • community
       </div>
     );
   } else if (screen === "Month Offline In-Person Cohort in Washington, DC") {
@@ -169,13 +152,24 @@ function Screen({
     display = "auth";
   } else if (screen === "What is Offline?") {
     display = "Less is MO";
-  } else if (screen === "contact") {
+  } else if (screen === "support") {
     display = (
       <div>
         <div>support@dumb.co</div>
         <div>404-716-3605</div>
         <div style={{ fontSize: "14px" }}>8am-9pm EST Mon-Fri</div>
         <div style={{ fontSize: "14px" }}>10am-2pm EST Sat-Sun</div>
+      </div>
+    );
+    newOptions = [];
+  } else if (screen === "organize") {
+    display = (
+      <div>
+        get $ off for a <br />
+        group dumb down
+        <br />
+        <br /> email
+        <br /> organize@dumb.co
       </div>
     );
     newOptions = [];
@@ -328,10 +322,6 @@ function Screen({
       "https://shop.offline.community/products/month-offline-nyc";
     setRow(0);
     setScreen("Home");
-  } else if (screen === "support") {
-    window.location.href = "/support";
-    setRow(0);
-    setScreen("Home");
   } else if (screen === "FAQ") {
     display = (
       <div>
@@ -358,13 +348,6 @@ function Screen({
         }}
       >
         <SnakeGame dirInput={snakeDirInput} onGameEnd={onSnakeGameEnd} />
-      </div>
-    );
-  } else if (screen === "dumb international") {
-    display = (
-      <div>
-        launching dumb international...
-        <DumbInternationalModal clickBackButton={clickBackButton} />
       </div>
     );
   } else if (screen === "dumb on campus") {
@@ -401,7 +384,7 @@ function Screen({
           style={{
             textAlign: "right",
             padding: "1rem",
-            fontSize: screen === "contact" ? "1.65rem" : "1.3rem",
+            fontSize: screen === "support" ? "1.65rem" : "1.3rem",
             color: "#000000",
           }}
         >
