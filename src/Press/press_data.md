@@ -1,3 +1,9 @@
+id: CBS2026
+image_name: cbs2026.webp
+title: gen z ditches smartphones 4 the dp2
+href: https://www.cbsnews.com/sanfrancisco/video/new-gen-z-trend-ditching-smartphones-for-dumb-phones-without-social-media-apps/
+source: CBS
+
 id: TECHCRUNCHJUL20262
 image_name: techcrunchjul1.webp
 title: dumb co dared me 2 join the fun percent
