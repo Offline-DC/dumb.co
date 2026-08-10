@@ -28,6 +28,6 @@ id: setting-up-dumber-plan
 title: Setting up the dumber plan
 link: https://vimeo.com/1210262726
 
-id: T9-bootcamp!&-voice-2-text
+id: T9-bootcamp-voice-2-text
 title: T9 bootcamp! (& voice 2 text)
 link: https://vimeo.com/1215826540
