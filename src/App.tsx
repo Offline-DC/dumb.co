@@ -18,6 +18,7 @@ import AndroidDownload from "./Android/AndroidDownload.tsx";
 import AppsDownload from "./Android/AppsDownload.tsx";
 import DesktopDownload from "./Desktop/DesktopDownload.tsx";
 import FSADownload from "./FSA/FSADownload.tsx";
+import SpotifyLink from "./Link/SpotifyLink.tsx";
 import AppRedirect from "./AppRedirect.tsx";
 import MobileRedirect from "./MobileRedirect.tsx";
 
@@ -78,6 +79,10 @@ function App() {
             <Route path="/desktop-signin" element={<DesktopDownload />} />
             <Route path="/desktop" element={<DesktopDownload />} />
             <Route path="/fsa" element={<FSADownload />} />
+            {/* Spotify sign-in hand-off for the dumbphone. The phone's WebView
+                can't render Spotify's consent page, so the browser half of OAuth
+                happens here. See src/Link/SpotifyLink.tsx. */}
+            <Route path="/link" element={<SpotifyLink />} />
             <Route path="/app" element={<AppRedirect />} />
             <Route path="/mobile" element={<MobileRedirect />} />
             <Route path="*" element={<NotFound />} />
