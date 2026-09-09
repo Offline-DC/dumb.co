@@ -115,8 +115,8 @@ export default function HomeModalContent({
               to ditch our smartphones. we learned a lot along the way, and
               decided to design a device that&apos;s just dumb enough. the
               dumbphone 2 is a companion device that syncs with ur smartphone
-              and includes maps, music, uber, and all ur messages (but only if u
-              want). our little team is stoked that ur part of the growing
+              and includes maps, music, rideshare, and all ur messages (but only
+              if u want). our little team is stoked that ur part of the growing
               movement of dumb ppl choosing dumb down.
             </p>
             <p style={{ marginBottom: "1rem" }} className={styles.flipBody}>
