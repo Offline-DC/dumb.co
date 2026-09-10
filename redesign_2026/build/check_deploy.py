@@ -86,12 +86,13 @@ else:
     m = re.search(r"cname:\s*(\S+)", w)
     if m: ok(f"custom domain set by the workflow: {m.group(1)}")
     else: warn("no cname: in the workflow", "the site would fall back to the github.io URL")
-    if "404.html" in w:
-        ok("404.html SPA fallback step present")
-        warn("that fallback serves real paths with an HTTP 404 status",
-             "see SEO.md — prerender the routes instead before shipping /shop etc.")
+    if "prerender" in w or (LIVE / "scripts" / "prerender.mjs").exists():
+        ok("routes are prerendered to real files (scripts/prerender.mjs)")
+    elif "cp dist/index.html dist/404.html" in w:
+        warn("routes rely on the 404.html trick, which serves them with an HTTP 404 status",
+             "see SEO.md — every URL except / is unindexable that way")
     else:
-        warn("no 404.html step", "any path other than / would hit GitHub's own 404 page")
+        warn("no SPA fallback and no prerender", "any path other than / would 404")
     if "force_orphan" in w:
         ok("force_orphan: gh-pages is replaced each deploy, so its history can't bloat")
     if re.search(r"enable_jekyll:\s*true", w):
@@ -161,6 +162,33 @@ else:
     else:
         ok("every file in public/ made it into dist/, byte for byte")
 
+    # the prerendered routes, and their metadata actually differing
+    routes_f = LIVE / "scripts" / "routes.mjs"
+    if routes_f.exists():
+        slugs = re.findall(r'path:\s*"([^"]+)"', routes_f.read_text(encoding="utf-8"))
+        missing_r = [s_ for s_ in slugs
+                     if not (dist / "index.html" if s_ == "/" else dist / s_.strip("/") / "index.html").exists()]
+        if missing_r:
+            fail(f"{len(missing_r)} route(s) in scripts/routes.mjs have no file in dist/",
+                 ", ".join(missing_r[:6]))
+        else:
+            ok(f"all {len(slugs)} routes have a real file in dist/ (HTTP 200, not the 404 fallback)")
+        titles = {}
+        for s_ in slugs:
+            f = dist / "index.html" if s_ == "/" else dist / s_.strip("/") / "index.html"
+            if f.exists():
+                m = re.search(r"<title>(.*?)</title>", f.read_text(encoding="utf-8", errors="replace"), re.S)
+                titles.setdefault((m.group(1).strip() if m else ""), []).append(s_)
+        dupes = {t: v for t, v in titles.items() if len(v) > 1}
+        if dupes:
+            warn(f"{len(dupes)} title(s) shared by more than one route",
+                 "; ".join(f"{t[:40]!r} on {', '.join(v)}" for t, v in list(dupes.items())[:3]))
+        else:
+            ok("every route has its own <title>")
+        for name in ("sitemap.xml", "robots.txt", "404.html"):
+            if (dist / name).exists(): ok(f"dist/{name}")
+            else: fail(f"no dist/{name}", "scripts/prerender.mjs should have written it")
+
     idx = dist / "index.html"
     if idx.exists():
         ok(f"dist/index.html present ({human(size(idx))})")
@@ -178,8 +206,14 @@ else:
 # ------------------------------------------------------------------- 4. seo
 print("\nsearch basics")
 for name in ("robots.txt", "sitemap.xml"):
-    if (pub / name).exists(): ok(f"public/{name}")
-    else: warn(f"no public/{name}", "see SEO.md")
+    if (pub / name).exists():
+        ok(f"public/{name}")
+    elif (dist / name).exists():
+        ok(f"{name} is generated into dist/ by scripts/prerender.mjs")
+    elif (LIVE / "scripts" / "prerender.mjs").exists():
+        ok(f"{name} is generated at build time (run npm run build to see it)")
+    else:
+        warn(f"no {name} anywhere", "see SEO.md")
 underscored = [p.name for p in pub.iterdir() if p.name.startswith("_")] if pub.is_dir() else []
 if underscored:
     warn(f"public/ has {len(underscored)} entr(y/ies) starting with '_': {', '.join(underscored[:4])}",

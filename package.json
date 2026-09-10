@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
     "start": "serve -s dist",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
