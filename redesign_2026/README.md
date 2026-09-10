@@ -18,6 +18,7 @@ build/build.py             builds index.html from v6_baseline + build/parts/*
 build/build_mobile.py      builds the two mobile files (run build.py first)
 build/serve.sh             serves concept/ on the wifi so a phone can open it
 build/check_deploy.py      read-only pre-flight on the app before a deploy
+build/check_routes.sh      asks a site for every route, prints the status code
 HOSTING.md                 how dumb.co is hosted, and what a deploy does ship
 SEO.md                     what has to happen for search, desktop + mobile
 build/parts/*.css|*.js     the actual source: window controller, shop, memories, press

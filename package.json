@@ -9,7 +9,11 @@
     "start": "serve -s dist",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
-    "prerender": "node scripts/prerender.mjs"
+    "prerender": "node scripts/prerender.mjs",
+    "serve:dist": "python3 -m http.server 8000 -d dist",
+    "check:routes": "bash redesign_2026/build/check_routes.sh",
+    "check:routes:local": "bash redesign_2026/build/check_routes.sh http://localhost:8000",
+    "check:deploy": "python3 redesign_2026/build/check_deploy.py"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

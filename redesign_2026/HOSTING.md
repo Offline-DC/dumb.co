@@ -50,10 +50,18 @@ never commit to it by hand, every deploy replaces it wholesale.
 
 Run this before you care about a deploy:
 
+All of these run from the **`dumb.co`** folder (not `dumb.co_code` — that's one
+level up, and the scripts live in the app):
+
 ```
 cd ~/Desktop/dumb.co_code/dumb.co
-npm run build                          # writes dist/ locally. pushes nothing.
-python3 redesign_2026/build/check_deploy.py
+
+npm run build              # writes dist/ locally. pushes nothing.
+npm run check:deploy       # the pre-flight below
+npm run check:routes       # asks the live site for every route
+
+npm run serve:dist         # tab 1: serves dist/ on :8000, hold this tab open
+npm run check:routes:local # tab 2: asks that server for every route
 ```
 
 It's read-only and it checks, in order: the workflow (which branch deploys,
