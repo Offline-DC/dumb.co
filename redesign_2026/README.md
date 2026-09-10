@@ -286,3 +286,30 @@ python3 build/refresh_faq_snapshot.py    # needs network; refuses to write a sho
 python3 build/build.py
 python3 build/build_mobile.py
 ```
+
+## Keyboard
+
+Both builds take the same keys.
+
+| key | what it does |
+| --- | --- |
+| ↑ ↓ (and ← →, desktop) | move through the tabs |
+| return / space | open the highlighted tab |
+| escape | minimise — desktop shrinks the window into the egg, mobile closes the sheet back to the phone |
+
+On the desktop the cursor is a black outline on the sidebar item; on mobile it's
+the highlighted row on the phone's screen. Clicking a tab moves the cursor
+there too, so the mouse and the keyboard don't disagree.
+
+Two deliberate exceptions. While the desktop window is minimised into the egg
+the arrows belong to snake, including its ↑↑↓↓←→ unlock, so they don't move the
+tabs. And on mobile the arrows only work with the sheet closed, since the menu
+is behind it — escape first, then arrows.
+
+Watch out for double handling if you touch this: `build/parts/21_snake.js`
+already listens for the arrows and calls `teamKey()`, and the mobile shell's
+`teamKey` wrapper sends them to the menu. Handling them again in
+`m02_mobile.js` moved the highlight twice per press. Likewise `27_keys.js`
+checks for the mobile shell **inside** its handler, not at load time — the
+mobile shell is built after that file runs, so a load-time check saw nothing
+and left both handlers live.

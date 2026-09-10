@@ -241,11 +241,26 @@
     if(_teamKeyMobile) _teamKeyMobile(dir);
   };
 
+  /* same keys as the desktop build: arrows move through the tabs, return
+     confirms, escape minimises whatever the sheet is showing */
   window.addEventListener('keydown', (e) => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA'
+             || t.tagName === 'IFRAME' || t.isContentEditable)) return;
+
+    if(e.key === 'Escape'){
+      if(mSheetOpen()){ e.preventDefault(); mobileClose(); }
+      return;
+    }
     if(mSheetOpen()) return;
-    const map = {ArrowUp:'up', ArrowDown:'down', ArrowRight:'right', ArrowLeft:'left'};
-    if(map[e.key]){ e.preventDefault(); teamKey(map[e.key]); }
-    if(e.key === 'Enter'){ e.preventDefault(); mSelect(); }
+
+    /* The arrows are deliberately NOT handled here. 21_snake.js already listens
+       for them and calls teamKey(), and the teamKey wrapper above sends them to
+       this menu — so handling them here as well moved the highlight twice per
+       press and appeared to skip a row. Return and space are ours; the arrows
+       arrive through teamKey. */
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); mSelect(); }
   });
 
   /* swipe the flipoff.exe carousel */

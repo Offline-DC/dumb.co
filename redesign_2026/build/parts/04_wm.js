@@ -115,9 +115,7 @@
      open just stayed in the window. A plain link can't be blocked, and it also
      gets cmd-click, middle-click and "copy link address" for free. */
 
-  window.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && winEl().classList.contains('sectionmode')) goHome();
-  });
+  /* Escape, the arrows and return are handled in build/parts/27_keys.js */
 
   window.addEventListener('resize', () => {
     if(winEl().classList.contains('sectionmode')) sizeForSection(SIZE[openKey]);
