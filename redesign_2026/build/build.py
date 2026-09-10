@@ -258,7 +258,7 @@ html = html.replace(old_pink,
 # ------------------------------------------------------------------- 3. CSS
 css = (part("01_wm.css") + part("02_shop.css") + part("03_memories.css")
        + part("09_press.css") + part("12_involved.css") + part("18_quiz.css")
-       + part("19_duck.css") + part("22_snake.css"))
+       + part("19_duck.css") + part("22_snake.css") + part("26_mobile_hint.css"))
 must("</style>" in html, "no </style>")
 html = html.replace("</style>", css + "</style>", 1)
 
@@ -401,7 +401,7 @@ html = html.replace("  const sections = {",
 html = swap_block(html, "  function openSection(key){", "  /* ---------------- live FAQ",
                   part("04_wm.js") + part("08_helpers.js") + part("20_duck.js")
                   + part("21_snake.js") + part("23_memories_sheet.js")
-                  + part("24_routes.js") + "\n")
+                  + part("24_routes.js") + part("25_mobile_hint.js") + "\n")
 
 # ---- 8b. the hero kicker said "$20/mo"; the deck says $20 is the phone and
 # plans start at $15.99/mo, so say that instead
@@ -434,6 +434,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "duckWalkPath", 'id="tcl-screen"', 'id="deskphone"', "phonePlayable",
                "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
                "MEMORIES_CSV_URL", "function memoriesFromRows", "loadMemories();",
+               "function mobileHint", "mobhint-go",
                "project<br/>xtra&#8209;ordinary", "group<br/>dumb down", "gi-foot",
                'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()"]:
     must(needle in html, f"post-build check failed, missing: {needle}")

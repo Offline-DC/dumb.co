@@ -16,6 +16,9 @@
 
   /* --- kill the desktop shell ------------------------------------------- */
   #topbar, #walkduck, #egg, #home{display:none !important;}
+  /* this IS the mobile build; the desktop file's "open the mobile build"
+     bar (25_mobile_hint.js) must never show here */
+  #mobhint{display:none !important;}
   #sidebar{display:none !important;}
   html, body{height:100%; overflow:hidden;}
   #app{display:block; height:100%;}
