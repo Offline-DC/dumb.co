@@ -13,8 +13,20 @@
      ========================================================================== */
 
   /* the illustration's geometry, measured off assets/flipphone.png:
-     560x921, drawn phone in the alpha bbox x 29.8-75.4%, y 2.6-94.9% */
-  const M_ART = { ratio: 921 / 560, drawnTop: 0.026, drawnH: 0.923, drawnW: 0.455 };
+     560x921, drawn phone in the alpha bbox x 29.8-75.4%, y 2.6-94.9%.
+     keysBottom is where the D-pad ends (pf-keys top 52.5% + height 13%). */
+  const M_ART = { ratio: 921 / 560, drawnTop: 0.026, drawnH: 0.923, drawnW: 0.455,
+                  keysBottom: 0.655 };
+
+  /* Two ways to size the phone, because "how big should it be" is a taste call:
+       'whole'  the entire phone fits the screen — nothing cropped, smaller menu
+       'dpad'   scaled until the D-pad reaches the bottom of the screen, so the
+                menu is much bigger and the number keys crop off below
+     concept/mobile-new.html is 'whole'; concept/mobile-new-big.html sets
+     window.DUMB_MOBILE_FIT = 'dpad' before this script runs (see
+     build/build_mobile.py). */
+  const M_FIT = (typeof window !== 'undefined' && window.DUMB_MOBILE_FIT === 'dpad')
+    ? 'dpad' : 'whole';
 
   let mSel = 0;
   let mRows = [];
@@ -86,6 +98,38 @@
     hint.textContent = 'mobile build — review at a phone width';
     document.body.appendChild(hint);
 
+    /* how to drive the phone. Shown once per tab, and the ? badge brings it
+       back — a phone-shaped menu is not a convention anyone has seen before. */
+    const help = document.createElement('div');
+    help.id = 'mhelp';
+    help.innerHTML =
+      '<div class="mh-card">' +
+        '<div class="mh-q">?</div>' +
+        '<p>to navigate, use the d&#8209;pad on screen or click on the tab you would like to see</p>' +
+        '<button type="button" id="mhelp-ok">got it</button>' +
+      '</div>';
+    document.body.appendChild(help);
+
+    const badge = document.createElement('button');
+    badge.id = 'mhelp-badge';
+    badge.type = 'button';
+    badge.setAttribute('aria-label', 'how to navigate');
+    badge.textContent = '?';
+    document.body.appendChild(badge);
+
+    const showHelp = () => help.classList.add('on');
+    const hideHelp = () => {
+      help.classList.remove('on');
+      try { sessionStorage.setItem('mhelp', 'seen'); } catch(e){}
+    };
+    badge.onclick = showHelp;
+    help.querySelector('#mhelp-ok').onclick = hideHelp;
+    help.onclick = (e) => { if(e.target === help) hideHelp(); };
+
+    let seen = false;
+    try { seen = sessionStorage.getItem('mhelp') === 'seen'; } catch(e){}
+    if(!seen) setTimeout(showHelp, 550);
+
     mFit();
     window.addEventListener('resize', mFit);
     window.addEventListener('orientationchange', () => setTimeout(mFit, 120));
@@ -100,8 +144,12 @@
     const availH = Math.max(240, window.innerHeight - band - 6);
     const availW = Math.max(200, window.innerWidth - 20);
 
-    // image width from the drawn height, capped so the drawn width still fits
-    let w = availH / (M_ART.drawnH * M_ART.ratio);
+    // image width from whatever has to fit vertically, capped so the drawn
+    // width still fits across
+    const vFraction = M_FIT === 'dpad'
+      ? (M_ART.keysBottom - M_ART.drawnTop)   // top of the phone -> end of the D-pad
+      : M_ART.drawnH;                          // the whole phone
+    let w = availH / (vFraction * M_ART.ratio);
     w = Math.min(w, availW / M_ART.drawnW);
 
     stage.style.setProperty('--mpw', Math.round(w) + 'px');
@@ -113,8 +161,10 @@
     const n = Math.max(1, mRows.length || 8);
     const screenH = 0.252 * M_ART.ratio * w;
     const rowH = Math.max(13, Math.floor((screenH - 14) / n));
+    const maxFont = M_FIT === 'dpad' ? 17 : 12.5;
     stage.style.setProperty('--mrowh', rowH + 'px');
-    stage.style.setProperty('--mrowf', Math.max(8.5, Math.min(12.5, Math.round(rowH * 0.48 * 10) / 10)) + 'px');
+    stage.style.setProperty('--mrowf', Math.max(8.5, Math.min(maxFont, Math.round(rowH * 0.46 * 10) / 10)) + 'px');
+    stage.style.setProperty('--mbarf', (M_FIT === 'dpad' ? 10 : 8) + 'px');
   }
 
   /* --- menu: highlight, move, choose ----------------------------------- */

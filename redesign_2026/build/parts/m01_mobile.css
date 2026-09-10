@@ -57,7 +57,7 @@
   #mmenu{position:absolute; inset:0; display:flex; flex-direction:column;}
   #mmenu .mm-bar{
     flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
-    font-family:var(--body); font-weight:700; font-size:8px; letter-spacing:.06em;
+    font-family:var(--body); font-weight:700; font-size:var(--mbarf, 8px); letter-spacing:.06em;
     color:rgba(0,0,0,.62); padding:2px 5px 1px;
     border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
   }
@@ -108,3 +108,41 @@
     padding:9px 15px; border-radius:100px; box-shadow:0 6px 18px rgba(0,0,0,.28);
   }
   @media (min-width:901px){ #mhint{display:block;} }
+
+  /* ==========================================================================
+     "how do I drive this" — first-run card, and the ? badge that reopens it
+     ========================================================================== */
+  #mhelp{
+    display:none; position:fixed; inset:0; z-index:600;
+    background:rgba(0,0,0,.55); align-items:center; justify-content:center; padding:26px;
+  }
+  #mhelp.on{display:flex;}
+  #mhelp .mh-card{
+    background:var(--white); border:3px solid var(--black); border-radius:18px;
+    padding:22px 22px 18px; max-width:300px; text-align:center;
+    box-shadow:0 14px 30px rgba(0,0,0,.32);
+  }
+  #mhelp .mh-q{
+    width:38px; height:38px; margin:0 auto 12px; border-radius:50%;
+    background:var(--yellow); border:2.5px solid var(--black);
+    font-family:var(--headline); font-size:23px; line-height:34px;
+  }
+  #mhelp p{
+    font-family:var(--body); font-size:14.5px; line-height:1.42; margin:0 0 16px;
+    color:var(--black);
+  }
+  #mhelp button{
+    font-family:var(--body); font-weight:700; font-size:13px;
+    background:var(--black); color:var(--yellow); border:0; border-radius:100px;
+    padding:11px 24px; cursor:pointer;
+  }
+  #mhelp-badge{
+    position:fixed; z-index:590; right:14px; top:14px;
+    width:32px; height:32px; border-radius:50%;
+    background:var(--white); border:2.5px solid var(--black); color:var(--black);
+    font-family:var(--headline); font-size:19px; line-height:1; cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.18);
+  }
+  /* the badge would sit on top of the .exe title bar, so hide it while a
+     section is open — the red button is the only control that matters there */
+  body.sheet-open #mhelp-badge{display:none;}

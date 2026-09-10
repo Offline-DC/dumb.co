@@ -13,6 +13,7 @@ concept/v6_baseline.html   the redesign as it stood before Kunal's notes (untouc
 concept/index.html         <- open this one. desktop, built output.
 concept/mobile-current.html  mobile A: the site that is live today + memories
 concept/mobile-new.html      mobile B: this redesign on a phone
+concept/mobile-new-big.html  mobile B, phone scaled up (alt, if B reads small)
 concept/quiz.html          the real subscription quiz, copied from reference/ by the build
 build/build.py             builds index.html from v6_baseline + build/parts/*
 build/build_mobile.py      builds the two mobile files (run build.py first)
@@ -80,6 +81,19 @@ carries ~27% transparent margin on each side, so `mFit()` in `m02_mobile.js`
 scales the image until the *drawn* phone fills the stage, then divides the drawn
 screen by the number of menu items so all eight always fit without scrolling
 (checked at 360×740, 390×844 and 430×932).
+
+**Two sizings, same page.** `mobile-new.html` fits the whole handset on screen.
+`mobile-new-big.html` is the same file with `window.DUMB_MOBILE_FIT = 'dpad'`
+set before the script runs: `mFit()` then scales the phone until the D-pad
+reaches the bottom of the screen rather than the whole phone, so the menu type
+goes from ~12px to 17px and the number keys crop off below. The D-pad is still
+fully on screen — it's the last thing that has to fit. Keep both for the review
+and drop whichever loses.
+
+**A first-run card explains the controls** ("to navigate, use the d-pad on
+screen or click on the tab you would like to see"), once per tab, with a `?`
+badge top-right to bring it back. A phone-shaped menu isn't a convention anyone
+has seen before.
 
 **The duck is deliberately not on mobile.** It walks between the logo and the
 egg, and neither exists on the phone layout.
@@ -224,6 +238,7 @@ script that assembles text files into one HTML file.
    | `19_duck.css`, `20_duck.js` | the walking duck |
    | `21_snake.js`, `22_snake.css` | Grant's snake, ported from `src/Phone/SnakeGame.tsx` |
    | `23_memories_sheet.js` | Memories from a published Google Sheet |
+   | `refresh_faq_snapshot.py` | re-downloads the FAQ sheet into `assets/faq_snapshot.csv` |
    | `24_routes.js` | the addressable sections (`#/shop` → `ROUTES`) |
    | `m01_mobile.css`, `m02_mobile.js` | the mobile shell for version B |
    | `m10_current.html` | version A, whole file |
@@ -249,3 +264,25 @@ The pieces that port more or less directly are `04_wm.js` → the existing
 `src/WindowModal/`, `05_data.js` → a data module or the sheet, `24_routes.js` →
 react-router routes, and `21_snake.js` back onto `src/Phone/SnakeGame.tsx`,
 which is where it came from.
+
+## FAQ.exe and the sheet
+
+FAQ.exe showed nothing but "questions are loading in from the sheet". The live
+site reads the FAQ from a published Google Sheet as CSV, and the prototype
+copied that — but Google's published-CSV URL redirects to a googleusercontent
+host that sends no CORS header on the final hop, and a page opened from a
+`file://` path has a null origin on top of that. So the fetch failed and there
+was nothing behind it.
+
+The build now embeds a snapshot of the sheet (`assets/faq_snapshot.csv`, 36
+questions) as `FAQ_SNAPSHOT`. FAQ.exe renders that instantly, with no network
+at all, then still tries the live sheet and replaces the list if that succeeds.
+Working from a file, on a plane, or in front of Kunal, the questions are there.
+
+When the sheet changes:
+
+```
+python3 build/refresh_faq_snapshot.py    # needs network; refuses to write a short sheet
+python3 build/build.py
+python3 build/build_mobile.py
+```

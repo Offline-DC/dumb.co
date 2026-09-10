@@ -394,8 +394,22 @@ routes_js = ("  /* section <-> url slug. The prototype uses #/<slug>; the React 
              "     the same slugs to real paths (dumb.co/shop, dumb.co/get_involved). */\n"
              "  const ROUTES = " + json.dumps({k: slug for k, _l, href, slug in NAV_ITEMS if not href},
                                               indent=4).replace("\n", "\n  ") + ";\n\n")
+# ---- the FAQ sheet, snapshotted at build time so FAQ.exe always has content
+# (Google's published-CSV endpoint has no CORS header on its final hop, and a
+# file:// page has a null origin, so the live fetch cannot be relied on)
+import csv as _csv, io as _io
+FAQ_SNAP = ROOT / "assets" / "faq_snapshot.csv"
+must(FAQ_SNAP.exists(), "assets/faq_snapshot.csv missing — run build/refresh_faq_snapshot.py")
+_faq_rows = list(_csv.reader(_io.StringIO(FAQ_SNAP.read_text(encoding="utf-8"))))
+_faq_qs = [r for r in _faq_rows[1:] if r and r[0].strip()]
+must(len(_faq_qs) >= 5, f"the FAQ snapshot only has {len(_faq_qs)} questions")
+faq_js = ("  /* the FAQ sheet as of the last build (build/refresh_faq_snapshot.py).\n"
+          "     FAQ.exe shows this instantly, then upgrades to the live sheet if the\n"
+          "     fetch succeeds. %d questions. */\n" % len(_faq_qs)
+          + "  const FAQ_SNAPSHOT = " + json.dumps(_faq_rows) + ";\n\n")
+
 html = html.replace("  const sections = {",
-                    asset_js + press_js + shop_js + mem_js + part("05_data.js") + routes_js
+                    asset_js + press_js + shop_js + mem_js + faq_js + part("05_data.js") + routes_js
                     + "\n  const sections = {", 1)
 
 html = swap_block(html, "  function openSection(key){", "  /* ---------------- live FAQ",
@@ -434,6 +448,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "duckWalkPath", 'id="tcl-screen"', 'id="deskphone"', "phonePlayable",
                "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
                "MEMORIES_CSV_URL", "function memoriesFromRows", "loadMemories();",
+               "const FAQ_SNAPSHOT", "function faqItemsFromRows",
                "function mobileHint", "mobhint-go",
                "project<br/>xtra&#8209;ordinary", "group<br/>dumb down", "gi-foot",
                'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()"]:
@@ -447,7 +462,8 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                "const QUIZ =", "function renderQuiz(", "quizAnswer(",
                "NYFW activation", "Hush Harbor", "dumb organizers",
                "a.navitem.external::after", 'class="count"',
-               "that's a sandbox thing", "compare all three plans", "not sure which plan fits"]:
+               "that's a sandbox thing", "compare all three plans", "not sure which plan fits",
+               ">compare plans<"]:
     must(banned not in html, f"v7 leftover still present: {banned}")
 must(html.count("data:image/webp;base64") >= len(press), "press thumbnails not all embedded")
 

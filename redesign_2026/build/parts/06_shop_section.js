@@ -33,7 +33,7 @@
             <li>optional features: fwd calls from ur smartphone, sync smartphone texts + contacts, whatsapp, spotify, apple music, podcasts.</li>
             <li>iphone + android compatible.</li>
           </ul>
-          <div class="spec-quiz">Find out what plan works for you &mdash; <a href="#" onclick="event.preventDefault(); openQuiz();"><b>take the plan quiz</b></a>, or <a href="#" onclick="event.preventDefault(); renderAllPlans();">compare plans</a>.</div>
+          <div class="spec-quiz"><a href="#" onclick="event.preventDefault(); openQuiz();"><b>take the plan quiz</b></a>, or <a href="#" onclick="event.preventDefault(); renderAllPlans();">Find out what plan works for you</a>.</div>
         </div>
 
         ${SHOW_PLAN_CARDS ? `

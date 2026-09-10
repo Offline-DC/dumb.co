@@ -63,12 +63,30 @@ def build_new():
 
     for needle in ["stage.id = 'mstage'", "function mobileClose", "#mmenu .mm-row",
                    "mobileClose()", "function mFit", "function mSelect", "const M_ART",
-                   "MEMORY_EVENTS", "SHOP_PHOTOS", 'src="quiz.html"', "ROUTES"]:
+                   "MEMORY_EVENTS", "SHOP_PHOTOS", 'src="quiz.html"', "ROUTES",
+                   "mhelp-badge", "const M_FIT", "d&#8209;pad on screen"]:
         must(needle in html, f"mobile-new check failed, missing: {needle}")
 
     out = ROOT / "concept" / "mobile-new.html"
     out.write_text(html, encoding="utf-8")
     print(f"  wrote concept/{out.name}  ({len(html):,} chars)")
+
+    # ---- the same page, phone scaled up until the D-pad reaches the bottom.
+    # An alternate for the review, in case the menu on mobile-new.html reads
+    # too small: the flag is set before the page script runs, and mFit() sizes
+    # the phone off the D-pad instead of the whole handset, cropping the number
+    # keys off below.
+    flag = ('<script>/* alt sizing: bigger phone, number keys crop off the bottom */\n'
+            "window.DUMB_MOBILE_FIT = 'dpad';</script>\n")
+    must("<body>" in html, "no <body> to set the sizing flag before")
+    big = html.replace("<body>", "<body>\n" + flag, 1)
+    big = big.replace("<title>dumb.co — 2026 redesign, mobile</title>",
+                      "<title>dumb.co — 2026 redesign, mobile (bigger phone)</title>", 1)
+    must("window.DUMB_MOBILE_FIT" in big, "sizing flag not injected")
+
+    out_big = ROOT / "concept" / "mobile-new-big.html"
+    out_big.write_text(big, encoding="utf-8")
+    print(f"  wrote concept/{out_big.name}  ({len(big):,} chars, D-pad-height sizing)")
 
 # ---------------------------------------------------------------------------
 # A — a mirror of the site that is live today, plus memories
