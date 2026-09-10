@@ -59,7 +59,7 @@ href: https://www.dazeddigital.com/life-culture/article/69882/1/month-offline-sm
 source: DAZED MAG
 
 id: DAZEDMOFEATURE2026
-image_name: dazed month offline mag.avif
+image_name: dazed month offline.avif
 title: young Americans get dumb
 href: https://www.dazeddigital.com/life-culture/article/69969/1/how-to-get-offline-spend-less-time-on-phone-brick-opal-print-media
 source: DAZED MAG
