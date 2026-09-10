@@ -90,12 +90,27 @@ function assertRewritten(route) {
 }
 assertRewritten(ROUTES.find((r) => r.path === "/press") ?? ROUTES[1]);
 
+/* Two files per route, on purpose:
+     dist/press.html          GitHub Pages serves /press from this, 200, no redirect
+     dist/press/index.html    serves /press/ , and is what every other static
+                              server (python -m http.server, nginx, Netlify)
+                              uses for /press via a 301 to the trailing slash
+   Both carry the same canonical (/press, no slash), so the two spellings can't
+   read as duplicate pages. */
 let written = 0;
 for (const route of ROUTES) {
   const html = page(route);
-  const out = route.path === "/" ? INDEX : join(DIST, route.path, "index.html");
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, html, "utf8");
+  if (route.path === "/") {
+    writeFileSync(INDEX, html, "utf8");
+  } else {
+    const slug = route.path.replace(/^\//, "");
+    const dirFile = join(DIST, slug, "index.html");
+    mkdirSync(dirname(dirFile), { recursive: true });
+    writeFileSync(dirFile, html, "utf8");
+    const flatFile = join(DIST, `${slug}.html`);
+    mkdirSync(dirname(flatFile), { recursive: true });
+    writeFileSync(flatFile, html, "utf8");
+  }
   written++;
 }
 
@@ -119,4 +134,5 @@ writeFileSync(
   "utf8"
 );
 
-console.log(`prerender: ${written} routes + sitemap.xml + robots.txt + 404.html`);
+console.log(`prerender: ${written} routes (as <slug>.html and <slug>/index.html)`
+            + ` + sitemap.xml + robots.txt + 404.html`);
