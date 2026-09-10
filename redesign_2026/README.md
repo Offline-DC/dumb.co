@@ -17,6 +17,7 @@ concept/mobile-new-big.html  mobile B, phone scaled up (alt, if B reads small)
 concept/quiz.html          the real subscription quiz, copied from reference/ by the build
 build/build.py             builds index.html from v6_baseline + build/parts/*
 build/build_mobile.py      builds the two mobile files (run build.py first)
+build/build_review.py      builds the one offline file to send the team
 build/serve.sh             serves concept/ on the wifi so a phone can open it
 build/check_deploy.py      read-only pre-flight on the app before a deploy
 build/check_routes.sh      asks a site for every route, prints the status code
@@ -140,6 +141,37 @@ the red button closes each one, and no console errors. Re-run that after any
 change to `m01_mobile.css` / `m02_mobile.js` and it should stay silent.
 
 Neither file writes anything into the app, and nothing in this folder does.
+
+## The file to send the team
+
+```
+python3 build/build.py
+python3 build/build_mobile.py
+python3 build/build_review.py     ->  concept/dumb.co-review.html   (6.3 MB)
+```
+
+One file, desktop and both phone layouts, and it needs no server and no
+internet — double-click it out of a Downloads folder on a plane and everything
+works. A switcher at the bottom flips between **desktop / phone / phone,
+bigger**; it reloads the same file with `?view=phone`, which is what lets it
+work from a `file://` path.
+
+What had to be pulled in to make it truly offline:
+
+| | |
+| --- | --- |
+| fonts | the normal build `@import`s Rubik from Google Fonts; here all four weights are inlined as woff2 (Cheltenham already was) |
+| quiz | quiz.exe frames `concept/quiz.html`; here the whole quiz rides along as a string and is written into the iframe's `srcdoc` |
+| FAQ | already from the build-time snapshot, so 36 questions with no network |
+| photos | already inlined |
+
+The only thing that still wants the internet is the two Vimeo tiles, and offline
+they say "video needs internet" instead of sitting blank.
+
+Verified with every non-file request blocked at the browser: Rubik applied, all
+seven sections open, the quiz renders inside its frame, 36 FAQ questions, and
+in both phone views the menu, the full-screen sheet, the red close button and
+the arrow keys all work with no console errors.
 
 ## Addresses you can copy and paste
 

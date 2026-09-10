@@ -212,6 +212,7 @@
     document.querySelectorAll('.navitem').forEach(el => el.classList.remove('active'));
     if(typeof setExeTitle === 'function') setExeTitle('home');
     if(typeof setRoute === 'function') setRoute(null);
+    document.body.classList.remove('sheet-open');
     mPaint();
   }
 
@@ -219,6 +220,10 @@
   const _openSectionMobile = openSection;
   openSection = function(key){
     document.getElementById('winmodal').classList.remove('collapsed');
+    /* body.sheet-open is what hides the ? badge and dims the review switcher.
+       Without it the badge sat on top of the sheet's red x and swallowed the
+       tap that closes the window. */
+    document.body.classList.add('sheet-open');
     _openSectionMobile(key);
     document.getElementById('wm-section').scrollTop = 0;
     const i = mRows.findIndex(r => r.key === key);

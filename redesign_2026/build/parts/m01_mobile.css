@@ -143,6 +143,9 @@
     font-family:var(--headline); font-size:19px; line-height:1; cursor:pointer;
     box-shadow:0 2px 6px rgba(0,0,0,.18);
   }
-  /* the badge would sit on top of the .exe title bar, so hide it while a
-     section is open — the red button is the only control that matters there */
-  body.sheet-open #mhelp-badge{display:none;}
+  /* The badge would sit on top of the .exe title bar and eat the tap meant for
+     the red close button, so it goes away while a section is open — there, the
+     red button is the only control that matters. Keyed off both the body class
+     and the window's own state, so it cannot come back through one of them. */
+  body.sheet-open #mhelp-badge,
+  #winmodal:not(.collapsed) ~ #mhelp-badge{display:none !important;}
