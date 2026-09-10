@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "prerender": "node scripts/prerender.mjs",
-    "serve:dist": "python3 -m http.server 8000 -d dist",
+    "serve:dist": "bash redesign_2026/build/serve_dist.sh",
     "check:routes": "bash redesign_2026/build/check_routes.sh",
     "check:routes:local": "bash redesign_2026/build/check_routes.sh http://localhost:8000",
     "check:deploy": "python3 redesign_2026/build/check_deploy.py"
