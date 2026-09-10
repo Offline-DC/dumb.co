@@ -37,25 +37,35 @@ const shell = readFileSync(INDEX, "utf8");
 const esc = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-/** replace the content of a meta tag, whether it is on one line or several */
+/**
+ * Replace the content of a meta tag, whether it is on one line or several.
+ *
+ * Every replacement goes through a FUNCTION, never a template string. In a
+ * string replacement JavaScript treats $1, $2, $& as capture references — and
+ * this copy contains "$20" and "$15.99/mo", so a string replacement expanded
+ * $2 into the captured opening tag, broke out of the <meta> element and spilled
+ * `" />` and prose into the body. A replacer function passes the text through
+ * verbatim. Do not turn these back into template strings.
+ */
 function setMeta(html, attr, name, content) {
+  const value = esc(content);
   const re = new RegExp(
     `(<meta\\s+[^>]*${attr}=(?:"|')${name}(?:"|')[^>]*content=(?:"|'))[\\s\\S]*?((?:"|')[^>]*>)`,
     "i"
   );
-  if (re.test(html)) return html.replace(re, `$1${esc(content)}$2`);
+  if (re.test(html)) return html.replace(re, (_m, open, close) => open + value + close);
   const re2 = new RegExp(
     `(<meta\\s+[^>]*content=(?:"|'))[\\s\\S]*?((?:"|')[^>]*${attr}=(?:"|')${name}(?:"|')[^>]*>)`,
     "i"
   );
-  if (re2.test(html)) return html.replace(re2, `$1${esc(content)}$2`);
-  return html.replace("</head>", `    <meta ${attr}="${name}" content="${esc(content)}" />\n  </head>`);
+  if (re2.test(html)) return html.replace(re2, (_m, open, close) => open + value + close);
+  return html.replace("</head>", () => `    <meta ${attr}="${name}" content="${value}" />\n  </head>`);
 }
 
 function page({ path, title, description }) {
   const url = SITE + (path === "/" ? "/" : path);
   let h = shell;
-  h = h.replace(/<title>[\s\S]*?<\/title>/i, `<title>${esc(title)}</title>`);
+  h = h.replace(/<title>[\s\S]*?<\/title>/i, () => `<title>${esc(title)}</title>`);
   h = setMeta(h, "name", "description", description);
   h = setMeta(h, "property", "og:title", title);
   h = setMeta(h, "property", "og:description", description);
@@ -65,30 +75,58 @@ function page({ path, title, description }) {
   h = setMeta(h, "name", "twitter:url", url);
   // one canonical, replacing any the shell already had
   h = h.replace(/\s*<link rel="canonical"[^>]*>/gi, "");
-  h = h.replace("</head>", `    <link rel="canonical" href="${url}" />\n  </head>`);
+  h = h.replace("</head>", () => `    <link rel="canonical" href="${url}" />\n  </head>`);
   return h;
 }
 
-/* If a future Vite version reshapes the head, these regexes could quietly
-   match nothing and we would ship thirteen copies of the homepage's metadata.
-   Check the first route actually changed, and stop the build if it didn't. */
-function assertRewritten(route) {
+/**
+ * Check EVERY route, not a sample. The first version of this checked only
+ * /press, whose copy happens to contain no "$" — so the $-expansion bug above
+ * sailed through on the two routes that mention $20 and $15.99/mo, and shipped
+ * a page with meta content spilled into the body.
+ *
+ * Two kinds of check: the metadata went in verbatim, and the document still has
+ * the shape of a document.
+ */
+function problemsWith(route) {
   const html = page(route);
+  const url = SITE + (route.path === "/" ? "/" : route.path);
   const problems = [];
-  if (!html.includes(`<title>${esc(route.title)}</title>`)) problems.push("<title>");
-  if (!html.includes(esc(route.description))) problems.push("meta description");
-  if (!html.includes(`rel="canonical" href="${SITE}${route.path}"`)) problems.push("canonical");
-  if (!html.includes(`content="${SITE}${route.path}"`)) problems.push("og:url");
-  if (problems.length) {
-    console.error(
-      `prerender: could not rewrite ${problems.join(", ")} in dist/index.html.\n` +
-      "  The head markup changed shape — fix the patterns in scripts/prerender.mjs\n" +
-      "  rather than shipping every route with the homepage's metadata."
-    );
-    process.exit(1);
-  }
+
+  if (!html.includes(`<title>${esc(route.title)}</title>`)) problems.push("<title> not rewritten");
+  if (!html.includes(esc(route.description))) problems.push("description not written verbatim");
+  if (!html.includes(`rel="canonical" href="${url}"`)) problems.push("canonical missing");
+  if (!html.includes(`content="${url}"`)) problems.push("og:url missing");
+
+  // shape: exactly one of each, and the head still closes once
+  const count = (re) => (html.match(re) || []).length;
+  if (count(/<title>/gi) !== 1) problems.push(`${count(/<title>/gi)} <title> tags`);
+  if (count(/rel="canonical"/gi) !== 1) problems.push(`${count(/rel="canonical"/gi)} canonical tags`);
+  if (count(/<\/head>/gi) !== 1) problems.push(`${count(/<\/head>/gi)} </head> tags`);
+  if (count(/<meta\s/gi) < 10) problems.push(`only ${count(/<meta\s/gi)} meta tags left`);
+
+  // the tell-tale of a broken replacement: tag syntax loose in the body
+  const body = html.slice(html.indexOf("</head>"));
+  if (/"\s*\/>/.test(body)) problems.push('markup spilled into the body (found `" />` after </head>)');
+  if (/content=/i.test(body)) problems.push("a meta attribute ended up in the body");
+
+  return problems;
 }
-assertRewritten(ROUTES.find((r) => r.path === "/press") ?? ROUTES[1]);
+
+const broken = ROUTES.map((r) => [r.path, problemsWith(r)]).filter(([, p]) => p.length);
+if (broken.length) {
+  console.error("prerender: refusing to write — the rewrite is not clean:\n");
+  for (const [path, problems] of broken) {
+    console.error(`  ${path}`);
+    for (const p of problems) console.error(`      ${p}`);
+  }
+  console.error(
+    "\n  Fix scripts/prerender.mjs rather than shipping this. If a replacement\n" +
+    "  string was used instead of a replacer function, copy containing $ will\n" +
+    "  be read as a capture reference ($1, $2) and corrupt the document.\n"
+  );
+  process.exit(1);
+}
 
 /* Two files per route, on purpose:
      dist/press.html          GitHub Pages serves /press from this, 200, no redirect
