@@ -1,0 +1,14 @@
+# concept/index.html, mobile-new.html, mobile-current.html and quiz.html are
+# BUILT by build/build.py + build/build_mobile.py. Each one is ~6MB of inlined
+# base64, so committing them would add a fresh 6MB blob to the repo on every
+# rebuild. Two commands regenerate them in a couple of seconds:
+#
+#   python3 build/build.py
+#   python3 build/build_mobile.py
+#
+# concept/v6_baseline.html IS committed — it is the source the build starts
+# from, not an output.
+concept/index.html
+concept/mobile-new.html
+concept/mobile-current.html
+concept/quiz.html

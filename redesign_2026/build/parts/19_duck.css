@@ -1,0 +1,24 @@
+
+  /* ==========================================================================
+     the walking duck
+     Only appears once the .exe window has been shrunk into the egg — then it
+     migrates back and forth between the dumb.co logo and the egg, and leaves
+     again the moment the window is reopened.
+     ========================================================================== */
+  #walkduck{
+    /* under the window (z-45) and the egg: the duck walks on the desktop,
+       never across an open .exe */
+    position:absolute; top:34px; left:0; width:62px; z-index:19;
+    display:none; pointer-events:none; will-change:transform;
+  }
+  #walkduck.on{display:block;}
+  #walkduck img{
+    width:100%; display:block;
+    animation:duckBob .34s ease-in-out infinite alternate;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.16));
+  }
+  @keyframes duckBob{
+    from{ transform:translateY(0) rotate(-1.5deg); }
+    to  { transform:translateY(-4px) rotate(1.5deg); }
+  }
+  @media (max-width:1000px){ #walkduck{display:none !important;} }

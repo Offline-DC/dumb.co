@@ -1,0 +1,50 @@
+
+  /* ==========================================================================
+     v8 — ONE window, reused
+     The mock-up deck shows a single pop-up in every slide: flipoff.exe on the
+     home state, then about.exe / Shop.exe / Press.exe / Memories.exe / FAQ.exe /
+     Contact.exe in the same frame. So there is no window manager and no
+     stacking — nav items swap this window's title and its contents.
+     #winmodal (already draggable, resizable, and collapsible to the egg in v6)
+     IS that window.
+     ========================================================================== */
+
+  /* the carousel view (home) and the section view are the two states of one body */
+  #wm-carousel{position:absolute; inset:0;}
+  #wm-section{position:absolute; inset:0; overflow:auto; background:var(--white); display:none;
+    -webkit-overflow-scrolling:touch;}
+  #winmodal.sectionmode #wm-carousel{display:none;}
+  #winmodal.sectionmode #wm-section{display:block;}
+  #winmodal.sectionmode .wm-body{background:var(--white);}
+
+  .wm-pad{padding:26px 30px 34px;}
+  /* bleed sections draw their own edge-to-edge blocks and get the full body
+     height, so a child can be told to fill what's left (contact.exe does) */
+  .wm-pad.bleed{padding:0; min-height:100%; display:flex; flex-direction:column;}
+  .wm-pad.bleed > *{flex:0 0 auto;}
+  /* about.exe is a single edge-to-edge panel: let it grow to fill the body so
+     no white strip shows under it (min-height:100% alone can't resolve here) */
+  .wm-pad.bleed > #about-pink{flex:1 1 auto;}
+  #wm-section h2{font-family:var(--headline); font-size:38px; margin:0 0 6px; transform:rotate(-1.2deg); display:inline-block;}
+  #wm-section .sub{font-family:var(--body); color:#555; max-width:620px; margin-bottom:22px; font-size:14px; line-height:1.6;}
+
+  /* a back affordance for the in-window detail views (a memory, the quiz) —
+     these used to be extra pop-ups */
+  .wm-back{
+    display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+    font-family:var(--body); font-weight:700; font-size:12px;
+    background:var(--white); border:2px solid var(--black); border-radius:100px;
+    padding:8px 16px; margin-bottom:16px;
+  }
+  .wm-back:hover{background:var(--yellow);}
+
+
+  /* the title bar is now the section label, so give it room */
+  #winmodal .wm-bar span:first-child{
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px;
+  }
+
+  /* the nav items are real links now (every section has a copyable address),
+     so strip the browser's link styling — they are still the same buttons */
+  .navitem, .navitem:visited{text-decoration:none; color:var(--black);}
+  .navitem:hover{text-decoration:none;}

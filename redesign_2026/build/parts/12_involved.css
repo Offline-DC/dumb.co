@@ -1,0 +1,74 @@
+
+  /* ==========================================================================
+     Get Involved — one yellow page with confetti, holding the two panels the
+     deck drew as two separate windows (slide 6), side by side. No photos.
+     ========================================================================== */
+  .wm-pad.bleed > .gi-page{flex:1 1 auto; min-height:0;}
+  .gi-page{
+    position:relative; overflow:hidden; background:var(--yellow);
+    padding:30px 34px 36px; display:flex; flex-direction:column;
+  }
+  .gi-page .dots{position:absolute; inset:0; pointer-events:none;}
+  .gi-page .dots i{position:absolute; border-radius:50%; display:block;}
+  .gi-in{position:relative; display:flex; flex-direction:column; flex:1 1 auto; min-height:0;}
+  .gi-in > h2{margin-bottom:20px; flex:0 0 auto;}
+
+  .gi-two{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    flex:1 1 auto; align-content:center; margin:26px 0;
+  }
+  .gi-card{
+    position:relative; overflow:hidden;
+    background:var(--yellow); border:2.5px solid var(--black); border-radius:4px;
+    box-shadow:5px 5px 0 rgba(0,0,0,.9);
+    padding:24px 26px 26px; display:flex; flex-direction:column; min-height:230px;
+  }
+  .gi-card .dots{position:absolute; inset:0; pointer-events:none;}
+  .gi-card .dots i{position:absolute; border-radius:50%; display:block;}
+  .gi-card > *:not(.dots){position:relative;}
+  .gi-card .gi-kicker{
+    font-family:var(--body); font-weight:700; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.55; margin-bottom:8px;
+  }
+  .gi-card h3{
+    font-family:var(--headline); font-size:34px; line-height:1.02; margin:0 0 12px;
+  }
+  .gi-card p{
+    font-family:var(--body); font-weight:500; font-size:14px; line-height:1.5; margin:0;
+  }
+  .gi-card p b{background:var(--pink); padding:0 4px; border-radius:3px; font-weight:700;}
+
+  /* one email, at the bottom */
+  .gi-foot{
+    flex:0 0 auto; border-top:2px solid var(--black); padding-top:18px;
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    font-family:var(--body); font-size:15px;
+  }
+  .gi-foot a{
+    font-family:var(--headline); font-size:26px; color:var(--black); text-decoration:none;
+    border-bottom:3px solid rgba(0,0,0,.4);
+  }
+  .gi-foot a:hover{border-color:var(--black);}
+
+  /* the DIAL-UP, on the yellow */
+  .gi-page #newsletter{
+    flex:0 0 auto; border-top:0; border-bottom:2px solid var(--black);
+    padding:0 0 20px; margin:0;
+  }
+  .gi-page #newsletter input{background:var(--white); border-color:var(--black); border-width:2px;}
+  .gi-page #newsletter button{border-width:2px;}
+
+  @media (max-width:760px){
+    .gi-two{grid-template-columns:1fr;}
+    .gi-page .gi-list{flex-direction:column; gap:6px;}
+  }
+
+  /* ==========================================================================
+     Month Offline is an outbound link, not an .exe
+     ========================================================================== */
+  a.navitem.external{
+    text-decoration:none; color:var(--black); display:block;
+  }
+  a.navitem.external:hover{
+    background:var(--black); color:var(--yellow); transform:rotate(-2deg) translateX(-3px);
+  }

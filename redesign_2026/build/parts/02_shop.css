@@ -1,0 +1,147 @@
+
+  /* ==========================================================================
+     v8 — Shop.exe, following the mock-up slides
+     Slide 3 = pink display-type hero over polka dots + a white spec panel.
+     Slide 4 = the same hero, a "click here 2 buy!!!" strip, then a photo
+     carousel of users and a carousel of reviews.
+     ========================================================================== */
+  .sh-hero{
+    position:relative; background:var(--pink); overflow:hidden;
+    padding:26px 26px 22px;
+  }
+  .sh-hero .dots{position:absolute; inset:0; pointer-events:none;}
+  .sh-hero .dots i{position:absolute; border-radius:50%; display:block;}
+  .sh-hero .hero-in{position:relative; display:grid; grid-template-columns:1fr .82fr; gap:12px; align-items:center;}
+  .sh-hero h3{
+    font-family:var(--headline); font-weight:700; font-size:52px; line-height:.94; margin:0 0 10px;
+    letter-spacing:-.01em; text-transform:uppercase;
+  }
+  .sh-hero .hero-lines{font-family:var(--body); font-weight:800; font-size:26px; line-height:1.06; margin:0; letter-spacing:-.01em;}
+  .sh-hero .hero-lines span{display:block;}
+  .sh-hero .hero-sync{
+    font-family:var(--body); font-weight:800; font-size:19px; margin-top:14px; line-height:1.05; letter-spacing:-.01em;
+  }
+  .sh-hero .hero-phone{position:relative;}
+  .sh-hero .hero-phone img{width:100%; display:block; transform:rotate(-7deg);}
+
+  .sh-hero .sh-cta{
+    display:inline-flex; align-items:center; gap:9px; margin-top:22px; cursor:pointer;
+    background:var(--black); color:var(--yellow); border:2px solid var(--black);
+    font-family:var(--body); font-weight:700; font-size:14.5px;
+    padding:14px 26px; border-radius:100px;
+  }
+  .sh-hero .sh-cta:hover{background:var(--white); color:var(--black);}
+
+  /* click here 2 buy!!! */
+  .sh-buystrip{
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    background:linear-gradient(90deg, var(--orange), var(--yellow));
+    border-top:2px solid var(--black); border-bottom:2px solid var(--black);
+    padding:12px 26px;
+  }
+  .sh-buystrip .bs-txt{font-family:var(--body); font-weight:800; font-size:19px; line-height:1; letter-spacing:-.01em;}
+  .sh-buystrip .bs-cta{
+    display:inline-flex; align-items:center; gap:8px; background:var(--black); color:var(--yellow);
+    font-family:var(--body); font-weight:700; font-size:13.5px; padding:12px 22px; border-radius:100px;
+    border:2px solid var(--black); text-decoration:none; white-space:nowrap;
+  }
+  .sh-buystrip .bs-cta:hover{background:var(--white); color:var(--black);}
+
+  /* the white spec panel from slide 3 */
+  .sh-spec{
+    border:0; border-radius:0; background:var(--white);
+    margin:4px 0 30px; overflow:hidden;
+  }
+  .sh-spec .spec-head{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:0 0 10px; border-bottom:0; background:var(--white);
+  }
+  .sh-spec .spec-name{font-family:var(--headline); font-size:30px;}
+  .sh-spec .spec-price{font-family:var(--headline); font-size:30px;}
+  .sh-spec ul{list-style:none; margin:0; padding:6px 0 4px; display:grid; gap:12px;}
+  .sh-spec li{font-family:var(--body); font-size:clamp(14px, 1.15vw, 17px); line-height:1.55; color:#222; display:flex; gap:10px;}
+  .sh-spec li::before{content:"•"; flex:0 0 auto; opacity:.6;}
+  .sh-spec li b{background:var(--yellow); padding:0 4px; border-radius:3px;}
+  .sh-spec .spec-quiz{
+    border-top:1px solid #e6e6e6; padding:14px 0 0; margin-top:6px;
+    font-family:var(--body); font-size:14.5px;
+  }
+
+  /* section furniture */
+  .shop-sec{margin-bottom:32px;}
+  .shop-sec > h3{font-family:var(--headline); font-size:26px; margin:0 0 3px; transform:rotate(-.8deg); display:inline-block;}
+  .shop-sec > .shs-sub{font-family:var(--body); font-size:12.5px; color:#666; margin:0 0 14px;}
+  .rail-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:12px;}
+  .rail-nav{display:flex; gap:7px; flex:0 0 auto;}
+  .rail-nav button{
+    width:32px; height:32px; border-radius:50%; border:2px solid var(--black); background:var(--white);
+    font-size:15px; font-weight:700; cursor:pointer; line-height:1;
+  }
+  .rail-nav button:hover{background:var(--yellow);}
+  .rail{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px;}
+  .rail::-webkit-scrollbar{height:8px;}
+  .rail::-webkit-scrollbar-thumb{background:var(--black); border-radius:4px;}
+  .rail > *{scroll-snap-align:start; flex:0 0 auto;}
+
+  /* carousel of reviews */
+  .review-card{
+    width:290px; border:2px solid var(--black); border-radius:12px; padding:15px 16px 17px;
+    background:var(--white); display:flex; flex-direction:column; gap:9px;
+  }
+  .review-card .rc-top{display:flex; align-items:center; gap:10px;}
+  .review-card .rc-av{
+    width:34px; height:34px; border-radius:50%; background:var(--pink); border:2px solid var(--black);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+    font-family:var(--headline); font-size:14px;
+  }
+  .review-card:nth-child(2n) .rc-av{background:var(--blue);}
+  .review-card:nth-child(3n) .rc-av{background:var(--yellow);}
+  .review-card .rc-name{font-family:var(--body); font-weight:700; font-size:12.5px;}
+  .review-card .rc-meta{font-family:var(--body); font-size:10px; text-transform:uppercase; letter-spacing:.06em; opacity:.5;}
+  .review-card .rc-body{font-family:var(--body); font-size:12.5px; line-height:1.55; color:#3a3a3a;}
+  .review-card .rc-body::before{content:"\201C";}
+  .review-card .rc-body::after{content:"\201D";}
+  .stars{color:var(--orange); letter-spacing:2px; font-size:13px; line-height:1;}
+
+  /* product gallery — studio shots, alternating background colours */
+  .sh-hero .hero-phone img{
+    width:100%; aspect-ratio:3/4; object-fit:cover; display:block;
+    border:2.5px solid var(--black); border-radius:6px; transform:rotate(-1.5deg);
+    box-shadow:5px 5px 0 rgba(0,0,0,.85);
+  }
+  .sh-gallery{
+    display:flex; gap:10px; overflow-x:auto; padding:14px 26px 16px;
+    background:var(--white); border-bottom:2px solid var(--black);
+  }
+  .sh-gallery::-webkit-scrollbar{height:7px;}
+  .sh-gallery::-webkit-scrollbar-thumb{background:var(--black); border-radius:4px;}
+  .sh-gallery .sh-thumb{
+    width:84px; height:84px; flex:0 0 auto; object-fit:cover; display:block; cursor:pointer;
+    border:2px solid var(--black); border-radius:6px; opacity:.55;
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .sh-gallery .sh-thumb:hover{opacity:1; transform:translateY(-2px);}
+  .sh-gallery .sh-thumb.on{opacity:1; box-shadow:3px 3px 0 rgba(0,0,0,.85);}
+
+  /* plan cards — built, held per Kunal's note 4 */
+  .plan-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .plan-cards img{width:100%; display:block; border:2px solid var(--black); border-radius:12px;}
+
+  /* quiz teaser — built, held per Kunal's note 5 */
+  .quiz-teaser{
+    background:var(--blue); border:2px solid var(--black); border-radius:14px;
+    padding:20px 22px; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; transform:rotate(-.5deg);
+  }
+  .quiz-teaser h3{font-family:var(--headline); font-size:24px; margin:0 0 3px;}
+  .quiz-teaser p{font-family:var(--body); font-size:12.5px; margin:0; max-width:400px; line-height:1.5;}
+  .quiz-teaser .qz-btn{
+    font-family:var(--body); font-weight:700; font-size:12.5px; background:var(--black); color:var(--yellow);
+    border:2px solid var(--black); border-radius:100px; padding:11px 20px; cursor:pointer; white-space:nowrap;
+  }
+  .quiz-teaser .qz-btn:hover{background:var(--white); color:var(--black);}
+
+  @media (max-width:720px){
+    .sh-hero .hero-in{grid-template-columns:1fr;}
+    .plan-cards{grid-template-columns:1fr;}
+  }

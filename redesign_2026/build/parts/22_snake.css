@@ -1,0 +1,67 @@
+
+  /* ==========================================================================
+     snake, inside the flip-phone screen
+     ========================================================================== */
+  .phone-frame .pf-keys{
+    position:absolute; left:36%; top:52.5%; width:32%; height:13%; z-index:3;
+    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr);
+  }
+  .phone-frame .pf-keys button{
+    -webkit-appearance:none; appearance:none; background:none; border:0; padding:0;
+    cursor:pointer; border-radius:50%;
+    /* no focus ring: these are invisible hotspots drawn over the illustration,
+       and a visible ring read as a stray red circle on the artwork. The arrow
+       keys are the keyboard path in, so nothing is lost. */
+    outline:none;
+  }
+  .phone-frame .pf-keys .k-up{grid-area:1/2;}
+  .phone-frame .pf-keys .k-left{grid-area:2/1;}
+  .phone-frame .pf-keys .k-right{grid-area:2/3;}
+  .phone-frame .pf-keys .k-down{grid-area:3/2;}
+
+  .phone-frame .pf-screen.playing img,
+  .phone-frame .pf-screen.playing .pf-hint{opacity:0 !important; display:none;}
+
+  #snake-root{position:absolute; inset:0; display:flex; flex-direction:column;}
+  #snake-root .sn-hud{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:4px;
+    font-family:var(--body); font-weight:700; font-size:9px; color:#1a1a1a;
+    border-bottom:1px solid rgba(0,0,0,.28); padding:1px 0;
+  }
+  #snake-root .sn-pill{
+    width:5px; height:8px; border:1.2px solid #1a1a1a; border-radius:1.5px; display:block;
+  }
+  #snake-root .sn-grid{flex:1 1 auto; display:grid; overflow:hidden;}
+  #snake-root .sn-grid i{display:block;}
+  #snake-root .sn-grid i.body{background:#3f3f34; border-radius:1px;}
+  #snake-root .sn-grid i.head{background:#141410; border-radius:2px;}
+  #snake-root .sn-grid i.food{
+    background:#1a1a14; border-radius:1px;
+    transform:scale(.62); box-shadow:0 0 0 1px rgba(0,0,0,.25);
+  }
+  #snake-root .sn-over{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; text-align:center;
+    font-family:var(--body); color:#151510;
+  }
+  #snake-root .sn-over span{font-weight:800; font-size:13px; line-height:1.05; letter-spacing:.02em;}
+  #snake-root .sn-over b{font-size:14px;}
+  #snake-root .sn-over i{font-style:normal; font-size:8px; opacity:.65;}
+
+  /* ==========================================================================
+     the flip-phone on the desktop, behind the .exe window
+     Minimise the window into the egg and the phone is what's left — and it's
+     playable at that point (Grant's ↑↑↓↓←→).
+     ========================================================================== */
+  #deskphone{
+    position:absolute; top:0; bottom:0; left:47%; right:2%; z-index:20;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  /* the illustration carries ~27% transparent margin on each side, so the
+     drawn phone is about 45% of this width — 420px reads as a phone you
+     could pick up next to the .exe window, where 300px read as a thumbnail. */
+  #deskphone .phone-frame{flex:0 0 auto; width:420px; pointer-events:auto;}
+  #deskphone .pf-art{filter:drop-shadow(0 8px 14px rgba(0,0,0,.14));}
+  #deskphone .pf-keys button{cursor:pointer;}
+  @media (max-width:1000px){ #deskphone{display:none;} }

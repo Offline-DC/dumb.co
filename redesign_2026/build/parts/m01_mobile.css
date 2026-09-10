@@ -1,0 +1,107 @@
+
+  /* ==========================================================================
+     MOBILE BUILD (concept/mobile-new.html)
+     Same data, same section bodies, same .exe window as the desktop concept —
+     re-shelled for a phone.
+
+     The home state IS the phone: the flip-phone illustration is scaled to the
+     viewport and the side-menu lives on its screen, navigated with the drawn
+     D-pad (or by tapping a row). Choosing an item opens the .exe window as a
+     full-screen sheet, closed with the red button in its title bar.
+
+     The desktop chrome — sidebar, split hero, draggable window, egg, walking
+     duck — is not used here. The duck is deliberately dropped: it walks
+     between the logo and the egg, and neither exists on a phone.
+     ========================================================================== */
+
+  /* --- kill the desktop shell ------------------------------------------- */
+  #topbar, #walkduck, #egg, #home{display:none !important;}
+  #sidebar{display:none !important;}
+  html, body{height:100%; overflow:hidden;}
+  #app{display:block; height:100%;}
+
+  /* --- the stage: logo on top, phone filling the rest ------------------- */
+  #mstage{
+    position:fixed; inset:0; overflow:hidden;
+    display:block; background:var(--yellow);
+  }
+  #mstage #logo{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    width:132px; z-index:5; cursor:pointer;
+  }
+  #mstage #logo img{width:100%; display:block;}
+
+  /* The illustration carries ~27% transparent margin each side and ~2.6% on
+     top, so it is scaled by the drawn phone rather than the file: --mpw is the
+     image width the shim computes, --mtop pulls the transparent strip back up. */
+  #mstage #deskphone{
+    display:block !important; position:absolute !important;
+    /* inset first: it resets the desktop rule's left/right, and would wipe the
+       left/top below if it came after them */
+    inset:auto;
+    left:50%; top:var(--mtop, 56px);
+    transform:translateX(-50%); z-index:2; pointer-events:none;
+  }
+  #mstage #deskphone .phone-frame{
+    width:var(--mpw, 480px); flex:0 0 auto; pointer-events:auto;
+  }
+  #mstage #deskphone .pf-art{filter:drop-shadow(0 6px 12px rgba(0,0,0,.13));}
+  #mstage #deskphone .pf-keys button{cursor:pointer;}
+  /* the drawn OK button in the middle of the D-pad */
+  #mstage .pf-keys .k-ok{grid-area:2/2;}
+
+  /* --- the menu, on the phone's screen ---------------------------------- */
+  #mmenu{position:absolute; inset:0; display:flex; flex-direction:column;}
+  #mmenu .mm-bar{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--body); font-weight:700; font-size:8px; letter-spacing:.06em;
+    color:rgba(0,0,0,.62); padding:2px 5px 1px;
+    border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
+  }
+  #mmenu .mm-list{flex:1 1 auto; min-height:0; overflow:auto; -webkit-overflow-scrolling:touch;}
+  #mmenu .mm-row{
+    display:flex; align-items:center; gap:3px;
+    font-family:var(--body); font-weight:700; line-height:1;
+    color:var(--black); text-decoration:none; white-space:nowrap;
+    /* mFit() divides the drawn screen by the number of items, so the whole
+       menu fits without scrolling on a short phone too */
+    height:var(--mrowh, 24px); padding:0 5px;
+    font-size:var(--mrowf, 11.5px);
+  }
+  #mmenu .mm-row.on{background:var(--black); color:var(--yellow);}
+  #mmenu .mm-row .mm-ext{font-size:9px; opacity:.75;}
+  #mmenu .mm-row.on .mm-ext{opacity:1;}
+
+  /* --- the .exe window becomes a full-screen sheet ---------------------- */
+  /* !important beats the inline left/top/width/height the desktop controller
+     writes, so nothing can drag or resize it out of frame on a phone. */
+  #winmodal{
+    position:fixed !important; left:0 !important; top:0 !important;
+    right:0 !important; bottom:0 !important;
+    width:100% !important; height:100% !important;
+    max-width:none !important; max-height:none !important;
+    transform:none !important; border-radius:0 !important; border-width:0 !important;
+    box-shadow:none !important; z-index:200 !important;
+  }
+  #winmodal.collapsed{display:none !important;}
+  #winmodal .wm-bar{height:48px; padding:0 8px 0 14px; cursor:default;}
+  #winmodal .wm-bar span:first-child{font-size:15px !important;}
+  #winmodal .wm-x{
+    width:36px; height:36px; font-size:21px; display:flex; align-items:center;
+    justify-content:center; border-radius:50%;
+  }
+  #winmodal .wm-resize{display:none !important;}
+  #winmodal .wm-body{height:calc(100% - 48px) !important;}
+  /* bleed sections draw their own edge-to-edge blocks — don't gutter them */
+  #wm-section .wm-pad:not(.bleed){padding:18px 18px 30px;}
+  #wm-section h2{font-size:30px !important;}
+  #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
+
+  /* --- viewport hint, wide screens only -------------------------------- */
+  #mhint{
+    display:none; position:fixed; z-index:400; left:50%; bottom:16px;
+    transform:translateX(-50%); background:var(--black); color:var(--yellow);
+    font-family:var(--body); font-weight:700; font-size:12px; letter-spacing:.02em;
+    padding:9px 15px; border-radius:100px; box-shadow:0 6px 18px rgba(0,0,0,.28);
+  }
+  @media (min-width:901px){ #mhint{display:block;} }

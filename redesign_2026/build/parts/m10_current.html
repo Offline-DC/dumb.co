@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>dumb.co — mobile (current site + memories)</title>
+<!--
+  Version A: the site that is live today, on a phone, with a memories section
+  added to the home menu. Standalone: no build step at runtime, no network, and
+  nothing here touches dumb.co/ — swapping it in is a copy, swapping it out is
+  a delete.
+
+  The phone body, olive screen, keypad and footer are the same geometry and
+  colours as src/Phone/* in the live app. Rows are tappable here as well as
+  D-pad driven, because a phone user reaches for the row before the arrows.
+-->
+<style>
+  :root{
+    --yellow:#F9F594;
+    --screen:rgb(128,123,95);
+    --body:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%; margin:0; padding:0;}
+  body{
+    background:var(--yellow); font-family:var(--body);
+    display:flex; align-items:center; justify-content:center;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+
+  /* --- the handset ---------------------------------------------------- */
+  #phone{
+    background:#333; border-radius:2rem; padding:2rem 2rem 1rem; margin:.5rem;
+    aspect-ratio:9 / 20; width:clamp(250px, 100vw, 275px); max-height:82vh;
+    display:flex; flex-direction:column; justify-content:space-between;
+    box-shadow:0 6px 12px rgba(0,0,0,.4);
+  }
+  #logo{max-height:40px; text-align:center;}
+  #logo img{width:auto; height:40px; display:inline-block;}
+
+  #screen-frame{
+    border:1px solid grey; border-radius:.25rem; height:50%;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  #screen{
+    background:var(--screen); height:100%; border-radius:.25rem;
+    box-shadow:inset 0 0 6px rgba(0,0,0,.6); border:1px solid #333;
+    padding:.125rem; font-size:1.5rem; overflow:hidden; position:relative;
+  }
+
+  /* menu rows — PhoneText */
+  .row{
+    padding:.5rem; display:flex; align-items:center; font-size:1.3rem;
+    color:#000; background:transparent; cursor:pointer; line-height:1.05;
+  }
+  .row.on{background:#000; color:#fff;}
+  .row .caret{width:.75em; flex:0 0 auto;}
+
+  /* a message screen — the live site's centred right-aligned block */
+  .msg{
+    display:flex; align-items:center; justify-content:center;
+    height:100%; width:100%; padding-top:5px;
+  }
+  .msg > div{text-align:right; padding:1rem; font-size:1.3rem; color:#000;}
+  .msg.big > div{font-size:1.65rem;}
+
+  /* the dithered team portraits, as the live site shows them */
+  .portrait{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .portrait img{width:100%; height:auto; display:block;}
+
+  /* memories: a photo fills the screen with its caption over the bottom */
+  .shot{position:absolute; inset:0; display:flex; flex-direction:column;}
+  .shot img{
+    flex:1 1 auto; min-height:0; width:100%; object-fit:cover; display:block;
+  }
+  .shot .cap{
+    flex:0 0 auto; background:rgba(0,0,0,.72); color:#fff;
+    font-size:.72rem; font-weight:700; letter-spacing:.02em;
+    padding:5px 7px; display:flex; justify-content:space-between; gap:6px;
+  }
+  .shot .cap i{font-style:normal; opacity:.7; white-space:nowrap;}
+
+  /* --- keypad --------------------------------------------------------- */
+  #lower{
+    height:30%; display:flex; flex-direction:column;
+    justify-content:space-around; padding:5% 0;
+  }
+  #nav{display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px;}
+  #nav .cell{aspect-ratio:2; display:flex; align-items:center;}
+  #nav button{
+    display:flex; align-items:center; justify-content:center;
+    height:95%; width:95%; border-radius:.5rem; border:1px solid #bbb;
+    background:linear-gradient(to bottom,#eaeaea,#d4d4d4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.6),
+               inset 0 -1px 2px rgba(0,0,0,.1),
+               0 1px 2px rgba(0,0,0,.2);
+    font-weight:bold; font-size:1.5rem; color:#333; cursor:pointer;
+    transition:transform .1s ease;
+  }
+  #nav button:active{transform:translateY(2px);}
+  #nav svg{width:25px; height:25px; stroke:#333; stroke-width:2;
+           fill:none; stroke-linecap:round; stroke-linejoin:round;}
+  #nav svg.small{width:20px; height:20px;}
+  #nav svg.dot{width:15px; height:15px; fill:#333; stroke:none;}
+
+  #foot{text-align:center; padding-top:.5em; color:#fff; font-size:.7em;}
+  #foot .icons{display:flex; justify-content:center; gap:.75rem; margin-top:.4rem;}
+  #foot .icons img{width:18px; height:18px;}
+</style>
+</head>
+<body>
+
+<div id="phone">
+  <div id="logo"><img src="{{LOGO}}" alt="dumb.co" /></div>
+
+  <div id="screen-frame">
+    <div id="screen"></div>
+  </div>
+
+  <div id="lower">
+    <div id="nav">
+      <div class="cell"></div>
+      <div class="cell"><button type="button" aria-label="up" onclick="key('up')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7-7 7 7"/></svg></button></div>
+      <div class="cell"><button type="button" aria-label="back" onclick="key('back')"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a4 4 0 0 1 0 8h-1"/></svg></button></div>
+
+      <div class="cell"><button type="button" aria-label="left" onclick="key('left')"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l-7 7 7 7"/></svg></button></div>
+      <div class="cell"><button type="button" aria-label="select" onclick="key('ok')"><svg class="dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></button></div>
+      <div class="cell"><button type="button" aria-label="right" onclick="key('right')"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+
+      <div class="cell"><button type="button" aria-label="call" onclick="key('call')"><svg class="small" viewBox="0 0 24 24"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v4a16 16 0 0 1-16-16z"/></svg></button></div>
+      <div class="cell"><button type="button" aria-label="down" onclick="key('down')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button></div>
+      <div class="cell"><button type="button" aria-label="end" onclick="key('end')"><svg class="small" viewBox="0 0 24 24"><path d="M4 8h16v4l-4 1-1.5-2h-5L8 13l-4-1z"/><path d="M12 3v3"/></svg></button></div>
+    </div>
+
+    <div id="foot">
+      &copy; <span id="year"></span> Dumb Co.
+      <div class="icons">
+        <img src="{{NS_INSTAGRAM}}" alt="not on instagram" />
+        <img src="{{NS_X}}" alt="not on x" />
+        <img src="{{NS_FACEBOOK}}" alt="not on facebook" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const EVENTS = {{EVENTS_JSON}};
+  const PORTRAITS = {{PORTRAITS_JSON}};
+
+  const SHOP_URL  = "https://shop.dumb.co";
+  const MO_URL    = "https://offline.community";
+  const LIVE      = "https://dumb.co";
+
+  /* ------------------------------------------------------------------ menus
+     Same home menu as src/Phone/Screen.tsx, with "memories" added. */
+  const MENUS = {
+    "Home":        ["buy dumbphone 2","FAQ","Month Offline","memories","get involved","contact us","press"],
+    "get involved":["dumb organizers","dumb international","internship"],
+    "contact us":  ["team","contact"],
+    "team":        ["Daniel Hogenkamp","Jack Nugent","Lydia Peabody","Milk DiDonato","Afreka Ebanks"],
+    "memories":    EVENTS.map(e => e.name),
+  };
+
+  /* screens that are a block of text rather than a menu */
+  const TEXTS = {
+    "contact": {big:true, html:"<div>support@dumb.co</div><div>404-716-3605</div>"},
+    "dumb organizers": {html:"want 2 organize a dumb experience w/ ur group?<br/><br/>email<br/>lydia @<br/>offline &bull; community"},
+    "dumb international": {html:"dumb international<br/><br/>press &#9679;<br/>to read more"},
+    "internship": {html:"internship<br/><br/>press &#9679;<br/>to apply"},
+    "buy dumbphone 2": {html:"dumbphone 2<br/>$20 phone<br/>plans from<br/>$15.99/mo<br/><br/>press &#9679;<br/>to buy"},
+    "FAQ": {html:"FAQ<br/><br/>press &#9679;<br/>to read"},
+    "press": {html:"press<br/><br/>press &#9679;<br/>to read"},
+  };
+
+  /* screens that leave the site when you land on / select them */
+  const LINKS = {
+    "Month Offline":      MO_URL,
+    "buy dumbphone 2":    SHOP_URL,
+    "FAQ":                LIVE + "/faq",
+    "press":              LIVE + "/press",
+    "internship":         LIVE + "/internship",
+    "dumb international": LIVE + "/dumbdown",
+  };
+
+  let screen = "Home";
+  let row = 0;
+  const stack = [];
+
+  /* memories state: which event, and which photo inside it */
+  let evIdx = -1, shotIdx = 0;
+
+  const el = () => document.getElementById('screen');
+
+  function render(){
+    const s = el();
+
+    if(evIdx >= 0){
+      const ev = EVENTS[evIdx];
+      if(!ev.shots.length){
+        s.innerHTML = '<div class="msg"><div>' + ev.name + '<br/><br/>' + ev.note + '</div></div>';
+        return;
+      }
+      const shot = ev.shots[shotIdx];
+      s.innerHTML =
+        '<div class="shot">' +
+          '<img src="' + shot.src + '" alt="' + shot.cap + '" />' +
+          '<div class="cap"><span>' + shot.cap + '</span>' +
+          '<i>' + (shotIdx + 1) + '/' + ev.shots.length + '</i></div>' +
+        '</div>';
+      return;
+    }
+
+    const menu = MENUS[screen];
+    if(menu){
+      s.innerHTML = menu.map((label, i) =>
+        '<div class="row' + (i === row ? ' on' : '') + '" onclick="pick(' + i + ')">' +
+        '<span class="caret">' + (i === row ? '&gt;' : '') + '</span>' + label + '</div>'
+      ).join('');
+      return;
+    }
+
+    if(PORTRAITS[screen]){
+      s.innerHTML = '<div class="portrait"><img src="' + PORTRAITS[screen] +
+                    '" alt="' + screen + '" /></div>';
+      return;
+    }
+
+    const t = TEXTS[screen];
+    if(t){
+      s.innerHTML = '<div class="msg' + (t.big ? ' big' : '') + '"><div>' + t.html + '</div></div>';
+      return;
+    }
+
+    s.innerHTML = '<div class="msg"><div>' + screen + '<br/><br/>coming soon</div></div>';
+  }
+
+  function go(next){
+    if(LINKS[next] && !MENUS[next] && !TEXTS[next]){
+      window.open(LINKS[next], '_blank', 'noopener');
+      return;
+    }
+    stack.push({screen, row, evIdx, shotIdx});
+    screen = next; row = 0;
+    if(screen === "memories"){ evIdx = -1; shotIdx = 0; }
+    render();
+  }
+
+  function back(){
+    if(evIdx >= 0){ evIdx = -1; shotIdx = 0; render(); return; }
+    const prev = stack.pop();
+    if(!prev){ screen = "Home"; row = 0; render(); return; }
+    screen = prev.screen; row = prev.row;
+    evIdx = -1; shotIdx = 0;
+    render();
+  }
+
+  function pick(i){
+    if(typeof i === 'number') row = i;
+    const menu = MENUS[screen];
+    if(!menu) { select(); return; }
+    render();
+    select();
+  }
+
+  function select(){
+    if(evIdx >= 0) return;
+
+    if(screen === "memories"){
+      evIdx = row; shotIdx = 0; render(); return;
+    }
+
+    const menu = MENUS[screen];
+    if(menu){
+      const choice = menu[row];
+      if(LINKS[choice] && !MENUS[choice] && !TEXTS[choice]){
+        window.open(LINKS[choice], '_blank', 'noopener');
+        return;
+      }
+      go(choice);
+      return;
+    }
+
+    if(LINKS[screen]) window.open(LINKS[screen], '_blank', 'noopener');
+  }
+
+  function key(k){
+    if(evIdx >= 0){
+      const n = EVENTS[evIdx].shots.length;
+      if(k === 'right' && n) { shotIdx = (shotIdx + 1) % n; render(); return; }
+      if(k === 'left'  && n) { shotIdx = (shotIdx - 1 + n) % n; render(); return; }
+      if(k === 'back' || k === 'end') { back(); return; }
+      return;
+    }
+
+    const menu = MENUS[screen] || [];
+    if(k === 'up')    { if(row > 0){ row--; render(); } return; }
+    if(k === 'down')  { if(row < menu.length - 1){ row++; render(); } return; }
+    if(k === 'left' || k === 'back' || k === 'end') { back(); return; }
+    if(k === 'right' || k === 'ok') { select(); return; }
+    if(k === 'call')  { window.location.href = 'tel:844-633-5463'; return; }
+  }
+
+  window.addEventListener('keydown', (e) => {
+    const map = {ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left',
+                 ArrowRight:'right', Enter:'ok', Escape:'back', Backspace:'back'};
+    if(map[e.key]){ e.preventDefault(); key(map[e.key]); }
+  });
+
+  /* swipe through an event's photos */
+  (function(){
+    const s = el();
+    let x0 = null;
+    s.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive:true});
+    s.addEventListener('touchend', e => {
+      if(x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if(Math.abs(dx) > 40) key(dx < 0 ? 'right' : 'left');
+      x0 = null;
+    }, {passive:true});
+  })();
+
+  render();
+</script>
+</body>
+</html>

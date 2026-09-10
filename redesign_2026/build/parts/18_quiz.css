@@ -1,0 +1,198 @@
+
+  /* ==========================================================================
+     the subscription quiz — opens from "shop dumbphone 2"
+     ========================================================================== */
+  .quiz{position:relative; min-height:100%; background:var(--yellow); overflow:hidden;
+    display:flex; flex-direction:column; justify-content:center;}
+  .quiz .dots{position:absolute; inset:0; pointer-events:none;}
+  .quiz .dots i{position:absolute; border-radius:50%; display:block;}
+  .quiz-in{position:relative; padding:38px 34px 34px; max-width:640px; margin:0 auto; width:100%;}
+  .quiz-step{
+    font-family:var(--body); font-weight:700; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.5; margin-bottom:8px;
+  }
+  #wm-section h2.quiz-q{
+    font-family:var(--headline); font-size:38px; line-height:1.03;
+    margin:0 0 22px; transform:none; display:block;
+  }
+  .quiz-opts{display:grid; gap:11px;}
+  .quiz-opt{
+    text-align:left; cursor:pointer; background:var(--white); border:2.5px solid var(--black);
+    border-radius:12px; padding:16px 18px; display:block; width:100%;
+    box-shadow:4px 4px 0 rgba(0,0,0,.85); transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .quiz-opt:hover{background:var(--pink); transform:translate(-2px,-2px); box-shadow:6px 6px 0 rgba(0,0,0,.9);}
+  .quiz-opt:active{transform:translate(2px,2px); box-shadow:2px 2px 0 rgba(0,0,0,.9);}
+  .quiz-opt .qo-label{display:block; font-family:var(--body); font-weight:700; font-size:15px; line-height:1.25;}
+  .quiz-opt .qo-note{display:block; font-family:var(--body); font-size:12px; opacity:.6; margin-top:3px;}
+
+  .quiz-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:22px;}
+  .quiz-link{
+    background:none; border:none; cursor:pointer; padding:0;
+    font-family:var(--body); font-weight:700; font-size:12.5px; color:var(--black);
+    border-bottom:2px solid rgba(0,0,0,.35);
+  }
+  .quiz-link:hover{border-color:var(--black);}
+  .quiz-skip{
+    font-family:var(--body); font-size:12.5px; color:#000; opacity:.6; text-decoration:none;
+    border-bottom:1px solid rgba(0,0,0,.3); margin-left:auto;
+  }
+  .quiz-skip:hover{opacity:1;}
+
+  /* result */
+  .quiz.result .quiz-in{max-width:560px;}
+  .qr-name{background:var(--black); color:var(--yellow); padding:0 8px; border-radius:6px;}
+  .qr-why{font-family:var(--body); font-size:14.5px; line-height:1.55; margin:0 0 20px;}
+  .qr-card{border:2.5px solid var(--black); border-radius:12px; overflow:hidden; box-shadow:5px 5px 0 rgba(0,0,0,.85);}
+  .qr-card img{width:100%; display:block;}
+  .qr-line{font-family:var(--body); font-size:14px; margin-top:16px;}
+  .qr-line b{font-size:16px;}
+  .qr-min{font-family:var(--body); font-size:12px; line-height:1.55; opacity:.7; margin-top:8px; max-width:460px;}
+  .qr-cta{
+    display:inline-flex; align-items:center; gap:8px; background:var(--black); color:var(--yellow);
+    font-family:var(--body); font-weight:700; font-size:14px; padding:13px 24px; border-radius:100px;
+    border:2px solid var(--black); text-decoration:none;
+  }
+  .qr-cta:hover{background:var(--orange); border-color:var(--orange); color:var(--white);}
+
+  /* all three plans, side by side */
+  .plan-table{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
+  .plan-col{border:0; border-radius:14px; padding:20px 18px 22px;}
+  .plan-col.dumb{background:var(--yellow);}
+  .plan-col.dumber{background:var(--blue);}
+  .plan-col.dumbest{background:var(--black); color:var(--white);}
+  .plan-col .pt-name{font-family:var(--headline); font-size:30px; text-transform:uppercase; line-height:1;}
+  .plan-col .pt-price{font-family:var(--body); font-weight:800; font-size:22px; margin-top:4px;}
+  .plan-col .pt-price span{font-size:12px; font-weight:700; opacity:.7;}
+  .plan-col .pt-blurb{font-family:var(--body); font-weight:600; font-size:12px; line-height:1.4; margin-top:8px; min-height:34px;}
+  .plan-col .pt-feats{list-style:none; margin:14px 0 0; padding:0; display:grid; gap:5px;}
+  .plan-col .pt-feats li{font-family:var(--body); font-weight:700; font-size:12.5px; display:flex; gap:7px; align-items:baseline;}
+  .plan-col .pt-feats li span{flex:0 0 auto; font-size:12px;}
+  .plan-col .pt-feats li.yes span{color:#2f9e2f;}
+  .plan-col .pt-feats li.no span{color:var(--red);}
+  .plan-col .pt-feats li.no{opacity:.45;}
+  .plan-col.dumbest .pt-feats li.yes span{color:#59d659;}
+
+  /* ==========================================================================
+     team, moved into about.exe
+     ========================================================================== */
+  #about-team{max-width:900px; margin:48px auto 0; padding-top:34px; border-top:1.5px solid rgba(0,0,0,.18);}
+  #about-team h3{font-family:var(--headline); font-size:30px; margin:0 0 16px; text-align:center;}
+  #about-team .team-wrap{display:flex; gap:24px; align-items:flex-start; justify-content:center;}
+  #about-team .team-row2{color:var(--black);}
+  #about-team .team-row2:hover{background:var(--black); color:var(--yellow);}
+  /* the flip-phone illustration. The olive screen fill sits BEHIND the line
+     art and shows through its transparent screen, so the drawn stroke stays on
+     top. Portraits are the site's own 1-bit dithered PNGs (black on
+     transparent), which is why they need the olive behind them to read — and
+     why they must not be smoothed on scale. */
+  .phone-frame{position:relative; flex:0 0 300px; width:300px;}
+  .phone-frame .pf-art{width:100%; display:block; position:relative; z-index:2; pointer-events:none;}
+  .phone-frame .pf-screen{
+    position:absolute; left:35.4%; top:12.9%; width:30%; height:25.2%; z-index:1;
+    background:var(--yellow); overflow:hidden;
+    box-shadow:inset 0 0 5px rgba(0,0,0,.35);
+  }
+  .phone-frame .pf-screen img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:contain; object-position:center bottom;
+    padding:5% 7% 0;
+    opacity:0; transition:opacity .22s ease;
+    image-rendering:pixelated;
+  }
+  .phone-frame .pf-screen img.on{opacity:1;}
+  .phone-frame .pf-hint{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:8px; line-height:1.3;
+    font-family:var(--body); font-weight:700; font-size:11px; color:rgba(0,0,0,.55);
+  }
+
+  /* contact.exe is the support card only, on the yellow ground from slide 9.
+     The card fills the window; its three groups spread top / middle / bottom so
+     filling the height doesn't leave a hole in the middle. */
+  .wm-pad.bleed > .contact-ground{flex:1 1 auto; min-height:0;}
+  .contact-ground{
+    background:var(--yellow); padding:22px 24px 26px;
+    display:flex; flex-direction:column;
+  }
+  .contact-ground h2{margin-bottom:12px; flex:0 0 auto;}
+  .contact-card.support{
+    max-width:none; flex:1 1 auto; display:flex; flex-direction:column;
+    padding:24px 26px 24px; position:relative; overflow:hidden;
+  }
+  .contact-card.support .dots{position:absolute; inset:0; pointer-events:none; opacity:.9;}
+  .contact-card.support .dots i{position:absolute; border-radius:50%; display:block;}
+  .contact-card.support > *:not(.dots){position:relative;}
+  .contact-card.support h3{font-size:27px; margin-bottom:3px;}
+  .contact-card.support .card-sub{font-size:13px; max-width:320px; margin-bottom:0;}
+  .contact-card.support .cc-lines{margin:auto 0; display:grid; gap:11px;}
+  .contact-card.support .contact-line{font-size:18px; margin:0;}
+  .contact-card.support .contact-line .ico{width:32px; height:32px; font-size:14px;}
+  .contact-card.support .contact-hours-block{margin-top:0; font-size:13px; padding:12px 14px;}
+
+  @media (max-width:760px){
+    .plan-table{grid-template-columns:1fr;}
+    #about-team .team-wrap{flex-direction:column; align-items:center;}
+  }
+
+  /* ==========================================================================
+     layout: hero sits between the sidebar and the window, never under it
+     ========================================================================== */
+  #home{ right:54%; }                    /* hero column ends at 46vw */
+  #home-copy{ flex:0 1 100%; }
+  #home-copy h1{ font-size:clamp(38px, 3.5vw, 66px); }
+  #home-copy p{ max-width:none; font-size:clamp(14px, 1.15vw, 17px); }
+  #home-copy .kicker{ font-size:clamp(11px, .85vw, 13px); }
+
+  /* the sidebar gives ground on smaller screens so the hero keeps its column */
+  @media (max-width:1600px){
+    #sidebar{width:340px; padding:26px 26px;}
+    #logo{width:200px;}
+    #home{left:340px;}
+    #sidebar .navitem{font-size:33px;}
+  }
+  @media (max-width:1300px){
+    #sidebar{width:296px; padding:20px 22px;}
+    #logo{width:172px; margin-bottom:14px;}
+    #home{left:296px; padding:0 22px;}
+    #sidebar .navitem{font-size:27px; padding:4px 9px;}
+    nav#navlist{gap:7px;}
+  }
+
+  /* ==========================================================================
+     quiz.exe — the real quiz, framed
+     ========================================================================== */
+  .wm-pad.bleed > .quizframe{flex:1 1 auto; min-height:0;}
+  .quizframe{display:flex; flex-direction:column; min-height:100%; background:var(--white);}
+  .quizframe .qf-bar{
+    flex:0 0 auto; display:flex; align-items:center; gap:14px;
+    padding:12px 16px; border-bottom:2px solid var(--black); background:var(--yellow);
+  }
+  .quizframe .qf-bar .wm-back{margin:0;}
+  .quizframe .qf-open{
+    margin-left:auto; font-family:var(--body); font-weight:700; font-size:12px;
+    color:var(--black); text-decoration:none; border-bottom:2px solid rgba(0,0,0,.35);
+  }
+  .quizframe .qf-open:hover{border-color:var(--black);}
+  .quizframe .qf-frame{flex:1 1 auto; width:100%; border:0; display:block; background:var(--white);}
+
+  /* ==========================================================================
+     About — signatures sit under the body copy, smaller; "made in D.C." sits on
+     the polaroid's white bottom band instead of hanging off the corner
+     ========================================================================== */
+  #about-pink .txt #about-signatures{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-start;
+    gap:8px 18px; max-width:none; margin:18px 0 0; padding-top:0; border-top:none;
+  }
+  #about-pink .txt #about-signatures img{height:30px;}
+  #about-pink .txt #about-signatures img:nth-child(2){height:34px;}
+  #about-pink .txt #about-signatures img:nth-child(4){height:36px;}
+  #about-pink .txt #about-signatures img:nth-child(6){height:32px;}
+  #about-pink .txt #about-signatures img:nth-child(8){height:44px;}
+
+  /* the polaroid's white bottom band runs from 78.6% to 94.2% of the image
+     height (measured off src/polaroid.webp), so the handwriting sits inside it */
+  #about-photo .madeindc{
+    position:absolute; width:34%; left:50%; top:81.5%; right:auto; bottom:auto;
+    transform:translateX(-50%) rotate(-1.5deg);
+  }
