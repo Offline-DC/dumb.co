@@ -1,0 +1,180 @@
+
+  /* ==========================================================================
+     THE HANDSET IS THE NAV
+     Jack's notes, in one place:
+       - the phone screen and the .exe window mirror each other. Open Shop and
+         the phone says Shop; minimise and it still says Shop.
+       - below the breakpoint the window minimises into the egg and the phone
+         zooms up into the mobile layout — same document, no second file.
+       - the drawn oval keys are the D-pad, with arrows on them.
+       - clicking the tab that's already highlighted pops the window back out.
+     ========================================================================== */
+
+  /* measured off assets/flipphone.png (560x921): the drawn phone occupies the
+     alpha box x 29.8-75.4%, y 2.6-94.9%, and the four oval keys sit at
+     x 39.4/63.3%, y 55.4/63.2% with OK at 52.1/59.3%. */
+  const ART = { ratio: 921 / 560, drawnTop: 0.026, drawnH: 0.923, drawnW: 0.455,
+                keysBottom: 0.655 };
+  const BP = 760;
+
+  const isPhone = () => window.innerWidth <= BP;
+  const snakeOn = () => !!document.querySelector('#tcl-screen.playing');
+  const winEl2  = () => document.getElementById('winmodal');
+  const collapsed = () => winEl2().classList.contains('collapsed');
+
+  let pmItems = [];
+  let pmSel = 0;
+
+  /* ---------------------------------------------------- the screen's menu */
+  function buildPhoneMenu(){
+    const screen = document.getElementById('tcl-screen');
+    if(!screen) return;
+    pmItems = [...document.querySelectorAll('#navlist .navitem')].map(el => ({
+      key: el.dataset.key,
+      label: (el.textContent || '').trim(),
+      external: el.classList.contains('external'),
+      href: el.getAttribute('href') || '',
+    }));
+    screen.insertAdjacentHTML('afterbegin',
+      '<div class="pmn">' +
+        '<div class="pmn-bar"><span>dumb.co</span><span>&#9679;&#9679;&#9679;</span></div>' +
+        '<div class="pmn-list">' +
+          pmItems.map((it, i) =>
+            '<a class="pmn-row' + (i === 0 ? ' on' : '') + '" data-key="' + it.key + '"' +
+            ' href="' + it.href + '"' +
+            (it.external ? ' target="_blank" rel="noopener noreferrer"' : '') +
+            ' onclick="phonePick(' + i + ', event)">' + it.label + '</a>'
+          ).join('') +
+        '</div>' +
+      '</div>');
+  }
+
+  function phonePaint(){
+    const rows = document.querySelectorAll('#tcl-screen .pmn-row');
+    rows.forEach((el, i) => el.classList.toggle('on', i === pmSel));
+  }
+
+  /* the window changed — make the handset say the same thing */
+  function phoneReflect(key){
+    const i = pmItems.findIndex(it => it.key === key);
+    if(i >= 0){ pmSel = i; phonePaint(); }
+  }
+
+  function phoneMove(step){
+    if(!pmItems.length) return;
+    pmSel = (pmSel + step + pmItems.length) % pmItems.length;
+    phonePaint();
+  }
+
+  function phoneOpen(i){
+    const it = pmItems[i];
+    if(!it) return;
+    if(it.external){ window.open(it.href, '_blank', 'noopener'); return; }
+    if(collapsed() && typeof expandModal === 'function') expandModal();
+    openSection(it.key);
+  }
+
+  function phonePick(i, ev){
+    pmSel = i; phonePaint();
+    const it = pmItems[i];
+    if(it && it.external) return;        // let the <a> take it
+    if(ev) ev.preventDefault();
+    phoneOpen(i);
+  }
+
+  /* the drawn keys: snake keeps first claim (including its ↑↑↓↓←→ unlock),
+     the menu gets everything else */
+  const _teamKeySnake = teamKey;
+  teamKey = function(dir){
+    if(snakeOn()){ _teamKeySnake(dir); return; }
+    _teamKeySnake(dir);                  // feeds the unlock buffer
+    if(snakeOn()) return;                // that press was the last of the unlock
+    if(dir === 'up')    { phoneMove(-1); return; }
+    if(dir === 'down')  { phoneMove(1);  return; }
+    if(dir === 'right' || dir === 'ok'){ phoneOpen(pmSel); return; }
+  };
+  function phoneOk(){ teamKey('ok'); }
+
+  /* ------------------------------------------------------- sizing the phone */
+  function phoneFit(){
+    const frame = document.querySelector('#deskphone .phone-frame');
+    if(!frame) return;
+    const root = document.documentElement;
+
+    if(!isPhone()){
+      root.style.removeProperty('--mpw');
+      root.style.removeProperty('--mtop');
+      setRowVars(frame.getBoundingClientRect().width || 420);
+      return;
+    }
+
+    const logo = document.getElementById('logo');
+    const band = logo ? logo.getBoundingClientRect().bottom + 10 : 56;
+    const availH = Math.max(240, window.innerHeight - band - 6);
+    const availW = Math.max(200, window.innerWidth - 20);
+
+    /* scale until the D-pad reaches the bottom of the screen rather than the
+       whole handset — the bigger of the two sizings from the review, which is
+       the one we kept. The number keys crop off below. */
+    let w = availH / ((ART.keysBottom - ART.drawnTop) * ART.ratio);
+    w = Math.min(w, availW / ART.drawnW);
+
+    root.style.setProperty('--mpw', Math.round(w) + 'px');
+    root.style.setProperty('--mtop', Math.round(band - ART.drawnTop * ART.ratio * w) + 'px');
+    setRowVars(w);
+  }
+
+  /* the screen is 30% x 25.2% of the image, so the menu is sized off the frame
+     and always fits however big the handset is */
+  function setRowVars(frameW){
+    const root = document.documentElement;
+    const screenH = 0.252 * ART.ratio * frameW;
+    const n = Math.max(1, pmItems.length);
+    const bar = Math.max(9, Math.round(screenH * 0.06));
+    const rowH = Math.max(11, Math.floor((screenH - bar) / n));
+    root.style.setProperty('--pmn-rowh', rowH + 'px');
+    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(17, Math.round(rowH * 0.46 * 10) / 10)) + 'px');
+    root.style.setProperty('--pmn-barf', Math.max(6, Math.min(10, Math.round(bar * 0.62))) + 'px');
+  }
+
+  /* --------------------------------------------- crossing the breakpoint */
+  let wasPhone = null;
+  function onBreakpoint(){
+    const now = isPhone();
+    if(wasPhone === null){ wasPhone = now; return; }
+    if(now === wasPhone) return;
+    wasPhone = now;
+    /* going to the phone: the window minimises into the egg and the handset
+       zooms up (the width transition in 29_responsive.css does the zoom) */
+    if(now && !collapsed() && typeof collapseModal === 'function') collapseModal();
+  }
+
+  window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); });
+  window.addEventListener('orientationchange', () => setTimeout(() => { phoneFit(); onBreakpoint(); }, 120));
+
+  /* ------------------------------------------------------- wiring it up */
+  (function initPhone(){
+    buildPhoneMenu();
+
+    /* clicking the tab that is already open pops the window back out of the
+       egg. The nav items are plain <a href="#/slug"> now, so an already-current
+       slug fires no hashchange and nothing used to happen. */
+    document.querySelectorAll('#navlist .navitem').forEach(el => {
+      el.addEventListener('click', () => {
+        if(el.classList.contains('external')) return;
+        if(collapsed() && typeof expandModal === 'function') expandModal();
+        if(location.hash === el.getAttribute('href')) openSection(el.dataset.key);
+      });
+    });
+
+    /* every opener also updates the handset */
+    const _openSectionPhone = openSection;
+    openSection = function(key){
+      _openSectionPhone(key);
+      phoneReflect(key);
+    };
+
+    phoneFit();
+    wasPhone = isPhone();
+    if(isPhone() && typeof collapseModal === 'function' && !collapsed()) collapseModal();
+  })();

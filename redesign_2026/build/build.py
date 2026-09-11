@@ -258,8 +258,8 @@ html = html.replace(old_pink,
 # ------------------------------------------------------------------- 3. CSS
 css = (part("01_wm.css") + part("02_shop.css") + part("03_memories.css")
        + part("09_press.css") + part("12_involved.css") + part("18_quiz.css")
-       + part("19_duck.css") + part("22_snake.css") + part("26_mobile_hint.css")
-       + part("28_keys.css"))
+       + part("19_duck.css") + part("22_snake.css")
+       + part("28_keys.css") + part("29_responsive.css"))
 must("</style>" in html, "no </style>")
 html = html.replace("</style>", css + "</style>", 1)
 
@@ -269,16 +269,19 @@ html = html.replace("</style>", css + "</style>", 1)
 # Same URL the current build redirects to (src/Phone/Screen.tsx).
 MONTH_OFFLINE_URL = "https://offline.community"
 
+# Shop leads, About follows (Kunal). Month Offline is no longer a top-level
+# item: Afreka asked for it and Get Involved to merge into "Community", which
+# houses the organizing, career and community work — so MO is a link inside
+# that window now, not a tab of its own.
 NAV_ITEMS = [
     # key, label, external href, url slug
-    ("about",        "About",         None,              "about"),
-    ("shop",         "Shop",          None,              "shop"),
-    ("involved",     "Get Involved",  None,              "get_involved"),
-    ("monthoffline", "Month Offline", MONTH_OFFLINE_URL, None),
-    ("press",        "Press",         None,              "press"),
-    ("memories",     "Memories",      None,              "memories"),
-    ("faq",          "FAQ",           None,              "faq"),
-    ("contact",      "Contact",       None,              "contact"),
+    ("shop",      "Shop",      None, "shop"),
+    ("about",     "About",     None, "about"),
+    ("community", "Community", None, "community"),
+    ("press",     "Press",     None, "press"),
+    ("memories",  "Memories",  None, "memories"),
+    ("faq",       "FAQ",       None, "faq"),
+    ("contact",   "Contact",   None, "contact"),
 ]
 
 # Every section is addressable, so a section can be linked, copy-pasted and
@@ -345,10 +348,11 @@ deskphone = (
     '        <div class="pf-screen" id="tcl-screen"></div>\n'
     f'        <img class="pf-art" src="{flipphone_uri}" alt="dumbphone 2" />\n'
     '        <div class="pf-keys">\n'
-    "          <button type=\"button\" class=\"k-up\"    aria-label=\"up\"    onclick=\"teamKey('up')\"></button>\n"
-    "          <button type=\"button\" class=\"k-left\"  aria-label=\"left\"  onclick=\"teamKey('left')\"></button>\n"
-    "          <button type=\"button\" class=\"k-right\" aria-label=\"right\" onclick=\"teamKey('right')\"></button>\n"
-    "          <button type=\"button\" class=\"k-down\"  aria-label=\"down\"  onclick=\"teamKey('down')\"></button>\n"
+    "          <button type=\"button\" class=\"k-up\"    aria-label=\"up\"    onclick=\"teamKey('up')\">&#8593;</button>\n"
+    "          <button type=\"button\" class=\"k-left\"  aria-label=\"left\"  onclick=\"teamKey('left')\">&#8592;</button>\n"
+    "          <button type=\"button\" class=\"k-right\" aria-label=\"right\" onclick=\"teamKey('right')\">&#8594;</button>\n"
+    "          <button type=\"button\" class=\"k-down\"  aria-label=\"down\"  onclick=\"teamKey('down')\">&#8595;</button>\n"
+        "          <button type=\"button\" class=\"k-ok\"    aria-label=\"select\" onclick=\"phoneOk()\">OK</button>\n"
     '        </div>\n'
     '      </div>\n'
     '    </div>\n'
@@ -374,6 +378,7 @@ html = swap_block(html, "    shop: () => `",     "    involved: () => `", part("
 html = swap_block(html, "    memories: () => `", "    faq: () => `",      part("07_memories_section.js"))
 html = swap_block(html, "    press: () => `",    "    memories: () => `", part("10_press_section.js"))
 html = swap_block(html, "    involved: () => `", "    press: () => `",    part("11_involved_section.js"))
+# (that part now emits `community: () => ...` — the file keeps its old name)
 html = swap_block(html, "    about: () => `",    "    shop: () => `",     part("15_about_section.js"))
 html = swap_block(html, "    faq: () => `",      "    contact: () => `",  part("16_faq_section.js"))
 html = swap_block(html, "    contact: () => `",  "  };\n\n",             part("14_contact_section.js"))
@@ -416,8 +421,7 @@ html = html.replace("  const sections = {",
 html = swap_block(html, "  function openSection(key){", "  /* ---------------- live FAQ",
                   part("04_wm.js") + part("08_helpers.js") + part("20_duck.js")
                   + part("21_snake.js") + part("23_memories_sheet.js")
-                  + part("24_routes.js") + part("25_mobile_hint.js")
-                  + part("27_keys.js") + "\n")
+                  + part("24_routes.js") + part("27_keys.js") + part("30_phone.js") + "\n")
 
 # ---- 8b. the hero kicker said "$20/mo"; the deck says $20 is the phone and
 # plans start at $15.99/mo, so say that instead
@@ -438,9 +442,9 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                'id="walkduck"', "startDuckWalk();",
                "4 month minimum", "SHOW_PLAN_CARDS", "MEMORY_EVENTS",
                "PRESS_MIRROR", "press-mirror", "railStep", "$15.99",
-               "plans from $15.99/mo", "xtra&#8209;ordinary",
-               f'<a class="navitem external" data-key="monthoffline" href="{MONTH_OFFLINE_URL}"',
-               'href="#/get_involved"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
+               "plans from $15.99/mo", "xtra&#8209;ordinary", "community: () =>",
+               'href="#/community"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
+               ">Community<", "gi-drop", f'href="{MONTH_OFFLINE_URL}"',
                "1209576549", "1215826540",
                "about-team", 'onclick="openQuiz()"', "signatures: [",
                "Find out what plan works for you", "plan-table", "const SPLIT", "camp1:", "camp3:", "clamp(38px, 3.5vw, 66px)",
@@ -451,8 +455,9 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
                "MEMORIES_CSV_URL", "function memoriesFromRows", "loadMemories();",
                "const FAQ_SNAPSHOT", "function faqItemsFromRows",
-               "function mobileHint", "mobhint-go", "function keyboardNav", "kbfocus",
-               "project<br/>xtra&#8209;ordinary", "group<br/>dumb down", "gi-foot",
+               "function keyboardNav", "kbfocus", "function buildPhoneMenu", "pm-row",
+               "function phoneFit", "k-ok", "--bp-phone",
+               "gi-foot",
                'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()"]:
     must(needle in html, f"post-build check failed, missing: {needle}")
 for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindow", 'id="taskbar"',
@@ -463,7 +468,8 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                "SHOW_QUIZ", "content needed:", "on hiding Vimeo's branding",
                "const QUIZ =", "function renderQuiz(", "quizAnswer(",
                "NYFW activation", "Hush Harbor", "dumb organizers",
-               "a.navitem.external::after", 'class="count"',
+               "a.navitem.external::after", 'class="count"', "function mobileHint", 'id="mobhint"',
+               ">Get Involved<", 'data-key="monthoffline"', ">Month Offline</a>",
                "that's a sandbox thing", "compare all three plans", "not sure which plan fits",
                ">compare plans<"]:
     must(banned not in html, f"v7 leftover still present: {banned}")

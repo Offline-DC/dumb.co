@@ -8,7 +8,7 @@
     home:     "flipoff.exe",
     about:    "about.exe",
     shop:     "Shop.exe",
-    involved: "DumbCampus.exe",
+    community: "Community.exe",
     press:    "Press.exe",
     memories: "Memories.exe",
     faq:      "FAQ.exe",
@@ -78,7 +78,7 @@
 
     const host = sectionEl();
     host.className = '';
-    const BLEED = ['about', 'press', 'shop', 'involved', 'contact'];   // these draw their own edge-to-edge blocks
+    const BLEED = ['about', 'press', 'shop', 'community', 'contact'];   // these draw their own edge-to-edge blocks
     host.innerHTML = '<div class="wm-pad' + (BLEED.includes(key) ? ' bleed' : '') + '">'
                    + sections[key]() + '</div>';
     host.scrollTop = 0;

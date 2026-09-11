@@ -123,12 +123,23 @@
   .contact-card.support .dots{position:absolute; inset:0; pointer-events:none; opacity:.9;}
   .contact-card.support .dots i{position:absolute; border-radius:50%; display:block;}
   .contact-card.support > *:not(.dots){position:relative;}
-  .contact-card.support h3{font-size:27px; margin-bottom:3px;}
-  .contact-card.support .card-sub{font-size:13px; max-width:320px; margin-bottom:0;}
-  .contact-card.support .cc-lines{margin:auto 0; display:grid; gap:11px;}
-  .contact-card.support .contact-line{font-size:18px; margin:0;}
-  .contact-card.support .contact-line .ico{width:32px; height:32px; font-size:14px;}
-  .contact-card.support .contact-hours-block{margin-top:0; font-size:13px; padding:12px 14px;}
+  /* ---- contact.exe type scale -------------------------------------------
+     Contact was mostly empty space, so the type here is bigger and the blocks
+     spread to fill the card. No new copy — same words, more room.
+     To nudge any of it, these six lines are the whole story:
+       h3         the word "Support"
+       .card-sub  the support line under it
+       .cc-lines  the email + phone block (margin:auto centres it vertically)
+       .ico       the round ✉ / ☎ badges
+       .contact-hours-block  the opening-hours strip
+     --------------------------------------------------------------------- */
+  .contact-card.support h3{font-size:34px; margin-bottom:6px;}
+  .contact-card.support .card-sub{font-size:18px; max-width:460px; margin-bottom:0; line-height:1.45;}
+  .contact-card.support .cc-lines{margin:auto 0; display:grid; gap:18px;}
+  .contact-card.support .contact-line{font-size:24px; margin:0;}
+  .contact-card.support .contact-line .ico{width:42px; height:42px; font-size:18px;}
+  .contact-card.support .contact-hours-block{margin-top:0; font-size:16px; padding:18px 20px;}
+  .contact-card.support .contact-hours-block .hr-row + .hr-row{margin-top:6px;}
 
   @media (max-width:760px){
     .plan-table{grid-template-columns:1fr;}
@@ -139,7 +150,10 @@
      layout: hero sits between the sidebar and the window, never under it
      ========================================================================== */
   #home{ right:54%; }                    /* hero column ends at 46vw */
-  #home-copy{ flex:0 1 100%; }
+  /* the hero sits in the gap between the sidebar and the window. At 100% it
+     filled that gap, so the copy read as pinned to the sidebar; sized to its
+     content instead, #home's justify-content:center actually centres it. */
+  #home-copy{ flex:0 1 auto; max-width:min(460px, 100%); }
   #home-copy h1{ font-size:clamp(38px, 3.5vw, 66px); }
   #home-copy p{ max-width:none; font-size:clamp(14px, 1.15vw, 17px); }
   #home-copy .kicker{ font-size:clamp(11px, .85vw, 13px); }

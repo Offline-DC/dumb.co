@@ -2,22 +2,37 @@
   /* ==========================================================================
      snake, inside the flip-phone screen
      ========================================================================== */
+  /* The keys are placed on the drawn ovals, measured off assets/flipphone.png:
+     the four ovals centre at x 39.4% / 63.3% and y 55.4% / 63.2%, with the OK
+     circle at 52.1% / 59.3%. They used to be a 3x3 grid whose cells landed in
+     the gaps between the ovals, so you were tapping bare artwork.
+     Each hit area is forced to at least 44px (Jack asked for 40-45) even when
+     the drawn oval is smaller, and the arrow glyph is what says which is which
+     — the ovals sit on the diagonals, so position alone wouldn't. */
   .phone-frame .pf-keys{
-    position:absolute; left:36%; top:52.5%; width:32%; height:13%; z-index:3;
-    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr);
+    position:absolute; inset:0; z-index:3; pointer-events:none;
   }
   .phone-frame .pf-keys button{
     -webkit-appearance:none; appearance:none; background:none; border:0; padding:0;
-    cursor:pointer; border-radius:50%;
-    /* no focus ring: these are invisible hotspots drawn over the illustration,
-       and a visible ring read as a stray red circle on the artwork. The arrow
-       keys are the keyboard path in, so nothing is lost. */
-    outline:none;
+    position:absolute; transform:translate(-50%, -50%);
+    /* a fixed 46px target at every phone size: as a percentage it scaled with
+       the handset and the bottom key ended up past the edge of a phone screen.
+       46px sits inside Jack's 40-45 ask and still covers the drawn oval. */
+    width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:auto; cursor:pointer; border-radius:50%; outline:none;
+    font-family:var(--body); font-weight:700; color:var(--black);
+    font-size:clamp(15px, 4.6cqw, 32px); line-height:1;
+    opacity:.78; transition:opacity .15s ease, transform .1s ease;
   }
-  .phone-frame .pf-keys .k-up{grid-area:1/2;}
-  .phone-frame .pf-keys .k-left{grid-area:2/1;}
-  .phone-frame .pf-keys .k-right{grid-area:2/3;}
-  .phone-frame .pf-keys .k-down{grid-area:3/2;}
+  .phone-frame{container-type:inline-size;}
+  .phone-frame .pf-keys button:hover{opacity:1;}
+  .phone-frame .pf-keys button:active{transform:translate(-50%,-50%) scale(.88);}
+  .phone-frame .pf-keys .k-up   {left:39.4%; top:55.4%;}
+  .phone-frame .pf-keys .k-right{left:63.3%; top:55.4%;}
+  .phone-frame .pf-keys .k-down {left:63.3%; top:63.2%;}
+  .phone-frame .pf-keys .k-left {left:39.4%; top:63.2%;}
+  .phone-frame .pf-keys .k-ok   {left:52.1%; top:59.3%; width:60px; height:60px; font-size:0;}
 
   .phone-frame .pf-screen.playing img,
   .phone-frame .pf-screen.playing .pf-hint{opacity:0 !important; display:none;}

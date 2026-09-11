@@ -3,10 +3,7 @@
 Builds the two mobile prototypes into concept/, from the same sources as the
 desktop concept. Run build.py first — version B is derived from its output.
 
-  concept/mobile-new.html      version B: the 2026 redesign on a phone.
-                               concept/index.html + m01_mobile.css + m02_mobile.js.
-                               Same data and same section bodies as the desktop
-                               concept, so it cannot drift from it.
+  (mobile-new.html is retired — concept/index.html is responsive now.)
 
   concept/mobile-current.html  version A: a standalone mirror of the site that
                                is live today (the phone keypad UI), with a
@@ -44,49 +41,22 @@ def part(name):
     return p.read_text(encoding="utf-8")
 
 # ---------------------------------------------------------------------------
-# B — the redesign on a phone: index.html + the mobile shell
+# B — RETIRED.
+#
+# concept/index.html is responsive now: below 760px the sidebar and hero step
+# out, the flip phone fills the screen and the .exe window becomes a sheet
+# (build/parts/29_responsive.css + build/parts/30_phone.js). Jack asked for one
+# site rather than a desktop file and a mobile file, so mobile-new.html and
+# mobile-new-big.html are no longer built — there is nothing left for them to
+# be. Copies still sitting in concept/ are stale; delete them.
 # ---------------------------------------------------------------------------
 def build_new():
-    src = ROOT / "concept" / "index.html"
-    must(src.exists(), "concept/index.html missing — run build/build.py first")
-    html = src.read_text(encoding="utf-8")
-
-    must("</style>" in html, "no </style> in index.html")
-    html = html.replace("</style>", part("m01_mobile.css") + "</style>", 1)
-
-    must("</script>" in html, "no </script> in index.html")
-    i = html.rindex("</script>")
-    html = html[:i] + part("m02_mobile.js") + html[i:]
-
-    html = html.replace("<title>dumb.co — 2026 redesign concept v8</title>",
-                        "<title>dumb.co — 2026 redesign, mobile</title>", 1)
-
-    for needle in ["stage.id = 'mstage'", "function mobileClose", "#mmenu .mm-row",
-                   "mobileClose()", "function mFit", "function mSelect", "const M_ART",
-                   "MEMORY_EVENTS", "SHOP_PHOTOS", 'src="quiz.html"', "ROUTES",
-                   "mhelp-badge", "const M_FIT", "d&#8209;pad on screen"]:
-        must(needle in html, f"mobile-new check failed, missing: {needle}")
-
-    out = ROOT / "concept" / "mobile-new.html"
-    out.write_text(html, encoding="utf-8")
-    print(f"  wrote concept/{out.name}  ({len(html):,} chars)")
-
-    # ---- the same page, phone scaled up until the D-pad reaches the bottom.
-    # An alternate for the review, in case the menu on mobile-new.html reads
-    # too small: the flag is set before the page script runs, and mFit() sizes
-    # the phone off the D-pad instead of the whole handset, cropping the number
-    # keys off below.
-    flag = ('<script>/* alt sizing: bigger phone, number keys crop off the bottom */\n'
-            "window.DUMB_MOBILE_FIT = 'dpad';</script>\n")
-    must("<body>" in html, "no <body> to set the sizing flag before")
-    big = html.replace("<body>", "<body>\n" + flag, 1)
-    big = big.replace("<title>dumb.co — 2026 redesign, mobile</title>",
-                      "<title>dumb.co — 2026 redesign, mobile (bigger phone)</title>", 1)
-    must("window.DUMB_MOBILE_FIT" in big, "sizing flag not injected")
-
-    out_big = ROOT / "concept" / "mobile-new-big.html"
-    out_big.write_text(big, encoding="utf-8")
-    print(f"  wrote concept/{out_big.name}  ({len(big):,} chars, D-pad-height sizing)")
+    stale = [ROOT / "concept" / n for n in ("mobile-new.html", "mobile-new-big.html")]
+    left = [f.name for f in stale if f.exists()]
+    if left:
+        print("  index.html is responsive now — these are stale, delete them:")
+        for n in left:
+            print(f"    concept/{n}")
 
 # ---------------------------------------------------------------------------
 # A — a mirror of the site that is live today, plus memories

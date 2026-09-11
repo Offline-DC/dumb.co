@@ -11,9 +11,7 @@ Nothing in here is part of the site build. Vite only bundles `src/` and copies
 ```
 concept/v6_baseline.html   the redesign as it stood before Kunal's notes (untouched)
 concept/index.html         <- open this one. desktop, built output.
-concept/mobile-current.html  mobile A: the site that is live today + memories
-concept/mobile-new.html      mobile B: this redesign on a phone
-concept/mobile-new-big.html  mobile B, phone scaled up (alt, if B reads small)
+concept/mobile-current.html  a mirror of the site that is live today + memories
 concept/quiz.html          the real subscription quiz, copied from reference/ by the build
 build/build.py             builds index.html from v6_baseline + build/parts/*
 build/build_mobile.py      builds the two mobile files (run build.py first)
@@ -57,121 +55,40 @@ Serve it to see that tab work:
 python3 -m http.server 8000 -d concept    # then open localhost:8000
 ```
 
-## The two mobile builds
+## One site, two shapes
 
-Two separate files, so they can be reviewed side by side and either one can be
-thrown away without touching the other.
+`concept/index.html` is responsive. There is no separate mobile file any more —
+Jack asked for one site, mobile-first, and two documents was exactly the drift
+risk he was pointing at.
 
-**`concept/mobile-current.html` — version A.** A standalone mirror of the site
-that is live today: same handset geometry, olive screen, keypad and footer as
-`../dumb.co/src/Phone/*`, with **memories** added to the home menu. Pick an
-event, then ← / → (or swipe) through its photos. baird shows "photos coming
-soon". No build step at runtime, no network calls.
+Below **760px** (`--bp-phone`, `build/parts/29_responsive.css`) the sidebar and
+hero step out, the flip phone grows to fill the screen, and the `.exe` window
+becomes a full-screen sheet. Nothing moves in the DOM — it is all position — so
+crossing the breakpoint in either direction is reversible and there is nothing
+to keep in sync. Cross it with the window open and the window minimises into the
+egg while the handset zooms up, which is the transition Lafayette described.
 
-**`concept/mobile-new.html` — version B.** This redesign on a phone. The home
-state *is* the phone: the flip-phone illustration is scaled to fill the
-viewport, the side-menu is rendered onto its screen, and the drawn D-pad moves
-the highlight (OK / → opens; rows are tappable too). Choosing an item opens the
-same `.exe` window the desktop uses as a **full-screen sheet**, closed with the
-red button in its title bar. Generated from `concept/index.html` plus
-`build/parts/m01_mobile.css` and `m02_mobile.js`, so it runs the *same* data and
-the *same* section bodies as the desktop concept and cannot drift from it.
+**The handset is the nav.** The phone's screen carries the menu in both shapes,
+so the phone and the window always say the same thing: open Shop and the screen
+says Shop, minimise and it still says Shop. The highlight uses the sidebar's own
+per-position colour cycle (pink, blue, orange, black) so the two can't drift.
+Clicking the tab that is already highlighted pops the window back out of the egg.
 
-The phone is sized from the illustration's alpha box, not the file: the PNG
-carries ~27% transparent margin on each side, so `mFit()` in `m02_mobile.js`
-scales the image until the *drawn* phone fills the stage, then divides the drawn
-screen by the number of menu items so all eight always fit without scrolling
-(checked at 360×740, 390×844 and 430×932).
+**The D-pad is real.** The four drawn ovals are the keys — measured off
+`assets/flipphone.png` at x 39.4/63.3% and y 55.4/63.2%, with OK at 52.1/59.3%.
+They used to be a 3x3 grid whose cells landed in the gaps between the ovals, so
+you were tapping bare artwork. Each hit area is a fixed 46px and carries an
+arrow, because the ovals sit on the diagonals and position alone wouldn't say
+which is which. Grant's snake still has first claim on those keys, unlock
+sequence included.
 
-**Two sizings, same page.** `mobile-new.html` fits the whole handset on screen.
-`mobile-new-big.html` is the same file with `window.DUMB_MOBILE_FIT = 'dpad'`
-set before the script runs: `mFit()` then scales the phone until the D-pad
-reaches the bottom of the screen rather than the whole phone, so the menu type
-goes from ~12px to 17px and the number keys crop off below. The D-pad is still
-fully on screen — it's the last thing that has to fit. Keep both for the review
-and drop whichever loses.
+### Testing it
 
-**A first-run card explains the controls** ("to navigate, use the d-pad on
-screen or click on the tab you would like to see"), once per tab, with a `?`
-badge top-right to bring it back. A phone-shaped menu isn't a convention anyone
-has seen before.
-
-**The duck is deliberately not on mobile.** It walks between the logo and the
-egg, and neither exists on the phone layout.
-
-### Testing them — and verifying the mobile one actually works
-
-**On a laptop, in a minute.** Open `concept/mobile-new.html`, then Chrome >
-devtools (⌥⌘I) > the phone icon in the toolbar > pick "iPhone 14 Pro" >
-**reload**. The reload matters: the layout is measured on load. Rotate with the
-icon at the right of the device bar to check landscape.
-
-**On your actual phone, which is the test that counts.** From this folder:
-
-```
-bash build/serve.sh
-```
-
-It prints the URL to type into Safari on the phone — same wifi, no AirDrop, no
-6MB transfer, and reloading the phone picks up a rebuild instantly. This is also
-the only way FAQ.exe works, since it fetches the published sheet and a `file://`
-page can't.
-
-**What to check off** (this is the list I run after every build):
-
-| | expected |
-| --- | --- |
-| load | the phone fills the screen, menu on its screen, nothing cut off, no sideways scroll |
-| D-pad | the small keys around OK move the highlight; OK and → open the highlighted item |
-| tap | tapping a row opens it directly |
-| sheet | the .exe fills the whole screen — no gap at the top or bottom |
-| red button | closes the sheet and puts you back on the phone |
-| Month Offline | leaves for offline.community in a new tab, does not open a sheet |
-| shop | photos swipe, gallery scrolls, "click here to buy" reachable |
-| memories | baird says "photos coming soon"; the others' photos swipe and open |
-| press | rows all one colour, each opens its article |
-| faq | questions load (served, not `file://`) |
-| address | `…/mobile-new.html#/shop` opens straight into Shop.exe |
-| rotate | landscape still fits, phone rescales |
-| small phone | repeat at 360×740 in emulation — the menu must still fit without scrolling |
-
-Automated on my side, at 360×740, 390×844 and 430×932: every row taps open,
-every sheet is exactly viewport-sized, no horizontal overflow in any section,
-the red button closes each one, and no console errors. Re-run that after any
-change to `m01_mobile.css` / `m02_mobile.js` and it should stay silent.
-
-Neither file writes anything into the app, and nothing in this folder does.
-
-## The file to send the team
-
-```
-python3 build/build.py
-python3 build/build_mobile.py
-python3 build/build_review.py     ->  concept/dumb.co-review.html   (6.3 MB)
-```
-
-One file, desktop and both phone layouts, and it needs no server and no
-internet — double-click it out of a Downloads folder on a plane and everything
-works. A switcher at the bottom flips between **desktop / phone / phone,
-bigger**; it reloads the same file with `?view=phone`, which is what lets it
-work from a `file://` path.
-
-What had to be pulled in to make it truly offline:
-
-| | |
-| --- | --- |
-| fonts | the normal build `@import`s Rubik from Google Fonts; here all four weights are inlined as woff2 (Cheltenham already was) |
-| quiz | quiz.exe frames `concept/quiz.html`; here the whole quiz rides along as a string and is written into the iframe's `srcdoc` |
-| FAQ | already from the build-time snapshot, so 36 questions with no network |
-| photos | already inlined |
-
-The only thing that still wants the internet is the two Vimeo tiles, and offline
-they say "video needs internet" instead of sitting blank.
-
-Verified with every non-file request blocked at the browser: Rubik applied, all
-seven sections open, the quiz renders inside its frame, 36 FAQ questions, and
-in both phone views the menu, the full-screen sheet, the red close button and
-the arrow keys all work with no console errors.
+- **On a laptop:** open the file and drag the window narrow past 760px. It
+  should minimise into the egg and the phone should grow.
+- **On a phone:** `bash build/serve.sh 8402` prints a wifi URL to type in.
+- **`concept/mobile-current.html`** is unrelated and still built: it mirrors the
+  site that is live today, with memories added.
 
 ## Addresses you can copy and paste
 
@@ -180,9 +97,9 @@ so right-click > copy link address works:
 
 | section | prototype | after the React port |
 | --- | --- | --- |
-| About | `index.html#/about` | `dumb.co/about` |
 | Shop | `index.html#/shop` | `dumb.co/shop` |
-| Get Involved | `index.html#/get_involved` | `dumb.co/get_involved` |
+| About | `index.html#/about` | `dumb.co/about` |
+| Community | `index.html#/community` | `dumb.co/community` |
 | Press | `index.html#/press` | `dumb.co/press` |
 | Memories | `index.html#/memories` | `dumb.co/memories` |
 | FAQ | `index.html#/faq` | `dumb.co/faq` |
@@ -272,7 +189,8 @@ script that assembles text files into one HTML file.
    | `23_memories_sheet.js` | Memories from a published Google Sheet |
    | `refresh_faq_snapshot.py` | re-downloads the FAQ sheet into `assets/faq_snapshot.csv` |
    | `24_routes.js` | the addressable sections (`#/shop` → `ROUTES`) |
-   | `m01_mobile.css`, `m02_mobile.js` | the mobile shell for version B |
+   | `29_responsive.css`, `30_phone.js` | the phone layout and the handset menu |
+   | `m01_mobile.css`, `m02_mobile.js` | retired with mobile-new.html |
    | `m10_current.html` | version A, whole file |
 
 3. **`concept/v6_baseline.html`** — the snapshot the build starts from. Never
@@ -345,3 +263,15 @@ already listens for the arrows and calls `teamKey()`, and the mobile shell's
 checks for the mobile shell **inside** its handler, not at load time — the
 mobile shell is built after that file runs, so a load-time check saw nothing
 and left both handlers live.
+
+## Where the meeting notes landed
+
+| note | where it lives |
+| --- | --- |
+| Shop before About; Month Offline out of the nav | `build/build.py` > `NAV_ITEMS` |
+| Get Involved + MO merge into **Community**, as dropdowns | `build/parts/11_involved_section.js` (file keeps its old name), `12_involved.css` |
+| "your life is waiting for you" centred in its column | `build/parts/18_quiz.css` > `#home-copy` |
+| Contact type bigger, blocks fill the card | `build/parts/18_quiz.css` > the `.contact-card.support` block — six lines, each labelled |
+| one responsive site, breakpoint + zoom transition | `build/parts/29_responsive.css` |
+| handset mirrors the window, D-pad, click-the-active-tab | `build/parts/30_phone.js` |
+| arrows on the drawn ovals, 46px targets | `build/parts/22_snake.css` > `.pf-keys` |

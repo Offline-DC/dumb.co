@@ -1,0 +1,103 @@
+
+  /* ==========================================================================
+     ONE SITE, TWO SHAPES  (Jack: mobile-first, the desktop collapses into the
+     mobile view rather than being a second file)
+
+     Below the breakpoint the sidebar, hero and top bar step out, the flip
+     phone grows to fill the screen, and the .exe window becomes a full-screen
+     sheet. Nothing moves in the DOM — it's all position, so crossing the
+     breakpoint in either direction is reversible and there's no second build.
+     ========================================================================== */
+  :root{ --bp-phone: 760px; }
+
+  /* the phone's screen carries the menu in BOTH shapes, so the handset always
+     reflects whatever the window is showing (Jack: "the phone and the modal
+     reflect one another") */
+  #tcl-screen .pmn{position:absolute; inset:0; display:flex; flex-direction:column;}
+  #tcl-screen .pmn-bar{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--body); font-weight:700; font-size:var(--pmn-barf, 7px);
+    letter-spacing:.06em; color:rgba(0,0,0,.62); padding:2px 5px 1px;
+    border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
+  }
+  #tcl-screen .pmn-list{flex:1 1 auto; min-height:0; overflow:hidden;}
+  #tcl-screen .pmn-row{
+    display:flex; align-items:center; gap:4px; height:var(--pmn-rowh, 22px);
+    padding:0 5px; font-family:var(--body); font-weight:700; line-height:1;
+    font-size:var(--pmn-rowf, 10px); color:var(--black); text-decoration:none;
+    white-space:nowrap; overflow:hidden;
+  }
+  /* the highlight uses the same per-position colour cycle as the sidebar nav,
+     so the two can't drift apart (see .navitem:nth-child rules) */
+  #tcl-screen .pmn-row.on:nth-child(4n+1){background:var(--pink);   color:var(--black);}
+  #tcl-screen .pmn-row.on:nth-child(4n+2){background:var(--blue);   color:var(--black);}
+  #tcl-screen .pmn-row.on:nth-child(4n+3){background:var(--orange); color:var(--white);}
+  #tcl-screen .pmn-row.on:nth-child(4n+4){background:var(--black);  color:var(--yellow);}
+  #tcl-screen.playing .pmn{display:none;}
+
+  /* ------------------------------------------------------------ the phone */
+  @media (max-width: 760px){
+    #topbar, #walkduck{display:none !important;}
+    #home{display:none !important;}
+    html, body{height:100%; overflow:hidden;}
+
+    /* the sidebar stops being a column and becomes a transparent layer that
+       only still carries the logo */
+    #sidebar{
+      position:fixed !important; inset:0 !important;
+      width:auto !important; height:auto !important; padding:0 !important;
+      background:transparent !important; border:0 !important;
+      pointer-events:none; z-index:5; display:block !important;
+    }
+    #sidebar nav#navlist, #sidebar #sidebar-foot{display:none !important;}
+    #sidebar #logo{
+      position:absolute; top:14px; left:50%; transform:translateX(-50%);
+      width:132px; margin:0; pointer-events:auto;
+    }
+
+    /* the handset fills what's left. --mpw is the image width the shim
+       computes; the illustration carries ~27% transparent margin each side and
+       2.6% on top, so it's scaled by the drawn phone, not by the file. */
+    #deskphone{
+      display:block !important; position:fixed !important;
+      /* every edge needs !important individually — `inset:auto !important`
+         outranks a plain left/top in the same rule, which parked the handset
+         at the viewport's left edge */
+      left:50% !important; right:auto !important; bottom:auto !important;
+      top:var(--mtop, 56px) !important;
+      transform:translateX(-50%); z-index:2; pointer-events:none;
+      overflow:visible;
+    }
+    #deskphone .phone-frame{
+      width:var(--mpw, 480px); flex:0 0 auto; pointer-events:auto;
+      transition:width .45s cubic-bezier(.6,0,.2,1);
+    }
+
+    /* the .exe window becomes a sheet. !important beats the inline geometry
+       the desktop controller writes, so nothing can drag it out of frame. */
+    #winmodal{
+      position:fixed !important; left:0 !important; top:0 !important;
+      right:0 !important; bottom:0 !important;
+      width:100% !important; height:100% !important;
+      max-width:none !important; max-height:none !important;
+      border-radius:0 !important; box-shadow:none !important; z-index:200 !important;
+    }
+    #winmodal:not(.collapsed){transform:none !important;}
+    #winmodal .wm-bar{height:48px; padding:0 8px 0 14px; cursor:default;}
+    #winmodal .wm-bar span:first-child{font-size:15px !important;}
+    #winmodal .wm-x{width:36px; height:36px; font-size:21px;}
+    #winmodal .wm-resize{display:none !important;}
+    #winmodal .wm-body{height:calc(100% - 48px) !important;}
+    #wm-section .wm-pad:not(.bleed){padding:18px 18px 30px;}
+    #wm-section h2{font-size:30px !important;}
+    #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
+
+    /* the egg is how you get the sheet back, so it stays */
+    #egg{top:12px; right:12px; width:48px; z-index:210;}
+  }
+
+  /* wide screens: the handset keeps the size Kunal asked for and the menu on
+     its screen is small but legible */
+  @media (min-width: 761px){
+    #deskphone .phone-frame{transition:width .45s cubic-bezier(.6,0,.2,1);}
+  }

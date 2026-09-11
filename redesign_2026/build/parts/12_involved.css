@@ -72,3 +72,50 @@
   a.navitem.external:hover{
     background:var(--black); color:var(--yellow); transform:rotate(-2deg) translateX(-3px);
   }
+
+  /* ==========================================================================
+     Community.exe dropdowns (build/parts/11_involved_section.js)
+     Native <details>/<summary>, so open/close needs no javascript and the
+     keyboard gets it for free.
+     ========================================================================== */
+  .gi-lede{
+    font-family:var(--body); font-size:15px; line-height:1.5; max-width:620px;
+    margin:0 0 20px; opacity:.85;
+  }
+  .gi-drops{display:grid; gap:12px; margin:22px 0 20px;}
+  .gi-drop{
+    border:2px solid var(--black); background:var(--white);
+    box-shadow:4px 4px 0 rgba(0,0,0,.9);
+  }
+  .gi-drop > summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; gap:14px;
+    padding:14px 18px; min-height:44px;
+  }
+  .gi-drop > summary::-webkit-details-marker{display:none;}
+  .gi-drop > summary:hover{background:var(--yellow);}
+  .gi-sum{display:flex; flex-direction:column; gap:3px; min-width:0;}
+  .gi-drop .gi-kicker{
+    font-family:var(--body); font-weight:700; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; opacity:.6;
+  }
+  .gi-drop .gi-name{
+    font-family:var(--headline); font-size:clamp(22px, 2.4vw, 30px); line-height:1;
+  }
+  .gi-chev{
+    margin-left:auto; flex:0 0 auto; font-family:var(--body); font-weight:700;
+    font-size:26px; line-height:1; transition:transform .18s ease;
+  }
+  .gi-drop[open] > summary{background:var(--yellow); border-bottom:2px solid var(--black);}
+  .gi-drop[open] .gi-chev{transform:rotate(45deg);}
+  .gi-body{padding:16px 18px 18px;}
+  .gi-body p{
+    font-family:var(--body); font-size:14.5px; line-height:1.55; margin:0 0 14px;
+    max-width:58ch;
+  }
+  .gi-go{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--body); font-weight:700; font-size:13px;
+    background:var(--black); color:var(--yellow); text-decoration:none;
+    border:2px solid var(--black); border-radius:100px; padding:11px 20px;
+  }
+  .gi-go:hover{background:var(--white); color:var(--black);}

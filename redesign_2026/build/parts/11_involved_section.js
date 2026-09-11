@@ -1,8 +1,15 @@
-    involved: () => `
+    /* Community.exe — was "Get Involved". Afreka asked for Month Offline and
+       Get Involved to merge into one Community section housing the organizing,
+       career and community work; Jack asked for the contents to be dropdowns.
+       The DIAL-UP stays at the top. `group dumb down` is parked below in a
+       comment — it's one paste away when it comes back.
+       (File keeps its old name so build.py's anchors stay put.) */
+    community: () => `
       <div class="gi-page">
         <div class="dots">${DOTS_PAGE}</div>
         <div class="gi-in">
-          <h2>Get Involved</h2>
+          <h2>Community</h2>
+          <p class="gi-lede">everything we organize together — the challenge, the campus programme, and whatever you start next.</p>
 
           <!-- the DIAL-UP sits up top -->
           <div id="newsletter">
@@ -11,23 +18,55 @@
             <button type="button">subscribe</button>
           </div>
 
-          <!-- two distinct programmes: one is for schools, one is for everyone else -->
-          <div class="gi-two">
-            <div class="gi-card">
-              <div class="gi-kicker">on campus</div>
-              <h3>project<br/>xtra&#8209;ordinary</h3>
-              <p>organize a dumb down at ur school and we'll <b>fund it</b> — money to break the shell, put on the event and get ur campus off the feed.</p>
-            </div>
-            <div class="gi-card">
-              <div class="gi-kicker">everyone else</div>
-              <h3>group<br/>dumb down</h3>
-              <p>bring ur crew, office, team or block and everyone <b>gets $ off</b> their dumbphone plan. no campus required.</p>
-            </div>
+          <div class="gi-drops">
+            <details class="gi-drop">
+              <summary>
+                <span class="gi-sum">
+                  <span class="gi-kicker">the 30&#8209;day challenge</span>
+                  <span class="gi-name">Month Offline</span>
+                </span>
+                <span class="gi-chev" aria-hidden="true">+</span>
+              </summary>
+              <div class="gi-body">
+                <p>a month without the smartphone, together. cohorts, meetups and a whole lot of people finding out what they do with the time.</p>
+                <a class="gi-go" href="https://offline.community" target="_blank" rel="noopener noreferrer">go to Month Offline &#8599;</a>
+              </div>
+            </details>
+
+            <details class="gi-drop">
+              <summary>
+                <span class="gi-sum">
+                  <span class="gi-kicker">on campus</span>
+                  <span class="gi-name">project xtra&#8209;ordinary</span>
+                </span>
+                <span class="gi-chev" aria-hidden="true">+</span>
+              </summary>
+              <div class="gi-body">
+                <p>organize a dumb down at ur school and we'll <b>fund it</b> — money to break the shell, put on the event and get ur campus off the feed.</p>
+                <a class="gi-go" href="mailto:organize@dumb.co">organize@dumb.co</a>
+              </div>
+            </details>
           </div>
+
+          <!--  parked, per Jack: "Month Offline and Project Xtra-ordinary (for now)"
+          <details class="gi-drop">
+            <summary>
+              <span class="gi-sum">
+                <span class="gi-kicker">everyone else</span>
+                <span class="gi-name">group<br/>dumb down</span>
+              </span>
+              <span class="gi-chev" aria-hidden="true">+</span>
+            </summary>
+            <div class="gi-body">
+              <p>bring ur crew, office, team or block and everyone <b>gets $ off</b> their dumbphone plan. no campus required.</p>
+              <a class="gi-go" href="mailto:organize@dumb.co">organize@dumb.co</a>
+            </div>
+          </details>
+          -->
 
           <!-- one email, at the bottom -->
           <div class="gi-foot">
-            <span>either one starts the same way —</span>
+            <span>want to start something else? —</span>
             <a href="mailto:organize@dumb.co">organize@dumb.co</a>
           </div>
         </div>
