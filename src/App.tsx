@@ -19,7 +19,6 @@ import DesktopDownload from "./Desktop/DesktopDownload.tsx";
 import FSADownload from "./FSA/FSADownload.tsx";
 import SpotifyLink from "./Link/SpotifyLink.tsx";
 import AppRedirect from "./AppRedirect.tsx";
-import MobileRedirect from "./MobileRedirect.tsx";
 
 import "./App.css";
 import CenteredShell from "./CenteredLayout.tsx";
@@ -83,7 +82,13 @@ function App() {
                 happens here. See src/Link/SpotifyLink.tsx. */}
             <Route path="/link" element={<SpotifyLink />} />
             <Route path="/app" element={<AppRedirect />} />
-            <Route path="/mobile" element={<MobileRedirect />} />
+            {/* /mobile is served by public/mobile/index.html — the subscription
+                quiz — not by React Router. GitHub Pages resolves the real file
+                before the SPA fallback, so this route could never match; it is
+                removed rather than left as dead code. Every exit from the quiz
+                (all three plan outcomes and the skip link) points at
+                https://dumb-co.gigs.com/, which is where /mobile redirected
+                before, so the destination is unchanged. */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
