@@ -1,0 +1,243 @@
+/* Memories.exe — the same Windows-95 furniture the rest of the site's modals
+   use (see src/WindowModal/index.module.css): #c0c0c0 chrome, beveled edges,
+   Cheltenham headers, Rubik body. Not the 2026 redesign's black-and-yellow. */
+
+.wrap {
+  padding: 14px 16px 18px;
+  font-family: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  color: #101010;
+  /* Two things have to be reset here.
+     1. The modal renders inside the phone screen's display container, which
+        sets text-align: right and its own font-size (src/Phone/Screen.tsx).
+     2. src/Support.css styles bare `p, h1, h2, h3` and `button` globally with
+        font-family "VT323" — an unscoped element selector in a globally
+        imported stylesheet, so it reaches every component on the site. Class
+        selectors beat it, which is why every rule below names its font
+        explicitly instead of relying on inheritance. */
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.head h1 {
+  font-family: "Cheltenham", Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+.head p {
+  font-family: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #3a3a3a;
+  margin: 0 0 14px;
+}
+
+.rule {
+  height: 2px;
+  background: #808080;
+  border-bottom: 1px solid #ffffff;
+  margin: 0 0 16px;
+}
+
+/* ---------------------------------------------------------------- an event */
+.event {
+  margin: 0 0 20px;
+}
+
+.event:last-child {
+  margin-bottom: 4px;
+}
+
+.eventHead {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 6px;
+}
+
+.eventHead h2 {
+  font-family: "Cheltenham", Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.when {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.where {
+  font-size: 11.5px;
+  color: #555;
+}
+
+.blurb {
+  font-family: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+  max-width: 62ch;
+}
+
+/* the photo strip scrolls sideways, with the arrows the live site uses */
+.strip {
+  position: relative;
+}
+
+.rail {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 2px 2px 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tile {
+  flex: 0 0 auto;
+  width: 132px;
+  padding: 0;
+  background: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.tile:active {
+  box-shadow: inset -1px -1px 0 #ffffff, inset 1px 1px 0 #808080;
+}
+
+.tile img {
+  display: block;
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  border: 1px solid #808080;
+}
+
+.tileCap {
+  display: block;
+  font-size: 10.5px;
+  line-height: 1.25;
+  padding: 4px 5px 5px;
+  color: #202020;
+}
+
+.arrows {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.arrow {
+  width: 30px;
+  height: 24px;
+  background: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.arrow:active {
+  box-shadow: inset -1px -1px 0 #ffffff, inset 1px 1px 0 #808080;
+}
+
+.pending {
+  border: 2px dashed #909090;
+  background: #d8d8d8;
+  color: #5a5a5a;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 18px 10px;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------ one photo up */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.back {
+  align-self: flex-start;
+  background: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080;
+  padding: 5px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.back:active {
+  box-shadow: inset -1px -1px 0 #ffffff, inset 1px 1px 0 #808080;
+}
+
+.detailFrame {
+  background: #808080;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff;
+  padding: 6px;
+}
+
+.detailFrame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 58vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.detailMeta h2 {
+  font-family: "Cheltenham", Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  margin: 0 0 2px;
+}
+
+.detailMeta p {
+  font-family: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin: 0 0 4px;
+}
+
+.counter {
+  font-size: 11px;
+  color: #555;
+}
+
+.detailNav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .wrap { padding: 12px 12px 16px; }
+  .head h1 { font-size: 25px; }
+  .eventHead h2 { font-size: 19px; }
+  .tile { width: 118px; }
+  .tile img { height: 86px; }
+  .detailFrame img { max-height: 46vh; }
+}
