@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 import Phone from "./Phone/Phone";
 import OfflineMode from "./OfflineMode";
+import DumbDumb from "./DumbDumb.tsx";
 import Support from "./Support";
 import Internship from "./Internship/Internship.tsx";
 import NotFound from "./NotFound";
@@ -60,7 +61,7 @@ function App() {
         <Routes>
           <Route element={<CenteredShell />}>
             <Route path="/" element={<Phone />} />
-            <Route path="/dumbdown" element={<AppRedirect />} />
+            <Route path="/dumbdown" element={<DumbDumb />} />
             <Route path="/setup" element={<OfflineMode />} />
             <Route path="/support" element={<Support />} />
             <Route path="/internship" element={<Internship />} />
