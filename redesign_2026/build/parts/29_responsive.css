@@ -100,8 +100,14 @@
     #wm-section h2{font-size:30px !important;}
     #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
 
-    /* the egg is how you get the sheet back, so it stays */
-    #egg{top:12px; right:12px; width:48px; z-index:210;}
+    /* The egg is desktop furniture — it reads as a stray sticker floating over
+       the handset on a phone. It used to stay because it was the way to pop a
+       minimised sheet back open, but the handset already does that: phoneOpen()
+       calls expandModal() before openSection(), so any menu row or the OK key
+       brings the sheet back. Nothing can strand you with this hidden.
+       (#walkduck is already hidden above, and duck.js falls back to a fixed x
+       when the egg has no box, so the walk path doesn't break either.) */
+    #egg{display:none !important;}
   }
 
   /* wide screens: the handset keeps the size Kunal asked for and the menu on
