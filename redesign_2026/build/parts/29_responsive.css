@@ -13,7 +13,15 @@
   /* the phone's screen carries the menu in BOTH shapes, so the handset always
      reflects whatever the window is showing (Jack: "the phone and the modal
      reflect one another") */
-  #tcl-screen .pmn{position:absolute; inset:0; display:flex; flex-direction:column;}
+  /* The screen box is now the drawn aperture exactly (see trace_screen.py), so
+     its top and bottom edges sit under the ink stroke. Inset the content
+     vertically to clear it -- vertical only, so the highlight bar still bleeds
+     out to the traced edge instead of floating in a box. */
+  #tcl-screen .pmn{
+    position:absolute; inset:0; box-sizing:border-box;
+    padding:5% 0 3%;
+    display:flex; flex-direction:column;
+  }
   #tcl-screen .pmn-bar{
     flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
     font-family:var(--body); font-weight:700; font-size:var(--pmn-barf, 7px);
