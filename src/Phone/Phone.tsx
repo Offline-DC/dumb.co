@@ -144,7 +144,8 @@ function Phone({ initialScreen }: Props) {
       screen === "internship" ||
       screen === "dumbphone 2" ||
       screen === "dumb on campus" ||
-      screen === "FAQ"
+      screen === "FAQ" ||
+      screen === "memories"
     ) {
       return;
     }

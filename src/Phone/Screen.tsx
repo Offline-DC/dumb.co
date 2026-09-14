@@ -5,6 +5,7 @@ import Press from "../Press/Press";
 import DumbphoneOneModal from "../DumbphoneOneModal";
 import DumbCampusModal from "../DumbCampusModal";
 import FAQModal from "../FAQModal";
+import MemoriesModal from "../MemoriesModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
 
@@ -66,11 +67,18 @@ function Screen({
     newOptions = [
       "buy dumbphone 2",
       "FAQ",
-      "Month Offline",
-      "dumb on campus",
+      "get involved",
+      "memories",
       "contact us",
       "press",
     ];
+  } else if (screen === "get involved") {
+    // Month Offline and dumb on campus moved off the home menu into here —
+    // they're both ways to take part rather than things to read, and folding
+    // them up freed the row that "memories" now uses. Their own screen
+    // branches below are untouched, so selecting either behaves as it always
+    // did.
+    newOptions = ["Month Offline", "dumb on campus"];
   } else if (screen === "contact us") {
     newOptions = ["team", "support", "organize"];
   } else if (screen === "sign up") {
@@ -327,6 +335,13 @@ function Screen({
       <div>
         launching FAQ...
         <FAQModal clickBackButton={clickBackButton} />
+      </div>
+    );
+  } else if (screen === "memories") {
+    display = (
+      <div>
+        launching memories...
+        <MemoriesModal clickBackButton={clickBackButton} />
       </div>
     );
   } else if (screen === "setup") {
