@@ -119,8 +119,13 @@ mem_js = ("  /* Memories — real event photos, only from events that have happe
           + "  };\n")
 print(f"  embedded {len(mem_files)} memory photos")
 
-phone_f = ROOT / "assets" / "flipphone.png"
-must(phone_f.exists(), "assets/flipphone.png missing")
+# the shortened handset (build/make_short_phone.py): same drawing with the
+# blank body and the non-interactive number keys taken out, so the screen is
+# 40% of the art instead of 28%. Matteo asked for "less space above and below
+# the screen"; this is that, until Marco redraws it.
+phone_f = ROOT / "assets" / "flipphone_short.png"
+must(phone_f.exists(),
+     "assets/flipphone_short.png missing - run: python3 build/make_short_phone.py")
 flipphone_uri = datauri(phone_f, "png")
 
 duck_f = ROOT / "assets" / "duck-walk.gif"
