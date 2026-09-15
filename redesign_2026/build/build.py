@@ -423,12 +423,13 @@ html = swap_block(html, "  function openSection(key){", "  /* ---------------- l
                   + part("21_snake.js") + part("23_memories_sheet.js")
                   + part("24_routes.js") + part("27_keys.js") + part("30_phone.js") + "\n")
 
-# ---- 8b. the hero kicker said "$20/mo"; the deck says $20 is the phone and
-# plans start at $15.99/mo, so say that instead
-old_kicker = '<div class="kicker">dumbphone 2 &middot; $20/mo</div>'
-must(old_kicker in html, "could not find the hero kicker to correct")
-html = html.replace(old_kicker,
-    '<div class="kicker">dumbphone 2 &middot; $20 phone &middot; plans from $15.99/mo</div>', 1)
+# ---- 8b. the hero kicker used to gain "$20 phone - plans from $15.99/mo"
+# here. Milk + Marlee: no price on the home page at all. The shop page carries
+# it, and leading with a number before anyone knows what the thing is prices it
+# against phones it isn't competing with. The baseline now reads just
+# "dumbphone 2" and nothing rewrites it.
+must('<div class="kicker">dumbphone 2</div>' in html,
+     "the hero kicker changed shape - check it still says just the product name")
 
 # ------------------------------------------------------------------ 9. title
 html = html.replace("<title>dumb.co — 2026 redesign concept v3</title>",
@@ -442,7 +443,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                'id="walkduck"', "startDuckWalk();",
                "4 month minimum", "SHOW_PLAN_CARDS", "MEMORY_EVENTS",
                "PRESS_MIRROR", "press-mirror", "railStep", "$15.99",
-               "plans from $15.99/mo", "xtra&#8209;ordinary", "community: () =>",
+               "xtra&#8209;ordinary", "community: () =>",
                'href="#/community"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
                ">Community<", "gi-drop", f'href="{MONTH_OFFLINE_URL}"',
                "1209576549", "1215826540",

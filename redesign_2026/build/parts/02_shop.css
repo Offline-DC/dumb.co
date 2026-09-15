@@ -12,9 +12,12 @@
   .sh-hero .dots{position:absolute; inset:0; pointer-events:none;}
   .sh-hero .dots i{position:absolute; border-radius:50%; display:block;}
   .sh-hero .hero-in{position:relative; display:grid; grid-template-columns:1fr .82fr; gap:12px; align-items:center;}
+  /* lowercase (Milk + Marlee): the product is "dumbphone 2", not "DUMBPHONE 2".
+     text-transform was overriding the markup, so lowercasing the string alone
+     changed nothing on screen. */
   .sh-hero h3{
     font-family:var(--headline); font-weight:700; font-size:52px; line-height:.94; margin:0 0 10px;
-    letter-spacing:-.01em; text-transform:uppercase;
+    letter-spacing:-.01em; text-transform:none;
   }
   .sh-hero .hero-lines{font-family:var(--body); font-weight:800; font-size:26px; line-height:1.06; margin:0; letter-spacing:-.01em;}
   .sh-hero .hero-lines span{display:block;}
@@ -145,3 +148,21 @@
     .sh-hero .hero-in{grid-template-columns:1fr;}
     .plan-cards{grid-template-columns:1fr;}
   }
+
+  /* buy sits with the price (Milk + Marlee) rather than up in the hero, so the
+     number and the action are the same glance. */
+  .sh-spec .spec-head{display:flex; align-items:center; gap:12px;}
+  .sh-spec .spec-head .spec-price{margin-left:auto;}
+  .sh-spec .sh-buy{
+    -webkit-appearance:none; appearance:none; border:0; cursor:pointer;
+    background:var(--black); color:var(--yellow);
+    font-family:var(--body); font-weight:700; font-size:15px;
+    padding:10px 20px; border-radius:999px; line-height:1;
+    min-height:44px;                 /* Matteo's minimum, not Jack's 24 */
+  }
+  .sh-spec .sh-buy:hover{opacity:.88;}
+  .sh-spec .spec-plan{
+    font-family:var(--body); font-size:14px; color:#00000099;
+    margin:8px 0 0;
+  }
+  .sh-spec .spec-plan a{color:var(--black); text-underline-offset:3px;}

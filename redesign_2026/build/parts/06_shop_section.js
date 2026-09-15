@@ -3,9 +3,8 @@
         <div class="dots">${DOTS_EDGE}</div>
         <div class="hero-in">
           <div>
-            <h3>DUMBPHONE 2</h3>
+            <h3>dumbphone 2</h3>
             <p class="hero-lines"><span>everything</span><span>u need 2</span><span>go out</span></p>
-            <div class="hero-sync">can sync with ur smartphone</div>
             <button type="button" class="sh-cta" onclick="openQuiz()">click here to buy</button>
           </div>
           <div class="hero-phone"><img id="sh-main-img" src="${SHOP_PHOTOS[0]}" alt="dumbphone 2"/></div>
@@ -25,9 +24,13 @@
           <div class="spec-head">
             <span class="spec-name">dumbphone 2</span>
             <span class="spec-price">$20</span>
+            <button type="button" class="sh-buy" onclick="openQuiz()">buy</button>
           </div>
+          <p class="spec-plan">all phones come with a
+            <a href="#" onclick="openQuiz(); return false;">plan</a>
+            starting at $15.99/mo + tax</p>
           <ul>
-            <li>$20 phone hardware with custom dumbOS + SIM card. plans start at $15.99/mo, activated when u receive the phone.</li>
+            <li>$20 phone hardware with custom dumbOS + SIM card. plans start at $15.99/mo + tax, activated when u receive the phone.</li>
             <li><b>4 month minimum plan, auto-renews monthly after that.</b></li>
             <li>every phone comes with the essentials: unlimited call/text, maps, signal, uber, 2-factor auth, bluetooth, hotspot, alarm, camera, weather + more.</li>
             <li>optional features: fwd calls from ur smartphone, sync smartphone texts + contacts, whatsapp, spotify, apple music, podcasts.</li>
