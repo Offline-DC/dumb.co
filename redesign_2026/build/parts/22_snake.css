@@ -2,13 +2,24 @@
   /* ==========================================================================
      snake, inside the flip-phone screen
      ========================================================================== */
-  /* The keys are placed on the drawn ovals, measured off assets/flipphone.png:
-     the four ovals centre at x 39.4% / 63.3% and y 55.4% / 63.2%, with the OK
-     circle at 52.1% / 59.3%. They used to be a 3x3 grid whose cells landed in
-     the gaps between the ovals, so you were tapping bare artwork.
-     Each hit area is forced to at least 44px (Jack asked for 40-45) even when
-     the drawn oval is smaller, and the arrow glyph is what says which is which
-     — the ovals sit on the diagonals, so position alone wouldn't. */
+  /* The five keys live ON the drawn OK circle, as one d-pad.
+     Measured off assets/flipphone.png (560x921): the circle's interior spans
+     x[249,330] y[507,589], so it centres at 51.70% / 59.50% with a radius of
+     7.23% of the frame's width and 4.51% of its height. The arrows sit at 72%
+     of that radius -- on the ring, just inside the stroke, framing the drawn
+     "OK" rather than landing on top of it. Centre is select and carries no
+     glyph, because the artwork already says OK.
+
+     The four ovals around the circle are NOT keys. In the raw art they contain
+     plain dashes, not arrows; the arrows that used to appear there were these
+     CSS glyphs painted over them. They're decoration now.
+
+     Sizes are in cqw (the frame sets container-type:inline-size) rather than a
+     fixed px: these have to stay inside a circle that scales with the handset,
+     so a fixed target would spill out of it on a phone and swamp the artwork.
+     That gives ~35px arrows where it matters (the handset is ~760px wide at
+     the phone breakpoint) and ~19px on the desktop cameo, where you have real
+     arrow keys anyway. */
   .phone-frame .pf-keys{
     position:absolute; inset:0; z-index:3; pointer-events:none;
   }
@@ -18,21 +29,21 @@
     /* a fixed 46px target at every phone size: as a percentage it scaled with
        the handset and the bottom key ended up past the edge of a phone screen.
        46px sits inside Jack's 40-45 ask and still covers the drawn oval. */
-    width:46px; height:46px;
+    width:4.6cqw; height:4.6cqw;
     display:flex; align-items:center; justify-content:center;
     pointer-events:auto; cursor:pointer; border-radius:50%; outline:none;
     font-family:var(--body); font-weight:700; color:var(--black);
-    font-size:clamp(15px, 4.6cqw, 32px); line-height:1;
+    font-size:clamp(9px, 2.6cqw, 20px); line-height:1;
     opacity:.78; transition:opacity .15s ease, transform .1s ease;
   }
   .phone-frame{container-type:inline-size;}
   .phone-frame .pf-keys button:hover{opacity:1;}
   .phone-frame .pf-keys button:active{transform:translate(-50%,-50%) scale(.88);}
-  .phone-frame .pf-keys .k-up   {left:39.4%; top:55.4%;}
-  .phone-frame .pf-keys .k-right{left:63.3%; top:55.4%;}
-  .phone-frame .pf-keys .k-down {left:63.3%; top:63.2%;}
-  .phone-frame .pf-keys .k-left {left:39.4%; top:63.2%;}
-  .phone-frame .pf-keys .k-ok   {left:52.1%; top:59.3%; width:60px; height:60px; font-size:0;}
+  .phone-frame .pf-keys .k-up   {left:51.70%; top:56.26%;}
+  .phone-frame .pf-keys .k-right{left:56.97%; top:59.50%;}
+  .phone-frame .pf-keys .k-down {left:51.70%; top:62.74%;}
+  .phone-frame .pf-keys .k-left {left:46.43%; top:59.50%;}
+  .phone-frame .pf-keys .k-ok   {left:51.70%; top:59.50%; width:5.0cqw; height:5.0cqw; font-size:0;}
 
   .phone-frame .pf-screen.playing img,
   .phone-frame .pf-screen.playing .pf-hint{opacity:0 !important; display:none;}

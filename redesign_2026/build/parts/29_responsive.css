@@ -41,7 +41,22 @@
   #tcl-screen .pmn-row.on:nth-child(4n+2){background:var(--blue);   color:var(--black);}
   #tcl-screen .pmn-row.on:nth-child(4n+3){background:var(--orange); color:var(--white);}
   #tcl-screen .pmn-row.on:nth-child(4n+4){background:var(--black);  color:var(--yellow);}
-  #tcl-screen.playing .pmn{display:none;}
+  /* ---- the screen mirrors the minimised window -------------------------
+     While a section is collapsed, the handset shows a live scaled clone of
+     the window's own content rather than the menu with a row highlighted --
+     so minimising reads as "it went into the phone". The clone is rendered
+     at a fixed 560px and scaled down to whatever the screen is, which keeps
+     the proportions identical at every handset size. It is inert: no
+     pointer events, so taps still fall through to the drawn keys. */
+  #tcl-screen .pmn-mirror{
+    position:absolute; inset:0; overflow:hidden;
+    background:var(--yellow); z-index:2;
+  }
+  #tcl-screen .pmn-mirror .pmn-mirror-in{
+    transform-origin:0 0; pointer-events:none; user-select:none;
+  }
+  #tcl-screen.playing .pmn,
+  #tcl-screen.playing .pmn-mirror{display:none;}
 
   /* ------------------------------------------------------------ the phone */
   @media (max-width: 760px){

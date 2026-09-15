@@ -54,6 +54,60 @@
     rows.forEach((el, i) => el.classList.toggle('on', i === pmSel));
   }
 
+  /* ---- mirror the minimised window onto the screen ----------------------
+     Showing the menu with a row highlighted told you which section was
+     minimised but not what was in it. This clones the window's own content
+     onto the handset instead, scaled to fit, so shrinking the window reads
+     as the page going into the phone.
+
+     The clone is laid out at the window's own current width and then scaled
+     down, so the miniature matches what you just minimised line for line.
+     Laying it out at a fixed width instead made absolutely-positioned bits
+     land in the wrong place and text collide. MIRROR_W is only the fallback
+     for when the window has no width to read yet. */
+  const MIRROR_W = 560;
+
+  function phoneMirror(on){
+    const screen = document.getElementById('tcl-screen');
+    if(!screen) return;
+    const menu = screen.querySelector('.pmn');
+    let mir = screen.querySelector('.pmn-mirror');
+
+    if(!on){
+      if(mir) mir.remove();
+      if(menu) menu.style.display = '';
+      return;
+    }
+
+    const src = document.getElementById('wm-section') || document.getElementById('wm-body');
+    if(!src || !src.firstChild){ if(mir) mir.remove(); if(menu) menu.style.display=''; return; }
+
+    if(!mir){
+      mir = document.createElement('div');
+      mir.className = 'pmn-mirror';
+      mir.setAttribute('aria-hidden', 'true');   // the real content is in the window
+      screen.appendChild(mir);
+    }
+    const srcW = src.offsetWidth || MIRROR_W;    // layout width: transforms don't affect it
+
+    const inner = document.createElement('div');
+    inner.className = 'pmn-mirror-in';
+    inner.style.width = srcW + 'px';
+    const clone = src.cloneNode(true);
+    clone.removeAttribute('id');                 // no duplicate ids in the document
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    /* the confetti is absolutely positioned against the section, so at this
+       size it just lands on top of the words. It reads as noise in a
+       thumbnail, not as decoration. */
+    clone.querySelectorAll('i[style*="background"]').forEach(el => el.remove());
+    inner.appendChild(clone);
+    mir.replaceChildren(inner);
+
+    const w = screen.clientWidth || 1;
+    inner.style.transform = 'scale(' + (w / srcW) + ')';
+    if(menu) menu.style.display = 'none';
+  }
+
   /* the window changed — make the handset say the same thing */
   function phoneReflect(key){
     const i = pmItems.findIndex(it => it.key === key);
@@ -172,7 +226,22 @@
     openSection = function(key){
       _openSectionPhone(key);
       phoneReflect(key);
+      /* if we're opening while minimised (the phone is the nav on mobile),
+         refresh the mirror to the section just picked */
+      if(collapsed()) phoneMirror(true);
     };
+
+    /* minimising fills the screen with the window's content; restoring hands
+       the screen back to the menu. Wrapped rather than edited in place so the
+       baseline's own inline onclick="collapseModal()" keeps working. */
+    if(typeof collapseModal === 'function'){
+      const _collapse = collapseModal;
+      collapseModal = function(){ _collapse.apply(this, arguments); phoneMirror(true); };
+    }
+    if(typeof expandModal === 'function'){
+      const _expand = expandModal;
+      expandModal = function(){ _expand.apply(this, arguments); phoneMirror(false); };
+    }
 
     phoneFit();
     wasPhone = isPhone();
