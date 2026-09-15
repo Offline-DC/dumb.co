@@ -119,13 +119,13 @@ mem_js = ("  /* Memories — real event photos, only from events that have happe
           + "  };\n")
 print(f"  embedded {len(mem_files)} memory photos")
 
-# the shortened handset (build/make_short_phone.py): same drawing with the
-# blank body and the non-interactive number keys taken out, so the screen is
-# 40% of the art instead of 28%. Matteo asked for "less space above and below
-# the screen"; this is that, until Marco redraws it.
-phone_f = ROOT / "assets" / "flipphone_short.png"
+# the whole handset, with only the screen made bigger (build/expand_screen.py).
+# An earlier attempt cropped the number keys off to buy height -- it worked on
+# paper and looked wrong: a stubby phone. The window is what needed to grow,
+# not the phone to shrink.
+phone_f = ROOT / "assets" / "flipphone_bigscreen.png"
 must(phone_f.exists(),
-     "assets/flipphone_short.png missing - run: python3 build/make_short_phone.py")
+     "assets/flipphone_bigscreen.png missing - run: python3 build/expand_screen.py")
 flipphone_uri = datauri(phone_f, "png")
 
 duck_f = ROOT / "assets" / "duck-walk.gif"
