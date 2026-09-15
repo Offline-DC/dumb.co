@@ -13,9 +13,9 @@ if [ ! -f "$HERE/concept/index.html" ]; then
   echo "concept/index.html is missing — run: python3 build/build.py" >&2
   exit 1
 fi
-for f in mobile-new.html mobile-current.html; do
-  [ -f "$HERE/concept/$f" ] || { echo "concept/$f is missing — run: python3 build/build_mobile.py" >&2; exit 1; }
-done
+# mobile-new.html is gone: the redesign is one responsive page now, so
+# index.html IS the mobile build -- just open it narrow. mobile-current.html is
+# still built separately (it mirrors today's live site) and is optional.
 
 # the Wi-Fi address, not the loopback one
 IP="$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || true)"
@@ -27,21 +27,22 @@ echo
 echo "  serving $HERE/concept on port $PORT"
 echo
 echo "  on this mac:"
-echo "    http://localhost:$PORT/index.html            desktop"
-echo "    http://localhost:$PORT/mobile-new.html       mobile B — the redesign"
-echo "    http://localhost:$PORT/mobile-current.html   mobile A — today's site + memories"
+echo "    http://localhost:$PORT/index.html            the redesign"
+echo "    http://localhost:$PORT/mobile-current.html   today's live site, for comparison"
+echo
+echo "  same file for desktop and phone — drag the window narrower than 760px"
+echo "  and it becomes the handset."
 if [ -n "$IP" ]; then
   echo
-  echo "  on your phone (same wifi — type these in Safari/Chrome):"
-  echo "    http://$IP:$PORT/mobile-new.html"
-  echo "    http://$IP:$PORT/mobile-current.html"
+  echo "  on your phone (same wifi — type this in Safari/Chrome):"
+  echo "    http://$IP:$PORT/index.html"
 else
   echo
   echo "  couldn't read a wifi address — check System Settings > Network for this"
-  echo "  mac's IP and use http://<that-ip>:$PORT/mobile-new.html on the phone"
+  echo "  mac's IP and use http://<that-ip>:$PORT/index.html on the phone"
 fi
 echo
-echo "  a section links straight in, e.g.  http://${IP:-localhost}:$PORT/mobile-new.html#/shop"
+echo "  a section links straight in, e.g.  http://${IP:-localhost}:$PORT/index.html#/shop"
 echo "  ctrl-c to stop"
 echo
 
