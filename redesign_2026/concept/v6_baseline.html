@@ -27,7 +27,11 @@
     --body: "Rubik", "Helvetica Neue", Arial, sans-serif;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--black);overflow:hidden;}
+  /* touch-action:manipulation kills double-tap-to-zoom (Jack) while leaving
+     pinch-to-zoom alone. A maximum-scale / user-scalable=no viewport would
+     disable both, and taking pinch away from someone who needs it to read is
+     not a fix. */
+  html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--black);overflow:hidden;touch-action:manipulation;}
 
   #app{position:relative;height:100%;width:100%;overflow:hidden;background:var(--yellow);}
 

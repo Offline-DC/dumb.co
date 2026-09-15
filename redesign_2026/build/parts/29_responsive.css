@@ -125,6 +125,42 @@
     #egg{display:none !important;}
   }
 
+  /* ---- tablet / small laptop: 761px to 1100px --------------------------
+     The desktop layout is three columns -- sidebar, hero, handset -- and they
+     stop fitting around 1100px. #home is pinned left:296px right:54%, so at
+     820px the hero column computes to about -6px and the headline wrapped one
+     word per line (Jack's screenshot).
+
+     Under 1250px it becomes two columns: the handset cameo steps out and the
+     hero takes the space back. The handset isn't lost -- below 760px it
+     becomes the whole interface. flipoff.exe still floats above, which is
+     what a window is for. */
+  @media (min-width: 761px) and (max-width: 1250px){
+    #sidebar{width:244px; padding:18px 18px;}
+    #logo{width:150px; margin-bottom:12px;}
+    #sidebar .navitem{font-size:23px; padding:3px 8px;}
+    nav#navlist{gap:5px;}
+
+    #deskphone{display:none !important;}
+    /* keep a reserve for the window, just a smaller one than desktop's 54%,
+       so the hero and the window sit side by side instead of on top of each
+       other -- the same shape as desktop, only tighter */
+    #home{left:244px; right:40%; padding:0 24px;}
+    #home-copy{max-width:min(380px, 100%);}
+    #home-copy h1{font-size:clamp(30px, 4.6vw, 46px);}
+
+    /* the window's left/top are set inline by the drag code against the
+       desktop layout, so at this width it ran off the right edge. Pin it into
+       the reserve instead; dragging still works once it's open. */
+    #winmodal:not(.collapsed){
+      left:auto !important;
+      right:2.5vw !important;
+      top:72px !important;
+      width:min(520px, 35vw) !important;
+      max-height:78vh;
+    }
+  }
+
   /* wide screens: the handset keeps the size Kunal asked for and the menu on
      its screen is small but legible */
   @media (min-width: 761px){

@@ -70,6 +70,12 @@
   function phoneMirror(on){
     const screen = document.getElementById('tcl-screen');
     if(!screen) return;
+    /* Never mirror on a phone. Below the breakpoint the handset IS the
+       navigation, so replacing the menu with a picture of the section you
+       just closed leaves nothing to tap -- Jack hit exactly this: "you can't
+       go back to the main menu after clicking on something". On desktop the
+       sidebar is still there, so the mirror costs nothing. */
+    if(isPhone()) on = false;
     const menu = screen.querySelector('.pmn');
     let mir = screen.querySelector('.pmn-mirror');
 
@@ -187,7 +193,10 @@
     const bar = Math.max(9, Math.round(screenH * 0.06));
     const rowH = Math.max(11, Math.floor((screenH - bar) / n));
     root.style.setProperty('--pmn-rowh', rowH + 'px');
-    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(17, Math.round(rowH * 0.46 * 10) / 10)) + 'px');
+    /* the cap was 17px, which on a real handset read as small print next to
+       44px rows (Jack). 24px matches the minimum he asked for and still fits
+       seven rows on the shortest screen we support. */
+    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
     root.style.setProperty('--pmn-barf', Math.max(6, Math.min(10, Math.round(bar * 0.62))) + 'px');
   }
 
@@ -198,9 +207,11 @@
     if(wasPhone === null){ wasPhone = now; return; }
     if(now === wasPhone) return;
     wasPhone = now;
-    /* going to the phone: the window minimises into the egg and the handset
-       zooms up (the width transition in 29_responsive.css does the zoom) */
-    if(now && !collapsed() && typeof collapseModal === 'function') collapseModal();
+    /* Crossing into phone width used to minimise whatever was open, so the
+       thing you were reading vanished mid-resize. Jack: "the modal should
+       stay up instead of closing". It stays; the handset zooms up behind it
+       (the width transition in 29_responsive.css), and closing the window
+       lands you on the menu. */
   }
 
   window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); });
@@ -245,5 +256,7 @@
 
     phoneFit();
     wasPhone = isPhone();
+    /* on a cold load at phone width the home window is the first thing you
+       see, same as desktop; closing it reveals the handset menu */
     if(isPhone() && typeof collapseModal === 'function' && !collapsed()) collapseModal();
   })();
