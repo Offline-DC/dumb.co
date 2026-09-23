@@ -23,6 +23,9 @@ import numpy as np
 from PIL import Image
 import cv2
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from make_dpad_arrows import ARROW_ART_W   # one source of truth for arrow size
+
 ROOT  = pathlib.Path(__file__).resolve().parent.parent
 ART   = ROOT / "assets" / "flipphone_bigscreen.png"   # built by expand_screen.py
 CSS   = ROOT / "build" / "parts" / "18_quiz.css"
@@ -138,6 +141,10 @@ def main():
     # floor -- Jack's note said 24) the arrows overlapped the centre key at
     # the tighter radius. Further out they sit on the drawn stroke and the
     # five targets stop fighting each other.
+    # 24 artwork px wide -- build/make_dpad_arrows.py draws the chevron to
+    # that width, and it is the widest one that still frames the "OK" at this
+    # radius without touching the lettering.
+    AW = ARROW_ART_W
     RING = 0.80
     def pos(dx, dy):
         return (100 * (kcx + dx * kw / 2) / W, 100 * (kcy + dy * kh / 2) / H)
@@ -157,6 +164,13 @@ def main():
   .phone-frame .pf-keys .k-left {{left:{ks['k-left'][0]:.2f}%; top:{ks['k-left'][1]:.2f}%;}}
   .phone-frame .pf-keys .k-ok   {{left:{ks['k-ok'][0]:.2f}%; top:{ks['k-ok'][1]:.2f}%;
     width:5.7cqw; height:5.7cqw; min-width:34px; min-height:34px; font-size:0;}}
+  /* The glyph is sized separately from the hit target. The target keeps a 34px
+     floor so it stays clickable; the drawing must not, because a stroke is a
+     fixed width in the artwork, and an arrow that stops shrinking with the
+     handset ends up drawn in a different weight from every line around it --
+     which is why these read as chunky on the desktop cameo and right on a
+     phone. {AW}px of a {W}px-wide drawing, so the pen matches at any size. */
+  .phone-frame .pf-keys button{{background-size:{100*AW/W:.2f}cqw {100*AW/W:.2f}cqw;}}
 {KEND}"""
     kcss = KEYCSS.read_text(encoding="utf-8")
     must(kcss.count(KSTART) == 1 and kcss.count(KEND) == 1,

@@ -44,7 +44,11 @@
        pointing up, rotated inside each SVG. */
     font-size:0; color:transparent;
     background-repeat:no-repeat; background-position:center;
-    background-size:76% 76%;
+    /* background-size is NOT here -- it is in the generated dpad block below,
+       derived from the artwork by build/trace_screen.py. A percentage of the
+       button sized the drawing off the hit target, and the hit target has a
+       34px floor for Matteo's 44px rule, so on the desktop cameo the arrows
+       were drawn half again too big while on a phone they were right. */
     /* Marco's chevron, not a font glyph and not my imitation of one
        (build/make_dpad_arrows.py). Same pen as the handset. */
     opacity:.78; transition:opacity .15s ease, transform .1s ease;
@@ -64,6 +68,13 @@
   .phone-frame .pf-keys .k-left {left:45.84%; top:59.50%;}
   .phone-frame .pf-keys .k-ok   {left:51.70%; top:59.50%;
     width:5.7cqw; height:5.7cqw; min-width:34px; min-height:34px; font-size:0;}
+  /* The glyph is sized separately from the hit target. The target keeps a 34px
+     floor so it stays clickable; the drawing must not, because a stroke is a
+     fixed width in the artwork, and an arrow that stops shrinking with the
+     handset ends up drawn in a different weight from every line around it --
+     which is why these read as chunky on the desktop cameo and right on a
+     phone. 24px of a 560px-wide drawing, so the pen matches at any size. */
+  .phone-frame .pf-keys button{background-size:4.29cqw 4.29cqw;}
   /* <<< dpad */
   .phone-frame .pf-keys .k-up   {background-image:url("__DPAD_UP__");}
   .phone-frame .pf-keys .k-right{background-image:url("__DPAD_RIGHT__");}

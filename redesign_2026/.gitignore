@@ -14,3 +14,13 @@ concept/mobile-current.html
 concept/mobile-new-big.html
 concept/dumb.co-review.html
 concept/quiz.html
+
+# Local python venv. macOS's brewed python3 refuses `pip install` (PEP 668),
+# so Pillow lives here instead. dev.sh picks it up automatically if present.
+.venv/
+
+# trace_screen.py imports make_dpad_arrows for ARROW_ART_W, so python leaves
+# bytecode here now.
+build/__pycache__/
+# scratch previews written by the art scripts when checking a change by eye
+build/_*.png
