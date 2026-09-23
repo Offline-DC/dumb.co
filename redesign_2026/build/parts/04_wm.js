@@ -88,6 +88,7 @@
     });
     openKey = key;
     if(key === 'faq') loadFaq();
+    if(key === 'shop' && typeof loadReviews === 'function') loadReviews();
   }
 
   function goHome(){

@@ -100,7 +100,10 @@
   .review-card:nth-child(2n) .rc-av{background:var(--blue);}
   .review-card:nth-child(3n) .rc-av{background:var(--yellow);}
   .review-card .rc-name{font-family:var(--body); font-weight:700; font-size:12.5px;}
-  .review-card .rc-meta{font-family:var(--body); font-size:10px; text-transform:uppercase; letter-spacing:.06em; opacity:.5;}
+  /* not uppercased: the meta line carries the product name, and the product
+     is "dumbphone 2" (Milk + Marlee). Letterspacing keeps the small-label feel
+     without shouting it. */
+  .review-card .rc-meta{font-family:var(--body); font-size:10.5px; letter-spacing:.05em; opacity:.55;}
   .review-card .rc-body{font-family:var(--body); font-size:12.5px; line-height:1.55; color:#3a3a3a;}
   .review-card .rc-body::before{content:"\201C";}
   .review-card .rc-body::after{content:"\201D";}

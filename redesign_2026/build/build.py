@@ -419,13 +419,25 @@ faq_js = ("  /* the FAQ sheet as of the last build (build/refresh_faq_snapshot.p
           "     fetch succeeds. %d questions. */\n" % len(_faq_qs)
           + "  const FAQ_SNAPSHOT = " + json.dumps(_faq_rows) + ";\n\n")
 
+# ---- the reviews sheet as of the last build (build/refresh_reviews_snapshot.py)
+_rev_f = ROOT / "assets" / "reviews_snapshot.csv"
+must(_rev_f.exists(), "assets/reviews_snapshot.csv missing")
+_rev_rows = list(_csv.reader(_io.StringIO(_rev_f.read_text(encoding="utf-8"))))
+must(len(_rev_rows) > 1, "reviews_snapshot.csv has no review rows")
+_rev_shown = [r for r in _rev_rows[1:] if r and any(c.strip() for c in r)]
+rev_js = ("  /* the reviews sheet as of the last build "
+          "(build/refresh_reviews_snapshot.py).\n"
+          "     The shop page shows this instantly, then upgrades to the live sheet\n"
+          "     if REVIEWS_CSV_URL is set and the fetch succeeds. %d reviews. */\n" % len(_rev_shown)
+          + "  const REVIEWS_SNAPSHOT = " + json.dumps(_rev_rows) + ";\n\n")
+
 html = html.replace("  const sections = {",
-                    asset_js + press_js + shop_js + mem_js + faq_js + part("05_data.js") + routes_js
+                    asset_js + press_js + shop_js + mem_js + faq_js + rev_js + part("05_data.js") + routes_js
                     + "\n  const sections = {", 1)
 
 html = swap_block(html, "  function openSection(key){", "  /* ---------------- live FAQ",
                   part("04_wm.js") + part("08_helpers.js") + part("20_duck.js")
-                  + part("21_snake.js") + part("23_memories_sheet.js")
+                  + part("21_snake.js") + part("23_memories_sheet.js") + part("31_reviews.js")
                   + part("24_routes.js") + part("27_keys.js") + part("30_phone.js") + "\n")
 
 # ---- 8b. the hero kicker used to gain "$20 phone - plans from $15.99/mo"
@@ -461,6 +473,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
                "MEMORIES_CSV_URL", "function memoriesFromRows", "loadMemories();",
                "const FAQ_SNAPSHOT", "function faqItemsFromRows",
+               "const REVIEWS_SNAPSHOT", "function reviewsFromRows", "loadReviews",
                "function keyboardNav", "kbfocus", "function buildPhoneMenu", "pm-row",
                "function phoneFit", "k-ok", "--bp-phone",
                "gi-foot",
