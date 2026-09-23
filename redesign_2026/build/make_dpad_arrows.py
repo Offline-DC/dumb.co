@@ -40,12 +40,22 @@ SRC  = ROOT / "assets" / "sync-arrow.png"
 ART  = ROOT / "assets" / "flipphone_bigscreen.png"
 SIZE = 128          # output canvas; ~44px on screen, so comfortably retina
 
-# How wide the arrow is IN ARTWORK PIXELS. The handset art is 560px wide, the
-# OK circle 82px across, and the clear ring inside it is narrow -- see
-# build/trace_screen.py, which imports this to place the keys and to set
-# background-size. 24px is the widest chevron that still sits inside the drawn
-# circle without touching the "OK" lettering.
-ARROW_ART_W = 20
+# How wide the arrow is IN ARTWORK PIXELS.
+#
+# Walking out from the OK circle's centre along each axis, the ink sits at
+# these radii (artwork px, circle interior radius 41):
+#
+#   right   K 7..14,  ring 41..44   -> clear 15..40, 26px of room
+#   left    O 5..9 and 19..23, ring 42..44 -> clear 24..41, 18px  <- the binding one
+#   up      ring 42..45            -> clear 1..41
+#   down    ring 42..45            -> clear 1..41
+#
+# So the left arrow has 18px to live in and everything else follows from that.
+# A chevron is 107/128 as tall as it is wide, so a 13px box is 10.9px across
+# turned on its side: centred at radius 32.5 it spans 27.1..37.9 and clears
+# both the O and the rim by 3px. 15px left barely 2px and read as touching.
+# build/trace_screen.py imports this to place the keys and set background-size.
+ARROW_ART_W = 13
 
 MEASURE = 512       # a fixed width to compare stroke weights at, nothing more
 

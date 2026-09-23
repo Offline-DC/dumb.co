@@ -151,15 +151,16 @@ def main():
     must(best is not None, "couldn't find the OK circle - is the keypad still drawn?")
     _, kx0, kx1, ky0, ky1, kw, kh = best
     kcx, kcy = (kx0 + kx1) / 2, (ky0 + ky1) / 2
-    # 0.80 rather than 0.72: at 44px (Matteo's minimum, and the documented
-    # floor -- Jack's note said 24) the arrows overlapped the centre key at
-    # the tighter radius. Further out they sit on the drawn stroke and the
-    # five targets stop fighting each other.
+    # 0.79 = radius 32.5 of 41, the middle of the clear span on the LEFT axis
+    # (24..41 -- the O's outer stroke to the ring). That side is the tightest,
+    # and putting all four on one radius is what makes it read as a ring
+    # rather than four separately placed marks. See ARROW_ART_W in
+    # make_dpad_arrows.py for the measurements this comes from.
     # 24 artwork px wide -- build/make_dpad_arrows.py draws the chevron to
     # that width, and it is the widest one that still frames the "OK" at this
     # radius without touching the lettering.
     AW = ARROW_ART_W
-    RING = 0.80
+    RING = 0.79
     def pos(dx, dy):
         return (100 * (kcx + dx * kw / 2) / W, 100 * (kcy + dy * kh / 2) / H)
     ks = {name: pos(dx, dy) for name, (dx, dy) in {

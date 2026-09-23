@@ -221,7 +221,45 @@
        lands you on the menu. */
   }
 
-  window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); });
+  /* Where the sidebar's INK actually ends.
+     #home used to start at the sidebar's column edge, but the column is much
+     wider than what is drawn in it -- 340px of column holding 226px of logo
+     and nav -- so centring the hero inside that column left it sitting well
+     right of the middle of the gap a reader actually sees, by 45-64px
+     depending on width. Measured rather than derived from the CSS constants,
+     because the logo does not render at the width its rule asks for. */
+  function navInk(){
+    const bar = document.getElementById('sidebar');
+    if(!bar) return;
+    /* The right edge of the sidebar's INK -- where what is drawn actually
+       stops, which is nowhere near where its column stops (340px of column
+       holding ~226px of logo and nav). The hero is centred against this.
+
+       Measured with a Range over each text node, NOT with element boxes: a
+       block-level element is as wide as its column whether or not its text
+       is, so "dumb.co boycotts all big tech" in a full-width div reported an
+       edge 100px to the right of the words and #home started there, clipping
+       the hero. A Range reports the glyphs. */
+    let right = 0;
+    const walk = document.createTreeWalker(bar, NodeFilter.SHOW_TEXT);
+    for(let n = walk.nextNode(); n; n = walk.nextNode()){
+      if(!n.nodeValue.trim()) continue;
+      const rng = document.createRange();
+      rng.selectNodeContents(n);
+      for(const r of rng.getClientRects()) if(r.width) right = Math.max(right, r.right);
+    }
+    bar.querySelectorAll('img, svg').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.width && r.height) right = Math.max(right, r.right);
+    });
+    if(!right) return;                       // leave the CSS fallback in place
+    document.documentElement.style.setProperty('--nav-ink', Math.ceil(right) + 'px');
+  }
+
+  window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); navInk(); });
+  navInk();
+  /* webfonts land after first paint and the logo is type, so remeasure */
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(navInk);
   window.addEventListener('orientationchange', () => setTimeout(() => { phoneFit(); onBreakpoint(); }, 120));
 
   /* ------------------------------------------------------- wiring it up */

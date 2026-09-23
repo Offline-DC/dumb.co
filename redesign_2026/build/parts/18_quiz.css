@@ -172,7 +172,19 @@
   /* ==========================================================================
      layout: hero sits between the sidebar and the window, never under it
      ========================================================================== */
-  #home{ right:54%; }                    /* hero column ends at 46vw */
+  /* The hero is centred in the gap a reader SEES: from where the sidebar's ink
+     stops (--nav-ink, measured at runtime in 30_phone.js) to where the window
+     starts. It used to run from the sidebar's column edge to 46vw, and the
+     column is far wider than what is drawn in it, so the copy sat 45-64px
+     right of centre. 53% is where the window's left edge actually falls. */
+  #home{
+    left:var(--nav-ink, 340px); right:53%;
+    /* above the sidebar: #home starts where the sidebar's ink stops, so the
+       only thing it paints over is that column's empty right-hand padding --
+       same yellow, no visible seam -- and the hero can then sit where the gap
+       actually looks centred instead of being clipped by the column. */
+    z-index:21;
+  }
   /* the hero sits in the gap between the sidebar and the window. At 100% it
      filled that gap, so the copy read as pinned to the sidebar; sized to its
      content instead, #home's justify-content:center actually centres it. */
@@ -185,13 +197,12 @@
   @media (max-width:1600px){
     #sidebar{width:340px; padding:26px 26px;}
     #logo{width:200px;}
-    #home{left:340px;}
     #sidebar .navitem{font-size:33px;}
   }
   @media (max-width:1300px){
     #sidebar{width:296px; padding:20px 22px;}
     #logo{width:172px; margin-bottom:14px;}
-    #home{left:296px; padding:0 22px;}
+    #home{padding:0 22px;}
     #sidebar .navitem{font-size:27px; padding:4px 9px;}
     nav#navlist{gap:7px;}
   }
