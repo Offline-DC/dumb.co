@@ -17,6 +17,24 @@ cd "$HERE"
 
 command -v python3 >/dev/null || { echo "python3 not found" >&2; exit 1; }
 
+# build.py needs Pillow. Say so plainly rather than letting it throw an import
+# traceback halfway through a build -- the first time this ran on a laptop
+# rather than a container, that traceback was the whole error message.
+if ! python3 -c "import PIL" 2>/dev/null; then
+  cat >&2 <<'MSG'
+Pillow isn't installed for this python3, and build.py needs it.
+
+    python3 -m pip install --user Pillow
+
+If that says "externally-managed-environment", add --break-system-packages.
+
+Only needed for the build. The art scripts (trace_screen.py, expand_screen.py)
+also want numpy and opencv-python, but you only run those when a drawing
+changes.
+MSG
+  exit 1
+fi
+
 stamp() {
   find build/parts build/*.py concept/v6_baseline.html -type f \
        -exec stat -f '%m %N' {} + 2>/dev/null \

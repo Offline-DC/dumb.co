@@ -275,3 +275,27 @@ and left both handlers live.
 | one responsive site, breakpoint + zoom transition | `build/parts/29_responsive.css` |
 | handset mirrors the window, D-pad, click-the-active-tab | `build/parts/30_phone.js` |
 | arrows on the drawn ovals, 46px targets | `build/parts/22_snake.css` > `.pf-keys` |
+
+## what you need installed
+
+Every build in this repo was developed against a container that already had
+these; a laptop generally won't. build.py fails with a bare ImportError if
+Pillow is missing, so build/dev.sh checks first and tells you what to run.
+
+    python3 -m pip install --user Pillow          # build.py, make_dpad_arrows.py
+
+Add `--break-system-packages` if pip says "externally-managed-environment".
+
+Only if you're changing the handset artwork:
+
+    python3 -m pip install --user numpy opencv-python   # trace_screen.py, expand_screen.py
+
+## the loop
+
+    bash build/dev.sh 8010     # builds, serves, rebuilds on save
+    bash build/serve.sh 8010   # just serves what's already built
+
+dev.sh watches build/parts, build/*.py and concept/v6_baseline.html. It does
+not watch assets/ -- a new drawing needs its own step first (make_dpad_arrows,
+expand_screen, then trace_screen), and guessing which would be worse than
+typing it.
