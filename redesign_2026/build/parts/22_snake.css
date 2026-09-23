@@ -44,7 +44,9 @@
        pointing up, rotated inside each SVG. */
     font-size:0; color:transparent;
     background-repeat:no-repeat; background-position:center;
-    background-size:72% 72%;
+    background-size:76% 76%;
+    /* Marco's chevron, not a font glyph and not my imitation of one
+       (build/make_dpad_arrows.py). Same pen as the handset. */
     opacity:.78; transition:opacity .15s ease, transform .1s ease;
   }
   .phone-frame{container-type:inline-size;}
@@ -63,10 +65,10 @@
   .phone-frame .pf-keys .k-ok   {left:51.70%; top:59.50%;
     width:5.7cqw; height:5.7cqw; min-width:34px; min-height:34px; font-size:0;}
   /* <<< dpad */
-  .phone-frame .pf-keys .k-up   {background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20transform%3D%22rotate%280%2012%2012%29%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12.1%2019.4%20C11.5%2015.6%2C%2012.4%2010.2%2C%2011.9%205.2%22%2F%3E%3Cpath%20d%3D%22M7.2%2010.1%20C9.1%208.0%2C%2010.4%206.5%2C%2011.9%204.9%22%2F%3E%3Cpath%20d%3D%22M16.6%2010.0%20C14.8%208.1%2C%2013.3%206.4%2C%2011.9%204.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
-  .phone-frame .pf-keys .k-right{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20transform%3D%22rotate%2890%2012%2012%29%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12.1%2019.4%20C11.5%2015.6%2C%2012.4%2010.2%2C%2011.9%205.2%22%2F%3E%3Cpath%20d%3D%22M7.2%2010.1%20C9.1%208.0%2C%2010.4%206.5%2C%2011.9%204.9%22%2F%3E%3Cpath%20d%3D%22M16.6%2010.0%20C14.8%208.1%2C%2013.3%206.4%2C%2011.9%204.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
-  .phone-frame .pf-keys .k-down {background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20transform%3D%22rotate%28180%2012%2012%29%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12.1%2019.4%20C11.5%2015.6%2C%2012.4%2010.2%2C%2011.9%205.2%22%2F%3E%3Cpath%20d%3D%22M7.2%2010.1%20C9.1%208.0%2C%2010.4%206.5%2C%2011.9%204.9%22%2F%3E%3Cpath%20d%3D%22M16.6%2010.0%20C14.8%208.1%2C%2013.3%206.4%2C%2011.9%204.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
-  .phone-frame .pf-keys .k-left {background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20transform%3D%22rotate%28270%2012%2012%29%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12.1%2019.4%20C11.5%2015.6%2C%2012.4%2010.2%2C%2011.9%205.2%22%2F%3E%3Cpath%20d%3D%22M7.2%2010.1%20C9.1%208.0%2C%2010.4%206.5%2C%2011.9%204.9%22%2F%3E%3Cpath%20d%3D%22M16.6%2010.0%20C14.8%208.1%2C%2013.3%206.4%2C%2011.9%204.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");}
+  .phone-frame .pf-keys .k-up   {background-image:url("__DPAD_UP__");}
+  .phone-frame .pf-keys .k-right{background-image:url("__DPAD_RIGHT__");}
+  .phone-frame .pf-keys .k-down {background-image:url("__DPAD_DOWN__");}
+  .phone-frame .pf-keys .k-left {background-image:url("__DPAD_LEFT__");}
 
 
   .phone-frame .pf-screen.playing img,
