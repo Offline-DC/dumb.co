@@ -45,9 +45,9 @@ SIZE = 128          # output canvas; ~44px on screen, so comfortably retina
 # build/trace_screen.py, which imports this to place the keys and to set
 # background-size. 24px is the widest chevron that still sits inside the drawn
 # circle without touching the "OK" lettering.
-ARROW_ART_W = 24
+ARROW_ART_W = 20
 
-WORK = 16           # supersample: dilate at 16x art scale, then come back down
+MEASURE = 512       # a fixed width to compare stroke weights at, nothing more
 
 
 def must(c, m):
@@ -60,6 +60,19 @@ def ink_mask(path):
     im = Image.open(path).convert("RGBA")
     a = np.array(im)
     return ((a[..., 3] > 128) & (a[..., :3].mean(axis=2) < 110)).astype(np.uint8), im.size
+
+
+def ink_grey(path):
+    """The same ink, but keeping how solid each pixel is.
+
+    The handset art is 78% partial-alpha -- marker on paper, and that soft
+    speckled edge is most of what makes it look drawn. Binarising the chevron
+    threw all of it away and the arrows came back looking like vector clip-art
+    sitting on a drawing.
+    """
+    a = np.array(Image.open(path).convert("RGBA"))
+    dark = 255 - a[..., :3].mean(axis=2)
+    return np.minimum(a[..., 3], dark).astype(np.uint8)
 
 
 def stroke_width(mask):
@@ -82,6 +95,52 @@ def stroke_width(mask):
     return float(np.median(ridge) * 2) if ridge.size else 0.0
 
 
+def art_grain(path):
+    """The handset's own edge grain, as a zero-centred field.
+
+    Blur the art's alpha and subtract it: what is left is the high-frequency
+    wobble of marker on paper, with the shapes themselves removed.
+    """
+    a = np.array(Image.open(path).convert("RGBA"))[..., 3].astype(np.float32)
+    grain = a - cv2.GaussianBlur(a, (0, 0), 1.6)
+    sd = grain.std()
+    return grain / sd if sd > 1e-6 else grain
+
+
+def roughen(alpha, grain):
+    """Imprint that grain on the arrow's outline.
+
+    Marco drew the chevron far larger than the phone's lines were drawn, so
+    shrinking it to d-pad size shrinks its grain past the point of visibility --
+    12x down, and a clean vector edge is what comes back. No amount of care in
+    the dilation fixes that: the texture has to be put back at the size it is
+    seen. It is the handset's own grain, not invented noise, rescaled so its
+    features land at the size they land at on the rest of the drawing, and used
+    as a wobbling threshold so the outline wanders rather than the fill going
+    blotchy.
+
+    GRAIN_SCALE: the art draws at about 1.38x on a phone and the arrow at about
+    0.26x, so the art's grain has to be blown up ~5.3x to read the same size.
+    GRAIN_AMP: how far the edge is allowed to wander, in eighths of a pixel of
+    the finished arrow. Past about 60 it starts eating the tips of the chevron.
+    """
+    GRAIN_SCALE, GRAIN_AMP = 5.3, 46.0
+    h, w = alpha.shape
+    gh, gw = grain.shape
+    tile = cv2.resize(grain, (round(gw * GRAIN_SCALE), round(gh * GRAIN_SCALE)),
+                      interpolation=cv2.INTER_LINEAR)
+    # take it from the middle of the art, where the strokes are, not a margin
+    y0, x0 = (tile.shape[0] - h) // 2, (tile.shape[1] - w) // 2
+    field = tile[y0:y0 + h, x0:x0 + w]
+
+    a = alpha.astype(np.float32)
+    edge = cv2.GaussianBlur(a, (0, 0), 2.0)
+    band = np.clip(1.0 - np.abs(edge - 128.0) / 128.0, 0, 1)   # only near the outline
+    out = np.clip(a + GRAIN_AMP * field * band, 0, 255)
+    # a whisker of blur so the new edge is not stair-stepped
+    return cv2.GaussianBlur(out, (0, 0), 0.6).astype(np.uint8)
+
+
 def main():
     must(SRC.exists(), f"{SRC} missing")
     must(ART.exists(), f"{ART} missing - the pen weight is measured off it")
@@ -101,48 +160,67 @@ def main():
     dropped = int(mask.sum()) - int(area)
     must(w > 20 and h > 20, f"the chevron is only {w}x{h}px - too small to use")
 
-    chev = (lab[y:y + h, x:x + w] == keep).astype(np.uint8)
+    # the silhouette decides WHICH ink is the chevron; the grey decides how
+    # solid each pixel of it is
+    sel = (lab[y:y + h, x:x + w] == keep)
+    chev = sel.astype(np.uint8)
+    chev_grey = np.where(sel, ink_grey(SRC)[y:y + h, x:x + w], 0).astype(np.uint8)
 
     # ---- match the pen ---------------------------------------------------
-    # Work at WORK x art scale: the chevron is ARROW_ART_W art px wide there.
-    work_w = ARROW_ART_W * WORK
-    work_h = max(1, round(h * work_w / w))
-    big = cv2.resize(chev * 255, (work_w, work_h), interpolation=cv2.INTER_AREA)
-    big = (big > 127).astype(np.uint8)
-    # room to grow: cv2.dilate does not enlarge the array, it clips against it,
-    # and the chevron's ink runs right up to all four edges of its own bbox
-    pad = work_w // 4
-    big = np.pad(big, pad)
+    # Thicken at the SCAN'S OWN resolution. Shrinking the chevron first and
+    # dilating the small copy was what made these look like clip-art: the
+    # downscale averaged away the marker's ragged edge, and then a smooth
+    # kernel drew a smooth new one. At 1:1 the dilation radius is large
+    # compared to the grain, so the grain rides along.
+    # Room to grow, too: cv2.dilate does not enlarge the array, it clips
+    # against it, and the ink runs right up to all four edges of its bbox.
+    big = np.pad(chev_grey, max(w, h) // 3)
 
-    target = art_stroke * WORK          # the handset's pen, in this same space
+    target = art_stroke * (MEASURE / ARROW_ART_W)   # the handset's pen, at MEASURE
 
     def normalised(m):
-        """Trim to the ink and rescale it to exactly ARROW_ART_W wide.
+        """Trim to the ink and rescale to a fixed width for measuring.
 
         Measuring has to happen here, not on the padded working array.
         Dilation widens the whole chevron as well as its stroke, so a stroke
         that hits the target mid-loop is thinner than the target once the
-        result is scaled back down to the size it is actually drawn at. This
-        closes that loop: what we measure is the geometry that ships.
+        result is scaled back to the size it is actually drawn at. This closes
+        that loop: what we measure is the geometry that ships.
         """
-        ys, xs = np.nonzero(m)
+        ys, xs = np.nonzero(m > 127)
         cut = m[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
         ch, cw = cut.shape
-        out = cv2.resize(cut * 255, (work_w, max(1, round(ch * work_w / cw))),
-                         interpolation=cv2.INTER_AREA)
-        return (out > 127).astype(np.uint8)
+        return cv2.resize(cut, (MEASURE, max(1, round(ch * MEASURE / cw))),
+                          interpolation=cv2.INTER_AREA)
 
-    before = stroke_width(normalised(big))
+    solid = lambda g: (g > 127).astype(np.uint8)   # for measuring only
+
+    def grow(r):
+        """Grayscale dilation by radius r. A max filter over a soft edge pushes
+        that edge outward and keeps its profile, where dilating a binarised
+        mask would hand back a clean hard one."""
+        if r <= 0:
+            return big
+        k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))
+        return cv2.dilate(big, k)
+
+    before = stroke_width(solid(normalised(big)))
     must(before > 0, "measured a zero-width stroke on the chevron")
 
-    # dilate in small steps and re-measure: one big kernel overshoots, because
-    # dilation fattens the elbow faster than the straight runs
-    grown, steps = big, 0
-    while stroke_width(normalised(grown)) < target and steps < 400:
-        grown = cv2.dilate(grown, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)))
-        steps += 1
-    final = normalised(grown)
-    after = stroke_width(final)
+    # bisect the radius rather than stepping: at full scan resolution the step
+    # count would be in the hundreds, and each one costs a distance transform
+    lo, hi = 0, max(w, h) // 4
+    must(stroke_width(solid(normalised(grow(hi)))) >= target,
+         "cannot reach the handset's stroke weight even at the maximum radius")
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if stroke_width(solid(normalised(grow(mid)))) < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    steps = lo
+    final = normalised(grow(steps))
+    after = stroke_width(solid(final))
 
     # ---- square it so every rotation lands identically --------------------
     gh, gw = final.shape
@@ -151,7 +229,8 @@ def main():
     sq[(side - gh) // 2:(side - gh) // 2 + gh, (side - gw) // 2:(side - gw) // 2 + gw] = final
 
     box = SIZE
-    small = cv2.resize(sq * 255, (box, box), interpolation=cv2.INTER_AREA)
+    small = cv2.resize(sq, (box, box), interpolation=cv2.INTER_AREA)
+    small = roughen(small, art_grain(ART))
     rgba = np.zeros((box, box, 4), np.uint8)
     rgba[..., 3] = small                       # black ink, alpha carries the shape
     up = Image.fromarray(rgba, "RGBA")
@@ -163,8 +242,10 @@ def main():
 
     print(f"  source {src_size[0]}x{src_size[1]} -> chevron {w}x{h}"
           f" (dropped {dropped}px of specks outside it)")
+    k = ARROW_ART_W / MEASURE
     print(f"  pen: handset {art_stroke:.2f}px at {artW}px wide;"
-          f" chevron {before / WORK:.2f} -> {after / WORK:.2f} art px in {steps} steps")
+          f" chevron {before * k:.2f} -> {after * k:.2f} art px"
+          f" (dilated {steps}px at scan resolution)")
     print(f"  arrow is {ARROW_ART_W}px wide in artwork terms"
           f" -> background-size {100 * ARROW_ART_W / artW:.2f}cqw")
 

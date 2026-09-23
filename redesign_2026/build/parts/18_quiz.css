@@ -98,6 +98,9 @@
     left:35.54%; top:6.19%; width:31.96%; height:38.33%;
     background:var(--yellow); overflow:hidden;
     box-shadow:inset 0 0 5px rgba(0,0,0,.35);
+    /* the widest the drawn edge bows inward, plus a little air; anything
+       rectangular inside the screen keeps clear of the ink by this much */
+    --screen-inset:3.73%;
     clip-path:polygon(
       94.41% 0.85%, 90.50% 0.57%, 88.83% 0.00%, 85.47% 0.00%,
       78.77% 1.13%, 70.95% 1.13%, 64.25% 1.70%, 62.57% 1.13%,

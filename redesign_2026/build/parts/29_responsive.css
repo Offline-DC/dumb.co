@@ -19,7 +19,11 @@
      out to the traced edge instead of floating in a box. */
   #tcl-screen .pmn{
     position:absolute; inset:0; box-sizing:border-box;
-    padding:5% 0 3%;
+    /* --screen-inset comes from build/trace_screen.py: how far the drawn
+       screen edge bows inward at its worst. Rows used to run the full width
+       and the clip-path sheared their highlight flat against the ink on one
+       side while leaving a yellow wedge on the other. */
+    padding:5% var(--screen-inset, 6%) 3%;
     display:flex; flex-direction:column;
   }
   #tcl-screen .pmn-bar{

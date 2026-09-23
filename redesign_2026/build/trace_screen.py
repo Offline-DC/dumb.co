@@ -91,6 +91,17 @@ def main():
     vert = [f"{u:.2f}% {v:.2f}%" for u, v in pts]
     poly = ",\n      ".join(", ".join(vert[i:i + 4]) for i in range(0, len(vert), 4))
 
+    # How far the drawn edge wanders inward, left and right. Anything laid out
+    # as a rectangle -- a menu row, its highlight -- has to stay inside the
+    # WORST of that excursion, or the clip-path shears it flat wherever the ink
+    # bows in and leaves a yellow wedge wherever it bows out. That is what made
+    # the selected row look like it was fighting the screen outline.
+    # only the side runs: the polygon also traces the top and bottom edges,
+    # whose vertices span the full width and would swamp the maximum.
+    sides = [(u, v) for u, v in pts if 12 < v < 88]
+    inset = max(max((u for u, _ in sides if u < 50), default=0),
+                100 - min((u for u, _ in sides if u >= 50), default=100)) + 1.5
+
     block = f"""{START}
   /* {len(ap)} points traced from the {W}x{H} art at {EPS}px tolerance.
      The box is the aperture's exact bounding box; the clip-path follows the
@@ -101,6 +112,9 @@ def main():
     left:{100*x/W:.2f}%; top:{100*y/H:.2f}%; width:{100*w/W:.2f}%; height:{100*h/H:.2f}%;
     background:var(--yellow); overflow:hidden;
     box-shadow:inset 0 0 5px rgba(0,0,0,.35);
+    /* the widest the drawn edge bows inward, plus a little air; anything
+       rectangular inside the screen keeps clear of the ink by this much */
+    --screen-inset:{inset:.2f}%;
     clip-path:polygon(
       {poly}
     );
