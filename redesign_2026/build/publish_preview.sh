@@ -17,7 +17,10 @@
 # any URL.
 set -euo pipefail
 
-PREVIEW_REPO="${PREVIEW_REPO:-git@github.com:Offline-DC/dumb.co-preview.git}"
+# The repo that actually exists. The old default (dumb.co-preview) was a
+# guess made before the repo was created, so every publish needed the env
+# var spelled out or it failed on a repo that was never there.
+PREVIEW_REPO="${PREVIEW_REPO:-git@github.com:Offline-DC/dumb.co-redesign-preview.git}"
 REPO_NAME="$(basename "$PREVIEW_REPO" .git)"
 OWNER="$(basename "$(dirname "$PREVIEW_REPO")" | sed 's/.*://')"
 DRY=""
