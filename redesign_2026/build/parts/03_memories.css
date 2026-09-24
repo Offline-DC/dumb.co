@@ -67,20 +67,75 @@
   .mem-nav button:active{transform:translateY(-50%) translate(2px,2px); box-shadow:none;}
 
   /* child window: one memory, big */
-  .memdetail{display:flex; flex-direction:column;}
-  .memdetail .md-img{flex:1 1 auto; min-height:240px; background:#000; position:relative;}
-  .memdetail .md-img img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block;}
-  .memdetail .md-txt{flex:0 0 auto; border-top:2px solid var(--black); padding:16px 20px 18px; background:var(--white);}
-  .memdetail .md-txt h4{font-family:var(--headline); font-size:22px; margin:0 0 2px;}
-  .memdetail .md-txt .md-when{font-family:var(--body); font-size:11px; text-transform:uppercase; letter-spacing:.07em; opacity:.55;}
-  .memdetail .md-txt p{font-family:var(--body); font-size:13px; line-height:1.6; color:#444; margin:9px 0 0; max-width:620px;}
-  .memdetail .md-foot{display:flex; align-items:center; gap:8px; margin-top:14px;}
+  /* One photo, as a polaroid.
+     It used to be object-fit:contain in a black box, which letterboxed every
+     portrait shot with two wide black bars and left the modal mostly empty.
+     A polaroid crops instead -- that is what the format does -- so the picture
+     fills its frame and the frame fills the modal's height.
+
+     The card is sized BY HEIGHT: the photo well carries aspect-ratio 1/1 and
+     flexes, so its width follows from whatever height is going, and the card
+     shrink-wraps to that. No fixed pixel size to go wrong at a breakpoint. */
+  /* height, not min-height: the card only shrinks to fit if the column it
+     sits in is actually bounded. With min-height the pad just grew and the
+     polaroid pushed the controls out of the bottom of the modal. */
+  .memdetail-pad{display:flex; flex-direction:column; height:100%; min-height:0;}
+  .memdetail{
+    flex:1 1 auto; min-height:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; padding:4px 0 8px;
+  }
+  .memdetail .md-polaroid{
+    /* The aspect lives on the CARD, not the photo well. Put it on the well and
+       the well's max-content width is the source image's natural width, so the
+       card's fit-content resolved to the whole modal and a square photo sat in
+       a 679px frame. With height:100% and an aspect here, the width follows
+       the height and max-width pulls both back on a narrow screen.
+       1 / 1.18 leaves the photo itself at about 1:1.1, which is what a real
+       polaroid is -- 2.9in across by 3.1in. */
+    flex:0 1 auto; min-height:0;
+    aspect-ratio:1 / 1.18; max-width:100%; max-height:100%;
+    /* aspect-ratio can only follow ONE axis: give it a height and max-width
+       clamps the width without giving the height back, and the frame stretches.
+       So the authoritative axis is whichever one the modal is short of. The
+       .exe window is roughly square on a desktop and tall and narrow on a
+       phone, so the breakpoint picks correctly. */
+    height:100%; width:auto;
+    display:flex; flex-direction:column; margin:0;
+    background:var(--white); border:2px solid var(--black);
+    padding:13px 13px 0;
+    box-shadow:7px 9px 0 rgba(0,0,0,.13);
+    transform:rotate(-1.05deg);
+  }
+  .memdetail .md-img{
+    flex:1 1 auto; min-width:0; min-height:0;
+    background:#111; overflow:hidden;
+  }
+  .memdetail .md-img img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .memdetail .md-cap{
+    flex:0 0 auto; padding:11px 2px 14px; text-align:center;
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .memdetail .md-capline{
+    font-family:var(--headline); font-size:19px; line-height:1.15; color:var(--black);
+  }
+  .memdetail .md-when{
+    font-family:var(--body); font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.07em; opacity:.5;
+  }
+  .memdetail .md-blurb{
+    flex:0 0 auto; font-family:var(--body); font-size:12.5px; line-height:1.55;
+    color:#4a4a4a; margin:0; max-width:520px; text-align:center;
+  }
+  .memdetail .md-foot{flex:0 0 auto; display:flex; align-items:center; gap:10px;}
   .memdetail .md-foot button{
     font-family:var(--body); font-weight:700; font-size:12px; padding:8px 15px; border-radius:100px;
     border:2px solid var(--black); background:var(--white); cursor:pointer;
   }
   .memdetail .md-foot button:hover{background:var(--yellow);}
-  .memdetail .md-foot .md-count{font-family:var(--body); font-size:11.5px; opacity:.55; margin-left:auto;}
+  .memdetail .md-foot .md-count{font-family:var(--body); font-size:11.5px; opacity:.55;}
 
   /* ==========================================================================
      v7 — nav retuned for 8 items (Month Offline added)
@@ -102,4 +157,9 @@
     text-transform:uppercase; color:#8a8a8a;
     border:2px dashed var(--gray); border-radius:10px;
     padding:26px; text-align:center; max-width:420px;
+  }
+
+  /* phone: the modal is 386x792, so width is what runs out first */
+  @media (max-width: 760px){
+    .memdetail .md-polaroid{width:100%; height:auto;}
   }

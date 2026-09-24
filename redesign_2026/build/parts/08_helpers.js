@@ -81,20 +81,22 @@
     const ph = ev.photos[memView.pi];
     const host = document.getElementById('wm-section');
     host.innerHTML = `
-      <div class="wm-pad">
+      <div class="wm-pad memdetail-pad">
         <div class="wm-back" onclick="openSection('memories')">‹ all memories</div>
         <div class="memdetail">
-          <div class="md-img"><img src="${ph.src()}" alt="${ev.name}"/></div>
-          <div class="md-txt">
-            <h4>${ev.name}</h4>
-            <div class="md-when">${ev.when} · ${ev.where}</div>
-            <p>${ev.blurb}</p>
-            <div class="md-foot">
-              <button type="button" onclick="memStep(-1)">‹ prev</button>
-              <button type="button" onclick="memStep(1)">next ›</button>
-              <span class="md-count">${memView.pi + 1} / ${ev.photos.length}</span>
-            </div>
+          <figure class="md-polaroid">
+            <div class="md-img"><img src="${ph.src()}" alt="${ev.name}"/></div>
+            <figcaption class="md-cap">
+              <span class="md-capline">${ph.cap || ev.name}</span>
+              <span class="md-when">${ev.when} · ${ev.where}</span>
+            </figcaption>
+          </figure>
+          <div class="md-foot">
+            <button type="button" onclick="memStep(-1)" aria-label="previous photo">‹ prev</button>
+            <span class="md-count">${memView.pi + 1} / ${ev.photos.length}</span>
+            <button type="button" onclick="memStep(1)" aria-label="next photo">next ›</button>
           </div>
+          <p class="md-blurb">${ev.blurb}</p>
         </div>
       </div>`;
     host.scrollTop = 0;

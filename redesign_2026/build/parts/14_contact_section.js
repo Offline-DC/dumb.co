@@ -5,7 +5,7 @@
           <div class="dots">${DOTS_EDGE}</div>
           <div class="cc-head">
             <h3>Support</h3>
-            <div class="card-sub">need more help past the FAQ? reach out to our 100% human only support team</div>
+            <div class="card-sub">100% human support, always.</div>
           </div>
           <div class="cc-lines">
             <div class="contact-line"><span class="ico">✉</span><a href="mailto:support@dumb.co">support@dumb.co</a></div>
