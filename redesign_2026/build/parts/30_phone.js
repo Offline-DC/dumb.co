@@ -44,7 +44,6 @@
     }));
     screen.insertAdjacentHTML('afterbegin',
       '<div class="pmn">' +
-        '<div class="pmn-bar"><span>dumb.co</span><span>&#9679;&#9679;&#9679;</span></div>' +
         '<div class="pmn-list">' +
           pmItems.map((it, i) =>
             '<a class="pmn-row' + (i === 0 ? ' on' : '') + '" data-key="' + it.key + '"' +

@@ -162,6 +162,11 @@
     font-family:var(--body); font-weight:700; font-size:15px;
     padding:10px 20px; border-radius:999px; line-height:1;
     min-height:44px;                 /* Matteo's minimum, not Jack's 24 */
+    /* these are <a> now, not <button>. An anchor does not centre its own text
+       inside a min-height box the way a button does, so "buy" sat high and
+       left in the pill. */
+    display:inline-flex; align-items:center; justify-content:center;
+    text-decoration:none; text-align:center;
   }
   .sh-spec .sh-buy:hover{opacity:.88;}
   .sh-spec .spec-plan{

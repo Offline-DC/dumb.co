@@ -138,7 +138,13 @@
     background:var(--yellow); padding:22px 24px 26px;
     display:flex; flex-direction:column;
   }
-  .contact-ground h2{margin-bottom:12px; flex:0 0 auto;}
+  /* the same gap below the heading as the ground gives it above (22px), so
+     it sits centred between the modal edge and the pink support card rather
+     than hugging the top */
+  /* #wm-section h2 sets margin:0 0 6px, and an id beats a class however
+     late this file loads -- so this needs the id too or the heading keeps
+     hugging the pink card. */
+  #wm-section .contact-ground h2{margin-bottom:22px; flex:0 0 auto;}
   .contact-card.support{
     max-width:none; flex:1 1 auto; display:flex; flex-direction:column;
     padding:24px 26px 24px; position:relative; overflow:hidden;

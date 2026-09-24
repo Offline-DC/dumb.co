@@ -10,6 +10,12 @@
      Empty means snapshot only, which is a perfectly good state to ship in. */
   const REVIEWS_CSV_URL = '';
 
+  /* the place's own review page on Google -- same place_id the Places API
+     lookups use. Opens Google's list, which is where "see all reviews" has to
+     land: we only ever hold five of them. */
+  const REVIEWS_PAGE =
+    'https://search.google.com/local/reviews?placeid=ChIJiXXqrkq3t4kRFlcwNQMuk2k';
+
   function reviewsFromRows(rows){
     if(!rows || !rows.length) return {list: [], avg: '', count: ''};
     const head = rows[0].map(c => String(c || '').trim().toLowerCase());
@@ -60,7 +66,9 @@
       /* Google's terms want their reviews attributed, so the source is named
          rather than implied */
       sub.innerHTML = starRow(Math.round(parseFloat(data.avg) || 5)) +
-        ' ' + data.avg + ' · ' + data.count + ' reviews on Google';
+        ' ' + data.avg + ' · <a class="rv-src" href="' + REVIEWS_PAGE +
+        '" target="_blank" rel="noopener noreferrer">' + data.count +
+        ' reviews on Google &#8599;</a>';
     }
   }
 

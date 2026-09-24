@@ -31,7 +31,7 @@
 
   /* ---- the three plans, straight off the plan cards ---- */
   const FEATURES = ["spotify","apple music","podcasts","fwd calls","sync txts/contacts",
-                    "unlimited calls/sms","hotspot","uber","signal","whatsapp","microsoft 2fa"];
+                    "unlimited calls/sms","hotspot","rideshare","signal","whatsapp","microsoft 2fa"];
   const PLANS = {
     dumb: {
       name:"dumb", price:"$25.99", blurb:"a companion device for ur smartphone",

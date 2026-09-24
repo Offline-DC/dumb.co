@@ -474,7 +474,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                'id="walkduck"', "startDuckWalk();",
                "4 month minimum", "SHOW_PLAN_CARDS", "MEMORY_EVENTS",
                "PRESS_MIRROR", "press-mirror", "railStep", "$15.99",
-               "xtra&#8209;ordinary", "community: () =>",
+               "project xtraordinary", "community: () =>",   # no hyphen: Sonya
                'href="#/community"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
                ">Community<", "gi-drop", f'href="{MONTH_OFFLINE_URL}"',
                "1209576549", "1215826540",

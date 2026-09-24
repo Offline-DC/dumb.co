@@ -119,6 +119,17 @@
     #wm-section h2{font-size:30px !important;}
     #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
 
+    /* Full-bleed highlight on a phone. The inset exists on desktop so the
+       selected row does not butt against the wobbly drawn edge; here the
+       colour running wall to wall is the point -- no yellow gutter between
+       the bar and the screen. The clip-path still trims it to the ink. */
+    #tcl-screen .pmn{padding-left:0; padding-right:0;}
+
+    /* Arrows only. Tapping a row selected it, which meant two ways to do the
+       same thing and neither of them the one the handset is for. The d-pad
+       keys keep their own pointer-events, so they still work. */
+    #tcl-screen .pmn-row{pointer-events:none;}
+
     /* The egg is desktop furniture — it reads as a stray sticker floating over
        the handset on a phone. It used to stay because it was the way to pop a
        minimised sheet back open, but the handset already does that: phoneOpen()

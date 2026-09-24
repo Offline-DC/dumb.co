@@ -3,7 +3,7 @@
         <div id="about-top">
           <div class="txt">
             <h2>hello from<br/>the flip side.</h2>
-            <p>dumb.co was born in Washington, DC in 2025 after a small group of neighbors came together to form Month Offline: a 30-day challenge to ditch our smartphones. we learned a lot along the way, and decided to design a device that's just dumb enough. the dumbphone 2 is a companion device that syncs with ur smartphone and includes maps, music, uber, and all ur messages (but only if u want). our little team is stoked that ur part of the growing movement of dumb ppl choosing dumb down.</p>
+            <p>dumb.co was born in Washington, DC in 2025 after a small group of neighbors came together to form Month Offline: a 30-day challenge to ditch our smartphones. we learned a lot along the way, and decided to design a device that's just dumb enough. the dumbphone 2 is a companion device that syncs with ur smartphone and includes maps, music, rideshare, and all ur messages (but only if u want). our little team is stoked that ur part of the growing movement of dumb ppl choosing dumb down.</p>
             <p>quack,<br/>the dumb.co team</p>
             <div id="about-signatures">
               ${A.signatures.map(s => `<img src="${s.src}" alt="${s.name}"/>`).join('')}

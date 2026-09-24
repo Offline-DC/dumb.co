@@ -32,7 +32,7 @@
           <ul>
             <li>$20 phone hardware with custom dumbOS + SIM card. plans start at $15.99/mo + tax, activated when u receive the phone.</li>
             <li><b>4 month minimum plan, auto-renews monthly after that.</b></li>
-            <li>every phone comes with the essentials: unlimited call/text, maps, signal, uber, 2-factor auth, bluetooth, hotspot, alarm, camera, weather + more.</li>
+            <li>every phone comes with the essentials: unlimited call/text, maps, signal, rideshare, 2-factor auth, bluetooth, hotspot, alarm, camera, weather + more.</li>
             <li>optional features: fwd calls from ur smartphone, sync smartphone texts + contacts, whatsapp, spotify, apple music, podcasts.</li>
             <li>iphone + android compatible.</li>
           </ul>

@@ -16,7 +16,6 @@
             <div class="mem-strip" id="mem-strip-${ei}">
               ${ev.photos.map((ph, pi) => `
                 <div class="mem-tile" onclick="openMemory(${ei}, ${pi})">
-                  <span class="mt-zoom">open</span>
                   <img src="${ph.src()}" alt="${ev.name}"/>
                   <div class="mt-cap">${ph.cap}</div>
                 </div>
