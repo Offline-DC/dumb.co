@@ -44,7 +44,7 @@
   #tcl-screen .pmn-row.on:nth-child(4n+1){background:var(--pink);   color:var(--black);}
   #tcl-screen .pmn-row.on:nth-child(4n+2){background:var(--blue);   color:var(--black);}
   #tcl-screen .pmn-row.on:nth-child(4n+3){background:var(--orange); color:var(--white);}
-  #tcl-screen .pmn-row.on:nth-child(4n+4){background:var(--black);  color:var(--yellow);}
+  #tcl-screen .pmn-row.on:nth-child(4n+4){background:var(--red);    color:var(--white);}
   /* ---- the screen mirrors the minimised window -------------------------
      While a section is collapsed, the handset shows a live scaled clone of
      the window's own content rather than the menu with a row highlighted --

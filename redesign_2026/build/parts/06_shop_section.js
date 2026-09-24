@@ -5,7 +5,7 @@
           <div>
             <h3>dumbphone 2</h3>
             <p class="hero-lines"><span>everything</span><span>u need 2</span><span>go out</span></p>
-            <button type="button" class="sh-cta" onclick="openQuiz()">click here to buy</button>
+            <a class="sh-cta" href="${DUMBPHONE_CHECKOUT}" target="_blank" rel="noopener">click here to buy</a>
           </div>
           <div class="hero-phone"><img id="sh-main-img" src="${SHOP_PHOTOS[0]}" alt="dumbphone 2"/></div>
         </div>
@@ -24,7 +24,7 @@
           <div class="spec-head">
             <span class="spec-name">dumbphone 2</span>
             <span class="spec-price">$20</span>
-            <button type="button" class="sh-buy" onclick="openQuiz()">buy</button>
+            <a class="sh-buy" href="${DUMBPHONE_CHECKOUT}" target="_blank" rel="noopener">buy</a>
           </div>
           <p class="spec-plan">all phones come with a
             <a href="#" onclick="openQuiz(); return false;">plan</a>
@@ -36,7 +36,7 @@
             <li>optional features: fwd calls from ur smartphone, sync smartphone texts + contacts, whatsapp, spotify, apple music, podcasts.</li>
             <li>iphone + android compatible.</li>
           </ul>
-          <div class="spec-quiz"><a href="#" onclick="event.preventDefault(); openQuiz();"><b>take the plan quiz</b></a>, or <a href="#" onclick="event.preventDefault(); renderAllPlans();">Find out what plan works for you</a>.</div>
+          <div class="spec-quiz"><a href="#" onclick="event.preventDefault(); renderAllPlans();"><b>Find out what plan works for you</b></a>.</div>
         </div>
 
         ${SHOW_PLAN_CARDS ? `
