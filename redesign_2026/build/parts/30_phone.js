@@ -80,8 +80,7 @@
     /* Never mirror on a phone. Below the breakpoint the handset IS the
        navigation, so replacing the menu with a picture of the section you
        just closed leaves nothing to tap -- Jack hit exactly this: "you can't
-       go back to the main menu after clicking on something". On desktop the
-       sidebar is still there, so the mirror costs nothing. */
+       go back to the main menu after clicking on something". */
     if(isPhone()) on = false;
     const menu = screen.querySelector('.pmn');
     let mir = screen.querySelector('.pmn-mirror');
@@ -91,6 +90,17 @@
       if(menu) menu.style.display = '';
       return;
     }
+
+    /* On desktop the handset is scenery, not navigation -- the sidebar does
+       that job -- so a minimised window leaves the screen BLANK. It used to
+       show a scaled clone of the section you had just closed; Jack: "it should
+       stay empty while the user is on desktop". Blank also means the screen is
+       clear for snake, which is the one thing the desktop handset is actually
+       for once the window is in the egg. The menu is hidden rather than
+       removed so expandModal() can put it straight back. */
+    if(mir) mir.remove();
+    if(menu) menu.style.display = 'none';
+    return;
 
     const src = document.getElementById('wm-section') || document.getElementById('wm-body');
     if(!src || !src.firstChild){ if(mir) mir.remove(); if(menu) menu.style.display=''; return; }
