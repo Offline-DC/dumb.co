@@ -72,11 +72,28 @@ def main():
     cv2.floodFill(ff, pad, (0, 0), 1)          # fill from outside the shape
     mask = mask | (1 - ff)                      # anything unreached was an interior hole
 
+    # The traced edge is where the ink becomes SOLID, and the art is 78%
+    # partial-alpha -- marker on paper -- so the aperture stops a couple of
+    # pixels short of where the line looks like it starts. A menu row clipped
+    # to it therefore left a hairline of page-yellow between the colour and the
+    # stroke. Grow the aperture so the fill runs under the ink instead: .pf-art
+    # is z-index 2 against the screen's 1, so the drawing stays on top of
+    # whatever spills. BLEED is in artwork pixels.
+    BLEED = 4
+    bbox_c, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    must(len(bbox_c) >= 1, "no contour before bleed")
+    bx, by, bw, bh = cv2.boundingRect(max(bbox_c, key=cv2.contourArea))
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (BLEED * 2 + 1,) * 2)
+    mask = cv2.dilate(mask, k)
+
     cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     must(len(cnts) >= 1, "no contour")
     c = max(cnts, key=cv2.contourArea)
 
-    x, y, w, h = cv2.boundingRect(c)
+    # the ELEMENT keeps the true aperture's box, so the menu still lays out
+    # against the screen you can see; only the clip is fat, and its percentages
+    # simply run a little past 0 and 100.
+    x, y, w, h = bx, by, bw, bh
     frac = (w * h) / float(W * H)
     must(0.02 < frac < 0.25, f"aperture is {frac:.1%} of the art - that doesn't look like a screen")
 
@@ -198,6 +215,24 @@ def main():
     drawn = np.where(alpha > 128)
     dy0, dy1 = int(drawn[0].min()), int(drawn[0].max())
     dx0, dx1 = int(drawn[1].min()), int(drawn[1].max())
+    # The handset's silhouette, band by band: how far in the ink reaches from
+    # each edge, as a fraction of the art's width. The walking duck on a phone
+    # needs it -- the art's transparent margin is 27% at the phone's WIDEST
+    # point and much more everywhere else, so clamping the duck against a flat
+    # 27% left it 11px of itself showing when it had room for all of it.
+    BANDS = 32
+    ink = (np.array(im)[..., 3] > 128)
+    prof = []
+    for bnd in range(BANDS):
+        y0b, y1b = int(H * bnd / BANDS), int(H * (bnd + 1) / BANDS)
+        rows = ink[y0b:y1b]
+        cols = np.nonzero(rows.any(axis=0))[0]
+        if cols.size:
+            prof.append((cols[0] / W, (cols[-1] + 1) / W))
+        else:
+            prof.append((0.5, 0.5))          # no ink in this band at all
+    edges = ", ".join(f"[{a:.4f},{b:.4f}]" for a, b in prof)
+
     jblock = f"""{JSTART}
   /* Measured off {ART.name} ({W}x{H}) by build/trace_screen.py. These drive
      how big the handset is drawn on a phone, so they have to follow the art:
@@ -208,6 +243,10 @@ def main():
     drawnTop: {dy0/H:.4f}, drawnH: {(dy1-dy0)/H:.4f}, drawnW: {(dx1-dx0)/W:.4f},
     keysBottom: {(ky1+8)/H:.4f},   // just under the d-pad; anything lower crops off
     screenH: {h/H:.4f},            // the screen aperture, as a fraction of the art
+    /* the drawn silhouette in {BANDS} horizontal bands, [leftEdge, rightEdge] as
+       fractions of the art's width. The phone duck clamps against the band it
+       is standing in rather than the phone's widest point. */
+    edges: [{edges}],
   }};
 {JEND}"""
     jtxt = JS.read_text(encoding="utf-8")

@@ -20,6 +20,10 @@
     drawnTop: 0.0293, drawnH: 0.9153, drawnW: 0.4286,
     keysBottom: 0.6482,   // just under the d-pad; anything lower crops off
     screenH: 0.3833,            // the screen aperture, as a fraction of the art
+    /* the drawn silhouette in 32 horizontal bands, [leftEdge, rightEdge] as
+       fractions of the art's width. The phone duck clamps against the band it
+       is standing in rather than the phone's widest point. */
+    edges: [[0.4768,0.4911], [0.3071,0.7054], [0.3018,0.7196], [0.3018,0.7214], [0.3036,0.7304], [0.3036,0.7304], [0.3036,0.7321], [0.3089,0.7286], [0.3107,0.7268], [0.3107,0.7286], [0.3107,0.7268], [0.3089,0.7214], [0.3054,0.7196], [0.3071,0.7214], [0.3125,0.7214], [0.3143,0.7125], [0.3071,0.7214], [0.3071,0.7232], [0.3107,0.7268], [0.3107,0.7250], [0.3089,0.7232], [0.3089,0.7232], [0.3107,0.7232], [0.3071,0.7232], [0.3054,0.7214], [0.3071,0.7250], [0.3089,0.7250], [0.3125,0.7250], [0.3161,0.7250], [0.3179,0.7179], [0.3536,0.6821], [0.5000,0.5000]],
   };
   /* <<< art */
   const BP = 760;
@@ -248,6 +252,14 @@
        stay up instead of closing". It stays; the handset zooms up behind it
        (the width transition in 29_responsive.css), and closing the window
        lands you on the menu. */
+
+    /* What the blank screen shows depends on the breakpoint, so crossing one
+       has to re-decide it. Without this, minimising on a desktop and then
+       narrowing the window left the phone showing the power-on duck and NO
+       menu at 390px -- which on a phone is the dead end Jack reported, since
+       the handset is the only navigation down there. Going the other way it
+       left the menu sitting on a screen that should have gone blank. */
+    if(document.querySelector('#winmodal.collapsed')) phoneMirror(true);
   }
 
   /* Where the sidebar's INK actually ends.

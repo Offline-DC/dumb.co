@@ -124,9 +124,39 @@
     const fromRight = Math.random() < 0.5;
     el.style.left  = fromRight ? 'auto' : '0';
     el.style.right = fromRight ? '0' : 'auto';
+
+    /* Where the DRAWN phone starts AT THIS HEIGHT. Being behind the art
+       already stopped the duck being painted over the phone, but it could
+       still walk in far enough to disappear behind it, which reads the same.
+
+       Clamping against the illustration's flat 27% margin was too blunt: 27%
+       is the margin at the phone's WIDEST point, and the handset is narrower
+       than that almost everywhere, so the duck stopped with 11px of itself
+       showing when it had room for all of it. ART.edges is the silhouette in
+       32 bands, measured off the drawing by build/trace_screen.py, so the duck
+       clamps against the band it is standing in. */
+    const frame = document.querySelector('.phone-frame');
+    const GAP = 6;
+    let inner = fromRight ? w * 0.38 : -w * 0.38;   // ~62% of it in view
+    const edges = (typeof ART !== 'undefined' && ART.edges) ? ART.edges : null;
+    if(frame && edges){
+      const r = frame.getBoundingClientRect();
+      const mid = parseFloat(el.style.top) + el.offsetHeight / 2;
+      const t = (mid - r.top) / (r.height || 1);
+      if(t >= 0 && t <= 1){
+        const band = edges[Math.min(edges.length - 1, Math.max(0, Math.floor(t * edges.length)))];
+        const inkL = r.left + band[0] * r.width;
+        const inkR = r.left + band[1] * r.width;
+        if(fromRight) inner = Math.max(inner, inkR + GAP - window.innerWidth + w);
+        else          inner = Math.min(inner, inkL - GAP - w);
+      }
+    }
+
     const hidden = fromRight ? w : -w;        // fully outside the edge
-    const shown  = fromRight ? w * 0.38 : -w * 0.38;   // ~62% of it in view
-    const flip   = fromRight ? -1 : 1;        // face into the page
+    const shown  = inner;
+    /* The gif is drawn facing right, so scaleX(1) faces right. Coming in from
+       the left that is already inward; from the right it has to be mirrored. */
+    const flip   = fromRight ? -1 : 1;
     el.animate([
       { transform: `translateX(${hidden}px) scaleX(${flip})` },
       { transform: `translateX(${shown}px) scaleX(${flip})`, offset: 0.3 },
