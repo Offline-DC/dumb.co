@@ -1,9 +1,17 @@
 
   /* ---------------- shop.exe ---------------- */
-  function switchShopPhoto(el){
-    document.getElementById('sh-main-img').src = el.dataset.full || el.src;
-    el.parentElement.querySelectorAll('.sh-thumb').forEach(i => i.classList.remove('on'));
-    el.classList.add('on');
+  /* the product shot steps with the arrows beside it now, not a strip of
+     thumbnails underneath (Milk). Wraps both ways, and the dots under the
+     photo are the only place the position is shown. */
+  function shopPhotoStep(dir){
+    const img = document.getElementById('sh-main-img');
+    if(!img || !SHOP_PHOTOS.length) return;
+    const n = SHOP_PHOTOS.length;
+    const i = ((Number(img.dataset.i || 0) + dir) % n + n) % n;
+    img.dataset.i = i;
+    img.src = SHOP_PHOTOS[i];
+    const dots = document.querySelectorAll('.hero-phone .hp-dots i');
+    dots.forEach((d, j) => d.classList.toggle('on', j === i));
   }
 
   /* horizontal carousels (users, reviews, event photos) share one stepper */

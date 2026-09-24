@@ -174,3 +174,45 @@
     margin:8px 0 0;
   }
   .sh-spec .spec-plan a{color:var(--black); text-underline-offset:3px;}
+
+  /* ---- the product carousel: arrows beside the photo (Milk) ------------ */
+  .sh-hero .hero-phone{display:flex; align-items:center; gap:6px;}
+  .sh-hero .hero-phone img{flex:1 1 auto; min-width:0;}
+  .sh-hero .hp-arrow{
+    flex:0 0 auto; -webkit-appearance:none; appearance:none; cursor:pointer;
+    width:38px; height:38px; min-width:38px; border-radius:50%;
+    border:2px solid var(--black); background:var(--white); color:var(--black);
+    font-family:var(--body); font-weight:700; font-size:20px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .sh-hero .hp-arrow:hover{background:var(--yellow);}
+  .sh-hero .hp-arrow:active{transform:scale(.9);}
+  .sh-hero .hp-dots{
+    /* clear of the photo: the shot is rotated -7deg, so anything at its own
+       bottom edge lands on the picture at one end or the other */
+    position:absolute; left:50%; bottom:-18px; transform:translateX(-50%);
+    display:flex; gap:5px;
+  }
+  .sh-hero .hp-dots i{
+    width:6px; height:6px; border-radius:50%; display:block;
+    background:rgba(0,0,0,.22);
+  }
+  .sh-hero .hp-dots i.on{background:var(--black);}
+
+  /* ---- the drawers on the product page -------------------------------- */
+  .sh-drops{margin:20px 0 24px;}
+  .sh-list{margin:0; padding-left:19px;}
+  .sh-list li{
+    font-family:var(--body); font-size:13.5px; line-height:1.62; color:#333;
+    margin-bottom:3px;
+  }
+  .sh-list.two-up{columns:2; column-gap:26px;}
+  @media (max-width:620px){ .sh-list.two-up{columns:1;} }
+  .sh-specs{
+    display:grid; grid-template-columns:auto 1fr; gap:4px 14px;
+    margin:10px 0 0; font-family:var(--body); font-size:13px; line-height:1.55;
+  }
+  .sh-specs dt{font-weight:800;}
+  .sh-specs dd{margin:0; color:#444;}
+  .sh-plans{margin-top:26px;}

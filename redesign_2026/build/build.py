@@ -481,7 +481,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "about-team", 'onclick="openQuiz()"', "signatures: [",
                "Find out what plan works for you", "plan-table", "const SPLIT", "camp1:", "camp3:", "clamp(38px, 3.5vw, 66px)",
                # photoshoot, the flip-phone illustration and snake
-               "SHOP_PHOTOS", "sh-gallery", 'class="pf-screen"', "flipphone:",
+               "SHOP_PHOTOS", "shopPhotoStep", "hp-arrow", "sh-drops", 'class="pf-screen"', "flipphone:",
                "SNAKE_SEQUENCE", 'class="pf-keys"', "function snakeTick", "teamKey(",
                "duckWalkPath", 'id="tcl-screen"', 'id="deskphone"', "phonePlayable",
                "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
