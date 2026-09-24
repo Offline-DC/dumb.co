@@ -84,7 +84,7 @@
      overflow:hidden so it is clipped at the edge and reads as a head coming
      round the corner. It also holds off entirely while a section is open, so
      it can never appear over the modal. */
-  let pokeEl = null, pokeTimer = null;
+  let pokeEl = null, pokeTimer = null, pokeLastRight = null;
 
   const isPhoneWidth = () => window.matchMedia('(max-width: 760px)').matches;
 
@@ -118,12 +118,38 @@
     if(!el || modalIsOpen()) return;
     const w = el.offsetWidth || 46;
     const h = window.innerHeight;
-    /* 16%..72% down: clear of the logo at the top and of the thumb's half of
-       the keypad at the bottom */
-    el.style.top = Math.round(h * (0.16 + Math.random() * 0.56)) + 'px';
-    const fromRight = Math.random() < 0.5;
+    /* strict alternation, never the same edge twice running */
+    const fromRight = (pokeLastRight === null) ? (Math.random() < 0.5) : !pokeLastRight;
+    pokeLastRight = fromRight;
     el.style.left  = fromRight ? 'auto' : '0';
     el.style.right = fromRight ? '0' : 'auto';
+
+    /* Choose the height AFTER the side, and prefer a band with room in it.
+       The handset is not the same width all the way down -- it is widest
+       across the keypad -- so a height picked blind put the duck somewhere
+       there was only 8px of margin on that side and almost none of it showed.
+       16%..72% keeps clear of the logo up top and the thumb's half of the
+       keypad at the bottom; within that, take the roomiest few. */
+    const top0 = h * 0.16, top1 = h * 0.72;
+    let top = top0 + Math.random() * (top1 - top0);
+    const frame0 = document.querySelector('.phone-frame');
+    const edges0 = (typeof ART !== 'undefined' && ART.edges) ? ART.edges : null;
+    if(frame0 && edges0){
+      const fr = frame0.getBoundingClientRect();
+      const room = [];
+      for(let y = top0; y <= top1; y += 8){
+        const t = ((y + (el.offsetHeight || 40) / 2) - fr.top) / (fr.height || 1);
+        if(t < 0 || t > 1){ room.push({y, px: 1e4}); continue; }
+        const bnd = edges0[Math.min(edges0.length - 1, Math.max(0, Math.floor(t * edges0.length)))];
+        room.push({ y, px: fromRight
+          ? window.innerWidth - (fr.left + bnd[1] * fr.width)
+          : (fr.left + bnd[0] * fr.width) });
+      }
+      room.sort((a, b) => b.px - a.px);
+      const pick = room.slice(0, Math.max(3, Math.round(room.length * 0.35)));
+      top = pick[Math.floor(Math.random() * pick.length)].y;
+    }
+    el.style.top = Math.round(top) + 'px';
 
     /* Where the DRAWN phone starts AT THIS HEIGHT. Being behind the art
        already stopped the duck being painted over the phone, but it could
@@ -157,12 +183,20 @@
     /* The gif is drawn facing right, so scaleX(1) faces right. Coming in from
        the left that is already inward; from the right it has to be mirrored. */
     const flip   = fromRight ? -1 : 1;
+    /* Park it off-screen and mirrored BEFORE and AFTER, in the inline style.
+       Without this the animation had no fill, so the moment it finished the
+       transform reverted to none: no offset and no mirror, which left the duck
+       sitting fully on screen at the edge, facing out, until the next poke.
+       That is the duck pointing the wrong way -- it was never the flip, it was
+       the resting state. */
+    const park = `translateX(${hidden}px) scaleX(${flip})`;
+    el.style.transform = park;
     el.animate([
-      { transform: `translateX(${hidden}px) scaleX(${flip})` },
+      { transform: park },
       { transform: `translateX(${shown}px) scaleX(${flip})`, offset: 0.3 },
       { transform: `translateX(${shown}px) scaleX(${flip})`, offset: 0.7 },
-      { transform: `translateX(${hidden}px) scaleX(${flip})` },
-    ], { duration: 2800, easing: 'ease-in-out' });
+      { transform: park },
+    ], { duration: 2800, easing: 'ease-in-out', fill: 'both' });
   }
 
   function pokeSchedule(){
