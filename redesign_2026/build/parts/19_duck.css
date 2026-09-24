@@ -22,3 +22,40 @@
     to  { transform:translateY(-4px) rotate(1.5deg); }
   }
   @media (max-width:1000px){ #walkduck{display:none !important;} }
+
+  /* the phone duck: behind #deskphone (z-index 2) so the handset's ink always
+     covers it, visible through the illustration's transparent margins, and
+     clipped by #mstage's overflow:hidden at the edge of the screen */
+  #pokeduck{
+    /* fixed, not absolute: in index.html the handset is a position:fixed
+       #deskphone at z-index 2, so the duck has to be in the same stacking
+       context to land behind it. The viewport clips it at the edge. */
+    position:fixed; z-index:1; width:46px; display:block;
+    pointer-events:none; will-change:transform;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.14));
+  }
+  @media (min-width:761px){ #pokeduck{display:none !important;} }
+
+  /* the power-on duck, on the handset's blank screen */
+  .phone-frame .pf-boot{
+    position:absolute; inset:0; display:flex;
+    align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  /* .phone-frame .pf-screen img is the portrait slideshow: absolute, inset:0,
+     100% both, object-fit:cover. The boot duck is an img in that same screen,
+     so it inherited all of it and rendered 69x266 out of a 170x176 gif. */
+  .phone-frame .pf-boot img{
+    position:static; inset:auto; opacity:1; padding:0;
+    width:46%; max-width:120px; height:auto; max-height:56%;
+    object-fit:contain; display:block;
+    animation:phoneBoot 1.15s cubic-bezier(.34,1.42,.64,1) both,
+              duckBob .34s ease-in-out 1.15s infinite alternate;
+  }
+  /* comes up out of nothing like a screen waking, then settles and bobs */
+  @keyframes phoneBoot{
+    0%  { opacity:0; transform:scale(.18) translateY(14px); filter:blur(1px); }
+    55% { opacity:1; transform:scale(1.08) translateY(-3px); filter:blur(0); }
+    100%{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  .phone-frame .pf-screen.playing .pf-boot{display:none;}

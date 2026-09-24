@@ -73,6 +73,24 @@
      for when the window has no width to read yet. */
   const MIRROR_W = 560;
 
+  /* The blank screen gets a duck, the way a phone shows something when it
+     boots. It is the same inlined gif the walking duck uses rather than a
+     second copy of it. Replaced rather than restarted, so re-minimising
+     plays the power-on again instead of leaving a duck already sitting
+     there. Snake clears it: .playing hides .pf-boot. */
+  function bootDuck(screen){
+    screen.querySelector('.pf-boot')?.remove();
+    const src = document.querySelector('#walkduck img')?.getAttribute('src');
+    if(!src) return;
+    const boot = document.createElement('div');
+    boot.className = 'pf-boot';
+    boot.setAttribute('aria-hidden', 'true');
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    boot.appendChild(img);
+    screen.appendChild(boot);
+  }
+
   function phoneMirror(on){
     const screen = document.getElementById('tcl-screen');
     if(!screen) return;
@@ -86,6 +104,7 @@
 
     if(!on){
       if(mir) mir.remove();
+      screen.querySelector('.pf-boot')?.remove();
       if(menu) menu.style.display = '';
       return;
     }
@@ -99,6 +118,7 @@
        removed so expandModal() can put it straight back. */
     if(mir) mir.remove();
     if(menu) menu.style.display = 'none';
+    bootDuck(screen);
     return;
 
     const src = document.getElementById('wm-section') || document.getElementById('wm-body');
