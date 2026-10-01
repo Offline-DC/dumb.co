@@ -17,7 +17,7 @@ href: https://www.cbsnews.com/sanfrancisco/video/new-gen-z-trend-ditching-smartp
 source: CBS
 
 id: GRAYMEDIA2026
-image_name: investigatetv.avif
+image_name: investigatetv.jpg
 title: let's unplug with dumb.co
 href: https://www.investigatetv.com/2026/09/10/inside-growing-movement-ditch-smartphones-unplug-by-choice/
 source: Gray Media
