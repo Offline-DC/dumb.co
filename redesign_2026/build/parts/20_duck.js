@@ -25,12 +25,20 @@
     const logo = document.getElementById('logo');
     const duckW = duck.offsetWidth || 62;
 
+    /* It turns at both ends, symmetrically: just past the dumb.co logo on the
+       way out, just short of the egg on the way back. Walking off the edge
+       instead was tried and is not what we want -- the egg is the other end of
+       the walk, not an obstacle. */
     const x0 = leftWithin(logo, root) + (logo.offsetWidth || 0) + 12;
-    /* All the way off the right edge, rather than stopping short of the egg.
-       Turning around in open space in the middle of the page read as the duck
-       giving up; walking out of frame reads as leaving. It passes OVER the egg
-       and the window now (z-index 60), so there is nothing left to clear. */
-    const x1 = (root.clientWidth || window.innerWidth);
+    /* The egg shakes rotate(±6deg) forever, so its painted box reaches about
+       height*sin(6deg) past its layout box on each side. The turn clears that
+       as well as the egg itself; 12px of gap was less than the swing alone. */
+    const egg = document.getElementById('egg');
+    const swing = Math.ceil(((egg && egg.offsetHeight) || 70) * Math.sin(6 * Math.PI / 180));
+    const eggX = (egg && egg.offsetWidth)
+      ? leftWithin(egg, root)
+      : (root.clientWidth || window.innerWidth) - 100;
+    const x1 = eggX - swing - duckW - 14;
     return { x0: Math.round(x0), x1: Math.round(Math.max(x1, x0 + 80)) };
   }
 

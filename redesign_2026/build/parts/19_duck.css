@@ -6,9 +6,11 @@
      again the moment the window is reopened.
      ========================================================================== */
   #walkduck{
-    /* Over the top of everything. It used to sit at z-index 19, under both the
-       .exe window and the egg (z-45), so the far end of its walk vanished
-       behind them -- it read as the duck disappearing rather than leaving. */
+    /* z-index 60, above the .exe window and the egg (both 45). It used to be
+       19 and the far end of the walk vanished behind them, which read as the
+       duck disappearing. It turns before the egg now so it should not reach
+       either of them -- but if anything ever does overlap, the duck is on top
+       rather than swallowed. */
     position:absolute; top:34px; left:0; width:62px; z-index:60;
     display:none; pointer-events:none; will-change:transform;
   }
