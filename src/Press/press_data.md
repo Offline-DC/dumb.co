@@ -1,5 +1,5 @@
 id: BUSINESSINSIDERFALL2026
-image_name: bi.webp
+image_name: bi.jpg
 title: back 2 reality with dumb.co
 href: https://www.businessinsider.com/dumbco-startup-handwritten-cover-letters-ai-dumb-phones-i2026-9
 source: Business Insider
