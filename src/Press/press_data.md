@@ -1,3 +1,9 @@
+id: VOX2026
+image_name: voximage.jpg
+title: dumb.co gives back ur time
+href: https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/
+source: Vox
+
 id: CBS2026
 image_name: cbs2026.webp
 title: gen z ditches smartphones 4 the dp2
