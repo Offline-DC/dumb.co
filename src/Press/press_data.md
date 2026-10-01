@@ -2,7 +2,7 @@ id: VOX2026
 image_name: voximage.jpg
 title: dumb.co gives u back ur time
 href: https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/
-source: Vox
+source: VOX
 
 id: CBS2026
 image_name: cbs2026.webp
