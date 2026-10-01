@@ -1,6 +1,12 @@
+id: BUSINESSINSIDERFALL2026
+image_name: businessinsiderimage.webp
+title: back 2 reality with dumb.co
+href: https://www.businessinsider.com/dumbco-startup-handwritten-cover-letters-ai-dumb-phones-i2026-9
+source: Business Insider
+
 id: VOX2026
 image_name: voximage.jpg
-title: dumb.co gives u back ur time
+title: dp2 gives back ur time
 href: https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/
 source: VOX
 
