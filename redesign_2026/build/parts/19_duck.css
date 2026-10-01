@@ -6,9 +6,10 @@
      again the moment the window is reopened.
      ========================================================================== */
   #walkduck{
-    /* under the window (z-45) and the egg: the duck walks on the desktop,
-       never across an open .exe */
-    position:absolute; top:34px; left:0; width:62px; z-index:19;
+    /* Over the top of everything. It used to sit at z-index 19, under both the
+       .exe window and the egg (z-45), so the far end of its walk vanished
+       behind them -- it read as the duck disappearing rather than leaving. */
+    position:absolute; top:34px; left:0; width:62px; z-index:60;
     display:none; pointer-events:none; will-change:transform;
   }
   #walkduck.on{display:block;}
@@ -41,6 +42,12 @@
     position:absolute; inset:0; display:flex;
     align-items:center; justify-content:center;
     pointer-events:none;
+    /* The handset sits on the RIGHT of the page, so a duck facing right is
+       looking off the edge, away from everything. Facing left it looks back
+       across the page at the content. Flipped on the CONTAINER, not the img:
+       the img's transform is already spoken for by phoneBoot and duckBob, and
+       a transform here would just be overwritten by them. */
+    transform:scaleX(-1);
   }
   /* .phone-frame .pf-screen img is the portrait slideshow: absolute, inset:0,
      100% both, object-fit:cover. The boot duck is an img in that same screen,
