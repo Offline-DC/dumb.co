@@ -29,7 +29,7 @@ href: https://www.instagram.com/p/DdKNcTKPQjg/
 source: Morning Brew
 
 id: MSUREPORTER2026
-image_name: image (1).jpg
+image_name: 786157611_18440081152133493_3364820193751202418_n.jpg
 title: dumb.co leads rise in dumbphones
 href: https://www.msureporter.com/2026/08/27/the-rise-of-dumb-phones/
 source: MSU Reporter
