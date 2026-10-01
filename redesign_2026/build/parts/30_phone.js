@@ -96,6 +96,14 @@
   }
 
   function phoneMirror(on){
+    /* The handset is off the home page on desktop (Milk) and comes back only
+       once a window has been minimised into the egg -- which is where snake
+       and the power-on duck live, so neither is lost. body.section-open in the
+       baseline is never actually set by anything, so this class is the marker.
+       Set before the early return: the flag has to track the window even if
+       the screen element is not in the DOM yet. */
+    document.body.classList.toggle('win-collapsed', !!on);
+
     const screen = document.getElementById('tcl-screen');
     if(!screen) return;
     /* Never mirror on a phone. Below the breakpoint the handset IS the

@@ -132,3 +132,14 @@
   #deskphone .pf-art{filter:drop-shadow(0 8px 14px rgba(0,0,0,.14));}
   #deskphone .pf-keys button{cursor:pointer;}
   @media (max-width:1000px){ #deskphone{display:none;} }
+
+  /* Milk: no drawn phone on the home page. Above the phone breakpoint the
+     handset only appears once a window has been minimised into the egg -- that
+     is the state it is actually for (snake, and the power-on duck on the blank
+     screen). While a section is open it sits behind the window anyway, so
+     hiding it there costs nothing. Mobile is untouched: below 760px the
+     handset IS the navigation. */
+  @media (min-width:761px){
+    #deskphone{display:none;}
+    body.win-collapsed #deskphone{display:flex;}
+  }
