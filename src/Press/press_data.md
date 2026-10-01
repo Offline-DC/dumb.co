@@ -1,6 +1,6 @@
 id: VOX2026
 image_name: voximage.jpg
-title: dumb.co gives back ur time
+title: dumb.co gives u back ur time
 href: https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/
 source: Vox
 
@@ -15,6 +15,12 @@ image_name: image (1).jpg
 title: dumb.co leads rise in dumbphones
 href: https://www.msureporter.com/2026/08/27/the-rise-of-dumb-phones/
 source: MSU Reporter
+
+id: THEEAGLE2026
+image_name: theeagleimage.jpg
+title: detox with the dp2
+href: https://www.theeagleonline.com/article/2026/09/new-dc-based-flip-phone-company-showcases-gen-zs-move-towards-a-digital-detox/
+source: The Eagle
 
 id: TECHCRUNCHJUL20262
 image_name: techcrunchjul1.webp
