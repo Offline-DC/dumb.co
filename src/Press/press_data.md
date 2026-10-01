@@ -4,27 +4,33 @@ title: gen z ditches smartphones 4 the dp2
 href: https://www.cbsnews.com/sanfrancisco/video/new-gen-z-trend-ditching-smartphones-for-dumb-phones-without-social-media-apps/
 source: CBS
 
+id: MSUREPORTER2026
+image_name: image (1).jpg
+title: dumb.co leads rise in dumbphones
+href: https://www.msureporter.com/2026/08/27/the-rise-of-dumb-phones/
+source: MSU Reporter
+
 id: TECHCRUNCHJUL20262
 image_name: techcrunchjul1.webp
-title: dumb co dared me 2 join the fun percent
+title: dumb.co dared me 2 join the fun percent
 href: https://techcrunch.com/2026/07/10/dumb-co-dared-me-to-trade-my-iphone-for-a-hacked-flip-phone/ 
 source: Tech Crunch
 
 id: WASHINGTONIANSUMMER2026
 image_name: Flip-Phones-lead.webp
-title: reclaim ur brain with dumb co
+title: reclaim ur brain with dumb.co
 href: https://washingtonian.com/2026/07/14/dumb-cos-flip-phones-let-you-reclaim-your-brain/
 source: Washingtonian
 
 id: YAHOO2026
 image_name: dumb-phone.webp
-title: dumb co phones on the rise
+title: dumb.co phones on the rise
 href: https://tech.yahoo.com/phones/articles/dumb-co-dared-trade-iphone-160649244.html 
 source: Yahoo
 
 id: USATODAY1
 image_name: usatodayjuly2.webp
-title: dumbco all the rage w/ Gen Z
+title: dumb.co all the rage w/ Gen Z
 href: https://www.usatoday.com/picture-gallery/life/health-wellness/2026/07/09/people-are-ditching-smartphones-for-dumb-phones-flip-phones-landlines/90853022007/ 
 source: USAToday
 
@@ -36,13 +42,13 @@ source: USAToday
 
 id: THINGTESTING2026
 image_name: DumbphoneinAir copy.jpeg
-title: dumb co gets Gen Z on flip phones
+title: dumb.co gets Gen Z on flip phones
 href: https://thingtesting.com/stories/dumbphones-vs-smartphones 
 source: Thingtesting
 
 id: TECHCRUNCHJUL20261
 image_name: techcrunchjul2.webp
-title: cut your screentime with dumbco
+title: cut your screentime with dumb.co
 href: https://techcrunch.com/2026/06/24/if-you-want-to-cut-your-screen-time-just-get-a-brick/ 
 source: Tech Crunch
 
@@ -66,13 +72,13 @@ source: The Guardian
 
 id: CNNDOCMENTION2026_2
 image_name: bill weir dumbco.jpeg
-title: Bill Weir dumbs down w/ dumbco, u should 2
+title: Bill Weir dumbs down w/ dumb.co, u should 2
 href: https://www.instagram.com/reel/DWrxCZnjNPH/ 
 source: CNN
 
 id: AXIOSSPRING2026
 image_name: axios 2026.webp
-title: DumbCo leads drive away from smartphones
+title: dumb.co leads drive away from smartphones
 href: https://www.axios.com/2026/05/07/gen-z-leads-drive-away-from-social-media  
 source: AXIOS
 
