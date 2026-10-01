@@ -1,5 +1,5 @@
 id: BUSINESSINSIDERFALL2026
-image_name: businessinsiderimage.webp
+image_name: bi.webp
 title: back 2 reality with dumb.co
 href: https://www.businessinsider.com/dumbco-startup-handwritten-cover-letters-ai-dumb-phones-i2026-9
 source: Business Insider
@@ -29,7 +29,7 @@ href: https://www.instagram.com/p/DdKNcTKPQjg/
 source: Morning Brew
 
 id: MSUREPORTER2026
-image_name: 786157611_18440081152133493_3364820193751202418_n.jpg
+image_name: msu.webp
 title: dumb.co leads rise in dumbphones
 href: https://www.msureporter.com/2026/08/27/the-rise-of-dumb-phones/
 source: MSU Reporter
