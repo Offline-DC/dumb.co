@@ -6,7 +6,7 @@ source: Business Insider
 
 id: VOX2026
 image_name: voximage.jpg
-title: dp2 gives back ur time
+title: dumb.co gives u back time
 href: https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/
 source: VOX
 
@@ -16,7 +16,7 @@ title: gen z ditches smartphones 4 the dp2
 href: https://www.cbsnews.com/sanfrancisco/video/new-gen-z-trend-ditching-smartphones-for-dumb-phones-without-social-media-apps/
 source: CBS
 
-id: INVESTIGATETV2026
+id: GRAYMEDIA2026
 image_name: investigatetv.avif
 title: let's unplug with dumb.co
 href: https://www.investigatetv.com/2026/09/10/inside-growing-movement-ditch-smartphones-unplug-by-choice/
