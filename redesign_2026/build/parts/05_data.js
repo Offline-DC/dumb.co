@@ -82,18 +82,24 @@
       blurb:"the Month Offline gallery show — a room full of what people made once they put the smartphone down. prints, zines, cyanotypes, a landline you could actually call.",
       vimeoId:null,
       /* Replaced wholesale with the approved set (Lydia, 2 Oct) -- the five
-         that were here were never cleared with the people in them. Captions
-         below are written from what is visibly in each frame and still want
-         Lydia's pass; nothing in them asserts a name or a date. */
+         that were here were never cleared with the people in them.
+
+         Captions deliberately left empty. I had written eight from what was
+         visible in each frame; they were invented copy for someone else's
+         event, which is the kind of thing that reads fine until the one
+         person who was there sees it. A caption is now optional end to end:
+         empty means the strip is not drawn at all (07_memories_section.js)
+         and the polaroid falls back to the event name (08_helpers.js). Fill
+         them in whenever there is something real to say -- or leave them. */
       photos:[
-        {src:() => MEM.mo1, cap:"dear dumb phone"},
-        {src:() => MEM.mo2, cap:"the wall of entries"},
-        {src:() => MEM.mo3, cap:"the gallery wall"},
-        {src:() => MEM.mo4, cap:"at the table"},
-        {src:() => MEM.mo5, cap:"opening night"},
-        {src:() => MEM.mo6, cap:"a full room"},
-        {src:() => MEM.mo7, cap:"the crew"},
-        {src:() => MEM.mo8, cap:"snacks"},
+        {src:() => MEM.mo1, cap:""},
+        {src:() => MEM.mo2, cap:""},
+        {src:() => MEM.mo3, cap:""},
+        {src:() => MEM.mo4, cap:""},
+        {src:() => MEM.mo5, cap:""},
+        {src:() => MEM.mo6, cap:""},
+        {src:() => MEM.mo7, cap:""},
+        {src:() => MEM.mo8, cap:""},
       ],
     },
     {

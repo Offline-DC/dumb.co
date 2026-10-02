@@ -17,7 +17,8 @@
               ${ev.photos.map((ph, pi) => `
                 <div class="mem-tile" onclick="openMemory(${ei}, ${pi})">
                   <img src="${ph.src()}" alt="${ev.name}"/>
-                  <div class="mt-cap">${ph.cap}</div>
+                  ${(ph.cap || '').trim() ? `
+                  <div class="mt-cap">${ph.cap}</div>` : ``}
                 </div>
               `).join('')}
               ${ev.vimeoId ? `
