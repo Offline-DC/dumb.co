@@ -9,7 +9,8 @@
             <span class="mem-when">${ev.when}</span>
             <span class="mem-where">${ev.where}</span>
           </div>
-          <p class="mem-blurb">${ev.blurb}</p>
+          ${(ev.blurb || '').trim() ? `
+          <p class="mem-blurb">${ev.blurb}</p>` : ``}
           ${ev.photos.length === 0 ? `
           <div class="mem-pending">photos coming soon</div>` : `
           <div class="mem-carousel">

@@ -74,6 +74,59 @@
   #tcl-screen.playing .pmn-mirror{display:none;}
 
   /* ------------------------------------------------------------ the phone */
+  /* ---- "that's not a touchscreen" ------------------------------------- */
+  /* Lives outside the media query because the keyframes and the card want to
+     be defined once; only the handler is mobile-only (30_phone.js checks the
+     breakpoint), so none of this can fire on a desktop. */
+  @keyframes nt-shake{
+    0%,100%{transform:translateX(0) rotate(0);}
+    15%{transform:translateX(-7px) rotate(-1.1deg);}
+    30%{transform:translateX(6px)  rotate(.9deg);}
+    45%{transform:translateX(-5px) rotate(-.7deg);}
+    60%{transform:translateX(4px)  rotate(.5deg);}
+    78%{transform:translateX(-2px) rotate(-.25deg);}
+  }
+  .phone-frame.shake{animation:nt-shake .45s cubic-bezier(.36,.07,.19,.97) both;}
+
+  #nottouch{
+    position:fixed; inset:0; z-index:400; display:none;
+    align-items:center; justify-content:center; padding:22px;
+    background:rgba(20,20,12,.34);
+  }
+  #nottouch.on{display:flex; animation:nt-in .16s ease both;}
+  @keyframes nt-in{from{opacity:0;} to{opacity:1;}}
+  #nottouch .nt-card{
+    background:var(--yellow); color:var(--text-strong);
+    border:3px solid var(--black); border-radius:14px;
+    padding:20px 18px 16px; max-width:330px; width:100%; text-align:center;
+    box-shadow:6px 7px 0 rgba(0,0,0,.9);
+    animation:nt-pop .22s cubic-bezier(.2,1.3,.4,1) both;
+  }
+  @keyframes nt-pop{from{transform:scale(.9) rotate(-1.5deg);} to{transform:none;}}
+  #nottouch .nt-ha{
+    font-family:var(--body); font-weight:700; font-size:15px; line-height:1.35;
+    margin:0 0 10px;
+  }
+  #nottouch .nt-go{
+    font-family:var(--headline); font-size:26px; line-height:1.1; margin:0 0 6px;
+  }
+  /* the cluster is cut from the handset with its transparent margin intact,
+     so it needs no frame of its own -- it just sits on the paper */
+  #nottouch .nt-keys{
+    display:block; width:62%; max-width:190px; height:auto; margin:2px auto 12px;
+  }
+  #nottouch .nt-x{
+    font-family:var(--body); font-weight:700; font-size:13px; letter-spacing:.04em;
+    background:var(--black); color:var(--yellow); border:0; border-radius:999px;
+    padding:9px 20px; min-width:112px; cursor:pointer;
+  }
+  /* someone who has asked not to be moved around still gets the message, just
+     without the shake */
+  @media (prefers-reduced-motion: reduce){
+    .phone-frame.shake{animation:none;}
+    #nottouch.on, #nottouch .nt-card{animation:none;}
+  }
+
   @media (max-width: 760px){
     #topbar, #walkduck{display:none !important;}
     #home{display:none !important;}

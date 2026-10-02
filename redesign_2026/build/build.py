@@ -134,6 +134,14 @@ duck_uri = datauri(duck_f, "gif")
 
 assets["flipphone"] = flipphone_uri
 
+# the d-pad cluster, cut out of the handset by build/trace_screen.py. The
+# mobile "that's not a touchscreen" nudge shows it, so the controls it points
+# at are literally the ones drawn on the phone behind it.
+cluster_f = ROOT / "assets" / "dpad-cluster.png"
+must(cluster_f.exists(),
+     "assets/dpad-cluster.png missing - run: python3 build/trace_screen.py")
+assets["dpadCluster"] = datauri(cluster_f, "png")
+
 # ---- the d-pad arrows used to be generated and inlined here. Marco's redrawn
 # handset has them DRAWN IN, so there is nothing to inline: the four buttons are
 # invisible hit targets over his ink. assets/dpad-*.png and make_dpad_arrows.py

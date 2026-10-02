@@ -315,6 +315,46 @@ def main():
      phone. {AW}px of a {W}px-wide drawing, so the pen matches at any size. */
   .phone-frame .pf-keys button{{background-size:{100*AW/W:.2f}cqw {100*AW/W:.2f}cqw;}}
 {KEND}"""
+    # ---- a crop of the d-pad cluster, for the "use the buttons" nudge ------
+    # The mobile screen is not a touchscreen and people will tap it anyway, so
+    # the nudge that follows shows them the controls. It shows MARCO'S ink,
+    # cut straight out of the handset rather than redrawn, so what the modal
+    # points at and what is on the phone cannot drift apart.
+    if found:
+        # Crop to the five marks and NOTHING else. A plain bounding box pulled
+        # in the tops of the soft keys below and a sliver of the keypad edge,
+        # which made the nudge look like a picture of some buttons rather than
+        # a picture of THESE buttons. So: label the ink inside the box, keep
+        # only the components that actually belong to the four arrows and the
+        # OK ring, and clear whatever else wandered in.
+        boxes = [(kx0, ky0, kx1, ky1)]                       # the OK ring
+        for f in found.values():
+            fx, fy, fw_, fh_ = f[1] / 100 * W, f[2] / 100 * H, f[4], f[5]
+            boxes.append((int(fx - fw_ / 2), int(fy - fh_ / 2),
+                          int(fx + fw_ / 2), int(fy + fh_ / 2)))
+        pad = int(0.012 * W)
+        cx0 = max(0, min(b[0] for b in boxes) - pad)
+        cy0 = max(0, min(b[1] for b in boxes) - pad)
+        cx1 = min(W, max(b[2] for b in boxes) + pad)
+        cy1 = min(H, max(b[3] for b in boxes) + pad)
+
+        sub = np.array(im.crop((cx0, cy0, cx1, cy1)))
+        nn2, lab2, st2, _ = cv2.connectedComponentsWithStats(
+            (sub[..., 3] > 128).astype(np.uint8), 8)
+        keep_lab = set()
+        for i in range(1, nn2):
+            bx, by, bw2, bh2, _a = st2[i]
+            ax0, ay0, ax1, ay1 = bx + cx0, by + cy0, bx + bw2 + cx0, by + bh2 + cy0
+            for tx0, ty0, tx1, ty1 in boxes:
+                if ax0 < tx1 and ax1 > tx0 and ay0 < ty1 and ay1 > ty0:
+                    keep_lab.add(i)
+                    break
+        sub[~np.isin(lab2, list(keep_lab))] = 0
+        CLUSTER = ROOT / "assets" / "dpad-cluster.png"
+        Image.fromarray(sub).save(CLUSTER, "PNG", optimize=True)
+        print(f"  d-pad crop: {sub.shape[1]}x{sub.shape[0]}, "
+              f"{len(keep_lab)} marks kept -> {CLUSTER.name}")
+
     kcss = KEYCSS.read_text(encoding="utf-8")
     must(kcss.count(KSTART) == 1 and kcss.count(KEND) == 1,
          f"dpad markers not found exactly once in {KEYCSS.name}")

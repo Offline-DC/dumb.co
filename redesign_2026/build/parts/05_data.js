@@ -79,7 +79,13 @@
     },
     {
       name:"Month Offline gallery", when:"August 2026", where:"New York, NY",
-      blurb:"the Month Offline gallery show — a room full of what people made once they put the smartphone down. prints, zines, cyanotypes, a landline you could actually call.",
+      /* Blurb removed, not rewritten. It described prints, zines, cyanotypes
+         and a landline -- none of which are in the approved photo set, and
+         none of it written by anyone who was there. Laffy: "i'd rather have
+         no text than a random description of whats going on." The event
+         name, month and city stay: those are facts off the invitation, not
+         description. */
+      blurb:"",
       vimeoId:null,
       /* Replaced wholesale with the approved set (Lydia, 2 Oct) -- the five
          that were here were never cleared with the people in them.
@@ -104,15 +110,17 @@
     },
     {
       name:"DC Pride", when:"June 2026", where:"Washington, DC",
-      blurb:"join the flip side. we marched the parade with the banner, the totes and a lot of bubbles.",
+      /* same: the slogan is real and on the banner, but the sentence around
+         it was mine */
+      blurb:"",
       vimeoId:null,
       photos:[
-        {src:() => MEM.pride1, cap:"join the flip side"},
-        {src:() => MEM.pride2, cap:"the tote"},
-        {src:() => MEM.pride3, cap:"down the parade route"},
-        {src:() => MEM.pride4, cap:"bubbles"},
-        {src:() => MEM.pride5, cap:"dumb.co fans"},
-        {src:() => MEM.pride6, cap:"parade weather"},
+        {src:() => MEM.pride1, cap:""},
+        {src:() => MEM.pride2, cap:""},
+        {src:() => MEM.pride3, cap:""},
+        {src:() => MEM.pride4, cap:""},
+        {src:() => MEM.pride5, cap:""},
+        {src:() => MEM.pride6, cap:""},
       ],
     },
   ];

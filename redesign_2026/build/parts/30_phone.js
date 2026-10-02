@@ -260,6 +260,61 @@
     setRowVars(w);
   }
 
+  /* ------------------------------- "that's not a touchscreen" ------------ */
+  /* 65% of visits are on a phone and the whole interface is a drawn d-pad, so
+     the one thing worth teaching is that the buttons do the work. Tapping the
+     screen is the exact moment someone is asking how this thing works, so
+     that is where the answer goes.
+
+     The picture in it is Marco's own ink -- build/trace_screen.py cuts the
+     d-pad cluster straight out of the handset -- so what the nudge points at
+     and what is drawn on the phone behind it cannot drift apart. */
+  function nudgeEl(){
+    let el = document.getElementById('nottouch');
+    if(el) return el;
+    el = document.createElement('div');
+    el.id = 'nottouch';
+    el.innerHTML =
+      '<div class="nt-card" role="alertdialog" aria-live="assertive">' +
+        '<p class="nt-ha">oh, you thought you could use a touch screen.<br>' +
+        'that\u2019s real funny, hehehehe</p>' +
+        '<p class="nt-go">try the buttons below!</p>' +
+        '<img class="nt-keys" src="' + A.dpadCluster + '" alt="the four arrows and the OK button">' +
+        '<button type="button" class="nt-x">got it</button>' +
+      '</div>';
+    document.body.appendChild(el);
+    el.addEventListener('click', () => el.classList.remove('on'));
+    return el;
+  }
+
+  let nudgeTimer = null;
+  function touchNudge(){
+    const frame = document.querySelector('#deskphone .phone-frame');
+    if(!frame) return;
+    /* restart the shake even if one is already running: offsetWidth forces
+       the reflow that makes the browser treat it as a new animation */
+    frame.classList.remove('shake');
+    void frame.offsetWidth;
+    frame.classList.add('shake');
+    clearTimeout(nudgeTimer);
+    nudgeTimer = setTimeout(() => frame.classList.remove('shake'), 500);
+    /* a real buzz where the hardware has one; iOS Safari has no vibrate, so
+       the shake has to carry it on its own there */
+    if(navigator.vibrate){ try { navigator.vibrate([16, 38, 16]); } catch(e){} }
+    nudgeEl().classList.add('on');
+  }
+
+  document.addEventListener('click', (e) => {
+    if(!isPhone()) return;
+    if(snakeOn()) return;                                   // snake owns the screen
+    if(e.target.closest('#nottouch')) return;               // dismissing it
+    if(e.target.closest('.pf-keys')) return;                // the buttons ARE the answer
+    const win = document.getElementById('winmodal');
+    if(win && !win.classList.contains('collapsed')) return;  // a section is open
+    const scr = document.getElementById('tcl-screen');
+    if(scr && (scr === e.target || scr.contains(e.target))) touchNudge();
+  });
+
   /* ------------------------------------------- the wordmark on the hinge */
   /* Laffy: "can the dumb.co logo be moved to the phone hinge?" It lives in
      the sidebar, which is the desktop's furniture, so on a phone the node is
