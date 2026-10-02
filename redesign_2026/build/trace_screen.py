@@ -188,18 +188,62 @@ def main():
     # radius without touching the lettering.
     AW = ARROW_ART_W
     RING = 0.79
-    def pos(dx, dy):
+
+    def ring_pos(dx, dy):
         return (100 * (kcx + dx * kw / 2) / W, 100 * (kcy + dy * kh / 2) / H)
-    ks = {name: pos(dx, dy) for name, (dx, dy) in {
-        "k-up": (0, -RING), "k-right": (RING, 0),
-        "k-down": (0, RING), "k-left": (-RING, 0), "k-ok": (0, 0)}.items()}
+
+    # ---- find the arrows Marco DREW, instead of assuming a ring -----------
+    # The old handset had no arrows on it: mine were generated and painted on
+    # at RING * the OK circle's radius, so a ring was the right model because
+    # we were drawing the ring. Marco's handset has them inked in, and they
+    # are not symmetrical -- his left chevron sits 21.6% of the art's width
+    # from centre and his right one 20.9%, with up and down at different
+    # distances again. Placing hit targets on a computed ring therefore put
+    # them next to the arrows rather than on them.
+    #
+    # So: take every ink blob in an annulus around the OK circle, keep the
+    # ones that are arrow-sized, and assign each to the compass point it
+    # actually sits at. Falls back to the ring for any direction that has no
+    # drawn arrow, so art without them still traces.
+    ink = (alpha > 128).astype(np.uint8)
+    ys0, ys1 = int(kcy - 0.14 * H), int(kcy + 0.14 * H)
+    xs0, xs1 = int(kcx - 0.45 * W), int(kcx + 0.45 * W)
+    nn, _, st, ct = cv2.connectedComponentsWithStats(
+        ink[max(0, ys0):ys1, max(0, xs0):xs1], 8)
+    found = {}
+    for i in range(1, nn):
+        bxx, byy, bww, bhh, area = st[i]
+        if not (1500 <= area <= 9000):          # the OK circle and the body
+            continue                             # outlines are far bigger
+        if bww > 300 or bhh > 300:
+            continue
+        gx, gy = ct[i][0] + max(0, xs0), ct[i][1] + max(0, ys0)
+        dist = np.hypot(gx - kcx, gy - kcy)
+        if not (kw * 0.4 < dist < kw * 1.2):     # outside the circle, not far
+            continue
+        ang = np.degrees(np.arctan2(gy - kcy, gx - kcx)) % 360
+        bot = byy + bhh + max(0, ys0)            # the blob's lowest pixel
+        for name, target in (("k-right", 0), ("k-down", 90),
+                             ("k-left", 180), ("k-up", 270)):
+            off = min(abs(ang - target), 360 - abs(ang - target))
+            if off < 28 and (name not in found or dist < found[name][0]):
+                found[name] = (dist, 100 * gx / W, 100 * gy / H, bot)
+
+    ks = {"k-ok": ring_pos(0, 0)}
+    for name, (dx, dy) in (("k-up", (0, -RING)), ("k-right", (RING, 0)),
+                           ("k-down", (0, RING)), ("k-left", (-RING, 0))):
+        ks[name] = found[name][1:3] if name in found else ring_pos(dx, dy)
+    print(f"  d-pad arrows: {len(found)}/4 measured off the artwork"
+          + ("" if len(found) == 4 else " (the rest fall back to the ring)"))
 
     kblock = f"""{KSTART}
   /* The OK circle measured off {ART.name}: interior x[{kx0},{kx1}] y[{ky0},{ky1}],
-     so it centres at {100*kcx/W:.2f}% / {100*kcy/H:.2f}%. Arrows sit at {int(RING*100)}% of that
-     radius -- on the ring, framing the drawn "OK" instead of covering it.
-     The four ovals around the circle are decoration: in the raw art they hold
-     plain dashes, not arrows. */
+     so it centres at {100*kcx/W:.2f}% / {100*kcy/H:.2f}%.
+     The four arrow targets are placed on the arrows DRAWN IN THE ARTWORK --
+     {len(found)} of 4 located by blob position around that circle -- not on a
+     computed ring. Marco's chevrons are not symmetrical about the circle, so
+     a ring put the hit areas beside them instead of on them. Any direction
+     that has no drawn arrow falls back to {int(RING*100)}% of the radius. */
   .phone-frame .pf-keys .k-up   {{left:{ks['k-up'][0]:.2f}%; top:{ks['k-up'][1]:.2f}%;}}
   .phone-frame .pf-keys .k-right{{left:{ks['k-right'][0]:.2f}%; top:{ks['k-right'][1]:.2f}%;}}
   .phone-frame .pf-keys .k-down {{left:{ks['k-down'][0]:.2f}%; top:{ks['k-down'][1]:.2f}%;}}
@@ -220,6 +264,14 @@ def main():
     KEYCSS.write_text(
         kcss[:kcss.index(KSTART)] + kblock + kcss[kcss.index(KEND) + len(KEND):],
         encoding="utf-8")
+
+    # Where the mobile crop stops. It used to be the bottom of the OK circle
+    # plus a hair, which was right while the arrows were painted on inside the
+    # ring. Marco DREW his below the circle, so cropping to the circle cut the
+    # down arrow off the bottom of a phone screen -- the one key you need to
+    # get down the menu. Take whichever is lower, the circle or the lowest
+    # drawn arrow, and leave a little air under it.
+    keys_bottom = max([ky1] + [f[3] for f in found.values()]) + 10
 
     # ---- the numbers the layout code needs, from the same measurement ----
     drawn = np.where(alpha > 128)
@@ -251,7 +303,7 @@ def main():
   const ART = {{
     ratio: {H} / {W},
     drawnTop: {dy0/H:.4f}, drawnH: {(dy1-dy0)/H:.4f}, drawnW: {(dx1-dx0)/W:.4f},
-    keysBottom: {(ky1+8)/H:.4f},   // just under the d-pad; anything lower crops off
+    keysBottom: {keys_bottom/H:.4f},   // just under the d-pad; anything lower crops off
     screenH: {h/H:.4f},            // the screen aperture, as a fraction of the art
     /* the drawn silhouette in {BANDS} horizontal bands, [leftEdge, rightEdge] as
        fractions of the art's width. The phone duck clamps against the band it

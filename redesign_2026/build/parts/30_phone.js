@@ -18,7 +18,7 @@
   const ART = {
     ratio: 3600 / 1200,
     drawnTop: 0.0128, drawnH: 0.9747, drawnW: 0.8225,
-    keysBottom: 0.6272,   // just under the d-pad; anything lower crops off
+    keysBottom: 0.6650,   // just under the d-pad; anything lower crops off
     screenH: 0.3519,            // the screen aperture, as a fraction of the art
     /* the drawn silhouette in 32 horizontal bands, [leftEdge, rightEdge] as
        fractions of the art's width. The phone duck clamps against the band it
@@ -212,7 +212,23 @@
     if(!isPhone()){
       root.style.removeProperty('--mpw');
       root.style.removeProperty('--mtop');
-      setRowVars(frame.getBoundingClientRect().width || 420);
+
+      /* Desktop size is pinned to the DRAWN handset, not to the image box.
+         The frame used to be a flat 420px, which was fine while one drawing
+         was in play and wrong the moment it changed: the old art was only
+         45.5% ink across its width with big transparent margins, Marco's is
+         82.25%, so the same 420px drew a phone nearly twice the size and it
+         ran off the bottom of the page.
+
+         DESK_DRAWN_H is what the previous handset actually drew at --
+         420 * 1.645 * 0.923 = 638px of ink -- so pinning to it keeps the
+         cameo the size it has always been, and any future redraw with
+         different margins lands at the same size instead of needing this
+         number found again. */
+      const DESK_DRAWN_H = 638;
+      const w = Math.round(DESK_DRAWN_H / (ART.drawnH * ART.ratio));
+      frame.style.width = w + 'px';
+      setRowVars(w);
       return;
     }
 
