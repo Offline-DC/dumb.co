@@ -19,11 +19,20 @@
      out to the traced edge instead of floating in a box. */
   #tcl-screen .pmn{
     position:absolute; inset:0; box-sizing:border-box;
-    /* --screen-inset comes from build/trace_screen.py: how far the drawn
-       screen edge bows inward at its worst. Rows used to run the full width
-       and the clip-path sheared their highlight flat against the ink on one
-       side while leaving a yellow wedge on the other. */
-    padding:5% var(--screen-inset, 6%) 3%;
+    /* The inset is NOT applied here any more. It used to pad the whole menu
+       in by how far the drawn edge bows inward at its worst, which kept the
+       highlight off the ink -- but it also meant the bar stopped short of the
+       screen everywhere the edge did NOT bow, leaving the yellow border Laffy
+       asked to get rid of. On Marco's handset that is much worse: his screen
+       outline wobbles ~3% against the old art's ~0%, so the traced inset went
+       from 1.50% to 4.48% and the gap roughly tripled.
+
+       The bar now runs the full width and the clip-path shapes it, which is
+       what the clip is for: it is traced from the same ink, so the highlight
+       ends exactly where the drawn edge does -- no yellow, and it follows the
+       wobble instead of standing off from it. The inset moves to the row's
+       own padding, so the TEXT still keeps clear of the ink. */
+    padding:5% 0 3%;
     display:flex; flex-direction:column;
   }
   #tcl-screen .pmn-bar{
@@ -35,7 +44,9 @@
   #tcl-screen .pmn-list{flex:1 1 auto; min-height:0; overflow:hidden;}
   #tcl-screen .pmn-row{
     display:flex; align-items:center; gap:4px; height:var(--pmn-rowh, 22px);
-    padding:0 5px; font-family:var(--body); font-weight:700; line-height:1;
+    /* the text, not the highlight, is what has to clear the drawn edge */
+    padding:0 calc(var(--screen-inset, 4%) + 5px);
+    font-family:var(--body); font-weight:700; line-height:1;
     font-size:var(--pmn-rowf, 10px); color:var(--black); text-decoration:none;
     white-space:nowrap; overflow:hidden;
   }

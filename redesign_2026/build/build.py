@@ -134,13 +134,11 @@ duck_uri = datauri(duck_f, "gif")
 
 assets["flipphone"] = flipphone_uri
 
-# ---- the d-pad arrows: Marco's chevron, trimmed and rotated four ways by
-# build/make_dpad_arrows.py. Inlined here rather than referenced, same as every
-# other asset, because the prototype has to work from a single file.
-for _d in ("up", "right", "down", "left"):
-    _f = ROOT / "assets" / f"dpad-{_d}.png"
-    must(_f.exists(), f"assets/dpad-{_d}.png missing - run: python3 build/make_dpad_arrows.py")
-    assets[f"dpad_{_d}"] = datauri(_f, "png")
+# ---- the d-pad arrows used to be generated and inlined here. Marco's redrawn
+# handset has them DRAWN IN, so there is nothing to inline: the four buttons are
+# invisible hit targets over his ink. assets/dpad-*.png and make_dpad_arrows.py
+# are left on disk only because trace_screen.py still reads ARROW_ART_W from it
+# to size those targets against the artwork.
 
 asset_js = ("  const A = {\n"
             + "".join(f'    {k}: "{v}",\n' for k, v in assets.items())
@@ -456,11 +454,10 @@ html = swap_block(html, "  function openSection(key){", "  /* ---------------- l
 must('<div class="kicker">dumbphone 2</div>' in html,
      "the hero kicker changed shape - check it still says just the product name")
 
-# ---- fill the d-pad arrow tokens in 22_snake.css
-for _d in ("up", "right", "down", "left"):
-    _tok = "__DPAD_%s__" % _d.upper()
-    must(_tok in html, f"{_tok} not found - did 22_snake.css change?")
-    html = html.replace(_tok, assets[f"dpad_{_d}"])
+# the __DPAD_*__ tokens are gone with the generated arrows; guard against one
+# creeping back in and shipping as a literal url("__DPAD_UP__")
+must("__DPAD_" not in html, "a __DPAD_*__ token is still in the markup - "
+     "the generated arrows were retired when Marco drew them into the handset")
 
 # ------------------------------------------------------------------ 9. title
 html = html.replace("<title>dumb.co — 2026 redesign concept v3</title>",

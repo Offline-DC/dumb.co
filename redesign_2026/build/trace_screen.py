@@ -159,9 +159,19 @@ def main():
             continue
         # ...and the right SIZE. Once the number keys are cropped off, the
         # whole keypad interior is itself an enclosed round-ish region and it
-        # is far bigger, so "largest round thing" picks the wrong one. The OK
-        # circle is about 15% of the art's width; nothing else in that band is.
-        if not (0.08 < bw / W < 0.22):
+        # is far bigger, so "largest round thing" picks the wrong one.
+        #
+        # The upper bound is a FRACTION OF THE ART'S WIDTH, so it moves when
+        # the drawing's proportions do. On the 560x921 handset the OK circle
+        # was ~15% of the width; on Marco's 2000x6000 one the phone is much
+        # narrower relative to its height and the same circle is 24.2%, which
+        # the old 0.22 ceiling rejected outright -- the trace failed with
+        # "couldn't find the OK circle" on art that plainly has one.
+        # Widened to 0.30. Checked against the new art: of every enclosed
+        # region below the halfway line, the OK circle is the ONLY round-ish
+        # one (the keypad interior is 0.53 tall-to-wide, the key ovals are all
+        # 1.5-1.8 wide-to-tall), so this cannot now pick up something else.
+        if not (0.08 < bw / W < 0.30):
             continue
         if best is None or len(ys) > best[0]:
             best = (len(ys), x0, x1, y0, y1, bw, bh)
