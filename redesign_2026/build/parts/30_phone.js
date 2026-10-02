@@ -232,10 +232,22 @@
       return;
     }
 
-    const logo = document.getElementById('logo');
-    const band = logo ? logo.getBoundingClientRect().bottom + 10 : 56;
-    const availH = Math.max(240, window.innerHeight - band - 6);
-    const availW = Math.max(200, window.innerWidth - 20);
+    /* Clear the desktop's inline width before the phone branch touches
+       anything. The mobile rule is width:var(--mpw) in a stylesheet, and an
+       inline style beats a stylesheet however specific -- so after the window
+       had ever been wide, dragging it narrow left the handset stuck at the
+       218px desktop size and the menu text clipped inside it. That is the
+       "it didn't jump to the mobile size" -- the breakpoint fired correctly
+       every time, the width just could not move. */
+    frame.style.removeProperty('width');
+
+    /* The wordmark used to sit in a band above the handset, so the phone had
+       to start below it. It is on the hinge now, which hands that whole strip
+       back: the phone starts at a plain 10px of air and can be scaled up into
+       the space the logo was using. */
+    const TOP_AIR = 10;
+    const availH = Math.max(240, window.innerHeight - TOP_AIR - 6);
+    const availW = Math.max(200, window.innerWidth - 8);
 
     /* scale until the D-pad reaches the bottom of the screen rather than the
        whole handset — the bigger of the two sizings from the review, which is
@@ -244,8 +256,28 @@
     w = Math.min(w, availW / ART.drawnW);
 
     root.style.setProperty('--mpw', Math.round(w) + 'px');
-    root.style.setProperty('--mtop', Math.round(band - ART.drawnTop * ART.ratio * w) + 'px');
+    root.style.setProperty('--mtop', Math.round(TOP_AIR - ART.drawnTop * ART.ratio * w) + 'px');
     setRowVars(w);
+  }
+
+  /* ------------------------------------------- the wordmark on the hinge */
+  /* Laffy: "can the dumb.co logo be moved to the phone hinge?" It lives in
+     the sidebar, which is the desktop's furniture, so on a phone the node is
+     moved into the handset itself and put over the drawn hinge panel --
+     whose box trace_screen.py measures off the artwork (--hinge-*), so it
+     follows the drawing rather than being placed by eye. Moved back on the
+     way out, because the desktop sidebar still needs it. */
+  function logoHome(){
+    const logo = document.getElementById('logo');
+    const frame = document.querySelector('#deskphone .phone-frame');
+    const bar = document.getElementById('sidebar');
+    if(!logo || !frame || !bar) return;
+    if(isPhone()){
+      if(logo.parentElement !== frame){ frame.appendChild(logo); logo.classList.add('on-hinge'); }
+    } else if(logo.parentElement !== bar){
+      bar.insertBefore(logo, bar.firstChild);
+      logo.classList.remove('on-hinge');
+    }
   }
 
   /* the menu is sized off the frame from ART.screenH, so it fits however big
@@ -254,7 +286,13 @@
     const root = document.documentElement;
     const screenH = ART.screenH * ART.ratio * frameW;
     const n = Math.max(1, pmItems.length);
-    const bar = Math.max(9, Math.round(screenH * 0.06));
+    /* The strip at the top of the screen used to hold "DUMB.CO ..."; that was
+       removed in the copy pass, but 6% of the screen was still being reserved
+       for it on every build since. Measured: 26px of a 447px screen held back
+       for an element that is not in the DOM. Reserved only when it is really
+       there, which hands the rows the whole screen. */
+    const bar = document.querySelector('#tcl-screen .pmn-bar')
+      ? Math.max(9, Math.round(screenH * 0.06)) : 0;
     const rowH = Math.max(11, Math.floor((screenH - bar) / n));
     root.style.setProperty('--pmn-rowh', rowH + 'px');
     /* the cap was 17px, which on a real handset read as small print next to
@@ -267,6 +305,7 @@
   /* --------------------------------------------- crossing the breakpoint */
   let wasPhone = null;
   function onBreakpoint(){
+    logoHome();
     const now = isPhone();
     if(wasPhone === null){ wasPhone = now; return; }
     if(now === wasPhone) return;
@@ -321,7 +360,9 @@
     document.documentElement.style.setProperty('--nav-ink', Math.ceil(right) + 'px');
   }
 
-  window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); navInk(); });
+  window.addEventListener('resize', () => { logoHome(); phoneFit(); onBreakpoint(); navInk(); });
+  logoHome();
+  phoneFit();
   navInk();
 
   /* The hero is positioned from a measurement of the sidebar's ink, and the

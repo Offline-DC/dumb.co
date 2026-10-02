@@ -88,10 +88,32 @@
       pointer-events:none; z-index:5; display:block !important;
     }
     #sidebar nav#navlist, #sidebar #sidebar-foot{display:none !important;}
+    /* fallback only: if the hinge was never traced, or the node has not been
+       moved yet, the wordmark still has somewhere sensible to be */
     #sidebar #logo{
       position:absolute; top:14px; left:50%; transform:translateX(-50%);
       width:132px; margin:0; pointer-events:auto;
     }
+
+    /* ON THE HINGE. 30_phone.js moves the node into .phone-frame at this
+       width; --hinge-* is the drawn panel's box, measured off the artwork by
+       build/trace_screen.py. object-fit:contain means the wordmark sits in
+       that panel at its own proportions however the handset is scaled -- the
+       hinge is 2.8:1 and the wordmark is wider than that, so it fills the
+       width and centres on the height rather than being squashed to fit. */
+    .phone-frame > #logo.on-hinge{
+      position:absolute; z-index:4; margin:0; transform:none;
+      left:var(--hinge-left, 32%); top:var(--hinge-top, 46%);
+      width:var(--hinge-w, 36%); height:var(--hinge-h, 4.2%);
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:auto;
+    }
+    .phone-frame > #logo.on-hinge img{
+      width:100%; height:100%; object-fit:contain; display:block;
+    }
+    /* the hover tilt is a desktop affordance and looks like a glitch on a
+       panel this small */
+    .phone-frame > #logo.on-hinge:hover{transform:none;}
 
     /* the handset fills what's left. --mpw is the image width the shim
        computes; the illustration carries ~27% transparent margin each side and

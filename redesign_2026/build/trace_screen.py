@@ -119,11 +119,41 @@ def main():
     inset = max(max((u for u, _ in sides if u < 50), default=0),
                 100 - min((u for u, _ in sides if u >= 50), default=100)) + 1.5
 
+    # ---- the hinge: the flat panel between the screen and the keypad -----
+    # The mobile layout puts the dumb.co wordmark on it, so its box has to
+    # come off the drawing like everything else. It is the one enclosed
+    # region that sits below the screen aperture, above the OK circle, and is
+    # markedly wider than it is tall.
+    hinge = None
+    for r in range(1, n):
+        hys, hxs = np.where(lab == r)
+        if hys.size < 3000:
+            continue
+        hy0, hy1, hx0, hx1 = hys.min(), hys.max(), hxs.min(), hxs.max()
+        if hy0 <= by + bh or hx0 == 0 or hy0 == 0 or hx1 == W - 1 or hy1 == H - 1:
+            continue
+        hw, hh = hx1 - hx0 + 1, hy1 - hy0 + 1
+        if hw / hh < 1.8 or hw < 0.15 * W:
+            continue
+        if hinge is None or hy0 < hinge[1]:
+            hinge = (hx0, hy0, hw, hh)
+    if hinge:
+        hx0, hy0, hw, hh = hinge
+        hinge_css = (f"\n    /* the drawn hinge panel, for the mobile wordmark */"
+                     f"\n    --hinge-left:{100*hx0/W:.2f}%; --hinge-top:{100*hy0/H:.2f}%;"
+                     f"\n    --hinge-w:{100*hw/W:.2f}%; --hinge-h:{100*hh/H:.2f}%;")
+        print(f"  hinge: {hw}x{hh}px at {100*hx0/W:.2f}% / {100*hy0/H:.2f}%")
+    else:
+        hinge_css = ""
+        print("  hinge: not found - the mobile wordmark keeps its fallback box")
+
     block = f"""{START}
   /* {len(ap)} points traced from the {W}x{H} art at {EPS}px tolerance.
      The box is the aperture's exact bounding box; the clip-path follows the
      inside of the drawn stroke, so the screen fill stops where the ink starts
      instead of leaving a gap. */
+  .phone-frame{{{hinge_css}
+  }}
   .phone-frame .pf-screen{{
     position:absolute; z-index:1;
     left:{100*x/W:.2f}%; top:{100*y/H:.2f}%; width:{100*w/W:.2f}%; height:{100*h/H:.2f}%;

@@ -93,6 +93,11 @@
      The box is the aperture's exact bounding box; the clip-path follows the
      inside of the drawn stroke, so the screen fill stops where the ink starts
      instead of leaving a gap. */
+  .phone-frame{
+    /* the drawn hinge panel, for the mobile wordmark */
+    --hinge-left:32.33%; --hinge-top:46.08%;
+    --hinge-w:35.67%; --hinge-h:4.25%;
+  }
   .phone-frame .pf-screen{
     position:absolute; z-index:1;
     left:19.42%; top:8.89%; width:64.25%; height:35.19%;
