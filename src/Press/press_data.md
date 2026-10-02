@@ -1,6 +1,6 @@
 id: BUSINESSINSIDERFALL2026
 image_name: bi.jpg
-title: back 2 reality with dumb.co
+title: dumb.co has genz writing again
 href: https://www.businessinsider.com/dumbco-startup-handwritten-cover-letters-ai-dumb-phones-i2026-9
 source: Business Insider
 
@@ -18,13 +18,13 @@ source: CBS
 
 id: GRAYMEDIA2026
 image_name: investigatetv.jpg
-title: let's unplug with dumb.co
+title: ur neighbors all have dumbphones...
 href: https://www.investigatetv.com/2026/09/10/inside-growing-movement-ditch-smartphones-unplug-by-choice/
 source: Gray Media
 
 id: MORNINGBREW2026
 image_name: morningbrew.webp
-title: dumb.co fixes screentime
+title: get ur brain back with dumb.co
 href: https://www.instagram.com/p/DdKNcTKPQjg/
 source: Morning Brew
 
@@ -36,7 +36,7 @@ source: MSU Reporter
 
 id: THEEAGLE2026
 image_name: theeagleimage.jpg
-title: detox with the dp2
+title: college students are detoxing with the dp2
 href: https://www.theeagleonline.com/article/2026/09/new-dc-based-flip-phone-company-showcases-gen-zs-move-towards-a-digital-detox/
 source: The Eagle
 
