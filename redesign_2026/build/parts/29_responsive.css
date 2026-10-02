@@ -46,9 +46,20 @@
     letter-spacing:.06em; color:var(--text-weak); padding:2px 5px 1px;
     border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
   }
-  #tcl-screen .pmn-list{flex:1 1 auto; min-height:0; overflow:hidden;}
+  /* The rows DIVIDE the list rather than each being a fixed height. A fixed
+     --pmn-rowh is floor()ed, so seven of them left up to 6px of bare yellow
+     under Contact -- small in CSS pixels, obvious on a 2x screen against a
+     drawn edge. Sharing the height leaves no remainder to round away. */
+  #tcl-screen .pmn-list{
+    flex:1 1 auto; min-height:0; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
   #tcl-screen .pmn-row{
-    display:flex; align-items:center; gap:4px; height:var(--pmn-rowh, 22px);
+    display:flex; align-items:center; gap:4px;
+    /* equal shares of whatever the screen is, instead of a rounded height.
+       --pmn-rowh still drives the font size (see setRowVars) -- it is only
+       the BOX that stopped using it. */
+    flex:1 1 0; min-height:0;
     /* the text, not the highlight, is what has to clear the drawn edge */
     padding:0 calc(var(--screen-inset, 4%) + 5px);
     font-family:var(--body); font-weight:700; line-height:1;
