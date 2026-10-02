@@ -94,14 +94,39 @@
     font-family:var(--body); font-size:15px; line-height:1.5; max-width:620px;
     margin:0 0 20px; opacity:.85;
   }
-  .gi-drops{display:grid; gap:12px; margin:22px 0 20px;}
+  /* The section is a flex column in a window that is usually taller than its
+     content, so all the slack used to pile up BELOW the last line and the page
+     stopped halfway down. Three changes, none of which invent content:
+
+       - the drawers grow into the spare height (grid rows share it), so the
+         two panels read as the body of the page rather than a pair of rows
+         near the top. Capped, because two collapsed drawers 400px tall stop
+         being buttons and start being billboards -- and the cap is only
+         reached on a very tall window.
+       - whatever is left after that goes between the drawers and the DIAL-UP
+         (margin-bottom:auto), so the signup and the email land at the foot of
+         the window instead of floating mid-page.
+       - when a drawer is OPEN its content needs the room more than the
+         stretch does, so the 1fr rows are dropped at that point. */
+  .gi-drops{
+    display:grid; gap:12px; margin:22px 0 auto;
+    flex:1 1 auto; min-height:0; max-height:360px;
+    grid-auto-rows:minmax(0, 1fr); align-content:stretch;
+  }
+  .gi-drops:has(.gi-drop[open]){
+    max-height:none; grid-auto-rows:auto; align-content:start; flex:0 1 auto;
+  }
   .gi-drop{
     border:2px solid var(--black); background:var(--white);
     box-shadow:4px 4px 0 rgba(0,0,0,.9);
   }
+  .gi-drop{display:flex; flex-direction:column;}
   .gi-drop > summary{
     list-style:none; cursor:pointer; display:flex; align-items:center; gap:14px;
     padding:14px 18px; min-height:44px;
+    /* fills the row the grid hands it, so the label sits in the middle of a
+       tall drawer rather than clinging to the top of one */
+    flex:1 1 auto;
   }
   .gi-drop > summary::-webkit-details-marker{display:none;}
   .gi-drop > summary:hover{background:var(--yellow);}
