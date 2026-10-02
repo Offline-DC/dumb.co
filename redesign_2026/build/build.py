@@ -496,7 +496,8 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "function keyboardNav", "kbfocus", "function buildPhoneMenu", "pm-row",
                "function phoneFit", "k-ok", "--bp-phone",
                "gi-foot",
-               'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()"]:
+               'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()",
+               'id="review-sub"', "getElementById('review-sub')", 'class="plans-sub"']:
     must(needle in html, f"post-build check failed, missing: {needle}")
 for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindow", 'id="taskbar"',
                'id="section-body"', "openMonthOffline(", "$20/mo</div>",
@@ -509,7 +510,9 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                "a.navitem.external::after", 'class="count"', "function mobileHint", 'id="mobhint"',
                ">Get Involved<", 'data-key="monthoffline"', ">Month Offline</a>",
                "that's a sandbox thing", "compare all three plans", "not sure which plan fits",
-               ">compare plans<"]:
+               ">compare plans<",
+               "reviews on Google",                      # the link says just "reviews" now
+               "querySelector('.shs-sub')"]:             # must be by id, see 31_reviews.js
     must(banned not in html, f"v7 leftover still present: {banned}")
 must(html.count("data:image/webp;base64") >= len(press), "press thumbnails not all embedded")
 

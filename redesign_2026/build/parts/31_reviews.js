@@ -61,14 +61,20 @@
         <div class="rc-body">${r.body}</div>
       </div>`).join('');
 
-    const sub = document.querySelector('.shs-sub');
+    /* By id, NOT by '.shs-sub'. The plans drawer sits above this block and
+       briefly carried the same class, so the first match was its subtitle --
+       the star row and the review link were written into the plans drawer and
+       "dumb, dumber, dumbest." disappeared. The one element this is allowed to
+       rewrite now says so in its id. */
+    const sub = document.getElementById('review-sub');
     if(sub && data.avg && data.count){
-      /* Google's terms want their reviews attributed, so the source is named
-         rather than implied */
+      /* The link still goes to the Google listing, but the label is just
+         "reviews" -- Lafayette asked for it. Worth knowing: Google's terms
+         ask for their reviews to be attributed where they are shown, and the
+         count and the word "Google" were what did that here. */
       sub.innerHTML = starRow(Math.round(parseFloat(data.avg) || 5)) +
         ' ' + data.avg + ' · <a class="rv-src" href="' + REVIEWS_PAGE +
-        '" target="_blank" rel="noopener noreferrer">' + data.count +
-        ' reviews on Google &#8599;</a>';
+        '" target="_blank" rel="noopener noreferrer">reviews &#8599;</a>';
     }
   }
 

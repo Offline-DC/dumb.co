@@ -136,7 +136,7 @@
               <span class="gi-chev" aria-hidden="true">+</span>
             </summary>
             <div class="gi-body">
-              <div class="shs-sub">dumb, dumber, dumbest.</div>
+              <div class="plans-sub">dumb, dumber, dumbest.</div>
               <div class="plan-cards">
                 <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
                 <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
@@ -150,7 +150,7 @@
           <div class="rail-head">
             <div>
               <h3>what dumb ppl say</h3>
-              <div class="shs-sub">${starRow(5)} placeholder avg · placeholder reviews</div>
+              <div class="shs-sub" id="review-sub">${starRow(5)} placeholder avg · placeholder reviews</div>
             </div>
             <div class="rail-nav">
               <button type="button" onclick="railStep('review-rail',-1)">‹</button>

@@ -74,6 +74,9 @@
   .shop-sec{margin-bottom:32px;}
   .shop-sec > h3{font-family:var(--headline); font-size:26px; margin:0 0 3px; transform:rotate(-.8deg); display:inline-block;}
   .shop-sec > .shs-sub{font-family:var(--body); font-size:12.5px; color:#666; margin:0 0 14px;}
+  /* Same look as .shs-sub, its own class: loadReviews() rewrites the review
+     subtitle, and these two must never be confusable again. */
+  .plans-sub{font-family:var(--body); font-size:12.5px; color:#666; margin:0 0 14px;}
   .rail-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:12px;}
   .rail-nav{display:flex; gap:7px; flex:0 0 auto;}
   .rail-nav button{
