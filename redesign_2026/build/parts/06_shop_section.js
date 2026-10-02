@@ -116,18 +116,6 @@
             </div>
           </details>
         </div>
-
-        ${SHOW_PLAN_CARDS ? `
-        <div class="shop-sec">
-          <h3>the plans</h3>
-          <div class="shs-sub">dumb, dumber, dumbest.</div>
-          <div class="plan-cards">
-            <img src="${A.planDumb}"    alt="dumb plan"/>
-            <img src="${A.planDumber}"  alt="dumber plan"/>
-            <img src="${A.planDumbest}" alt="dumbest plan"/>
-          </div>
-        </div>` : ``}
-
         <div class="shop-sec" style="margin-bottom:6px;">
           <div class="rail-head">
             <div>
@@ -156,26 +144,20 @@
           </div>
         </div>
 
-        <!-- the plans, at the bottom. Built from the same PLANS/FEATURES data
-             renderAllPlans() uses, so the two can never drift. -->
+        <!-- the plans, at the bottom. MARCO'S CARDS, not a rebuild of them.
+             There was an HTML table here reproducing the three cards in divs
+             and it was only ever an approximation -- his type, his spacing and
+             his tick marks redrawn in CSS and drifting a little further every
+             time either side changed. Milk asked for his design; this is his
+             design. The flag that used to hide the real cards is gone with
+             it. -->
         <div class="shop-sec sh-plans">
           <h3>the plans</h3>
           <div class="shs-sub">dumb, dumber, dumbest.</div>
-          <div class="plan-table">
-            ${Object.keys(PLANS).map(k => {
-              const pl = PLANS[k];
-              return `
-              <div class="plan-col ${pl.theme}">
-                <div class="pt-name">${pl.name}</div>
-                <div class="pt-price">${pl.price}<span>/month</span></div>
-                <div class="pt-blurb">${pl.blurb}</div>
-                <ul class="pt-feats">
-                  ${FEATURES.map((f, i) => `
-                    <li class="${planHas(k, i) ? 'yes' : 'no'}"><span>${planHas(k, i) ? '✓' : '✗'}</span>${f}</li>
-                  `).join('')}
-                </ul>
-              </div>`;
-            }).join('')}
+          <div class="plan-cards">
+            <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
+            <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
+            <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
           </div>
           <div class="qr-min" style="margin-top:14px;">4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.</div>
         </div>

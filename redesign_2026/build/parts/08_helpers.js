@@ -52,21 +52,13 @@
       <div class="wm-pad">
         <div class="wm-back" onclick="openSection('shop')">‹ back to Shop.exe</div>
         <h2>the plans</h2>
-        <div class="plan-table">
-          ${Object.keys(PLANS).map(k => {
-            const p = PLANS[k];
-            return `
-            <div class="plan-col ${p.theme}">
-              <div class="pt-name">${p.name}</div>
-              <div class="pt-price">${p.price}<span>/month</span></div>
-              <div class="pt-blurb">${p.blurb}</div>
-              <ul class="pt-feats">
-                ${FEATURES.map((f, i) => `
-                  <li class="${planHas(k, i) ? 'yes' : 'no'}"><span>${planHas(k, i) ? '✓' : '✗'}</span>${f}</li>
-                `).join('')}
-              </ul>
-            </div>`;
-          }).join('')}
+        <!-- Marco's cards. This used to rebuild them as a div table from
+             PLANS/FEATURES -- an approximation of a finished design, which is
+             the one thing it should not have been. -->
+        <div class="plan-cards">
+          <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
+          <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
+          <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
         </div>
         <div class="qr-min" style="margin-top:16px;">4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.</div>
         <div class="quiz-foot" style="margin-top:16px;">

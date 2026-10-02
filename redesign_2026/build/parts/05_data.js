@@ -1,7 +1,8 @@
   /* ==========================================================================
      content
      ========================================================================== */
-  const SHOW_PLAN_CARDS = false;   // standalone "the plans" section, still held
+  /* SHOW_PLAN_CARDS is gone: Marco's cards are no longer optional, they
+     ARE the plans. */
   const DUMBPHONE_CHECKOUT = "https://buy.stripe.com/00w3cocK48f87HBakE8N20D";
 
   /* ---- confetti ----------------------------------------------------------
