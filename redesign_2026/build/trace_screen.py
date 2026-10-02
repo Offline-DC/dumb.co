@@ -95,7 +95,14 @@ def main():
     # simply run a little past 0 and 100.
     x, y, w, h = bx, by, bw, bh
     frac = (w * h) / float(W * H)
-    must(0.02 < frac < 0.25, f"aperture is {frac:.1%} of the art - that doesn't look like a screen")
+    # The ceiling is a "did we trace the right hole" guard, not a design limit.
+    # 0.25 was fine while the handset was 560x921 with a modest screen; Marco's
+    # is far narrower relative to its height and, once expand_screen.py grows
+    # the screen into the lid, the aperture is legitimately 25.7% of the image
+    # -- so the guard started rejecting the correct answer. Raised to 0.35,
+    # which still catches the real failure it is there for: flood-filling the
+    # background instead of the screen, which lands near 100%.
+    must(0.02 < frac < 0.35, f"aperture is {frac:.1%} of the art - that doesn't look like a screen")
 
     ap = cv2.approxPolyDP(c, EPS, True).reshape(-1, 2)
     must(len(ap) >= 4, "simplified to fewer than 4 points")

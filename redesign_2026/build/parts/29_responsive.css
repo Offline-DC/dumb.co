@@ -103,13 +103,27 @@
        width and centres on the height rather than being squashed to fit. */
     .phone-frame > #logo.on-hinge{
       position:absolute; z-index:4; margin:0; transform:none;
-      left:var(--hinge-left, 32%); top:var(--hinge-top, 46%);
-      width:var(--hinge-w, 36%); height:var(--hinge-h, 4.2%);
+      /* --hinge-* is the panel's INTERIOR, so a wordmark filling it touches
+         the drawn stroke on every side and reads as crammed in rather than
+         printed on. Inset by a share of the panel, so the band of body around
+         it stays proportional at any handset size.
+
+         Done with calc on the box rather than padding: a percentage padding
+         resolves against the CONTAINING BLOCK'S WIDTH, never the element's
+         own height -- so 9% here meant 38px of a 423px-wide frame, top and
+         bottom, inside a box 54px tall. The content box collapsed to zero and
+         the wordmark disappeared off the hinge entirely. */
+      left:calc(var(--hinge-left, 32%) + var(--hinge-w, 36%) * 0.07);
+      width:calc(var(--hinge-w, 36%) * 0.86);
+      top:calc(var(--hinge-top, 46%) + var(--hinge-h, 4.2%) * 0.14);
+      height:calc(var(--hinge-h, 4.2%) * 0.72);
       display:flex; align-items:center; justify-content:center;
+      box-sizing:border-box;
       pointer-events:auto;
     }
     .phone-frame > #logo.on-hinge img{
-      width:100%; height:100%; object-fit:contain; display:block;
+      width:100%; height:100%; object-fit:contain; object-position:center;
+      display:block;
     }
     /* the hover tilt is a desktop affordance and looks like a glitch on a
        panel this small */
