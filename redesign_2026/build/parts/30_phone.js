@@ -199,7 +199,15 @@
     if(snakeOn()) return;                // that press was the last of the unlock
     if(dir === 'up')    { phoneMove(-1); return; }
     if(dir === 'down')  { phoneMove(1);  return; }
-    if(dir === 'right' || dir === 'ok'){ phoneOpen(pmSel); return; }
+    /* OK opens. RIGHT used to open as well, which is wrong on a vertical
+       menu: the arrows should only ever do the thing they point at, and
+       right points at nothing here. It also quietly undid the lesson the
+       touch nudge teaches -- if two different keys open a row, the one key
+       that is actually labelled for it stops being the obvious answer.
+
+       Left and right still reach _teamKeySnake above, so the unlock sequence
+       is untouched; they just no longer navigate. */
+    if(dir === 'ok'){ phoneOpen(pmSel); return; }
   };
   function phoneOk(){ teamKey('ok'); }
 
