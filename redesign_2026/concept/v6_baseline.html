@@ -14,8 +14,33 @@
   }
 
   :root{
-    --yellow:#faf594;
+    /* ---- dumb design system (Matteo) ---------------------------------
+       Named for PURPOSE, not for colour, so the names survive a repaint:
+       "brand" is still brand when the yellow changes, which Matteo has
+       marked pending twice. Source: Figma dumb-design-system / colors.
+       The colour-named variables underneath are kept as aliases pointing
+       at these, so 30-odd part files don't all have to be rewritten at
+       once and nothing silently drifts out of the system meanwhile. */
+    --brand:#FAF594;            /* marked "will change" in the Figma */
+    --brand-secondary:#A8A465;  /* ditto */
+    --text-strong:#14140C;      /* the dumbphone's ink, not pure black */
+    --text-weak:#575757;        /* was #000 at .55-.62 alpha, which meant
+                                   the colour changed with whatever was
+                                   behind it -- yellow page vs white sheet
+                                   gave two different greys */
+    --stroke-strong:#898985;
+    --stroke-weak:#E8E8E7;
+    --fill:#F2F2F1;
+    --fill-weaker:#F9F9F9;
+    --background:#FFFEF5;
+    --yellow-strong:#F2E52B;
+
+    --yellow:var(--brand);
+    --paper:var(--background);
+    --hair:var(--stroke-weak);
     --white:#ffffff;
+    /* structural black: the window chrome and the drawn line art, which are
+       ink on paper rather than type and are not Matteo's text tokens */
     --black:#000000;
     --gray:#c1c1c1;
     --pink:#ff7df2;
@@ -31,7 +56,7 @@
      pinch-to-zoom alone. A maximum-scale / user-scalable=no viewport would
      disable both, and taking pinch away from someone who needs it to read is
      not a fix. */
-  html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--black);overflow:hidden;touch-action:manipulation;}
+  html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--text-strong);overflow:hidden;touch-action:manipulation;}
 
   #app{position:relative;height:100%;width:100%;overflow:hidden;background:var(--yellow);}
 
@@ -52,7 +77,7 @@
     font-family:var(--headline); font-weight:700; font-size:44px; line-height:1.1;
     cursor:pointer; padding:6px 12px; border-radius:6px; width:fit-content;
     transition:transform .18s ease, background .18s ease, color .18s ease;
-    color:var(--black);
+    color:var(--text-strong);
   }
   .navitem span.count{font-family:var(--body);font-weight:500;font-size:12px;vertical-align:middle;opacity:.65;margin-left:6px;}
 
@@ -65,7 +90,7 @@
   .navitem:nth-child(6):hover, .navitem:nth-child(6).active{ background:var(--blue);   color:var(--black); transform:rotate(4deg) translateX(4px); }
   .navitem:nth-child(7):hover, .navitem:nth-child(7).active{ background:var(--orange); color:var(--white); transform:rotate(-4deg) translateX(-4px); }
 
-  #sidebar-foot{margin-top:auto; font-size:12px; color:#00000099; line-height:1.6; font-family:var(--body);}
+  #sidebar-foot{margin-top:auto; font-size:12px; color:var(--text-weak); line-height:1.6; font-family:var(--body);}
   #sidebar-foot a{color:var(--black); font-weight:600;}
   #no-socials{display:flex; align-items:center; gap:10px; margin-top:14px;}
   #no-socials .ns-icon{width:38px; height:38px; transition:transform .18s ease;}
@@ -73,10 +98,10 @@
   #no-socials .ns-icon:nth-child(2){transform:rotate(3deg);}
   #no-socials .ns-icon:nth-child(3){transform:rotate(-3deg);}
   #no-socials .ns-icon:hover{transform:scale(1.15) rotate(0deg);}
-  #no-socials .ns-label{font-family:var(--body); font-size:10.5px; color:#00000080; margin-top:6px; letter-spacing:.03em;}
+  #no-socials .ns-label{font-family:var(--body); font-size:10.5px; color:var(--text-weak); margin-top:6px; letter-spacing:.03em;}
   /* Danny's line is the real fine print; the redesign watermark sits under it,
      dimmer, and comes out when this stops being a prototype. */
-  .ns-label.ns-wip{margin-top:2px; color:#00000045;}
+  .ns-label.ns-wip{margin-top:2px; color:var(--text-weak);}
 
   /* ---------- HOME ---------- */
   #home{
@@ -531,10 +556,29 @@
     document.body.style.userSelect='none';
     e.preventDefault();
   });
+  /* The window was clamped while RESIZING but not while MOVING, so it could
+     be dragged left over the sidebar and guillotine the logo and the whole
+     nav (Kunal: "the dumb.co logo is cut off ... move it up a layer").
+     Raising the sidebar instead would park an opaque 400px yellow column in
+     front of the window, which is worse, so the window is stopped at the
+     sidebar's INK rather than its column: --nav-ink is what navInk()
+     measured, so the stop sits where the drawing ends, not where the box
+     does, and the gap stays even. Also clamped at the top and right, so the
+     title bar can never be dragged somewhere you can't grab it back. */
+  function dragBounds(){
+    const bar = document.getElementById('sidebar');
+    const shown = bar && getComputedStyle(bar).display !== 'none';
+    const ink = parseFloat(getComputedStyle(document.documentElement)
+                  .getPropertyValue('--nav-ink')) || 0;
+    return { minLeft: (shown && ink) ? Math.round(ink) + 14 : 4 };
+  }
   window.addEventListener('mousemove', (e)=>{
     if(dragging){
-      win.style.left = (e.clientX - ox) + 'px';
-      win.style.top = (e.clientY - oy) + 'px';
+      const minLeft = dragBounds().minLeft;
+      const maxLeft = window.innerWidth  - 140;
+      const maxTop  = window.innerHeight - 60;
+      win.style.left = Math.max(minLeft, Math.min(maxLeft, e.clientX - ox)) + 'px';
+      win.style.top  = Math.max(4,       Math.min(maxTop,  e.clientY - oy)) + 'px';
     }
     if(resizeMode === 'br'){
       const r = win.getBoundingClientRect();

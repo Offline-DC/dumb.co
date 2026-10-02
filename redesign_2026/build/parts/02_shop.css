@@ -170,7 +170,7 @@
   }
   .sh-spec .sh-buy:hover{opacity:.88;}
   .sh-spec .spec-plan{
-    font-family:var(--body); font-size:14px; color:#00000099;
+    font-family:var(--body); font-size:14px; color:var(--text-weak);
     margin:8px 0 0;
   }
   .sh-spec .spec-plan a{color:var(--black); text-underline-offset:3px;}

@@ -29,7 +29,7 @@
   #tcl-screen .pmn-bar{
     flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
     font-family:var(--body); font-weight:700; font-size:var(--pmn-barf, 7px);
-    letter-spacing:.06em; color:rgba(0,0,0,.62); padding:2px 5px 1px;
+    letter-spacing:.06em; color:var(--text-weak); padding:2px 5px 1px;
     border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
   }
   #tcl-screen .pmn-list{flex:1 1 auto; min-height:0; overflow:hidden;}
@@ -99,6 +99,17 @@
       width:var(--mpw, 480px); flex:0 0 auto; pointer-events:auto;
       transition:width .45s cubic-bezier(.6,0,.2,1);
     }
+
+    /* Jack: "on mobile it briefly flashes a modal before showing the phone."
+       Two separate causes, both here. The window sits in the markup without
+       .collapsed, so at this width it paints as a full-screen sheet for the
+       frames before the shell runs; and .collapsed inherited the desktop's
+       shrink-into-the-egg transition, so dismissing it faded out over ~300ms
+       rather than just going. Measured: opacity was still 0.59 at 591ms.
+       Nothing paints until the shell sets .m-ready, and collapsed is gone
+       outright -- the egg it would shrink into does not exist here. */
+    html:not(.m-ready) #winmodal{display:none !important;}
+    #winmodal.collapsed{display:none !important; transition:none !important;}
 
     /* the .exe window becomes a sheet. !important beats the inline geometry
        the desktop controller writes, so nothing can drag it out of frame. */

@@ -46,5 +46,8 @@
 
   /* the nav items are real links now (every section has a copyable address),
      so strip the browser's link styling — they are still the same buttons */
-  .navitem, .navitem:visited{text-decoration:none; color:var(--black);}
+  .navitem, .navitem:visited{text-decoration:none; color:var(--text-strong);}
+  /* the :hover/.active chips keep --black deliberately: there the ink sits on
+     pink/blue/orange, not on paper, so it is chip contrast rather than body
+     text and Matteo's text tokens do not apply to it. */
   .navitem:hover{text-decoration:none;}

@@ -126,7 +126,7 @@
   .phone-frame .pf-hint{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     text-align:center; padding:8px; line-height:1.3;
-    font-family:var(--body); font-weight:700; font-size:11px; color:rgba(0,0,0,.55);
+    font-family:var(--body); font-weight:700; font-size:11px; color:var(--text-weak);
   }
 
   /* contact.exe is the support card only, on the yellow ground from slide 9.
@@ -189,7 +189,18 @@
        same yellow, no visible seam -- and the hero can then sit where the gap
        actually looks centred instead of being clipped by the column. */
     z-index:21;
+
+    /* --nav-ink is measured, and the logo it measures is type, so the first
+       answer is taken in the fallback face and changes when the webfont
+       lands. The hero was visibly jumping sideways on every cold load.
+       Held back for that one reflow; 30_phone.js adds .ink-measured once the
+       fonts have settled, with a 1.2s floor so this can never strand the
+       hero invisible if they never do. */
+    opacity:0;
+    transition:opacity .2s ease;
   }
+  html.ink-measured #home{ opacity:1; }
+
   /* the hero sits in the gap between the sidebar and the window. At 100% it
      filled that gap, so the copy read as pinned to the sidebar; sized to its
      content instead, #home's justify-content:center actually centres it. */

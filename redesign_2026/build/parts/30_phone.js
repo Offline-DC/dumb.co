@@ -307,8 +307,27 @@
 
   window.addEventListener('resize', () => { phoneFit(); onBreakpoint(); navInk(); });
   navInk();
-  /* webfonts land after first paint and the logo is type, so remeasure */
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(navInk);
+
+  /* The hero is positioned from a measurement of the sidebar's ink, and the
+     logo is type -- so the first measurement is taken in the fallback face
+     and the answer changes when the webfont lands, which is why the headline
+     visibly jumped (Jack: "is it intentional to have the 'your life is
+     waiting for you' text move?"). It is not. #home is held back for that one
+     reflow (18_quiz.css) instead of being allowed to land twice.
+
+     The timeout is the safety net: if fonts.ready never settles the hero must
+     still appear, so it is revealed on whatever measurement we have. */
+  function settleInk(){
+    navInk();
+    document.documentElement.classList.add('ink-measured');
+  }
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(settleInk);
+  else settleInk();
+  setTimeout(settleInk, 1200);
+
+  /* the mobile sheet stays hidden until this lands, so the .exe window cannot
+     paint full-screen for a frame before the phone does */
+  requestAnimationFrame(() => document.documentElement.classList.add('m-ready'));
   window.addEventListener('orientationchange', () => setTimeout(() => { phoneFit(); onBreakpoint(); }, 120));
 
   /* ------------------------------------------------------- wiring it up */
