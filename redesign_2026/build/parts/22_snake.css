@@ -68,12 +68,21 @@
      computed ring. Marco's chevrons are not symmetrical about the circle, so
      a ring put the hit areas beside them instead of on them. Any direction
      that has no drawn arrow falls back to 79% of the radius. */
-  .phone-frame .pf-keys .k-up   {left:51.33%; top:53.36%;}
-  .phone-frame .pf-keys .k-right{left:71.63%; top:59.62%;}
-  .phone-frame .pf-keys .k-down {left:50.62%; top:65.30%;}
-  .phone-frame .pf-keys .k-left {left:29.12%; top:58.82%;}
+  .phone-frame .pf-keys .k-up   {left:51.33%; top:53.36%;
+    width:14.09cqw; height:7.95cqw;}
+  .phone-frame .pf-keys .k-right{left:71.63%; top:59.62%;
+    width:7.09cqw; height:13.42cqw;}
+  .phone-frame .pf-keys .k-down {left:50.62%; top:65.30%;
+    width:12.65cqw; height:6.71cqw;}
+  .phone-frame .pf-keys .k-left {left:29.12%; top:58.82%;
+    width:9.97cqw; height:15.81cqw;}
+  /* OK confirms the highlighted row. The target is the DRAWN circle, measured
+     -- it used to be the same 5.7cqw as an arrow, about a third of the ink, so
+     tapping anywhere but the dead centre of a circle that is plainly a button
+     did nothing at all. */
   .phone-frame .pf-keys .k-ok   {left:50.71%; top:59.07%;
-    width:5.7cqw; height:5.7cqw; min-width:34px; min-height:34px; font-size:0;}
+    width:24.17cqw; height:20.67cqw;
+    min-width:44px; min-height:44px; font-size:0;}
   /* The glyph is sized separately from the hit target. The target keeps a 34px
      floor so it stays clickable; the drawing must not, because a stroke is a
      fixed width in the artwork, and an arrow that stops shrinking with the

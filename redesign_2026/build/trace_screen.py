@@ -227,12 +227,23 @@ def main():
                              ("k-left", 180), ("k-up", 270)):
             off = min(abs(ang - target), 360 - abs(ang - target))
             if off < 28 and (name not in found or dist < found[name][0]):
-                found[name] = (dist, 100 * gx / W, 100 * gy / H, bot)
+                found[name] = (dist, 100 * gx / W, 100 * gy / H, bot, bww, bhh)
 
     ks = {"k-ok": ring_pos(0, 0)}
+    sz = {}
     for name, (dx, dy) in (("k-up", (0, -RING)), ("k-right", (RING, 0)),
                            ("k-down", (0, RING)), ("k-left", (-RING, 0))):
         ks[name] = found[name][1:3] if name in found else ring_pos(dx, dy)
+        # the hit target is the size of the ARROW THAT IS DRAWN, with a floor:
+        # a fixed 5.7cqw was a third of Marco's chevrons, so most of a mark
+        # that reads as a button was dead. Both dimensions are in cqw, which
+        # is a share of the frame's WIDTH -- the art fills that width, so a
+        # height of kh/W cqw is exactly kh artwork pixels either way.
+        if name in found:
+            bw_, bh_ = found[name][4], found[name][5]
+            sz[name] = (100 * bw_ / W * 1.15, 100 * bh_ / W * 1.15)   # +15% air
+        else:
+            sz[name] = (5.7, 5.7)
     print(f"  d-pad arrows: {len(found)}/4 measured off the artwork"
           + ("" if len(found) == 4 else " (the rest fall back to the ring)"))
 
@@ -244,12 +255,21 @@ def main():
      computed ring. Marco's chevrons are not symmetrical about the circle, so
      a ring put the hit areas beside them instead of on them. Any direction
      that has no drawn arrow falls back to {int(RING*100)}% of the radius. */
-  .phone-frame .pf-keys .k-up   {{left:{ks['k-up'][0]:.2f}%; top:{ks['k-up'][1]:.2f}%;}}
-  .phone-frame .pf-keys .k-right{{left:{ks['k-right'][0]:.2f}%; top:{ks['k-right'][1]:.2f}%;}}
-  .phone-frame .pf-keys .k-down {{left:{ks['k-down'][0]:.2f}%; top:{ks['k-down'][1]:.2f}%;}}
-  .phone-frame .pf-keys .k-left {{left:{ks['k-left'][0]:.2f}%; top:{ks['k-left'][1]:.2f}%;}}
+  .phone-frame .pf-keys .k-up   {{left:{ks['k-up'][0]:.2f}%; top:{ks['k-up'][1]:.2f}%;
+    width:{sz['k-up'][0]:.2f}cqw; height:{sz['k-up'][1]:.2f}cqw;}}
+  .phone-frame .pf-keys .k-right{{left:{ks['k-right'][0]:.2f}%; top:{ks['k-right'][1]:.2f}%;
+    width:{sz['k-right'][0]:.2f}cqw; height:{sz['k-right'][1]:.2f}cqw;}}
+  .phone-frame .pf-keys .k-down {{left:{ks['k-down'][0]:.2f}%; top:{ks['k-down'][1]:.2f}%;
+    width:{sz['k-down'][0]:.2f}cqw; height:{sz['k-down'][1]:.2f}cqw;}}
+  .phone-frame .pf-keys .k-left {{left:{ks['k-left'][0]:.2f}%; top:{ks['k-left'][1]:.2f}%;
+    width:{sz['k-left'][0]:.2f}cqw; height:{sz['k-left'][1]:.2f}cqw;}}
+  /* OK confirms the highlighted row. The target is the DRAWN circle, measured
+     -- it used to be the same 5.7cqw as an arrow, about a third of the ink, so
+     tapping anywhere but the dead centre of a circle that is plainly a button
+     did nothing at all. */
   .phone-frame .pf-keys .k-ok   {{left:{ks['k-ok'][0]:.2f}%; top:{ks['k-ok'][1]:.2f}%;
-    width:5.7cqw; height:5.7cqw; min-width:34px; min-height:34px; font-size:0;}}
+    width:{100*kw/W:.2f}cqw; height:{100*kh/W:.2f}cqw;
+    min-width:44px; min-height:44px; font-size:0;}}
   /* The glyph is sized separately from the hit target. The target keeps a 34px
      floor so it stays clickable; the drawing must not, because a stroke is a
      fixed width in the artwork, and an arrow that stops shrinking with the
