@@ -32,7 +32,12 @@
        ends exactly where the drawn edge does -- no yellow, and it follows the
        wobble instead of standing off from it. The inset moves to the row's
        own padding, so the TEXT still keeps clear of the ink. */
-    padding:5% 0 3%;
+    /* No padding. The rows ARE the screen: a 5%/3% band top and bottom left
+       a strip of bare yellow above Shop and below Contact, which on a screen
+       this size reads as the menu not quite fitting rather than as margin.
+       setRowVars divides the full screen height by the row count, so seven
+       rows now land flush against the drawn edge at both ends. */
+    padding:0;
     display:flex; flex-direction:column;
   }
   #tcl-screen .pmn-bar{

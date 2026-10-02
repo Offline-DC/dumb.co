@@ -348,6 +348,8 @@
        there, which hands the rows the whole screen. */
     const bar = document.querySelector('#tcl-screen .pmn-bar')
       ? Math.max(9, Math.round(screenH * 0.06)) : 0;
+    /* the whole screen, divided by the rows: with .pmn's padding gone there
+       is nothing else to subtract, so seven rows reach both drawn edges */
     const rowH = Math.max(11, Math.floor((screenH - bar) / n));
     root.style.setProperty('--pmn-rowh', rowH + 'px');
     /* the cap was 17px, which on a real handset read as small print next to

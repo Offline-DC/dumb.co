@@ -33,7 +33,12 @@
     /* fixed, not absolute: in index.html the handset is a position:fixed
        #deskphone at z-index 2, so the duck has to be in the same stacking
        context to land behind it. The viewport clips it at the edge. */
-    position:fixed; z-index:1; width:46px; display:block;
+    /* 46 -> 62px. The duck is a single-weight line drawing, so at 46px the
+       stroke read as too light against the handset's ink beside it -- the
+       drawing was not small, the LINE was. Scaling the whole thing is what
+       brings the weight back; thickening the stroke instead would make it a
+       different duck. */
+    position:fixed; z-index:1; width:62px; display:block;
     pointer-events:none; will-change:transform;
     filter:drop-shadow(0 2px 3px rgba(0,0,0,.14));
   }

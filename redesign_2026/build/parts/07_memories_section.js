@@ -1,6 +1,5 @@
     memories: () => `
       <h2>Memories</h2>
-      <div class="sub">the events we've actually done. click any photo to open it up.</div>
 
       ${MEMORY_EVENTS.map((ev, ei) => `
         <div class="mem-event">
@@ -40,3 +39,4 @@
         </div>
       `).join('')}
     `,
+

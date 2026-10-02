@@ -80,6 +80,30 @@
   /* ---------------- memories.exe ----------------
      Clicking a photo swaps the view inside this window, with a back button. */
   let memView = { ei: 0, pi: 0 };
+  /* The two carousel arrows have called memScroll since the carousel was
+     built and NOTHING EVER DEFINED IT -- every press threw a ReferenceError,
+     which is exactly why dragging the strip worked and the buttons did
+     nothing at all.
+
+     It belongs here rather than beside the markup that calls it: the section
+     files are fragments of an object literal, so a function declaration in
+     one is a syntax error that takes the whole script down with it. (Found
+     that out by putting it there first -- the build does not parse the JS, so
+     nothing complained until openSection stopped existing.)
+
+     One tile plus the gap per press, both read off the DOM, so it still steps
+     by exactly one photo when the tile width changes at a breakpoint. */
+  function memScroll(ei, dir){
+    const strip = document.getElementById('mem-strip-' + ei);
+    if(!strip) return;
+    const tile = strip.querySelector('.mem-tile');
+    const cs   = getComputedStyle(strip);
+    const gap  = parseFloat(cs.columnGap || cs.gap) || 12;
+    const step = tile ? tile.getBoundingClientRect().width + gap
+                      : Math.round(strip.clientWidth * 0.8);
+    strip.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }
+
   function openMemory(ei, pi){
     memView = { ei, pi };
     renderMemoryView();
