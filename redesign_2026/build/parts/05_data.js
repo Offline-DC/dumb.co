@@ -81,12 +81,19 @@
       name:"Month Offline gallery", when:"August 2026", where:"New York, NY",
       blurb:"the Month Offline gallery show — a room full of what people made once they put the smartphone down. prints, zines, cyanotypes, a landline you could actually call.",
       vimeoId:null,
+      /* Replaced wholesale with the approved set (Lydia, 2 Oct) -- the five
+         that were here were never cleared with the people in them. Captions
+         below are written from what is visibly in each frame and still want
+         Lydia's pass; nothing in them asserts a name or a date. */
       photos:[
-        {src:() => MEM.mo1, cap:"opening night"},
+        {src:() => MEM.mo1, cap:"dear dumb phone"},
         {src:() => MEM.mo2, cap:"the wall of entries"},
-        {src:() => MEM.mo3, cap:"prints + plants"},
-        {src:() => MEM.mo4, cap:"LOST? CALL 207-806-0033"},
-        {src:() => MEM.mo5, cap:"on the decks"},
+        {src:() => MEM.mo3, cap:"the gallery wall"},
+        {src:() => MEM.mo4, cap:"at the table"},
+        {src:() => MEM.mo5, cap:"opening night"},
+        {src:() => MEM.mo6, cap:"a full room"},
+        {src:() => MEM.mo7, cap:"the crew"},
+        {src:() => MEM.mo8, cap:"snacks"},
       ],
     },
     {
