@@ -89,6 +89,7 @@
     openKey = key;
     if(key === 'faq') loadFaq();
     if(key === 'shop' && typeof loadReviews === 'function') loadReviews();
+    if(key === 'shop' && typeof plansDrawer === 'function') plansDrawer();
   }
 
   function goHome(){
@@ -120,4 +121,5 @@
 
   window.addEventListener('resize', () => {
     if(winEl().classList.contains('sectionmode')) sizeForSection(SIZE[openKey]);
+    if(typeof plansDrawer === 'function') plansDrawer();
   });

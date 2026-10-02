@@ -115,6 +115,36 @@
               </dl>
             </div>
           </details>
+
+          <!-- the plans, as a drawer beside specs. MARCO'S CARDS, not a
+               rebuild of them: there was an HTML table here reproducing the
+               three cards in divs, and it was only ever an approximation --
+               his type, his spacing and his tick marks redrawn in CSS and
+               drifting a little further every time either side changed. Milk
+               asked for his design; this is his design.
+
+               They sit in a drawer because at full size three 1500x946 cards
+               are taller than the Shop.exe window twice over, and everything
+               under them -- the reviews, the fine print -- got pushed off the
+               bottom. A phone is the other way round: the cards ARE the plans
+               page there, so plansDrawer() holds this open below 760px and the
+               stylesheet takes the chevron off, which leaves mobile exactly as
+               it is now. -->
+          <details class="gi-drop plans-drop">
+            <summary>
+              <span class="gi-sum"><span class="gi-name">the plans</span></span>
+              <span class="gi-chev" aria-hidden="true">+</span>
+            </summary>
+            <div class="gi-body">
+              <div class="shs-sub">dumb, dumber, dumbest.</div>
+              <div class="plan-cards">
+                <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
+                <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
+                <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
+              </div>
+              <div class="qr-min" style="margin-top:14px;">4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.</div>
+            </div>
+          </details>
         </div>
         <div class="shop-sec" style="margin-bottom:6px;">
           <div class="rail-head">
@@ -144,22 +174,5 @@
           </div>
         </div>
 
-        <!-- the plans, at the bottom. MARCO'S CARDS, not a rebuild of them.
-             There was an HTML table here reproducing the three cards in divs
-             and it was only ever an approximation -- his type, his spacing and
-             his tick marks redrawn in CSS and drifting a little further every
-             time either side changed. Milk asked for his design; this is his
-             design. The flag that used to hide the real cards is gone with
-             it. -->
-        <div class="shop-sec sh-plans">
-          <h3>the plans</h3>
-          <div class="shs-sub">dumb, dumber, dumbest.</div>
-          <div class="plan-cards">
-            <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
-            <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
-            <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
-          </div>
-          <div class="qr-min" style="margin-top:14px;">4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.</div>
-        </div>
       </div>
     `,

@@ -162,6 +162,10 @@
   @media (max-width:720px){
     .sh-hero .hero-in{grid-template-columns:1fr;}
     .plan-cards{grid-template-columns:1fr; max-width:none;}
+    /* On a phone the drawer is held open by plansDrawer() and there is nothing
+       to press: the summary stays as the heading, the chevron goes. */
+    .plans-drop > summary{pointer-events:none;}
+    .plans-drop > summary .gi-chev{display:none;}
   }
 
   /* buy sits with the price (Milk + Marlee) rather than up in the hero, so the

@@ -46,6 +46,23 @@
     host.scrollTop = 0;
   }
 
+/* The plans drawer. Desktop gets a closed drawer beside specs; a phone gets
+   the cards, open, with no chevron to press -- that is the plans page there.
+   <details> cannot be held open from CSS (the content is in a UA slot that a
+   child display rule does not reliably reach), so the state is set here and
+   kept in step from the resize handler in 04_wm.js. */
+function plansDrawer(){
+  const d = document.querySelector('.plans-drop');
+  if(!d) return;
+  if(window.matchMedia('(max-width: 760px)').matches){
+    d.open = true;
+    d.dataset.held = '1';
+  }else if(d.dataset.held){
+    delete d.dataset.held;
+    d.open = false;          // only ever closes a drawer the phone had forced open
+  }
+}
+
   function renderAllPlans(){
     const host = document.getElementById('wm-section');
     host.innerHTML = `
