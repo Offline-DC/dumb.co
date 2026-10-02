@@ -53,7 +53,7 @@ MARGIN  = 26     # body left showing around the screen inside the panel
 # the lid allows and 1.00 is the honest number rather than a wish. The room
 # is vertical, and nearly all of it is ABOVE the screen.
 GROW_W  = 1.00
-GROW_H  = 1.13
+GROW_H  = 1.25   # a ceiling only; the height is derived from the side margin
 
 
 def must(c, m):
@@ -125,15 +125,25 @@ def main():
             return None
         return i - step                                # last clear before the lid
 
-    col = ink[:, (sx0 + sx1) // 2]
-    row = ink[(sy0 + sy1) // 2, :]
+    # Scan on MANY lines and take the median, not one line through the middle.
+    # The lid is drawn by hand and wobbles: measured on a single row its left
+    # edge moved 5px between one scanline and another, and centring the screen
+    # on that one reading left 33px of gap above against 49 below, 36 left
+    # against 49 right. A median across the screen's whole span is stable
+    # against the wobble and lands the screen where it looks centred.
     cy, cx = (sy0 + sy1) // 2, (sx0 + sx1) // 2
-    py0 = panel_edge(col, cy, -1)
-    py1 = panel_edge(col, cy, +1)
-    px0 = panel_edge(row, cx, -1)
-    px1 = panel_edge(row, cx, +1)
-    must(None not in (px0, px1, py0, py1),
-         "couldn't find the lid's stroke on all four sides of the screen")
+
+    def med(vals):
+        v = sorted(x for x in vals if x is not None)
+        must(v, "couldn't find the lid's stroke on one of the four sides")
+        return int(np.median(v))
+
+    xs_scan = np.linspace(sx0 + (sx1 - sx0) * 0.15, sx1 - (sx1 - sx0) * 0.15, 21).astype(int)
+    ys_scan = np.linspace(sy0 + (sy1 - sy0) * 0.15, sy1 - (sy1 - sy0) * 0.15, 21).astype(int)
+    py0 = med([panel_edge(ink[:, x], cy, -1) for x in xs_scan])
+    py1 = med([panel_edge(ink[:, x], cy, +1) for x in xs_scan])
+    px0 = med([panel_edge(ink[y, :], cx, -1) for y in ys_scan])
+    px1 = med([panel_edge(ink[y, :], cx, +1) for y in ys_scan])
     must(px0 < sx0 and px1 > sx1 and py0 < sy0 and py1 > sy1,
          "the measured panel doesn't actually contain the screen")
     print(f"  panel measured from the ink: x[{px0},{px1}] y[{py0},{py1}]  "
@@ -147,10 +157,24 @@ def main():
          "the screen border already reaches the panel edge")
     bw, bh = bx1 - bx0 + 1, by1 - by0 + 1
 
-    nw, nh = int(round(bw * GROW_W)), int(round(bh * GROW_H))
+    nw = int(round(bw * GROW_W))
     room_w = (px1 - MARGIN) - (px0 + MARGIN) + 1
-    room_h = (py1 - MARGIN) - (py0 + MARGIN) + 1
     must(nw <= room_w, f"new screen {nw}px wide, only {room_w}px of panel to put it in")
+
+    # EQUAL PADDING TOP AND BOTTOM.
+    #
+    # The height used to be bh * GROW_H -- a number picked by hand -- and the
+    # placement was deliberately biased upward to clear the hinge. Between
+    # them that gave 30px of gap above the screen and 46px below: it sat
+    # visibly high in the lid, which is what Laffy spotted.
+    #
+    # Only top and bottom have to match (asked for explicitly: the sides are
+    # whatever the drawing gives, and GROW_W is 1.00 anyway because the screen
+    # already spans the lid). So take the whole vertical room, leave MARGIN at
+    # each end, and centre -- which both evens it and uses every pixel there
+    # is rather than a guess at it. GROW_H is only a ceiling now.
+    room_h = (py1 - MARGIN) - (py0 + MARGIN) + 1
+    nh = min(room_h, int(round(bh * GROW_H)))
     must(nh <= room_h, f"new screen {nh}px tall, only {room_h}px of panel to put it in")
     must(nw > 2 * CORNER and nh > 2 * CORNER, "grown block is smaller than its own corners")
 
@@ -172,17 +196,78 @@ def main():
     out[c:nh - c, nw - c:] = piece(c, bh - c, bw - c, bw, (c, mh))
     # the middle is the aperture: stays empty
 
-    # centre the new screen in the panel, biased up so it clears the hinge
+    # Place it so the gap ABOVE the drawn stroke equals the gap BELOW it.
+    #
+    # Centring the BLOCK is not the same thing and was still 12px out: the
+    # block is the aperture plus PAD either side, and Marco's stroke does not
+    # sit symmetrically inside that padding. So solve for the ink instead of
+    # the box. With t and b the first and last rows of ink in the grown block:
+    #
+    #     gap above = ny0 + t - py0        gap below = py1 - (ny0 + b)
+    #     equal  ->  ny0 = (py0 + py1 - t - b) / 2
+    #
+    # which is exact and needs no fudge factor.
+    # t and b are medians over the block's MIDDLE columns, not its extremes.
+    # Taking the topmost ink anywhere in the block picks up the corners, which
+    # on a hand-drawn rectangle reach further than the straight runs do -- so
+    # the solve was biased by the corner wobble and still landed 10px out.
+    # The eye judges the gap along the flat part, so measure there.
+    inner = out[:, int(nw * 0.20):int(nw * 0.80), 3] > 0
+    tops, bots = [], []
+    for c in range(inner.shape[1]):
+        nz = np.nonzero(inner[:, c])[0]
+        if nz.size:
+            tops.append(nz[0]); bots.append(nz[-1])
+    must(tops, "the grown screen block has no ink in its middle columns")
+    t, b = int(np.median(tops)), int(np.median(bots))
     cx = (px0 + px1) // 2
-    cy = py0 + MARGIN + nh // 2 + 4
-    nx0, ny0 = cx - nw // 2, cy - nh // 2
+    nx0 = cx - nw // 2
+    ny0 = int(round((py0 + py1 - t - b) / 2))
     must(nx0 >= px0 and ny0 >= py0 and nx0 + nw <= px1 and ny0 + nh <= py1,
          "the grown screen doesn't fit where we want to put it")
 
     a[by0:by1 + 1, bx0:bx1 + 1] = 0          # erase the old border
-    tgt = a[ny0:ny0 + nh, nx0:nx0 + nw]
     keep = out[..., 3] > 0                    # paste, don't blend
-    tgt[keep] = out[keep]
+    base = a.copy()
+
+    def gaps(arr):
+        """the real gap above and below the screen, on the composed image,
+           median over the columns the eye actually reads"""
+        ink2 = arr[..., 3] > 128
+        ab, be = [], []
+        for x in np.linspace(nx0 + nw * 0.25, nx0 + nw * 0.75, 21).astype(int):
+            col2 = ink2[:, x]
+            r, i = [], 0
+            while i < len(col2):
+                if col2[i]:
+                    j = i
+                    while j < len(col2) and col2[j]:
+                        j += 1
+                    r.append((i, j - 1)); i = j
+                else:
+                    i += 1
+            if len(r) >= 4:
+                ab.append(r[1][0] - r[0][1] - 1)
+                be.append(r[3][0] - r[2][1] - 1)
+        if not ab:
+            return None, None
+        return int(np.median(ab)), int(np.median(be))
+
+    # Place, measure what actually landed, correct, repeat. Solving for it
+    # analytically got within 6px but no closer, because the estimate and the
+    # thing being judged are measured over slightly different columns and the
+    # stroke wobbles between them. Measuring the composed image removes the
+    # estimator from the loop entirely, and it settles in a step or two.
+    for _ in range(6):
+        a = base.copy()
+        a[ny0:ny0 + nh, nx0:nx0 + nw][keep] = out[keep]
+        g_above, g_below = gaps(a)
+        if g_above is None:
+            break
+        if abs(g_above - g_below) <= 1:
+            break
+        ny0 += (g_below - g_above) // 2
+    print(f"  gap above the screen {g_above}px, below {g_below}px")
 
     Image.fromarray(a).save(OUT)
     print(f"  screen {sx1-sx0+1}x{sy1-sy0+1}  ->  {nw-2*PAD}x{nh-2*PAD}"

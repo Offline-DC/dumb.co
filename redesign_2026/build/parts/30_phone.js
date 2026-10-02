@@ -19,7 +19,7 @@
     ratio: 3600 / 1200,
     drawnTop: 0.0128, drawnH: 0.9747, drawnW: 0.8225,
     keysBottom: 0.6650,   // just under the d-pad; anything lower crops off
-    screenH: 0.3994,            // the screen aperture, as a fraction of the art
+    screenH: 0.4056,            // the screen aperture, as a fraction of the art
     /* the drawn silhouette in 32 horizontal bands, [leftEdge, rightEdge] as
        fractions of the art's width. The phone duck clamps against the band it
        is standing in rather than the phone's widest point. */
