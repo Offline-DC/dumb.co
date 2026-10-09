@@ -478,9 +478,10 @@ html = html.replace("<title>dumb.co — 2026 redesign concept v3</title>",
                     'that keeps maps, music, rideshare and ur messages, and leaves the rest behind." />\n'
                     '<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
                     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />', 1)
-# no version number in the footer label — it only ever goes stale
-html = re.sub(r"dumb\.co 2026 redesign( v\d+)? — not final copy",
-              "dumb.co 2026 redesign — not final copy", html, count=1)
+# the "dumb.co 2026 redesign — not final copy" label under the sidebar is
+# gone (Jack, Oct 9: "we don't need that on the website at all")
+html, n = re.subn(r'\n\s*<div class="ns-label ns-wip">[^<]*</div>', "", html, count=1)
+must(n == 1, "could not find the not-final-copy label to remove")
 
 # ----------------------------------------------------------------- 10. checks
 for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
@@ -526,7 +527,8 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                'href="#/',                               # paths, not hashes (Jack)
                'class="sh-buy"',                         # one buy per screen (Matteo)
                "that\\u2019s real funny",                 # Matteo's nudge copy replaced it
-               "querySelector('.shs-sub')"]:             # must be by id, see 31_reviews.js
+               "querySelector('.shs-sub')",
+               "not final copy"]:                        # Jack: not on the site at all             # must be by id, see 31_reviews.js
     must(banned not in html, f"v7 leftover still present: {banned}")
 must(html.count("data:image/webp;base64") >= len(press), "press thumbnails not all embedded")
 
