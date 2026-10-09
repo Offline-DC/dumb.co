@@ -200,6 +200,11 @@ if (section === "shop") ld.push({
         r.setProperty('--pmn-rowh', rowH + 'px');
         r.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
         r.setProperty('--pmn-barf', '6px');
+        /* the wordmark onto the hinge now, not when site.js gets to it
+           (logoHome): it painted at the top of the screen first and then
+           jumped (Jack, Oct 9) */
+        var logo = document.getElementById('logo'), frame = document.querySelector('#deskphone .phone-frame');
+        if (logo && frame) { frame.appendChild(logo); logo.classList.add('on-hinge'); }
       })();
     </script>
     <div id="walkduck"><img src={A.duckWalk} alt="dumb.co duck" /></div>
