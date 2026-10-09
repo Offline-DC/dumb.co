@@ -1432,9 +1432,35 @@ function plansDrawer(){
       g.putImageData(out, 0, 0);
       return c.toDataURL();
     };
-    const res = {x: x0 + L, y: y0 + T, w, h, k, ink: mk(false), mask: mk(true)};
+    const res = {x: x0 + L, y: y0 + T, w, h, k, ink: mk(false), mask: mk(true), ready: false};
+    /* Safari paints NOTHING of a masked element until its mask image has
+       decoded, so applying a fresh data-URL mask blanked the whole handset
+       for a moment (Jack's video, Oct 9: the drawing vanished mid-tapping).
+       Both images are decoded first and only used once they are ready. */
+    Promise.all([res.mask, res.ink].map(src => {
+      const im = new Image(); im.src = src;
+      return im.decode ? im.decode() : new Promise((ok, no) => { im.onload = ok; im.onerror = no; });
+    })).then(() => { res.ready = true; }, () => {});
     px.keys.set(id, res);
     return res;
+  }
+  /* work the strokes out (and decode them) before the first tap, and again
+     whenever the handset is resized, so a press never waits on them */
+  function warmKeys(){
+    const frame = document.querySelector('#deskphone .phone-frame');
+    const art = frame && frame.querySelector('.pf-art');
+    if(!art || !art.complete || !art.naturalWidth) return;
+    const a = art.getBoundingClientRect();
+    if(!a.width) return;
+    frame.querySelectorAll('.pf-keys button').forEach(btn => {
+      const b = btn.getBoundingClientRect();
+      if(b.width) keyStrokes(btn, art, a, b);
+    });
+  }
+  let warmTimer = 0;
+  function warmKeysSoon(delay){
+    clearTimeout(warmTimer);
+    warmTimer = setTimeout(() => (window.requestIdleCallback || setTimeout)(warmKeys), delay);
   }
   let maskedBy = null;
   function keyDown(btn){
@@ -1443,6 +1469,7 @@ function plansDrawer(){
     const a = art.getBoundingClientRect(), b = btn.getBoundingClientRect();
     const sk = keyStrokes(btn, art, a, b);
     if(!sk) return;                                      // can't read the art: no press, rather than a wrong one
+    if(!sk.ready) return;                                // not decoded yet: skip the press look, never blank the phone
     const k = sk.k, w = sk.w / k, h = sk.h / k, ax = sk.x / k, ay = sk.y / k;
     const st = btn.style;
     st.setProperty('--pl', (a.left - b.left + ax) + 'px');
@@ -1486,6 +1513,8 @@ function plansDrawer(){
     if(!art) return;
     /* one reference to the inlined drawing, not a second copy of it */
     frame.style.setProperty('--pf-art', 'url("' + art.getAttribute('src') + '")');
+    if(art.complete) warmKeysSoon(300); else art.addEventListener('load', () => warmKeysSoon(300), {once: true});
+    window.addEventListener('resize', () => warmKeysSoon(400));
     frame.querySelectorAll('.pf-keys button').forEach(btn => {
       /* a tap is shorter than a frame, so hold the press at least 90ms or it
          is never seen */
