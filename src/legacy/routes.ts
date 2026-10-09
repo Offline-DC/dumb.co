@@ -14,16 +14,16 @@
  * download hand-offs).
  */
 export const LEGACY_ROUTES: { path: string; title: string; description: string; ssr?: boolean; sitemap?: boolean }[] = [
-  { path: "support", title: "Support — dumb.co", description: "Get help with your dumbphone 2: setup, activation, billing and troubleshooting. support@dumb.co." },
-  { path: "dumbdown", title: "Dumb Down — dumb.co", description: "Opening the dumb down app.", sitemap: false },
-  { path: "setup", title: "Set up your dumbphone 2 — dumb.co", description: "Step-by-step setup for the dumbphone 2, including offline mode and syncing with your smartphone." },
+  { path: "support", title: "Support - dumb.co", description: "Get help with your dumbphone 2: setup, activation, billing and troubleshooting. support@dumb.co." },
+  { path: "dumbdown", title: "Dumb Down - dumb.co", description: "Opening the dumb down app.", sitemap: false },
+  { path: "setup", title: "Set up your dumbphone 2 - dumb.co", description: "Step-by-step setup for the dumbphone 2, including offline mode and syncing with your smartphone." },
   { path: "internship", ssr: true, title: "Internships at dumb.co", description: "Work on dumb.co: what the internship involves, who we are looking for, and how to apply." },
-  { path: "android", title: "Android downloads — dumb.co", description: "Download the dumb down launcher for Android.", sitemap: false },
-  { path: "apps", title: "App downloads — dumb.co", description: "Downloads for dumb.co apps.", sitemap: false },
-  { path: "desktop", title: "Desktop sign in — dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
-  { path: "desktop-signin", title: "Desktop sign in — dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
-  { path: "signin", title: "Sign in — dumb.co", description: "Sign in to dumb.co.", sitemap: false },
+  { path: "android", title: "Android downloads - dumb.co", description: "Download the dumb down launcher for Android.", sitemap: false },
+  { path: "apps", title: "App downloads - dumb.co", description: "Downloads for dumb.co apps.", sitemap: false },
+  { path: "desktop", title: "Desktop sign in - dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
+  { path: "desktop-signin", title: "Desktop sign in - dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
+  { path: "signin", title: "Sign in - dumb.co", description: "Sign in to dumb.co.", sitemap: false },
   { path: "app", title: "dumb.co", description: "Opening the dumb down app.", sitemap: false },
-  { path: "fsa", title: "Dumb Security Key — dumb.co", description: "The desktop helper that lets your dumbphone sign in to smart txt with a USB security key.", sitemap: false },
-  { path: "link", title: "Connect Spotify — dumb.co", description: "Sign in to Spotify for your dumbphone.", sitemap: false },
+  { path: "fsa", title: "Dumb Security Key - dumb.co", description: "The desktop helper that lets your dumbphone sign in to smart txt with a USB security key.", sitemap: false },
+  { path: "link", title: "Connect Spotify - dumb.co", description: "Sign in to Spotify for your dumbphone.", sitemap: false },
 ];

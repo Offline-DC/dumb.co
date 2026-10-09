@@ -2,7 +2,7 @@
   "pages": {
     "home": {
       "title": "dumb.co | dumbphone 2 - $20 phone, plans from $15.99/mo",
-      "description": "The dumbphone 2 is a $20 companion phone that syncs with your smartphone — texts, calls, maps, rideshare — minus the doomscroll. Plans from $15.99/mo."
+      "description": "The dumbphone 2 is a $20 companion phone that syncs with your smartphone - texts, calls, maps, rideshare - minus the doomscroll. Plans from $15.99/mo."
     },
     "shop": {
       "title": "dumb.co | dumbphone 2 - $20 phone, plans from $15.99/mo",
@@ -30,12 +30,12 @@
     },
     "contact": {
       "title": "dumb.co | dumbphone 2 - $20 phone, plans from $15.99/mo",
-      "description": "Get help with your dumbphone 2 from a real person: support@dumb.co or 404-716-3605. Mon–Fri 8am–9pm EST, Sat–Sun 10am–2pm EST."
+      "description": "Get help with your dumbphone 2 from a real person: support@dumb.co or 404-716-3605. Mon-Fri 8am-9pm EST, Sat-Sun 10am-2pm EST."
     }
   },
   "site_description": "Buy the \"world's best dumb phone\" for only $20. The dumbphone 2 syncs w/ ur smartphone --contacts, messages, Rideshare, Maps.",
-  "share_title": "dumb.co — Dumbphone 2",
-  "share_image_alt": "Dumbphone 2 — everything u need 2 go out: smrt txt, whatsapp, rideshare, maps and more",
+  "share_title": "dumb.co - Dumbphone 2",
+  "share_image_alt": "Dumbphone 2 - everything u need 2 go out: smrt txt, whatsapp, rideshare, maps and more",
   "support_email": "support@dumb.co",
   "support_phone": "404-716-3605",
   "contact_heading": "Contact Us",

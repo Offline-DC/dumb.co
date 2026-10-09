@@ -32,7 +32,7 @@ const DEFAULTS: Record<string, string> = {
   "settings.support_email": "support@dumb.co",
   "settings.site_description":
     "Buy the \"world's best dumb phone\" for only $20. The dumbphone 2 syncs w/ ur smartphone --contacts, messages, Rideshare, Maps.",
-  "settings.share_title": "dumb.co — Dumbphone 2",
+  "settings.share_title": "dumb.co - Dumbphone 2",
   "press.heading": "Press",
   "memories.heading": "Memories",
   "home.button": "shop dumbphone 2 →",
@@ -109,7 +109,7 @@ export const COPY = {
     ["home", "shop", "about", "community", "press", "memories", "faq", "contact"].map((k) => {
       const pg = obj(obj(settings.pages)[k]);
       return [k, {
-        title: text(pg, "title") || (k === "home" ? "dumb.co" : `${k} — dumb.co`),
+        title: text(pg, "title") || (k === "home" ? "dumb.co" : `${k} - dumb.co`),
         description: text(pg, "description") || text(settings, "site_description", "settings"),
       }];
     }),
