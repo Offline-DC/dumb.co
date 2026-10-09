@@ -1,5 +1,6 @@
 import type { StripePrice } from "../../hooks/types/stripe";
 import styles from "./index.module.css";
+import { SHOP } from "../../content";
 
 function formatUsdCents(cents: number | null | undefined): string {
   if (cents == null) return "—";
@@ -19,7 +20,7 @@ export default function PricingOptionRow({ price }: Props) {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  const checkoutUrl = "https://buy.stripe.com/00w3cocK48f87HBakE8N20D";
+  const checkoutUrl = SHOP.checkoutUrl;
   const ukPreorderUrl = "https://buy.stripe.com/dRm9AM7pK0MG6Dx78s8N20K";
 
   const handleClick = () => {
@@ -33,7 +34,7 @@ export default function PricingOptionRow({ price }: Props) {
   const rowButton = (
     <div className={`${styles.optionRow} ${styles.mobile}`}>
       <div className={styles.optionLeft}>
-        <div className={styles.optionName}>dumbphone 2</div>
+        <div className={styles.optionName}>{SHOP.productName}</div>
       </div>
 
       <div className={styles.optionRight}>
@@ -44,7 +45,7 @@ export default function PricingOptionRow({ price }: Props) {
 
   const buyNowButton = (
     <button type="button" className={styles.buyNowButton} onClick={handleClick}>
-      click here 2 buy!!!
+      {SHOP.buyButton}
     </button>
   );
 

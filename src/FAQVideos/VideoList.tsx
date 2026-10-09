@@ -1,7 +1,7 @@
-import rawVideosData from "./videos_data.md?raw";
-import { parseVideosMarkdown } from "./parseVideosData";
+import { buildVideoItems } from "./parseVideosData";
+import { FAQ_VIDEOS } from "../content";
 
-export const VIDEO_ITEMS = parseVideosMarkdown(rawVideosData);
+export const VIDEO_ITEMS = buildVideoItems(FAQ_VIDEOS);
 
 export default function VideoList() {
   if (VIDEO_ITEMS.length === 0) {

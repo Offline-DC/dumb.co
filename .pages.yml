@@ -1,0 +1,305 @@
+# Pages CMS configuration (https://pagescms.org)
+#
+# This file defines the forms the team sees after signing in at
+# https://app.pagescms.org and opening Offline-DC/dumb.co. Every save there is
+# a commit to main, and the normal deploy (.github/workflows/deploy.yml) puts
+# it live in a couple of minutes.
+#
+# The forms edit the JSON files in src/content/. The site reads them through
+# src/content/index.ts, which falls back to the shipped text for any field
+# left empty, so a blanked-out field never blanks out the site.
+
+media:
+  - name: press
+    label: Press images
+    input: src/Press/images
+    output: /src/Press/images
+    categories: [image]
+    rename: safe
+  - name: memories
+    label: Memories photos
+    input: src/Memories/images
+    output: /src/Memories/images
+    categories: [image]
+    rename: safe
+
+content:
+  # ------------------------------------------------------------------ Press
+  - name: press
+    label: Press
+    description: The articles on the press screen, in the order they appear. Drag to reorder.
+    type: file
+    path: src/content/press.json
+    format: json
+    fields:
+      - name: heading
+        label: Heading
+        type: string
+        default: Press
+      - name: contact_email
+        label: Press contact (shown under the heading)
+        type: string
+        default: afreka@dumb.co
+      - name: items
+        label: Articles
+        type: object
+        list:
+          collapsible:
+            summary: "{source}: {title}"
+        fields:
+          - name: title
+            label: Headline (our words, keep it short)
+            type: string
+            required: true
+          - name: source
+            label: Publication
+            description: e.g. "The New York Times"
+            type: string
+          - name: link
+            label: Link to the article
+            type: string
+            required: true
+            pattern:
+              regex: "^https?://.+"
+              message: Must start with https://
+          - name: image
+            label: Image
+            description: Square-ish works best. Articles without an image don't show.
+            type: image
+            required: true
+            options:
+              media: press
+          - name: hidden
+            label: Hide this article
+            type: boolean
+            default: false
+          - name: id
+            label: ID
+            description: Leave blank for new articles; it's made from the headline.
+            type: string
+
+  # --------------------------------------------------------------- Memories
+  - name: memories
+    label: Memories
+    description: Events we've done, newest first. An event with no photos says "photos coming soon".
+    type: file
+    path: src/content/memories.json
+    format: json
+    fields:
+      - name: events
+        label: Events
+        type: object
+        list:
+          collapsible:
+            summary: "{name} ({when})"
+        fields:
+          - name: name
+            label: Event name
+            type: string
+            required: true
+          - name: when
+            label: When
+            description: e.g. "August 2026"
+            type: string
+          - name: where
+            label: Where
+            description: e.g. "New York, NY"
+            type: string
+          - name: blurb
+            label: Blurb
+            type: text
+          - name: photos
+            label: Photos
+            type: object
+            list:
+              collapsible:
+                summary: "{caption}"
+            fields:
+              - name: image
+                label: Photo
+                type: image
+                required: true
+                options:
+                  media: memories
+              - name: caption
+                label: Caption
+                type: string
+          - name: hidden
+            label: Hide this event
+            type: boolean
+            default: false
+
+  # ------------------------------------------------------------ Site copy
+  - name: copy
+    label: Site copy
+    type: group
+    items:
+      - name: home
+        label: Home window
+        description: The window that opens on dumb.co.
+        type: file
+        path: src/content/home.json
+        format: json
+        fields:
+          - name: photo_caption
+            label: Words over the photo
+            type: string
+          - name: heading_line_1
+            label: Heading, line 1
+            type: string
+          - name: heading_line_2
+            label: Heading, line 2
+            type: string
+          - name: body
+            label: Paragraph
+            description: Leave a blank line between paragraphs to make more than one.
+            type: text
+          - name: sign_off
+            label: Sign-off
+            type: string
+          - name: button
+            label: Close button
+            type: string
+
+      - name: shop
+        label: Shop (dumbphone 2)
+        description: The pricing box on the dumbphone 2 page. Prices and the bullet list come from Stripe.
+        type: file
+        path: src/content/shop.json
+        format: json
+        fields:
+          - name: product_name
+            label: Product name
+            type: string
+          - name: buy_button
+            label: Buy button
+            type: string
+          - name: checkout_url
+            label: Checkout link (Stripe)
+            description: Where the buy button goes. Must be an https link, or the site keeps the old one.
+            type: string
+            pattern:
+              regex: "^https://.+"
+              message: Must start with https://
+          - name: questions_link
+            label: Link to the FAQ
+            type: string
+          - name: financial_aid
+            label: Financial aid line
+            type: string
+
+      - name: internship
+        label: Internship
+        type: file
+        path: src/content/internship.json
+        format: json
+        fields:
+          - name: intro
+            label: Intro
+            description: "Markdown: **bold**, ## heading, - list item, [link](https://...)"
+            type: text
+          - name: choose_label
+            label: Dropdown placeholder
+            type: string
+          - name: empty_state
+            label: Text before a role is picked
+            type: string
+          - name: roles
+            label: Roles
+            type: object
+            list:
+              collapsible:
+                summary: "{label}"
+            fields:
+              - name: label
+                label: Role name (shown in the dropdown)
+                type: string
+                required: true
+              - name: description
+                label: Description
+                description: Markdown, same as the intro.
+                type: text
+                required: true
+              - name: hidden
+                label: Hide this role
+                type: boolean
+                default: false
+          - name: conclusion
+            label: How to apply
+            description: Markdown, same as the intro.
+            type: text
+
+      - name: faq_videos
+        label: FAQ videos
+        description: The SHOW ME HOW tab on the FAQ. The questions themselves come from the FAQ Google Sheet.
+        type: file
+        path: src/content/faq_videos.json
+        format: json
+        fields:
+          - name: videos
+            label: Videos
+            type: object
+            list:
+              collapsible:
+                summary: "{title}"
+            fields:
+              - name: title
+                label: Title
+                type: string
+                required: true
+              - name: link
+                label: YouTube or Vimeo link
+                type: string
+                required: true
+                pattern:
+                  regex: "^https?://.+"
+                  message: Must start with https://
+              - name: id
+                label: ID
+                description: Leave blank for new videos.
+                type: string
+
+  # --------------------------------------------------------- Site settings
+  - name: settings
+    label: Site settings
+    description: Support contact details and small bits of text used in several places.
+    type: file
+    path: src/content/settings.json
+    format: json
+    fields:
+      - name: support_email
+        label: Support email
+        description: Shown on the phone's support screen, the dumbphone 2 page and the FAQ.
+        type: string
+      - name: support_phone
+        label: Support phone
+        type: string
+      - name: hours_weekdays
+        label: Support hours, weekdays
+        type: string
+      - name: hours_weekends
+        label: Support hours, weekends
+        type: string
+      - name: organize_text
+        label: Group discount text (phone "organize" screen)
+        description: One line per line on the phone screen.
+        type: text
+      - name: organize_email
+        label: Group discount email
+        type: string
+      - name: footer_name
+        label: Name in the footer (after ©)
+        type: string
+      - name: not_found
+        label: Page not found
+        type: object
+        fields:
+          - name: heading
+            label: Heading
+            type: string
+          - name: message
+            label: Message
+            type: string
+          - name: button
+            label: Button
+            type: string

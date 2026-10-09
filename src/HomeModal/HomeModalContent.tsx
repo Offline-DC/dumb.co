@@ -3,6 +3,7 @@ import funPercent from "../the_fun_percent.webp";
 import dumbCoLogo from "../dumb_co_logo.webp";
 import teamPolaroid from "../polaroid.webp";
 import madeInDc from "../made_in_dc.png";
+import { HOME } from "../content";
 
 // Signatures — new vector PNGs (higher-res replacements for the originals).
 import sigLydia from "../signatures/lydia sig vector 1.png";
@@ -88,7 +89,7 @@ export default function HomeModalContent({
               className={styles.image}
               draggable={false}
             />
-            <div className={styles.overlayText}>make your move.</div>
+            <div className={styles.overlayText}>{HOME.photoCaption}</div>
           </div>
           <img
             src={dumbCoLogo}
@@ -105,22 +106,17 @@ export default function HomeModalContent({
         <section className={styles.helloFlipSide}>
           <div className={styles.flipTextCol}>
             <h2 className={styles.flipTitle}>
-              hello from
+              {HOME.headingLine1}
               <br />
-              the flip side.
+              {HOME.headingLine2}
             </h2>
-            <p className={styles.flipBody}>
-              dumb.co was born in Washington, DC in 2025 after a small group of
-              neighbors came together to form Month Offline: a 30-day challenge
-              to ditch our smartphones. we learned a lot along the way, and
-              decided to design a device that&apos;s just dumb enough. the
-              dumbphone 2 is a companion device that syncs with ur smartphone
-              and includes maps, music, rideshare, and all ur messages (but only
-              if u want). our little team is stoked that ur part of the growing
-              movement of dumb ppl choosing dumb down.
-            </p>
+            {HOME.body.split(/\n\s*\n/).map((para, i) => (
+              <p key={i} className={styles.flipBody}>
+                {para}
+              </p>
+            ))}
             <p style={{ marginBottom: "1rem" }} className={styles.flipBody}>
-              quack,
+              {HOME.signOff}
             </p>
           </div>
           <div className={styles.flipPolaroidCol}>
@@ -162,7 +158,7 @@ export default function HomeModalContent({
             className={styles.seeMoreButton}
             onClick={onClose}
           >
-            see more
+            {HOME.button}
           </button>
         </div>
       </div>

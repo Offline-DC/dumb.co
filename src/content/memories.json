@@ -1,0 +1,74 @@
+{
+  "events": [
+    {
+      "name": "baird x dumb.co",
+      "when": "coming soon",
+      "where": "",
+      "blurb": "",
+      "photos": [],
+      "hidden": false
+    },
+    {
+      "name": "Month Offline gallery",
+      "when": "August 2026",
+      "where": "New York, NY",
+      "blurb": "the Month Offline gallery show — a room full of what people made once they put the smartphone down. prints, zines, cyanotypes, a landline you could actually call.",
+      "photos": [
+        {
+          "image": "/src/Memories/images/mo-1.jpg",
+          "caption": "opening night"
+        },
+        {
+          "image": "/src/Memories/images/mo-2.jpg",
+          "caption": "the wall of entries"
+        },
+        {
+          "image": "/src/Memories/images/mo-3.jpg",
+          "caption": "prints + plants"
+        },
+        {
+          "image": "/src/Memories/images/mo-4.jpg",
+          "caption": "LOST? CALL 207-806-0033"
+        },
+        {
+          "image": "/src/Memories/images/mo-5.jpg",
+          "caption": "on the decks"
+        }
+      ],
+      "hidden": false
+    },
+    {
+      "name": "DC Pride",
+      "when": "June 2026",
+      "where": "Washington, DC",
+      "blurb": "join the flip side. we marched the parade with the banner, the totes and a lot of bubbles.",
+      "photos": [
+        {
+          "image": "/src/Memories/images/pride-1.jpg",
+          "caption": "join the flip side"
+        },
+        {
+          "image": "/src/Memories/images/pride-2.jpg",
+          "caption": "the tote"
+        },
+        {
+          "image": "/src/Memories/images/pride-3.jpg",
+          "caption": "down the parade route"
+        },
+        {
+          "image": "/src/Memories/images/pride-4.jpg",
+          "caption": "bubbles"
+        },
+        {
+          "image": "/src/Memories/images/pride-5.jpg",
+          "caption": "dumb.co fans"
+        },
+        {
+          "image": "/src/Memories/images/pride-6.jpg",
+          "caption": "parade weather"
+        }
+      ],
+      "hidden": false
+    }
+  ]
+}

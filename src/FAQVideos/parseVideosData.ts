@@ -1,7 +1,7 @@
 export type VideoItemData = {
   id: string;
   title: string;
-  /** The original link from the markdown (kept for "open in new tab" fallbacks). */
+  /** The original link (kept for "open in new tab" fallbacks). */
   link: string;
   /** A URL safe to drop into an <iframe> so the video plays in-page. */
   embedUrl: string;
@@ -45,45 +45,24 @@ function slugify(text: string): string {
 }
 
 /**
- * Parse the blank-line-delimited `title:` / `link:` blocks in videos_data.md.
- * Mirrors the press_data.md convention (lines starting with # are comments).
+ * The videos come from src/content/faq_videos.json (Pages CMS: "FAQ videos").
+ * Anything without a title, or with a link we can't embed, is skipped.
  */
-export function parseVideosMarkdown(raw: string): VideoItemData[] {
-  if (typeof raw !== "string" || raw.trim().length === 0) return [];
-
-  const blocks = raw
-    .replace(/\r\n/g, "\n")
-    .split(/\n\s*\n+/)
-    .map((b) => b.trim())
-    .filter(Boolean);
-
+export function buildVideoItems(
+  entries: { id?: string; title?: string; link?: string }[],
+): VideoItemData[] {
   const out: VideoItemData[] = [];
   const seen = new Set<string>();
 
-  for (const block of blocks) {
-    const lines = block
-      .split("\n")
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0 && !l.startsWith("#"));
-
-    const map: Record<string, string> = {};
-    for (const line of lines) {
-      const idx = line.indexOf(":");
-      if (idx <= 0) continue;
-      const key = line.slice(0, idx).trim().toLowerCase();
-      const value = line.slice(idx + 1).trim();
-      if (!key || !value) continue;
-      map[key] = value;
-    }
-
-    const title = map["title"];
-    const link = map["link"];
+  for (const entry of entries) {
+    const title = typeof entry.title === "string" ? entry.title.trim() : "";
+    const link = typeof entry.link === "string" ? entry.link.trim() : "";
     if (!title || !link) continue;
 
     const embedUrl = toEmbedUrl(link);
     if (!embedUrl) continue;
 
-    let id = map["id"] || slugify(title);
+    let id = (typeof entry.id === "string" && entry.id.trim()) || slugify(title);
     while (seen.has(id)) id = `${id}-2`;
     seen.add(id);
 

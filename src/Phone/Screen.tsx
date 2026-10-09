@@ -8,6 +8,7 @@ import FAQModal from "../FAQModal";
 import MemoriesModal from "../MemoriesModal";
 import SnakeGame from "./SnakeGame";
 import type { DirInput } from "./SnakeGame";
+import { SETTINGS } from "../content";
 
 type Props = {
   row: number;
@@ -163,21 +164,25 @@ function Screen({
   } else if (screen === "support") {
     display = (
       <div>
-        <div>support@dumb.co</div>
-        <div>404-716-3605</div>
-        <div style={{ fontSize: "14px" }}>8am-9pm EST Mon-Fri</div>
-        <div style={{ fontSize: "14px" }}>10am-2pm EST Sat-Sun</div>
+        <div>{SETTINGS.supportEmail}</div>
+        <div>{SETTINGS.supportPhone}</div>
+        <div style={{ fontSize: "14px" }}>{SETTINGS.hoursWeekdays}</div>
+        <div style={{ fontSize: "14px" }}>{SETTINGS.hoursWeekends}</div>
       </div>
     );
     newOptions = [];
   } else if (screen === "organize") {
     display = (
       <div>
-        get $ off for a <br />
-        group dumb down
+        {SETTINGS.organizeText.split("\n").map((line, i) => (
+          <span key={i}>
+            {i > 0 && <br />}
+            {line}
+          </span>
+        ))}
         <br />
         <br /> email
-        <br /> organize@dumb.co
+        <br /> {SETTINGS.organizeEmail}
       </div>
     );
     newOptions = [];

@@ -1,3 +1,5 @@
+import { SETTINGS } from "../content";
+
 function Footer() {
 
     const footerStyle = {
@@ -22,7 +24,7 @@ function Footer() {
     const currentYear = new Date().getFullYear();
     return (
         <div style={footerStyle}>
-            © {currentYear} Dumb Co.
+            © {currentYear} {SETTINGS.footerName}
             <div style={iconsContainerStyle}>
                 <img src="/img/anti-socials/anti-social-instagram.svg" alt="Anti-Social Instagram" style={iconStyle} />
                 <img src="/img/anti-socials/anti-social-x.svg" alt="Anti-Social X" style={iconStyle} />

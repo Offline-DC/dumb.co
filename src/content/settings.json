@@ -1,0 +1,14 @@
+{
+  "support_email": "support@dumb.co",
+  "support_phone": "404-716-3605",
+  "hours_weekdays": "8am-9pm EST Mon-Fri",
+  "hours_weekends": "10am-2pm EST Sat-Sun",
+  "organize_email": "organize@dumb.co",
+  "organize_text": "get $ off for a\ngroup dumb down",
+  "footer_name": "Dumb Co.",
+  "not_found": {
+    "heading": "404",
+    "message": "oops, that url is not valid :(",
+    "button": "Go back home"
+  }
+}

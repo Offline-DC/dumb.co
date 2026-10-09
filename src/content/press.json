@@ -1,0 +1,294 @@
+{
+  "heading": "Press",
+  "contact_email": "afreka@dumb.co",
+  "items": [
+    {
+      "id": "BUSINESSINSIDERFALL2026",
+      "title": "dumb.co has genz writing again",
+      "source": "Business Insider",
+      "link": "https://www.businessinsider.com/dumbco-startup-handwritten-cover-letters-ai-dumb-phones-i2026-9",
+      "image": "/src/Press/images/bi.jpg",
+      "hidden": false
+    },
+    {
+      "id": "VOX2026",
+      "title": "dumb.co gives u back time",
+      "source": "VOX",
+      "link": "https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/",
+      "image": "/src/Press/images/voximage.jpg",
+      "hidden": false
+    },
+    {
+      "id": "CBS2026",
+      "title": "gen z ditches smartphones 4 the dp2",
+      "source": "CBS",
+      "link": "https://www.cbsnews.com/sanfrancisco/video/new-gen-z-trend-ditching-smartphones-for-dumb-phones-without-social-media-apps/",
+      "image": "/src/Press/images/cbs2026.webp",
+      "hidden": false
+    },
+    {
+      "id": "GRAYMEDIA2026",
+      "title": "ur neighbors all have dumbphones...",
+      "source": "Gray Media",
+      "link": "https://www.investigatetv.com/2026/09/10/inside-growing-movement-ditch-smartphones-unplug-by-choice/",
+      "image": "/src/Press/images/investigatetv.jpg",
+      "hidden": false
+    },
+    {
+      "id": "MORNINGBREW2026",
+      "title": "get ur brain back with dumb.co",
+      "source": "Morning Brew",
+      "link": "https://www.instagram.com/p/DdKNcTKPQjg/",
+      "image": "/src/Press/images/morningbrew.webp",
+      "hidden": false
+    },
+    {
+      "id": "MSUREPORTER2026",
+      "title": "dumb.co leads rise in dumbphones",
+      "source": "MSU Reporter",
+      "link": "https://www.msureporter.com/2026/08/27/the-rise-of-dumb-phones/",
+      "image": "/src/Press/images/msu.webp",
+      "hidden": false
+    },
+    {
+      "id": "THEEAGLE2026",
+      "title": "college students are detoxing with the dp2",
+      "source": "The Eagle",
+      "link": "https://www.theeagleonline.com/article/2026/09/new-dc-based-flip-phone-company-showcases-gen-zs-move-towards-a-digital-detox/",
+      "image": "/src/Press/images/theeagleimage.jpg",
+      "hidden": false
+    },
+    {
+      "id": "TECHCRUNCHJUL20262",
+      "title": "dumb.co dared me 2 join the fun percent",
+      "source": "Tech Crunch",
+      "link": "https://techcrunch.com/2026/07/10/dumb-co-dared-me-to-trade-my-iphone-for-a-hacked-flip-phone/",
+      "image": "/src/Press/images/techcrunchjul1.webp",
+      "hidden": false
+    },
+    {
+      "id": "WASHINGTONIANSUMMER2026",
+      "title": "reclaim ur brain with dumb.co",
+      "source": "Washingtonian",
+      "link": "https://washingtonian.com/2026/07/14/dumb-cos-flip-phones-let-you-reclaim-your-brain/",
+      "image": "/src/Press/images/Flip-Phones-lead.webp",
+      "hidden": false
+    },
+    {
+      "id": "YAHOO2026",
+      "title": "dumb.co phones on the rise",
+      "source": "Yahoo",
+      "link": "https://tech.yahoo.com/phones/articles/dumb-co-dared-trade-iphone-160649244.html",
+      "image": "/src/Press/images/dumb-phone.webp",
+      "hidden": false
+    },
+    {
+      "id": "USATODAY1",
+      "title": "dumb.co all the rage w/ Gen Z",
+      "source": "USAToday",
+      "link": "https://www.usatoday.com/picture-gallery/life/health-wellness/2026/07/09/people-are-ditching-smartphones-for-dumb-phones-flip-phones-landlines/90853022007/",
+      "image": "/src/Press/images/usatodayjuly2.webp",
+      "hidden": false
+    },
+    {
+      "id": "USATODAY2",
+      "title": "dumbphones change lives? ya",
+      "source": "USAToday",
+      "link": "https://www.usatoday.com/story/life/health-wellness/2026/07/09/swapped-smartphone-for-dumb-phone-for-a-month/90577821007/",
+      "image": "/src/Press/images/usatoday jul article 1.webp",
+      "hidden": false
+    },
+    {
+      "id": "THINGTESTING2026",
+      "title": "dumb.co gets Gen Z on flip phones",
+      "source": "Thingtesting",
+      "link": "https://thingtesting.com/stories/dumbphones-vs-smartphones",
+      "image": "/src/Press/images/DumbphoneinAir copy.jpeg",
+      "hidden": false
+    },
+    {
+      "id": "TECHCRUNCHJUL20261",
+      "title": "cut your screentime with dumb.co",
+      "source": "Tech Crunch",
+      "link": "https://techcrunch.com/2026/06/24/if-you-want-to-cut-your-screen-time-just-get-a-brick/",
+      "image": "/src/Press/images/techcrunchjul2.webp",
+      "hidden": false
+    },
+    {
+      "id": "THEATLANTICSPRING2026",
+      "title": "dumb down ur life, get a flip phone",
+      "source": "The Atlantic",
+      "link": "https://www.theatlantic.com/technology/2026/04/month-offline-smartphone-detox/686911/",
+      "image": "/src/Press/images/atlantic flip phone.avif",
+      "hidden": false
+    },
+    {
+      "id": "THEWASHINGTONPOSTSUMMER2026",
+      "title": "cool ppl r on dumbphones",
+      "source": "WaPo",
+      "link": "https://www.washingtonpost.com/style/trends/2026/06/22/activists-launch-irl-push-tech-free-summer/",
+      "image": "/src/Press/images/wapo2026.webp",
+      "hidden": false
+    },
+    {
+      "id": "THEGUARDIANSPRING2026",
+      "title": "so dumb...and its actually working",
+      "source": "The Guardian",
+      "link": "https://www.theguardian.com/technology/ng-interactive/2026/may/28/dumb-flip-phone",
+      "image": "/src/Press/images/theguardianmay2026.avif",
+      "hidden": false
+    },
+    {
+      "id": "CNNDOCMENTION2026_2",
+      "title": "Bill Weir dumbs down w/ dumb.co, u should 2",
+      "source": "CNN",
+      "link": "https://www.instagram.com/reel/DWrxCZnjNPH/",
+      "image": "/src/Press/images/bill weir dumbco.jpeg",
+      "hidden": false
+    },
+    {
+      "id": "AXIOSSPRING2026",
+      "title": "dumb.co leads drive away from smartphones",
+      "source": "AXIOS",
+      "link": "https://www.axios.com/2026/05/07/gen-z-leads-drive-away-from-social-media",
+      "image": "/src/Press/images/axios 2026.webp",
+      "hidden": false
+    },
+    {
+      "id": "Business Insider MO Spring 2026",
+      "title": "dumbphone users love dumb.co",
+      "source": "Business Insider",
+      "link": "https://www.businessinsider.com/millennial-switched-to-flip-phone-for-month-2026-4",
+      "image": "/src/Press/images/business insider 2026 maneesha.webp",
+      "hidden": false
+    },
+    {
+      "id": "AFP YAHOO SPRING 2026",
+      "title": "young ppl can't get off dumbphones by dumb.co",
+      "source": "Yahoo!",
+      "link": "https://shorturl.at/8MDed",
+      "image": "/src/Press/images/afp yahoo lol.webp",
+      "hidden": false
+    },
+    {
+      "id": "CNNDOCMENTION2026",
+      "title": "smartphones altered society, get dumb instead",
+      "source": "CNN",
+      "link": "https://www.facebook.com/AC360/videos/cnns-bill-weir-takes-a-fascinating-look-back-at-50-years-of-apple-and-how-the-te/1613153189891532/",
+      "image": "/src/Press/images/bill weir dumbsdown.jpeg",
+      "hidden": false
+    },
+    {
+      "id": "CNNBILLWEIR2026",
+      "title": "Bill Weir's brain does better on dumbphones??",
+      "source": "CNN",
+      "link": "https://www.facebook.com/cnn/videos/cnns-billweircnn-spends-half-a-month-without-his-iphone-and-scans-of-his-brain-b/1561313594960987/",
+      "image": "/src/Press/images/cnn dumbphones.avif",
+      "hidden": false
+    },
+    {
+      "id": "DAZEDFEATURE2026",
+      "title": "could u try a Month Offline with dumb.co?",
+      "source": "DAZED MAG",
+      "link": "https://www.dazeddigital.com/life-culture/article/69882/1/month-offline-smartphone-support-group-unplugging-flip-offline-detox",
+      "image": "/src/Press/images/dazed mag flip.webp",
+      "hidden": false
+    },
+    {
+      "id": "DAZEDMOFEATURE2026",
+      "title": "young Americans get dumb",
+      "source": "DAZED MAG",
+      "link": "https://www.dazeddigital.com/life-culture/article/69969/1/how-to-get-offline-spend-less-time-on-phone-brick-opal-print-media",
+      "image": "/src/Press/images/dazed month offline.avif",
+      "hidden": false
+    },
+    {
+      "id": "DAZEDNYFW2026",
+      "title": "nyfw goes dumb with dumb.co",
+      "source": "DAZED MAG",
+      "link": "https://www.dazeddigital.com/fashion/article/69662/1/new-yorks-emerging-designers-have-heard-your-complaints-about-nyfw",
+      "image": "/src/Press/images/nyfw dazed mag.avif",
+      "hidden": false
+    },
+    {
+      "id": "OfficeMag2026",
+      "title": "nyfw says no to the doomscroll",
+      "source": "Office MAG",
+      "link": "https://officemagazine.net/shame-software-ramona-beattie-turns-kgb-bar-cyberpunk-dressing-machine",
+      "image": "/src/Press/images/office mag nyfw 2026.jpg",
+      "hidden": false
+    },
+    {
+      "id": "TIME2025",
+      "title": "living dumb = living beyond the screen",
+      "source": "TIME",
+      "link": "https://time.com/7326718/sora-2-ai-fake-videos-social-media/",
+      "image": "/src/Press/images/for time 2025.jpg",
+      "hidden": false
+    },
+    {
+      "id": "vox2025-news",
+      "title": "the real attention economy is IRL",
+      "source": "vox",
+      "link": "https://www.vox.com/technology/467598/brick-month-offline-digital-detox",
+      "image": "/src/Press/images/voxarticle.webp",
+      "hidden": false
+    },
+    {
+      "id": "wapo",
+      "title": "can u be dumb 4 1 month?",
+      "source": "WaPo",
+      "link": "https://www.washingtonpost.com/podcasts/post-reports/could-you-give-up-your-smartphone-for-a-month/",
+      "image": "/src/Press/images/imrs.webp",
+      "hidden": false
+    },
+    {
+      "id": "nbcwashington",
+      "title": "pro presence, anti distractions",
+      "source": "nbcwashington",
+      "link": "https://www.nbcwashington.com/entertainment/the-scene/inside-dcs-1st-phone-free-bar-were-not-anti-tech-were-pro-presence/3986609/",
+      "image": "/src/Press/images/hushhush.webp",
+      "hidden": false
+    },
+    {
+      "id": "nbc-news",
+      "title": "is it cringe to be online? yes. go dumb",
+      "source": "nbc",
+      "link": "https://www.nbcnews.com/pop-culture/pop-culture-news/going-analog-2025-trends-phone-free-parties-junk-journals-rcna248499",
+      "image": "/src/Press/images/article_one.webp",
+      "hidden": false
+    },
+    {
+      "id": "Southern Living 2025",
+      "title": "dc bar dumbs down",
+      "source": "Southern Living",
+      "link": "https://www.southernliving.com/dc-phone-free-bar-hush-harbor-11810523",
+      "image": "/src/Press/images/southern living 2025.webp",
+      "hidden": false
+    },
+    {
+      "id": "hushharbor-1",
+      "title": "hush harbor reclaims 3rd spaces",
+      "source": "nba",
+      "link": "https://www.nba.com/wizards/videos/black-owned-dmv-hush-harbor",
+      "image": "/src/Press/images/wiz-primary.svg",
+      "hidden": false
+    },
+    {
+      "id": "Eater 2025",
+      "title": "scroll less, dance more",
+      "source": "Eater",
+      "link": "https://dc.eater.com/restaurant-news/163917/no-phones-bar-hush-harbor-unplugged-opening-h-street",
+      "image": "/src/Press/images/eater 2025.webp",
+      "hidden": false
+    },
+    {
+      "id": "Popville2025",
+      "title": "ur neighbours r at Month Offline w dumb.co",
+      "source": "PopVille",
+      "link": "https://www.popville.com/announcements/month-offline-exhibition-999/",
+      "image": "/src/Press/images/MO Popville.jpg",
+      "hidden": false
+    }
+  ]
+}

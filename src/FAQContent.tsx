@@ -9,6 +9,7 @@ import {
 import "./FAQs.css";
 import VideoList from "./FAQVideos/VideoList";
 import tvIcon from "./FAQVideos/tv-icon-black.png";
+import { SETTINGS, telHref } from "./content";
 
 /**
  * Update the URL hash without triggering a navigation/scroll-jump. We use
@@ -498,8 +499,9 @@ export default function FAQContent({ compact = false, onReady }: Props) {
       <div className="faq-contact">
         <p>
           questions? contact{" "}
-          <a href="mailto:support@dumb.co">support@dumb.co</a> or call us:{" "}
-          <a href="tel:404-716-3605">404-716-3605</a>
+          <a href={`mailto:${SETTINGS.supportEmail}`}>{SETTINGS.supportEmail}</a>{" "}
+          or call us:{" "}
+          <a href={telHref(SETTINGS.supportPhone)}>{SETTINGS.supportPhone}</a>
         </p>
         <p>human support</p>
       </div>

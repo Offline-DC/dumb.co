@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { SETTINGS } from "./content";
 
 export default function NotFound() {
   return (
@@ -14,9 +15,9 @@ export default function NotFound() {
         color: "white",
       }}
     >
-      <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>404</h1>
+      <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>{SETTINGS.notFound.heading}</h1>
       <p style={{ fontSize: "1.25rem", marginBottom: "1.5rem" }}>
-        oops, that url is not valid :(
+        {SETTINGS.notFound.message}
       </p>
 
       <Link
@@ -29,7 +30,7 @@ export default function NotFound() {
           color: "white",
         }}
       >
-        Go back home
+        {SETTINGS.notFound.button}
       </Link>
     </div>
   );

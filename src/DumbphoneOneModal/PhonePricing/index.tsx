@@ -1,6 +1,7 @@
 import { useCheckoutProducts } from "../../hooks/useCheckoutProducts";
 import styles from "./index.module.css";
 import PricingList from "./PricingList";
+import { SHOP } from "../../content";
 import "@fontsource/biorhyme/400.css";
 import "@fontsource/biorhyme/700.css";
 import "@fontsource/rubik/700.css";
@@ -20,10 +21,10 @@ export default function PhonePricing() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            questions?
+            {SHOP.questionsLink}
           </a>
           <div style={{ paddingRight: ".5rem" }}>
-            for financial / student aid, email support@dumb.co
+            {SHOP.financialAid}
           </div>
         </div>
       </div>

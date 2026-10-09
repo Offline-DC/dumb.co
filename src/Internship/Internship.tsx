@@ -1,19 +1,14 @@
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import introRaw from "./intro.md?raw";
-import techRaw from "./tech.md?raw";
-import opsRaw from "./ops.md?raw";
-import marketingRaw from "./marketing.md?raw";
-import airRaw from "./artist.md?raw";
-import conclusionRaw from "./conclusion.md?raw";
+import { INTERNSHIP } from "../content";
 import styles from "./internship.module.css";
 
-const JOBS = [
-  { value: "tech", label: "🛠 Tech Intern", md: techRaw },
-  { value: "ops", label: "📦 Business & Operations Intern", md: opsRaw },
-  // { value: "marketing", label: "📣 Marketing Intern", md: marketingRaw },
-  { value: "air", label: "🎨 Artist-in-Residence", md: airRaw },
-];
+// edited in Pages CMS ("Internship"), stored in src/content/internship.json
+const JOBS = INTERNSHIP.roles.map((role, i) => ({
+  value: String(i),
+  label: role.label as string,
+  md: role.description as string,
+}));
 
 export default function Internship() {
   const [selected, setSelected] = useState("");
@@ -25,7 +20,7 @@ export default function Internship() {
   return (
     <div className={styles.page}>
       <div className={styles.markdown}>
-        <ReactMarkdown>{introRaw}</ReactMarkdown>
+        <ReactMarkdown>{INTERNSHIP.intro}</ReactMarkdown>
       </div>
 
       <div className={styles.vintageSelectWrap}>
@@ -36,7 +31,7 @@ export default function Internship() {
             value={selected}
             onChange={(e) => setSelected(e.target.value)}
           >
-            <option value="">— choose a role —</option>
+            <option value="">{INTERNSHIP.chooseLabel}</option>
             {JOBS.map((job) => (
               <option key={job.value} value={job.value}>
                 {job.label}
@@ -51,13 +46,13 @@ export default function Internship() {
           </div>
         ) : (
           <div className={styles.emptyState}>
-            Pick a role to see the description.
+            {INTERNSHIP.emptyState}
           </div>
         )}
       </div>
 
       <div className={styles.markdown}>
-        <ReactMarkdown>{conclusionRaw}</ReactMarkdown>
+        <ReactMarkdown>{INTERNSHIP.conclusion}</ReactMarkdown>
       </div>
     </div>
   );

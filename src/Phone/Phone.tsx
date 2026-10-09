@@ -5,7 +5,6 @@ import Logo from "./Logo";
 import Footer from "./Footer";
 import { OFFLINE_PHONE_NUMBER } from "../App";
 import ReactGA from "react-ga4";
-import rawPressData from "../Press/press_data.md?raw";
 import { openPressItemAtRow } from "../Press/parsePressData";
 import { useNavigate, useLocation } from "react-router-dom";
 import type { DirInput } from "./SnakeGame";
@@ -150,7 +149,7 @@ function Phone({ initialScreen }: Props) {
       return;
     }
     if (screen === "press") {
-      openPressItemAtRow(row, rawPressData);
+      openPressItemAtRow(row);
       return;
     }
 

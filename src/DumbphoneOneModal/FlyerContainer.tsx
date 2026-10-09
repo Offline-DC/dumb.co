@@ -2,6 +2,7 @@ import flyer from "./productpageextendoooooo.jpg";
 import styles from "./index.module.css";
 import PhonePricing from "./PhonePricing";
 import { useEffect, useRef, useState } from "react";
+import { SETTINGS } from "../content";
 
 type Props = {
   modalWidth: number;
@@ -61,9 +62,11 @@ export default function FlyerContainer({ modalWidth, containerHeight }: Props) {
         >
           <PhonePricing />
           <div className={styles.supportLine}>
-            <div>human support support@dumb.co or 404-716-3605</div>
+            <div>
+              human support {SETTINGS.supportEmail} or {SETTINGS.supportPhone}
+            </div>
             <div style={{ fontSize: "12px", marginTop: ".25rem" }}>
-              8am-9pm EST Mon-Fri 10am-2pm EST Sat-Sun
+              {SETTINGS.hoursWeekdays} {SETTINGS.hoursWeekends}
             </div>
           </div>
         </div>
