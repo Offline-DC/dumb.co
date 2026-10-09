@@ -51,3 +51,7 @@
      pink/blue/orange, not on paper, so it is chip contrast rather than body
      text and Matteo's text tokens do not apply to it. */
   .navitem:hover{text-decoration:none;}
+
+  /* FAQ answers come from faq.json as paragraphs (a blank line in the CMS) */
+  .faq-a2 p{margin:0 0 .7em;}
+  .faq-a2 p:last-child{margin-bottom:0;}

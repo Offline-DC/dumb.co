@@ -3,6 +3,7 @@ import PressItem, { type PressItemData } from "./PressItem";
 
 type Props = {
   title: string;
+  subtitle?: string;
   items: ReadonlyArray<PressItemData>;
   row: number;
 };
@@ -31,13 +32,13 @@ export function getSnappedItems<T>(
   };
 }
 
-export default function PressList({ title, items, row }: Props) {
+export default function PressList({ title, subtitle, items, row }: Props) {
   const { visibleItems, highlightedIndex } = getSnappedItems(items, row, 3);
 
   return (
     <div className={styles.pressCard}>
       <h1 className={styles.title}>{title}</h1>
-      <div className={styles.subtitle}>afreka@dumb.co</div>
+      {subtitle ? <div className={styles.subtitle}>{subtitle}</div> : null}
 
       <div className={styles.list}>
         {visibleItems.map((item, i) => (

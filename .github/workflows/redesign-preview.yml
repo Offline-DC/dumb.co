@@ -1,0 +1,65 @@
+# Rebuilds the preview site (offline-dc.github.io/dumb.co-redesign-preview)
+# whenever the redesign branch changes -- including every save in Pages CMS
+# while the CMS is pointed at that branch. Same output as
+# redesign_2026/build/publish_preview.sh, without anyone running it.
+#
+# Only ever runs for dumb.co_redesign_v1, so once the redesign is merged into
+# main this file does nothing (main has its own deploy.yml).
+#
+# One-time setup, because it pushes to a different repo:
+#   1. ssh-keygen -t ed25519 -N "" -f preview_key
+#   2. Offline-DC/dumb.co-redesign-preview > Settings > Deploy keys >
+#      Add deploy key: paste preview_key.pub, tick "Allow write access".
+#   3. Offline-DC/dumb.co > Settings > Secrets and variables > Actions >
+#      New repository secret: PREVIEW_DEPLOY_KEY = the contents of preview_key.
+#   4. Delete both files from your machine.
+name: Redesign preview
+
+on:
+  push:
+    branches: [dumb.co_redesign_v1]
+  workflow_dispatch:
+
+concurrency:
+  group: redesign-preview
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: pip install "pillow>=11.3"   # reads the AVIF press images
+
+      - name: Build
+        run: python3 redesign_2026/build/build.py
+
+      - name: Lay out the site
+        run: |
+          python3 redesign_2026/build/split_assets.py out --prefix /dumb.co-redesign-preview/
+          cp redesign_2026/concept/quiz.html out/
+          touch out/.nojekyll
+          cat > out/PREVIEW.txt <<TXT
+          what   : dumb.co new site, preview
+          branch : ${GITHUB_REF_NAME}
+          commit : ${GITHUB_SHA::8}
+          built  : $(date -u '+%Y-%m-%d %H:%M UTC')
+          TXT
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.PREVIEW_DEPLOY_KEY }}
+          external_repository: Offline-DC/dumb.co-redesign-preview
+          publish_branch: gh-pages
+          publish_dir: ./out
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "preview: ${{ github.ref_name }} @ ${{ github.sha }}"

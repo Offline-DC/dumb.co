@@ -24,15 +24,15 @@ build/serve_dist.sh        serves the app's dist/ like GitHub Pages would
 HOSTING.md                 how dumb.co is hosted, and what a deploy does ship
 SEO.md                     what has to happen for search, desktop + mobile
 build/parts/*.css|*.js     the actual source: window controller, shop, memories, press
-build/make_press_assets.py mirrors the live press data + makes thumbnails
-assets/                    plan card PNGs + press thumbnails (embedded by the build)
+build/content.py           reads src/content/*.json (what Pages CMS edits) for the build
+../src/content/*.json      the words, press, memories and FAQ -- edited in Pages CMS
+assets/                    plan card PNGs, memories photos (embedded by the build)
 reference/                 the mock-up deck export + the real subscription quiz
 ```
 
 ## Building
 
 ```
-python3 build/make_press_assets.py   # only when press_data.md or its images change
 python3 build/build.py
 python3 build/build_mobile.py        # after build.py — mobile B is derived from its output
 ```
@@ -126,28 +126,25 @@ rewritten to `/shop`. `ROUTES` in `build/parts/24_routes.js` (generated from
 `NAV_ITEMS` in `build.py`) is the exact slug map react-router should be handed
 on the port. See `SEO.md` — real paths need prerendering on the React app.
 
-## Memories from a spreadsheet
+## Content: Pages CMS
 
-`memories.exe` can read its events from a published Google Sheet instead of the
-code — the same mechanism the FAQ already uses (`src/FAQContent.tsx` reads a
-published sheet as CSV). One row per photo, event columns repeated:
+The words on every page, press, memories and the FAQ live in
+`../src/content/*.json`, and the team edits them at https://app.pagescms.org
+(forms in `../.pages.yml`). `build/content.py` reads them and `build.py` bakes
+them into the page, so visitors' browsers fetch nothing for them -- the FAQ no
+longer comes from the Google Sheet. Press images are uploaded into
+`src/Press/images`, memories photos into `assets/memories`; the build crops and
+resizes them, so any size is fine.
 
-| event | date | city | blurb | vimeo id | photo url | caption |
-| --- | --- | --- | --- | --- | --- | --- |
-| baird x dumb.co | coming soon | | | | | |
-| Month Offline gallery | August 2026 | New York, NY | the gallery show… | | https://…/mo-1.jpg | opening night |
+Nothing in the CMS can break the build: a blank field is left out, a press
+item or photo whose file is missing is skipped (the build prints a warning),
+and the checkout link only takes an https address.
 
-Row order is display order, so a new event pasted into the top rows lands at the
-top of the page. An event with no photo rows renders "photos coming soon".
+How an edit reaches a site is in the root README, "Editing content".
 
-Paste the published CSV link into `MEMORIES_CSV_URL` at the top of
-`build/parts/23_memories_sheet.js` and rebuild. Until then the events written
-into that file are what shows — and they stay as the fallback, so an unreachable
-or empty sheet can never blank the page.
-
-The sheet holds *links* to photos, not the photos themselves, so the images need
-somewhere public to live (a Cloudinary/S3/Vercel Blob bucket is the reliable
-option; Drive share links are throttled and not meant for hotlinking).
+`23_memories_sheet.js` can still merge extra events in from a published
+Google Sheet if `MEMORIES_CSV_URLS` is filled in; it is empty, and the CMS is
+the way to add them now.
 
 ## Feature flags
 
@@ -196,12 +193,11 @@ script that assembles text files into one HTML file.
    | `11_involved_section.js`, `12_involved.css` | DumbCampus.exe |
    | `14_contact_section.js` | Contact.exe |
    | `15_about_section.js` | about.exe |
-   | `16_faq_section.js`, `17_faq.js` | FAQ.exe + the live sheet fetch |
+   | `16_faq_section.js`, `17_faq.js` | faq.exe, from `src/content/faq.json` |
    | `18_quiz.css` | quiz frame, plan table, contact, about, the flip-phone frame |
    | `19_duck.css`, `20_duck.js` | the walking duck |
    | `21_snake.js`, `22_snake.css` | Grant's snake, ported from `src/Phone/SnakeGame.tsx` |
    | `23_memories_sheet.js` | Memories from a published Google Sheet |
-   | `refresh_faq_snapshot.py` | re-downloads the FAQ sheet into `assets/faq_snapshot.csv` |
    | `24_routes.js` | the addressable sections (`#/shop` → `ROUTES`) |
    | `29_responsive.css`, `30_phone.js` | the phone layout and the handset menu |
    | `m01_mobile.css`, `m02_mobile.js` | retired with mobile-new.html |
@@ -219,37 +215,15 @@ script that assembles text files into one HTML file.
 builds take a couple of seconds each.
 
 **The asset generators** are separate and only need re-running when their inputs
-change: `make_press_assets.py` (mirrors `src/Press/press_data.md` from the app and
-resizes the 22 thumbnails), `make_memory_assets.py` (the event photos),
-`make_campaign_assets.sh`.
+change: `make_memory_assets.py` (the original event photos, from the shoot
+folders) and `make_campaign_assets.sh`. Press thumbnails are made by the build
+itself now, from `src/content/press.json`.
 
 **What this becomes:** the React app at the repo root is the thing that ships.
 The pieces that port more or less directly are `04_wm.js` → the existing
 `src/WindowModal/`, `05_data.js` → a data module or the sheet, `24_routes.js` →
 react-router routes, and `21_snake.js` back onto `src/Phone/SnakeGame.tsx`,
 which is where it came from.
-
-## FAQ.exe and the sheet
-
-FAQ.exe showed nothing but "questions are loading in from the sheet". The live
-site reads the FAQ from a published Google Sheet as CSV, and the prototype
-copied that — but Google's published-CSV URL redirects to a googleusercontent
-host that sends no CORS header on the final hop, and a page opened from a
-`file://` path has a null origin on top of that. So the fetch failed and there
-was nothing behind it.
-
-The build now embeds a snapshot of the sheet (`assets/faq_snapshot.csv`, 36
-questions) as `FAQ_SNAPSHOT`. FAQ.exe renders that instantly, with no network
-at all, then still tries the live sheet and replaces the list if that succeeds.
-Working from a file, on a plane, or in front of Kunal, the questions are there.
-
-When the sheet changes:
-
-```
-python3 build/refresh_faq_snapshot.py    # needs network; refuses to write a short sheet
-python3 build/build.py
-python3 build/build_mobile.py
-```
 
 ## Keyboard
 

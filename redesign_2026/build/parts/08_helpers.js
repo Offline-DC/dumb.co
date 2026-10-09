@@ -126,10 +126,10 @@ function plansDrawer(){
         <div class="wm-back" onclick="openSection('memories')">‹ all memories</div>
         <div class="memdetail">
           <figure class="md-polaroid">
-            <div class="md-img"><img src="${ph.src()}" alt="${ev.name}"/></div>
+            <div class="md-img"><img src="${esc(ph.src())}" alt="${esc(ev.name)}"/></div>
             <figcaption class="md-cap">
-              <span class="md-capline">${ph.cap || ev.name}</span>
-              <span class="md-when">${ev.when} · ${ev.where}</span>
+              <span class="md-capline">${esc(ph.cap || ev.name)}</span>
+              <span class="md-when">${esc(ev.when)} · ${esc(ev.where)}</span>
             </figcaption>
           </figure>
           <div class="md-foot">
@@ -137,7 +137,7 @@ function plansDrawer(){
             <span class="md-count">${memView.pi + 1} / ${ev.photos.length}</span>
             <button type="button" onclick="memStep(1)" aria-label="next photo">next ›</button>
           </div>
-          <p class="md-blurb">${ev.blurb}</p>
+          ${paras(ev.blurb, 'md-blurb')}
         </div>
       </div>`;
     host.scrollTop = 0;

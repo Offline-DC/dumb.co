@@ -111,6 +111,12 @@ def main():
     if not routes:
         sys.exit("split_assets: could not find ROUTES in the page")
 
+    # the favicon the page links to (public/ is the live site's static folder)
+    for f in ("favicon.png", "favicon.ico"):
+        src = ROOT.parent / "public" / f
+        if src.is_file():
+            shutil.copyfile(src, out / f)
+
     (out / "index.html").write_text(html)
     (out / "404.html").write_text(html)
     for slug in routes.values():

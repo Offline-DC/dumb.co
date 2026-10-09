@@ -123,7 +123,7 @@ html = html.replace("<title>dumb.co — 2026 redesign concept v8</title>",
 
 # ----------------------------------------------------------------- checks
 for needle in ["const REVIEW_QUIZ", "@font-face{font-family:'Rubik'", "reviewQuizFrame",
-               "rv-novideo", "FAQ_SNAPSHOT", "MEMORY_EVENTS", "const ROUTES",
+               "rv-novideo", "COPY.faq", "MEMORY_EVENTS", "const ROUTES",
                "function phoneFit", "--bp-phone"]:
     must(needle in html, f"review check failed, missing: {needle}")
 for banned in ["fonts.googleapis.com", 'src="quiz.html"']:

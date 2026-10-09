@@ -10,6 +10,8 @@ v8: one reusable .exe window (the mock-up deck shows a single pop-up per slide),
 and Press.exe mirrors the live React press page.
 """
 import base64, json, os, re, sys, pathlib
+import io as _io0
+from PIL import Image as _Image, ImageOps as _ImageOps
 
 ROOT  = pathlib.Path(__file__).resolve().parent.parent
 PARTS = ROOT / "build" / "parts"
@@ -17,6 +19,10 @@ SRC   = ROOT / "concept" / "v6_baseline.html"
 OUT   = ROOT / "concept" / "index.html"   # index so `http.server -d concept` serves it at /
 QUIZ_SRC = ROOT / "reference" / "subscription-quiz-FINAL-2026-08-18.html"
 QUIZ_OUT = ROOT / "concept" / "quiz.html"
+
+sys.path.insert(0, str(ROOT / "build"))
+import content as C                    # src/content/*.json -- what Pages CMS edits
+COPY, PRESS_ITEMS, MEMORY_EVENTS = C.load()
 
 def part(name):
     return (PARTS / name).read_text(encoding="utf-8")
@@ -105,19 +111,43 @@ shop_js = ("  /* Shop.exe product gallery — studio shots, ordered so the\n"
            + "  ];\n")
 print(f"  embedded {len(hero_files)} lifestyle + {len(shop_files)} studio photos")
 
-# ---- real event photos for Memories (build/make_memory_assets.py)
-MEMDIR = ROOT / "assets" / "memories"
-must(MEMDIR.is_dir(), "assets/memories missing — run build/make_memory_assets.py")
-mem_files = sorted(MEMDIR.glob("*.jpg"))
-must(mem_files, "no photos in assets/memories")
-def memkey(p):
-    a, b = p.stem.rsplit("-", 1)
-    return a.replace("-", "") + b
-mem_js = ("  /* Memories — real event photos, only from events that have happened */\n"
-          "  const MEM = {\n"
-          + "".join(f'    {memkey(f)}: "{datauri(f)}",\n' for f in mem_files)
-          + "  };\n")
-print(f"  embedded {len(mem_files)} memory photos")
+# ---- Memories: src/content/memories.json (Pages CMS: "Memories"). Photos
+# are uploaded to assets/memories; whatever size they come in at, they ship
+# 900px wide, EXIF-rotated (several shoots are sideways), like
+# make_memory_assets.py always did.
+def mem_photo(path):
+    src = _Image.open(path)
+    rotated = (src.getexif() or {}).get(0x0112, 1) not in (1, None)
+    if src.format == "JPEG" and src.width <= 900 and not rotated:
+        return datauri(path)          # already web-sized: don't recompress it twice
+    im = _ImageOps.exif_transpose(src).convert("RGB")
+    w, h = im.size
+    if w > 900:
+        im = im.resize((900, round(h * 900 / w)), _Image.LANCZOS)
+    buf = _io0.BytesIO()
+    im.save(buf, "JPEG", quality=68, optimize=True, progressive=True)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+_mem_cache = {}
+_events = []
+for ev in MEMORY_EVENTS:
+    photos = []
+    for ph in ev["photos"]:
+        if ph["image"] not in _mem_cache:
+            _mem_cache[ph["image"]] = mem_photo(ph["image"])
+        photos.append({"url": _mem_cache[ph["image"]], "cap": ph["caption"]})
+    _events.append({**ev, "photos": photos})
+# 07_memories_section.js and the sheet merge call ph.src(), so each photo
+# gets one; `let`, because 23_memories_sheet.js appends to it
+mem_js = ("  /* src/content/memories.json -- only events that have actually happened */\n"
+          "  const MEMORY_EVENTS = %s;\n"
+          "  MEMORY_EVENTS.forEach(ev => ev.photos.forEach(ph => {\n"
+          "    const u = ph.url; ph.src = () => u; delete ph.url;\n"
+          "  }));\n" % C.js(_events))
+print(f"  embedded {len(_events)} memory events, {len(_mem_cache)} photos")
+
+# ---- every other piece of editable copy, for the section templates
+copy_js = "  /* src/content/*.json -- the copy Pages CMS edits */\n  const COPY = %s;\n" % C.js(COPY)
 
 # the whole handset, with only the screen made bigger (build/expand_screen.py).
 # An earlier attempt cropped the number keys off to buy height -- it worked on
@@ -154,20 +184,36 @@ asset_js = ("  const A = {\n"
             + "".join('      {name: %s, src: "%s"},\n' % (json.dumps(n), d) for d, n in sigs)
             + "    ],\n  };\n")
 
-# ---- press: mirror the live page's own data + images (see make_press_assets.py)
-PRESSDIR = ROOT / "assets" / "press"
-mf = PRESSDIR / "manifest.json"
-must(mf.exists(), "assets/press/manifest.json missing — run build/make_press_assets.py first")
-press = json.loads(mf.read_text(encoding="utf-8"))
-rows = []
-for p in press:
-    b64 = base64.b64encode((PRESSDIR / p["file"]).read_bytes()).decode()
-    rows.append(
-        '    {title:%s, source:%s, href:%s, img:"data:image/webp;base64,%s"},\n'
-        % (json.dumps(p["title"]), json.dumps(p["source"]), json.dumps(p["href"]), b64)
-    )
-press_js = "  /* mirrors ../dumb.co/src/Press/press_data.md — %d items */\n  const PRESS_MIRROR = [\n%s  ];\n" % (
-    len(press), "".join(rows))
+# ---- press: src/content/press.json (Pages CMS: "Press"), images from
+# src/Press/images cropped to 220px squares -- the list renders them at 100px
+def press_thumb(path):
+    if path.suffix.lower() == ".svg":
+        # a logo: it scales on its own, and rasterising it needs librsvg,
+        # which a build machine may not have
+        return "data:image/svg+xml;base64," + base64.b64encode(path.read_bytes()).decode()
+    try:
+        im0 = _Image.open(path)
+    except Exception:
+        return None
+    with im0 as im:
+        im = im.convert("RGB")
+        w, h = im.size
+        s_ = min(w, h)
+        im = im.crop(((w - s_) // 2, (h - s_) // 2, (w + s_) // 2, (h + s_) // 2))
+        im = im.resize((220, 220), _Image.LANCZOS)
+        buf = _io0.BytesIO()
+        im.save(buf, "WEBP", quality=72, method=6)
+        return "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode()
+
+press = []
+for p_ in PRESS_ITEMS:
+    uri = press_thumb(p_["image"])
+    if not uri:
+        C.warnings.append(f"press: skipped {p_['title']} (can't read {p_['image'].name})")
+        continue
+    press.append({"title": p_["title"], "source": p_["source"], "href": p_["href"], "img": uri})
+press_js = ("  /* src/content/press.json -- %d items */\n  const PRESS_MIRROR = %s;\n"
+            % (len(press), C.js(press)))
 print(f"  embedded {len(press)} press items")
 
 # --- the team portraits are 1-bit dithered PNGs with a lot of transparent
@@ -421,19 +467,13 @@ routes_js = ("  /* section <-> url slug. The prototype uses #/<slug>; the React 
              "     the same slugs to real paths (dumb.co/shop, dumb.co/get_involved). */\n"
              "  const ROUTES = " + json.dumps({k: slug for k, _l, href, slug in NAV_ITEMS if not href},
                                               indent=4).replace("\n", "\n  ") + ";\n\n")
-# ---- the FAQ sheet, snapshotted at build time so FAQ.exe always has content
-# (Google's published-CSV endpoint has no CORS header on its final hop, and a
-# file:// page has a null origin, so the live fetch cannot be relied on)
+# ---- the FAQ lives in src/content/faq.json now (Pages CMS: "FAQ"), not the
+# Google Sheet: no snapshot to refresh and no live fetch to fail. It is
+# carried in COPY.faq; csv is still needed for the reviews snapshot below.
 import csv as _csv, io as _io
-FAQ_SNAP = ROOT / "assets" / "faq_snapshot.csv"
-must(FAQ_SNAP.exists(), "assets/faq_snapshot.csv missing — run build/refresh_faq_snapshot.py")
-_faq_rows = list(_csv.reader(_io.StringIO(FAQ_SNAP.read_text(encoding="utf-8"))))
-_faq_qs = [r for r in _faq_rows[1:] if r and r[0].strip()]
-must(len(_faq_qs) >= 5, f"the FAQ snapshot only has {len(_faq_qs)} questions")
-faq_js = ("  /* the FAQ sheet as of the last build (build/refresh_faq_snapshot.py).\n"
-          "     FAQ.exe shows this instantly, then upgrades to the live sheet if the\n"
-          "     fetch succeeds. %d questions. */\n" % len(_faq_qs)
-          + "  const FAQ_SNAPSHOT = " + json.dumps(_faq_rows) + ";\n\n")
+if len(COPY["faq"]["questions"]) < 5:
+    C.warnings.append(f"faq: only {len(COPY['faq']['questions'])} questions")
+print(f"  {len(COPY['faq']['questions'])} FAQ questions, {len(COPY['faq']['videos'])} videos")
 
 # ---- the reviews sheet as of the last build (build/refresh_reviews_snapshot.py)
 _rev_f = ROOT / "assets" / "reviews_snapshot.csv"
@@ -448,7 +488,7 @@ rev_js = ("  /* the reviews sheet as of the last build "
           + "  const REVIEWS_SNAPSHOT = " + json.dumps(_rev_rows) + ";\n\n")
 
 html = html.replace("  const sections = {",
-                    asset_js + press_js + shop_js + mem_js + faq_js + rev_js + part("05_data.js") + routes_js
+                    asset_js + copy_js + press_js + shop_js + mem_js + rev_js + part("05_data.js") + routes_js
                     + "\n  const sections = {", 1)
 
 html = swap_block(html, "  function openSection(key){", "  /* ---------------- live FAQ",
@@ -464,20 +504,83 @@ html = swap_block(html, "  function openSection(key){", "  /* ---------------- l
 must('<div class="kicker">dumbphone 2</div>' in html,
      "the hero kicker changed shape - check it still says just the product name")
 
+# ---- 8c. the home hero and the sidebar footer are static markup in the
+# baseline; their words come from src/content (home.json, settings.json)
+import html as _h
+def _lines(t):
+    return "<br/>".join(_h.escape(x) for x in t.split("\n"))
+_home = COPY["home"]
+_hero = ('      <div id="home-copy">\n'
+         + (f'        <div class="kicker">{_h.escape(_home["kicker"])}</div>\n' if _home["kicker"] else "")
+         + (f'        <h1>{_lines(_home["headline"])}</h1>\n' if _home["headline"] else "")
+         + (f'        <p>{_h.escape(_home["body"])}</p>\n' if _home["body"] else "")
+         + f'        <div id="home-cta" onclick="openSection(\'shop\')">{_h.escape(_home["button"])}</div>\n'
+         + '      </div>')
+html, n = re.subn(r'      <div id="home-copy">.*?\n      </div>', lambda m: _hero, html, count=1, flags=re.S)
+must(n == 1, "could not find #home-copy to fill from home.json")
+_c = COPY["contact"]
+_foot_old = '        <a href="#">support@dumb.co</a>'
+must(_foot_old in html, "could not find the sidebar support link")
+html = html.replace(_foot_old,
+    f'        <a href="mailto:{_h.escape(_c["support_email"])}">{_h.escape(_c["support_email"])}</a>', 1)
+_soc_old = '<div class="ns-label">dumb.co boycotts all social media</div>'
+must(_soc_old in html, "could not find the social-media line")
+html = html.replace(_soc_old, f'<div class="ns-label">{_h.escape(_c["social_line"])}</div>', 1)
+
 # the __DPAD_*__ tokens are gone with the generated arrows; guard against one
 # creeping back in and shipping as a literal url("__DPAD_UP__")
 must("__DPAD_" not in html, "a __DPAD_*__ token is still in the markup - "
      "the generated arrows were retired when Marco drew them into the handset")
 
-# ------------------------------------------------------------------ 9. title
-# the description is what link previews and search show; the preconnects let
-# the Rubik request start while the stylesheet is still being parsed
-html = html.replace("<title>dumb.co — 2026 redesign concept v3</title>",
-                    "<title>dumb.co — 2026 redesign concept v8</title>\n"
-                    '<meta name="description" content="dumb.co makes the dumbphone 2: a $20 flip phone '
-                    'that keeps maps, music, rideshare and ur messages, and leaves the rest behind." />\n'
-                    '<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
-                    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />', 1)
+# ------------------------------------------------------------------ 9. head
+# The same <head> the live dumb.co has today (index.html at the repo root):
+# title, description, share cards, favicon, Google Analytics -- with the
+# words from settings.json, so they are edited in the CMS. Nothing in it says
+# redesign or preview any more (Jack, Oct 9: "it should be kind of ready to
+# go and be like the main website").
+_s = COPY["site"]
+_e = lambda t: _h.escape(t, quote=True)
+SITE_URL = "https://dumb.co/"
+SHARE_IMG = SITE_URL + "og-image-wide.jpg"     # public/og-image-wide.jpg
+head = (f'<title>{_e(_s["site_title"])}</title>\n'
+        f'<meta name="description" content="{_e(_s["site_description"])}" />\n'
+        '<link rel="icon" type="image/png" href="favicon.png" />\n'
+        '<link rel="icon" type="image/x-icon" href="favicon.ico" />\n'
+        '<link rel="apple-touch-icon" href="favicon.png" />\n'
+        '<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
+        '<meta property="og:type" content="website" />\n'
+        f'<meta property="og:url" content="{SITE_URL}" />\n'
+        f'<meta property="og:title" content="{_e(_s["share_title"])}" />\n'
+        f'<meta property="og:description" content="{_e(_s["site_description"])}" />\n'
+        f'<meta property="og:image" content="{SHARE_IMG}" />\n'
+        f'<meta property="og:image:secure_url" content="{SHARE_IMG}" />\n'
+        '<meta property="og:image:type" content="image/jpeg" />\n'
+        '<meta property="og:image:width" content="1200" />\n'
+        '<meta property="og:image:height" content="630" />\n'
+        + (f'<meta property="og:image:alt" content="{_e(_s["share_image_alt"])}" />\n' if _s["share_image_alt"] else "")
+        + '<meta name="twitter:card" content="summary_large_image" />\n'
+        f'<meta name="twitter:url" content="{SITE_URL}" />\n'
+        f'<meta name="twitter:title" content="{_e(_s["share_title"])}" />\n'
+        f'<meta name="twitter:description" content="{_e(_s["site_description"])}" />\n'
+        f'<meta name="twitter:image" content="{SHARE_IMG}" />\n'
+        + (f'<meta name="twitter:image:alt" content="{_e(_s["share_image_alt"])}" />\n' if _s["share_image_alt"] else "")
+        # Analytics only on dumb.co itself, so preview and local visits
+        # don't land in the numbers
+        + '<script>\n'
+        '  if(/(^|\\.)dumb\\.co$/.test(location.hostname)){\n'
+        '    var ga = document.createElement("script"); ga.async = true;\n'
+        '    ga.src = "https://www.googletagmanager.com/gtag/js?id=G-6J99WZC0Y0";\n'
+        '    document.head.appendChild(ga);\n'
+        '    window.dataLayer = window.dataLayer || [];\n'
+        '    window.gtag = function(){ dataLayer.push(arguments); };\n'
+        '    gtag("js", new Date()); gtag("config", "G-6J99WZC0Y0");\n'
+        '  }\n'
+        '</script>')
+_t_old = "<title>dumb.co — 2026 redesign concept v3</title>"
+must(_t_old in html, "could not find the baseline <title>")
+html = html.replace(_t_old, head, 1)
+
 # the "dumb.co 2026 redesign — not final copy" label under the sidebar is
 # gone (Jack, Oct 9: "we don't need that on the website at all")
 html, n = re.subn(r'\n\s*<div class="ns-label ns-wip">[^<]*</div>', "", html, count=1)
@@ -493,7 +596,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "history.pushState", "const BASE", "legacyHash",
                "helping you get ready for the dumb life", "class=\"sh-end\"", "DOTS_SHOP_NARROW",
                "function keyDown", "--pf-art", "dumb-shook",
-               ">Community<", "gi-drop", f'href="{MONTH_OFFLINE_URL}"',
+               ">Community<", "gi-drop", f'"{MONTH_OFFLINE_URL}"',
                "1209576549", "1215826540",
                "about-team", 'onclick="openQuiz()"', "signatures: [",
                "Find out what plan works for you", "plan-table", "const SPLIT", "camp1:", "camp3:", "clamp(38px, 3.5vw, 66px)",
@@ -501,9 +604,9 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "SHOP_PHOTOS", "shopPhotoStep", "hp-arrow", "sh-drops", 'class="pf-screen"', "flipphone:",
                "SNAKE_SEQUENCE", 'class="pf-keys"', "function snakeTick", "teamKey(",
                "duckWalkPath", 'id="tcl-screen"', 'id="deskphone"', "phonePlayable",
-               "const MEM = {", "Month Offline gallery", "DC Pride", "const DOT_SIZE",
+               "const MEMORY_EVENTS", "const COPY = ", "const DOT_SIZE",
                "MEMORIES_CSV_URL", "function memoriesFromRows", "loadMemories();",
-               "const FAQ_SNAPSHOT", "function faqItemsFromRows",
+               "COPY.faq.questions", "function renderFaq",
                "const REVIEWS_SNAPSHOT", "function reviewsFromRows", "loadReviews",
                "function keyboardNav", "kbfocus", "function buildPhoneMenu", "pm-row",
                "function phoneFit", "k-ok", "--bp-phone",
@@ -528,9 +631,13 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                'class="sh-buy"',                         # one buy per screen (Matteo)
                "that\\u2019s real funny",                 # Matteo's nudge copy replaced it
                "querySelector('.shs-sub')",
-               "not final copy"]:                        # Jack: not on the site at all             # must be by id, see 31_reviews.js
+               "not final copy", "redesign concept", "<title>dumb.co —"]:                        # Jack: not on the site at all             # must be by id, see 31_reviews.js
     must(banned not in html, f"v7 leftover still present: {banned}")
-must(html.count("data:image/webp;base64") >= len(press), "press thumbnails not all embedded")
+must(press and all(p_["img"] in html for p_ in press), "press thumbnails not all embedded")
+if C.warnings:
+    print("  ! content (src/content/*.json):")
+    for w in C.warnings:
+        print("      " + w)
 
 OUT.write_text(html, encoding="utf-8")
 print(f"  wrote {OUT.relative_to(ROOT)}  ({len(html):,} chars, {html.count(chr(10)):,} lines)")
