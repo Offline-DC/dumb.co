@@ -47,6 +47,9 @@ jobs:
       - name: Mark it as a preview
         run: |
           touch dist/.nojekyll
+          # the videos, APKs and downloads in public/ (~350 MB) are for
+          # dumb.co; the preview doesn't need its own copy of them
+          find dist -type f -size +5M -delete
           # a preview must never be indexed in place of dumb.co
           printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
           cat > dist/PREVIEW.txt <<TXT
