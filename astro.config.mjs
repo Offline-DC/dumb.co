@@ -27,10 +27,11 @@ export default defineConfig({
   build: { format: "file", inlineStylesheets: "always" },
   redirects: {
     // addresses the old site answered that now live elsewhere
-    "/faqs": "/faq",
+    // targets carry the base, or on the preview they'd point at the domain root
+    "/faqs": `${base}faq`,
     // ("/faq/videos" -> /faq is in 404.astro: as a file here it would make a
     // faq/ folder, and GitHub Pages answers /faq with that folder, not faq.html)
-    "/phone": "/shop",
+    "/phone": `${base}shop`,
   },
   integrations: [
     react({ include: ["**/legacy/**", "**/*.tsx"] }),
