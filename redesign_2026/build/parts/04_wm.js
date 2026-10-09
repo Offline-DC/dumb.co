@@ -26,14 +26,7 @@
   const titleEl   = () => document.querySelector('#wm-drag span:first-child');
   const sectionEl = () => document.getElementById('wm-section');
 
-  // remember the flipoff.exe geometry so going home restores it exactly
-  let homeGeom = null;
   let openKey = null;   // which section the window is showing
-  function rememberHomeGeom(){
-    if(homeGeom) return;
-    const w = winEl(), r = w.getBoundingClientRect();
-    homeGeom = { left:r.left, top:r.top, width:r.width, height:r.height };
-  }
 
   function setExeTitle(key){ titleEl().textContent = EXE[key] || EXE.home; }
 
@@ -59,13 +52,30 @@
     w.style.height = height + 'px';
   }
 
+  /* flipoff.exe gets the same frame the sections do, worked out fresh from
+     the viewport every time. (Jack, Oct 9: "the homepage version of the
+     modal is scrunched ... make it expand and function like the other
+     modals, like the community one".) It used to be put back from a
+     snapshot taken the first time a section opened -- so open About in a
+     narrow window, widen the browser, go home, and flipoff.exe came back at
+     the narrow size, a 330px strip over the headline. Below 1000px the
+     stylesheet places it (29_responsive.css), so the inline box is cleared
+     rather than fought with. */
+  function placeHome(){
+    const w = winEl();
+    if(window.innerWidth < 1000){
+      w.style.left = w.style.top = w.style.width = w.style.height = '';
+      return;
+    }
+    sizeForSection(null);
+  }
+
   function openSection(key){
     if(!sections[key]) return;
     if(typeof stopSnake === 'function') stopSnake();
     /* the duck only walks while the window is in the egg; opening a section
        from that state used to leave it walking over the open window */
     if(typeof stopDuckWalk === 'function') stopDuckWalk();
-    rememberHomeGeom();
 
     const w = winEl();
     // if it was collapsed into the egg, bring it back
@@ -99,12 +109,7 @@
     w.classList.remove('sectionmode');
     setExeTitle('home');
     sectionEl().innerHTML = '';
-    if(homeGeom){
-      w.style.left = homeGeom.left + 'px';
-      w.style.top = homeGeom.top + 'px';
-      w.style.width = homeGeom.width + 'px';
-      w.style.height = homeGeom.height + 'px';
-    }
+    placeHome();
     document.getElementById('egg').classList.remove('show', 'pop');
     w.classList.remove('collapsed');
     document.querySelectorAll('.navitem').forEach(el => el.classList.remove('active'));
@@ -121,5 +126,9 @@
 
   window.addEventListener('resize', () => {
     if(winEl().classList.contains('sectionmode')) sizeForSection(SIZE[openKey]);
+    else placeHome();
     if(typeof plansDrawer === 'function') plansDrawer();
   });
+
+  placeHome();
+
