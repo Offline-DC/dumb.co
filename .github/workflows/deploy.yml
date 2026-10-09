@@ -1,8 +1,15 @@
-name: Deploy Vite site to GitHub Pages
+name: Deploy dumb.co to GitHub Pages
+
+# Every push to main -- including every save in Pages CMS while it is pointed
+# at main -- builds the site with Astro and publishes dist/ to dumb.co.
 
 on:
   push:
     branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -14,26 +21,25 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22      # Astro needs 22.12+
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
 
-      # `npm run build` is `vite build && node scripts/prerender.mjs`, and the
-      # prerender step writes a real file for every route in scripts/routes.mjs
-      # (so GitHub Pages answers 200 instead of the 404 the old
-      # `cp index.html 404.html` trick produced), plus sitemap.xml, robots.txt
-      # and a 404.html for paths that genuinely don't exist.
-      - name: Check the build produced the routes
+      # `astro build` writes one HTML file per page (shop.html answers /shop
+      # with a 200 on GitHub Pages), plus the sitemap and a real 404 page.
+      - name: Check the build produced the pages
         run: |
-          test -f dist/index.html
-          test -f dist/press/index.html
-          test -f dist/sitemap.xml
+          for f in index shop about community press memories faq contact internship support 404; do
+            test -f "dist/$f.html" || { echo "missing dist/$f.html"; exit 1; }
+          done
+          test -f dist/sitemap-index.xml
           test -f dist/robots.txt
-          test -f dist/404.html
+          grep -q 'FAQPage' dist/faq.html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4

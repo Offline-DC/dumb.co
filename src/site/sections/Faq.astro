@@ -1,0 +1,37 @@
+---
+/* faq.exe -- src/content/faq.json. Every question is in the page (so search
+   engines read them all); the tabs just show one category at a time. */
+import { COPY } from "../lib/content";
+import { paras } from "../lib/html";
+const c = COPY.faq;
+---
+<h2>{c.heading}</h2>
+{c.sub && <div class="sub">{c.sub}</div>}
+<div class="faq-tabs2">
+  <div class="faq-tab2 on" onclick="setFaqTab('general', this)">{c.general_tab}</div>
+  <div class="faq-tab2" onclick="setFaqTab('tech', this)">{c.tech_tab}</div>
+  {c.videos.length > 0 && <div class="faq-tab2" onclick="setFaqTab('demo', this)">{c.videos_tab}</div>}
+</div>
+<div id="faq-list2">
+  {c.questions.map((q, i) => (
+    <div class="faq-item2" id={`faq-i-${i}`} data-cat={q.category} style={q.category === "general" ? undefined : "display:none"}>
+      <div class="faq-q2" onclick={`toggleFaq(${i})`}><span>{q.question}</span><span>+</span></div>
+      <div class="faq-a2" set:html={paras(q.answer)} />
+    </div>
+  ))}
+  <div class="faq-videos" data-cat="demo" style="display:none">
+    {c.videos.map((v) => (
+      <div class="faq-video-card">
+        <div class="faq-video-title">{v.title}</div>
+        <div class="faq-video-embed">
+          <iframe
+            src={`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0&color=000000`}
+            title={v.title} loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    ))}
+  </div>
+  <div id="faq-status" data-cat="none" style="display:none">nothing in this tab yet.</div>
+</div>

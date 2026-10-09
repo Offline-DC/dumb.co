@@ -1,0 +1,17 @@
+---
+/* Google Analytics, on dumb.co only -- preview and local visits stay out of
+   the numbers. Both properties the old site reported to: G-6J99WZC0Y0 (from
+   its index.html) and G-J6NFHL9D1L (from App.tsx's react-ga4). */
+---
+<script is:inline>
+  if(/(^|\.)dumb\.co$/.test(location.hostname)){
+    var ga = document.createElement("script"); ga.async = true;
+    ga.src = "https://www.googletagmanager.com/gtag/js?id=G-6J99WZC0Y0";
+    document.head.appendChild(ga);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag("js", new Date());
+    gtag("config", "G-6J99WZC0Y0");
+    gtag("config", "G-J6NFHL9D1L");
+  }
+</script>

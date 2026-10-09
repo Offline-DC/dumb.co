@@ -1,3 +1,11 @@
+> **Retired (Oct 9, 2026).** The redesign is now the real site: an Astro app
+> at the repo root (`src/site/`, `src/pages/`), built and deployed from there.
+> Everything below describes the prototype pipeline it was ported from
+> (`build/build.py` + `build/parts/`); it is kept for its notes and history
+> and no longer builds -- its press, memories and FAQ inputs moved to
+> `src/content/` and `src/site/assets/`. Make changes in `src/`, not here.
+> See the root README.
+
 # redesign_2026
 
 The 2026 redesign prototype. It lives on the **`dumb.co_redesign_v1`** branch of

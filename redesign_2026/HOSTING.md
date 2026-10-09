@@ -1,3 +1,5 @@
+> **Superseded:** written for the old Vite app and the prototype. The site is Astro now -- see the root README.
+
 # How dumb.co is actually hosted
 
 *(read-only reference — nothing in this file deploys anything)*

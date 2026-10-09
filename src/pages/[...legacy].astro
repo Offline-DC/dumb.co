@@ -1,0 +1,50 @@
+---
+/**
+ * The older React pages (src/legacy/routes.ts), one HTML file each so the
+ * address answers 200, with the React app mounted in the browser.
+ */
+import LegacyApp from "../legacy/LegacyApp";
+import Internship from "../Internship/Internship.tsx";
+import DumbDumb from "../DumbDumb.tsx";
+import Analytics from "../site/Analytics.astro";
+import "../App.css";
+
+import { LEGACY_ROUTES } from "../legacy/routes";
+export function getStaticPaths() {
+  return LEGACY_ROUTES.map((r) => ({ params: { legacy: r.path }, props: r }));
+}
+const { title, description, path, ssr } = Astro.props;
+
+/* server-rendered pages sit in CenteredLayout.tsx's frame, minus the router it needed */
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const canonical = new URL(path, new URL(base, Astro.site ?? "https://dumb.co")).href;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/png" href={`${base}favicon.png`} />
+  <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Workbench&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <Analytics />
+</head>
+<body>
+  {ssr
+    ? (
+      <div id="root"><div style="height:100vh;width:100%;background-color:#F9F594;display:flex;margin:auto">
+        <div style="display:flex;justify-content:center;align-items:center;margin:auto 0rem;background-color:#F9F594;max-width:100%;width:100%">
+          {path === "internship" && <Internship client:load />}
+          {path === "dumbdown" && <DumbDumb client:load />}
+        </div>
+      </div></div>
+    )
+    : <div id="root"><LegacyApp client:only="react" /></div>}
+</body>
+</html>

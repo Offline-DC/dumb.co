@@ -1,5 +1,38 @@
 {
-  "site_title": "dumb.co",
+  "pages": {
+    "home": {
+      "title": "dumb.co — the $20 dumbphone that syncs with your smartphone",
+      "description": "The dumbphone 2 is a $20 companion phone that syncs with your smartphone — texts, calls, maps, rideshare — minus the doomscroll. Plans from $15.99/mo."
+    },
+    "shop": {
+      "title": "Dumbphone 2 — $20 phone, plans from $15.99/mo | dumb.co",
+      "description": "$20 phone hardware with custom dumbOS and a SIM. Unlimited call and text, maps, Signal, rideshare, hotspot. Plans from $15.99/mo, 4 month minimum."
+    },
+    "about": {
+      "title": "About dumb.co — hello from the flip side",
+      "description": "dumb.co was born in Washington, DC in 2025, out of Month Offline: a 30-day challenge to ditch our smartphones. Meet the team behind the dumbphone 2."
+    },
+    "community": {
+      "title": "Community — Month Offline and dumb on campus | dumb.co",
+      "description": "Everything dumb.co organizes together: Month Offline, the 30-day smartphone-free challenge, and project xtraordinary, funded dumb downs on campus."
+    },
+    "press": {
+      "title": "Press — dumb.co in The Atlantic, WaPo, CNN, Dazed",
+      "description": "Coverage of dumb.co and the dumbphone 2, from The Atlantic, The Washington Post, CNN, The Guardian, Dazed, Axios and more."
+    },
+    "memories": {
+      "title": "Memories — dumb.co events",
+      "description": "Photos from dumb.co events: the Month Offline gallery in New York, DC Pride, and what's coming next."
+    },
+    "faq": {
+      "title": "Dumbphone 2 FAQ — setup, plans, apps | dumb.co",
+      "description": "How the dumbphone 2 works: activation, syncing with your smartphone, which apps are on it, two-factor auth, plans and billing."
+    },
+    "contact": {
+      "title": "Contact dumb.co — 100% human support",
+      "description": "Get help with your dumbphone 2 from a real person: support@dumb.co or 404-716-3605. Mon–Fri 8am–9pm EST, Sat–Sun 10am–2pm EST."
+    }
+  },
   "site_description": "Buy the \"world's best dumb phone\" for only $20. The dumbphone 2 syncs w/ ur smartphone --contacts, messages, Rideshare, Maps.",
   "share_title": "dumb.co — Dumbphone 2",
   "share_image_alt": "Dumbphone 2 — everything u need 2 go out: smrt txt, whatsapp, rideshare, maps and more",

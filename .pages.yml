@@ -5,14 +5,13 @@
 # the CMS; what happens next depends on the branch (see "Editing content" in
 # README.md):
 #   dumb.co_redesign_v1  -> the preview site rebuilds (redesign-preview.yml)
-#   main                 -> dumb.co rebuilds, once the new site is what main
-#                           deploys
+#   main                 -> dumb.co rebuilds (deploy.yml)
 #
-# The forms edit the JSON in src/content/. The new site's build
-# (redesign_2026/build/build.py, via build/content.py) bakes it into the
-# pages: nothing is fetched by visitors' browsers. A field left empty is
-# simply not shown, a press item or photo whose image is missing is skipped,
-# and the checkout link only ever accepts an https address.
+# The forms edit the JSON in src/content/. The site is built from it by
+# Astro (src/site/lib/content.ts): every page is plain HTML with the content
+# already in it, and nothing is fetched by visitors' browsers. A field left
+# empty is simply not shown, a press item or photo whose image is missing is
+# skipped, and the checkout link only ever accepts an https address.
 
 media:
   - name: press
@@ -23,8 +22,8 @@ media:
     rename: safe
   - name: memories
     label: Memories photos
-    input: redesign_2026/assets/memories
-    output: /redesign_2026/assets/memories
+    input: src/site/assets/memories
+    output: /src/site/assets/memories
     categories: [image]
     rename: safe
 
@@ -403,16 +402,98 @@ content:
   # ---------------------------------------------------------- Site settings
   - name: settings
     label: Site settings
-    description: Search and share text, support contact details (contact.exe and the sidebar).
+    description: Page titles and descriptions for Google, link-preview text, support contact details (contact.exe and the sidebar).
     type: file
     path: src/content/settings.json
     format: json
     fields:
-      - name: site_title
-        label: Page title (browser tab, Google)
-        type: string
+      - name: pages
+        label: Page titles and descriptions (what Google and link previews show)
+        description: Titles work best around 50-60 characters, descriptions around 150-160.
+        type: object
+        fields:
+          - name: home
+            label: Home
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: shop
+            label: shop.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: about
+            label: about.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: community
+            label: community.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: press
+            label: press.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: memories
+            label: memories.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: faq
+            label: faq.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: contact
+            label: contact.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
       - name: site_description
-        label: Description (Google, link previews)
+        label: Fallback description (for any page without its own)
         type: text
       - name: share_title
         label: Title on link previews

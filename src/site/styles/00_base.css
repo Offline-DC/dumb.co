@@ -1,0 +1,431 @@
+/* The base stylesheet: everything the original v6 concept page carried,
+   as the redesign build left it. The files after it (01_wm.css ...) are the
+   redesign's own parts, loaded in this order by src/site/Site.astro. */
+
+
+  @font-face{
+    font-family:"Cheltenham";
+    src: url('../assets/fonts/cheltenham-bold-extra-condensed.otf') format('opentype');
+    font-weight:700; font-style:normal; font-display:swap;
+  }
+
+  :root{
+    /* ---- dumb design system (Matteo) ---------------------------------
+       Named for PURPOSE, not for colour, so the names survive a repaint:
+       "brand" is still brand when the yellow changes, which Matteo has
+       marked pending twice. Source: Figma dumb-design-system / colors.
+       The colour-named variables underneath are kept as aliases pointing
+       at these, so 30-odd part files don't all have to be rewritten at
+       once and nothing silently drifts out of the system meanwhile. */
+    --brand:#FAF594;            /* marked "will change" in the Figma */
+    --brand-secondary:#A8A465;  /* ditto */
+    --text-strong:#14140C;      /* the dumbphone's ink, not pure black */
+    --text-weak:#575757;        /* was #000 at .55-.62 alpha, which meant
+                                   the colour changed with whatever was
+                                   behind it -- yellow page vs white sheet
+                                   gave two different greys */
+    --stroke-strong:#898985;
+    --stroke-weak:#E8E8E7;
+    --fill:#F2F2F1;
+    --fill-weaker:#F9F9F9;
+    --background:#FFFEF5;
+    --yellow-strong:#F2E52B;
+
+    --yellow:var(--brand);
+    --paper:var(--background);
+    --hair:var(--stroke-weak);
+    --white:#ffffff;
+    /* structural black: the window chrome and the drawn line art, which are
+       ink on paper rather than type and are not Matteo's text tokens */
+    --black:#000000;
+    --gray:#c1c1c1;
+    --pink:#ff7df2;
+    --hotpink:#ee7bee;
+    --orange:#ff460d;
+    --blue:#38abfb;
+    --red:#e21f1f;
+    --headline: "Cheltenham", Georgia, serif;
+    --body: "Rubik", "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  /* touch-action:manipulation kills double-tap-to-zoom (Jack) while leaving
+     pinch-to-zoom alone. A maximum-scale / user-scalable=no viewport would
+     disable both, and taking pinch away from someone who needs it to read is
+     not a fix. */
+  html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--text-strong);overflow:hidden;touch-action:manipulation;}
+
+  #app{position:relative;height:100%;width:100%;overflow:hidden;background:var(--yellow);}
+
+  /* ---------- SIDEBAR (no divider line per feedback) ---------- */
+  #sidebar{
+    position:absolute; top:0; left:0; bottom:0; width:400px;
+    background:var(--yellow); border-right:none;
+    display:flex; flex-direction:column; padding:32px 30px;
+    transition:all .55s cubic-bezier(.7,0,.2,1);
+    z-index:20;
+  }
+  #logo{ cursor:pointer; margin-bottom:34px; width:250px; transition:transform .18s ease; }
+  #logo img{width:100%;display:block;}
+  #logo:hover{transform:rotate(-2deg) scale(1.02);}
+
+  nav#navlist{display:flex;flex-direction:column;gap:22px; margin-top:12px;}
+  .navitem{
+    font-family:var(--headline); font-weight:700; font-size:44px; line-height:1.1;
+    cursor:pointer; padding:6px 12px; border-radius:6px; width:fit-content;
+    transition:transform .18s ease, background .18s ease, color .18s ease;
+    color:var(--text-strong);
+  }
+  .navitem span.count{font-family:var(--body);font-weight:500;font-size:12px;vertical-align:middle;opacity:.65;margin-left:6px;}
+
+  /* alternating tilt direction + accent color cycle, per item position */
+  .navitem:nth-child(1):hover, .navitem:nth-child(1).active{ background:var(--pink);   color:var(--black); transform:rotate(-4deg) translateX(-4px); }
+  .navitem:nth-child(2):hover, .navitem:nth-child(2).active{ background:var(--blue);   color:var(--black); transform:rotate(4deg) translateX(4px); }
+  .navitem:nth-child(3):hover, .navitem:nth-child(3).active{ background:var(--orange); color:var(--white); transform:rotate(-4deg) translateX(-4px); }
+  .navitem:nth-child(4):hover, .navitem:nth-child(4).active{ background:var(--red);    color:var(--white);  transform:rotate(4deg) translateX(4px); }
+  .navitem:nth-child(5):hover, .navitem:nth-child(5).active{ background:var(--pink);   color:var(--black); transform:rotate(-4deg) translateX(-4px); }
+  .navitem:nth-child(6):hover, .navitem:nth-child(6).active{ background:var(--blue);   color:var(--black); transform:rotate(4deg) translateX(4px); }
+  .navitem:nth-child(7):hover, .navitem:nth-child(7).active{ background:var(--orange); color:var(--white); transform:rotate(-4deg) translateX(-4px); }
+
+  #sidebar-foot{margin-top:auto; font-size:12px; color:var(--text-weak); line-height:1.6; font-family:var(--body);}
+  #sidebar-foot a{color:var(--black); font-weight:600;}
+  #no-socials{display:flex; align-items:center; gap:10px; margin-top:14px;}
+  #no-socials .ns-icon{width:38px; height:38px; transition:transform .18s ease;}
+  #no-socials .ns-icon:nth-child(1){transform:rotate(-4deg);}
+  #no-socials .ns-icon:nth-child(2){transform:rotate(3deg);}
+  #no-socials .ns-icon:nth-child(3){transform:rotate(-3deg);}
+  #no-socials .ns-icon:hover{transform:scale(1.15) rotate(0deg);}
+  #no-socials .ns-label{font-family:var(--body); font-size:10.5px; color:var(--text-weak); margin-top:6px; letter-spacing:.03em;}
+  /* Danny's line is the real fine print; the redesign watermark sits under it,
+     dimmer, and comes out when this stops being a prototype. */
+  .ns-label.ns-wip{margin-top:2px; color:var(--text-weak);}
+
+  /* ---------- HOME ---------- */
+  #home{
+    position:absolute; top:0; left:400px; right:52%; bottom:0;
+    background:var(--yellow);
+    display:flex; align-items:center; justify-content:center; padding:0 32px;
+    transition:all .55s cubic-bezier(.7,0,.2,1);
+    overflow:hidden;
+  }
+  #home-copy{ flex:0 1 440px; min-width:0; }
+  /* lowercase: the product is 'dumbphone 2', never DUMBPHONE 2 (Milk) */
+  #home-copy .kicker{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:none;opacity:.7;margin-bottom:10px;}
+  #home-copy h1{font-family:var(--headline); font-weight:700; font-size:66px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
+  #home-copy p{font-family:var(--body); font-size:17px; max-width:300px; margin:0 0 26px; opacity:.85; line-height:1.55;}
+  #home-cta{
+    display:inline-flex; gap:10px; align-items:center; background:var(--black); color:var(--yellow);
+    font-family:var(--body); font-weight:700; font-size:14px; padding:13px 22px; border-radius:100px;
+    cursor:pointer; border:2px solid var(--black);
+  }
+  #home-cta:hover{background:var(--white); color:var(--black);}
+
+  /* ---------- TOPBAR ---------- */
+  #topbar{
+    position:absolute; top:0; left:0; right:0; height:0; overflow:hidden;
+    background:var(--yellow); border-bottom:3px solid var(--black);
+    display:flex; align-items:center; gap:18px; padding:0 26px;
+    transition:all .55s cubic-bezier(.7,0,.2,1);
+    z-index:30;
+  }
+  #topbar #logo-small{cursor:pointer;white-space:nowrap; flex:0 0 auto;}
+  #topbar #logo-small img{height:30px;display:block;}
+  #topbar-nav{display:flex; align-items:center; gap:6px; flex:0 0 auto;}
+  #topbar .navitem{font-size:22px;padding:7px 13px;}
+  #topbar-duck{
+    flex:1 1 auto; height:100%; position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:flex-end; min-width:40px;
+  }
+  #topbar-duck img{
+    height:40px; width:auto; display:block; transform-origin:center bottom;
+    animation: duckDance 1.6s ease-in-out infinite;
+    margin-right:6px;
+  }
+  @keyframes duckDance{
+    0%,100%{ transform:translateY(0) rotate(-6deg) scaleX(1) scaleY(1); }
+    25%{ transform:translateY(-9px) rotate(3deg) scaleX(.96) scaleY(1.05); }
+    50%{ transform:translateY(0) rotate(7deg) scaleX(1) scaleY(1); }
+    75%{ transform:translateY(-5px) rotate(-4deg) scaleX(1.02) scaleY(.98); }
+  }
+
+  #section-body{
+    position:absolute; left:0; right:0; bottom:0; top:0;
+    background:var(--white);
+    opacity:0; pointer-events:none; transform:translateY(14px);
+    transition:opacity .4s ease .15s, transform .4s ease .15s;
+    overflow:auto;
+  }
+  .section-inner{padding:128px 56px 60px; max-width:1080px; margin:0 auto;}
+  .section-inner.full-bleed{padding:0; max-width:none; margin:0;}
+  #section-body h2{font-family:var(--headline); font-size:46px; margin:0 0 6px; transform:rotate(-1.5deg); display:inline-block;}
+  #section-body .sub{font-family:var(--body); color:#555; max-width:640px; margin-bottom:28px; font-size:15px;}
+  .placeholder-block{
+    border:2px dashed var(--gray); border-radius:10px; padding:20px; max-width:760px;
+    font-family:var(--body); color:#777; font-size:13px; line-height:1.7; margin-bottom:10px;
+  }
+
+  /* ---------- SHOP ---------- */
+  #shop-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:6px;}
+  .product-card{border:2px solid var(--black); border-radius:12px; overflow:hidden; background:var(--white); display:flex; flex-direction:column;}
+  .product-card .pc-img{aspect-ratio:1/1; overflow:hidden; background:var(--yellow);}
+  .product-card .pc-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pc-body{padding:16px 16px 18px; display:flex; flex-direction:column; gap:6px; flex:1;}
+  .pc-name{font-family:var(--headline); font-size:24px;}
+  .pc-price{font-family:var(--body); font-weight:600; font-size:14px; opacity:.7;}
+  .pc-desc{font-family:var(--body); font-size:12.5px; color:#555; line-height:1.5; flex:1;}
+  .pc-btn{
+    margin-top:8px; text-align:center; font-family:var(--body); font-weight:700; font-size:13px;
+    padding:11px; border-radius:100px; border:2px solid var(--black); cursor:pointer; text-decoration:none; color:var(--black);
+    display:block;
+  }
+  .pc-btn.live{background:var(--black); color:var(--yellow);}
+  .pc-btn.live:hover{background:var(--orange); border-color:var(--orange); color:var(--white);}
+  .pc-btn.tbd{background:var(--white); color:#999; border-color:var(--gray); cursor:default;}
+
+  /* ---------- ABOUT — full pink bleed, no white margin ---------- */
+  #about-pink{background:var(--hotpink); min-height:100%; padding:56px 60px 48px; display:flex; flex-direction:column;}
+  #about-top{display:flex; gap:40px; align-items:center;}
+  #about-pink .txt{flex:1; min-width:0; max-width:520px;}
+  #about-pink h2{font-family:var(--headline); font-size:50px; line-height:1; margin:0 0 16px;}
+  #about-pink p{font-family:var(--body); font-weight:500; font-size:17px; line-height:1.5; margin:0 0 14px;}
+  #about-photo{flex:0 0 38%; max-width:400px; position:relative;}
+  #about-photo img.polaroid{width:100%; display:block; border-radius:2px;}
+  #about-photo .madeindc{position:absolute; width:55%; bottom:-6%; right:10%;}
+
+  #about-signatures{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+    gap:14px 34px; max-width:900px; margin:64px auto 0; padding-top:40px;
+    border-top:1.5px solid rgba(0,0,0,.18);
+  }
+  #about-signatures img{height:52px; width:auto; display:block; flex:0 0 auto;}
+  #about-signatures img:nth-child(1){transform:rotate(-3deg);}
+  #about-signatures img:nth-child(2){transform:rotate(2deg) translateY(-2px); height:60px;}
+  #about-signatures img:nth-child(3){transform:rotate(-1deg);}
+  #about-signatures img:nth-child(4){transform:rotate(4deg) translateY(2px); height:64px;}
+  #about-signatures img:nth-child(5){transform:rotate(-2deg);}
+  #about-signatures img:nth-child(6){transform:rotate(3deg); height:56px;}
+  #about-signatures img:nth-child(7){transform:rotate(-4deg) translateY(-1px);}
+  #about-signatures img:nth-child(8){transform:rotate(1deg); height:82px;}
+  #about-signatures img:nth-child(9){transform:rotate(-2deg);}
+
+  #about-seemore{display:flex; justify-content:center; margin-top:34px;}
+  #about-seemore button{
+    font-family:"Tahoma","MS Sans Serif","Segoe UI",Arial,sans-serif; font-size:14px; color:#000;
+    padding:7px 24px; min-width:130px; background:#c0c0c0; border:2px solid; cursor:pointer;
+    border-color:#ffffff #808080 #808080 #ffffff;
+    box-shadow:inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #404040;
+  }
+  #about-seemore button:active{
+    border-color:#808080 #ffffff #ffffff #808080;
+    box-shadow:inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+  }
+
+  /* ---------- GET INVOLVED ---------- */
+  .gi-hero{background:var(--black); color:var(--yellow); border-radius:14px; padding:38px 40px; margin-bottom:28px; transform:rotate(-.6deg);}
+  .gi-hero h3{font-family:var(--headline); font-size:34px; margin:0 0 6px;}
+  .gi-hero a{color:var(--yellow); font-weight:700; text-decoration:underline;}
+  .gi-photos{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:28px;}
+  .gi-photos img{width:100%; border-radius:10px; display:block; aspect-ratio:16/10; object-fit:cover;}
+  .gi-list{display:flex; justify-content:space-between; gap:16px; margin-bottom:30px;}
+  .gi-list .gi-item{font-family:var(--headline); font-size:20px;}
+  #newsletter{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    border-top:1px solid #eee; padding-top:22px;
+  }
+  #newsletter .nl-label{flex:0 0 auto;}
+  #newsletter .nl-kicker{font-family:var(--headline); font-size:18px; display:block;}
+  #newsletter .nl-sub{font-family:var(--body); font-size:12.5px; color:#666; display:block; margin-top:1px;}
+  #newsletter input{
+    flex:1; min-width:180px; max-width:260px; border:1.5px solid var(--gray); border-radius:8px; padding:9px 12px;
+    font-family:var(--body); font-size:13px; outline:none;
+  }
+  #newsletter input:focus{border-color:var(--black);}
+  #newsletter button{
+    border:1.5px solid var(--black); background:var(--white); color:var(--black); border-radius:8px;
+    padding:9px 16px; font-family:var(--body); font-weight:600; font-size:13px; cursor:pointer;
+  }
+  #newsletter button:hover{background:var(--black); color:var(--yellow);}
+
+  /* ---------- PRESS ---------- */
+  .press-contact{font-family:var(--body); font-size:13.5px; color:#555; margin-bottom:22px;}
+  .press-contact a{color:var(--black); font-weight:700;}
+  #press-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .press-card{border:1.5px solid #e6e6e6; border-radius:10px; padding:16px; text-decoration:none; color:var(--black); display:block; transition:border-color .15s, transform .15s;}
+  .press-card:hover{border-color:var(--black); transform:translateY(-2px);}
+  .press-source{font-family:var(--body); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.06em; opacity:.55; margin-bottom:6px;}
+  .press-title{font-family:var(--headline); font-size:19px; line-height:1.15;}
+
+  /* ---------- FAQ ---------- */
+  .faq-tabs2{display:flex; gap:8px; margin-bottom:18px;}
+  .faq-tab2{font-family:var(--body); font-weight:600; font-size:13px; padding:7px 14px; border-radius:100px; border:2px solid var(--black); cursor:pointer; background:var(--white);}
+  .faq-tab2.on{background:var(--black); color:var(--yellow);}
+  .faq-item2{border-bottom:1px solid #eee; padding:14px 0;}
+  .faq-q2{font-family:var(--body); font-weight:700; font-size:15px; cursor:pointer; display:flex; justify-content:space-between;}
+  .faq-a2{font-family:var(--body); font-size:13.5px; color:#555; margin-top:8px; line-height:1.6; display:none;}
+  .faq-item2.open .faq-a2{display:block;}
+  #faq-status{font-family:var(--body); font-size:12.5px; color:#999; margin-top:14px;}
+
+  /* ---------- FAQ · Phone Demo tab ---------- */
+  .faq-videos{display:flex; flex-direction:column; gap:26px; max-width:640px;}
+  .faq-video-card{
+    background:var(--yellow); border-radius:18px; padding:20px 20px 24px;
+    box-shadow:0 6px 0 rgba(0,0,0,.08);
+  }
+  .faq-video-title{font-family:var(--headline); font-size:22px; margin:2px 4px 14px;}
+  .faq-video-embed{
+    position:relative; width:100%; aspect-ratio:16/9; border-radius:12px; overflow:hidden;
+    background:#000; border:2px solid var(--black);
+  }
+  .faq-video-embed iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .faq-video-embed.pending{
+    background:repeating-linear-gradient(135deg, #1a1a1a, #1a1a1a 10px, #222 10px, #222 20px);
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+  }
+  .faq-video-embed.pending span{font-family:var(--body); font-weight:700; font-size:13px; color:var(--yellow); line-height:1.5; max-width:70%;}
+
+  /* ---------- CONTACT — warmer, filled-out redesign ---------- */
+  #contact-grid{display:grid; grid-template-columns:1fr 1.15fr; gap:34px; align-items:start;}
+
+  .contact-card{
+    border-radius:20px; padding:34px 32px; position:relative; overflow:hidden;
+  }
+  .contact-card.support{background:var(--pink);}
+  .contact-card h3{font-family:var(--headline); font-size:30px; margin:0 0 6px; line-height:1;}
+  .contact-card .card-sub{font-family:var(--body); font-size:13.5px; opacity:.75; margin-bottom:22px; max-width:340px;}
+  .contact-line{
+    font-family:var(--body); font-size:17px; font-weight:600; margin-bottom:10px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .contact-line a{color:var(--black); text-decoration:none; border-bottom:2px solid rgba(0,0,0,.35);}
+  .contact-line a:hover{border-color:var(--black);}
+  .contact-line .ico{
+    width:34px; height:34px; border-radius:50%; background:var(--black); color:var(--white);
+    display:flex; align-items:center; justify-content:center; font-size:15px; flex:0 0 auto;
+  }
+  .contact-hours-block{
+    margin-top:22px; background:rgba(255,255,255,.55); border-radius:12px; padding:14px 16px;
+    font-family:var(--body); font-size:13px; line-height:1.7;
+  }
+  .contact-hours-block .hr-row{display:flex; justify-content:space-between; gap:16px;}
+  .contact-hours-block .hr-row b{font-weight:700;}
+
+  .contact-card.team{background:var(--black); color:var(--white);}
+  .contact-card.team .card-sub{color:#ffffffb0;}
+  .team-wrap{display:flex; gap:22px; align-items:flex-start;}
+  .team-names{flex:1 1 auto; min-width:0;}
+  .team-row2{
+    font-family:var(--headline); font-size:22px; padding:9px 4px; cursor:default;
+    border-radius:6px; transition:background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .team-row2:hover{background:var(--pink); color:var(--black); transform:translateX(4px);}
+  .team-row2 .role{font-family:var(--body); font-size:10.5px; font-weight:500; opacity:.6; display:block; margin-top:-2px;}
+
+  .dither-box{
+    flex:0 0 210px; width:210px; height:236px; position:relative;
+    background:#0a0a0a; border-radius:16px; overflow:hidden;
+    border:2px solid var(--black); box-shadow:0 6px 0 rgba(0,0,0,.1);
+  }
+  .dither-box img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transition:opacity .3s ease;
+  }
+  .dither-box img.on{opacity:1;}
+  .dither-box .dither-hint{
+    position:absolute; inset:0; z-index:1;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:var(--body); font-size:12px; color:#ffffff70; padding:10px; line-height:1.4;
+    transition:opacity .2s ease;
+  }
+
+  /* ---------- STATE: section open ---------- */
+  body.section-open #sidebar{ left:-420px; }
+  body.section-open #home{ left:0; filter:blur(1px) brightness(.96); pointer-events:none; }
+  body.section-open #topbar{ height:78px; }
+  body.section-open #section-body{ opacity:1; pointer-events:auto; transform:translateY(0); }
+
+  /* ---------- floating window (flipoff.exe) ---------- */
+  #winmodal{
+    /* width capped at 44vw (not 54vw) so left(48%) + width never exceeds the
+       viewport — at 48vw+44vw=92vw there's always an 8vw safety margin, so the
+       bottom-right resize handle can never land off-screen the way it did
+       when this was 52%/54vw (right edge could exceed 100vw on common widths). */
+    position:absolute; width:min(940px,50vw); height:min(760px,84vh); top:8%; left:47%; z-index:45;
+    background:var(--white); border:2px solid var(--black);
+    box-shadow: 6px 6px 0 rgba(0,0,0,.9);
+    display:flex; flex-direction:column;
+    transform-origin: 96% 4%;
+    transform:scale(1) rotate(0deg); opacity:1;
+    transition: transform .5s cubic-bezier(.6,-0.15,.15,1.25), opacity .4s ease;
+  }
+  #winmodal.collapsed{
+    transform:scale(.015) rotate(-8deg); opacity:0; pointer-events:none;
+  }
+  #winmodal .wm-bar{
+    height:38px; background:var(--black); color:var(--yellow);
+    display:flex; align-items:center; justify-content:space-between; padding:0 10px 0 14px;
+    cursor:grab; user-select:none; font-family:var(--headline); font-size:16px; flex:0 0 auto;
+  }
+  #winmodal .wm-bar:active{cursor:grabbing;}
+  #winmodal .wm-x{
+    width:26px; height:26px; border-radius:50%; background:var(--red); border:2px solid #000;
+    cursor:pointer; font-weight:700; font-size:13px; color:#fff; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #winmodal .wm-x:hover{filter:brightness(1.1);}
+  #winmodal .wm-body{
+    flex:1; position:relative; background:#000; overflow:hidden;
+  }
+  #winmodal #wm-carousel img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+  }
+  #winmodal .wm-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+    width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.9); border:2px solid #000;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; font-weight:700;
+  }
+  #winmodal .wm-arrow:hover{background:var(--yellow);}
+  #winmodal .wm-prev{left:14px;}
+  #winmodal .wm-next{right:14px;}
+  #winmodal .wm-dots{position:absolute; bottom:14px; left:0; right:0; display:flex; gap:6px; justify-content:center; z-index:2;}
+  #winmodal .wm-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55); border:1px solid #000; cursor:pointer;}
+  #winmodal .wm-dot.on{background:var(--yellow);}
+  #winmodal .wm-resize{
+    position:absolute; bottom:2px; width:16px; height:16px; z-index:3;
+  }
+  #winmodal .wm-resize-br{
+    right:2px; cursor:nwse-resize;
+    background:none;
+  }
+  #winmodal .wm-resize-bl{
+    left:2px; cursor:nesw-resize;
+    background:none;
+  }
+
+  /* collapsed -> egg, resting top-right, even with the logo */
+  #egg{
+    position:absolute; width:60px; z-index:45; cursor:pointer; display:none;
+    top:34px; right:38px;
+    animation: eggshake 1.8s ease-in-out infinite;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));
+  }
+  #egg.show{display:block;}
+  #egg img{width:100%; display:block;}
+  @keyframes eggshake{
+    0%,100%{transform:rotate(-6deg);}
+    50%{transform:rotate(6deg);}
+  }
+  /* pop/settle animation: egg arrives after the modal shrinks into it, then
+     nudges into its resting spot so it reads as "still here if you want it" */
+  #egg.pop{ animation: eggPopIn .6s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes eggPopIn{
+    0%{ transform: translateY(46px) scale(.25) rotate(0deg); opacity:0; }
+    65%{ transform: translateY(-8px) scale(1.12) rotate(-5deg); opacity:1; }
+    100%{ transform: translateY(0) scale(1) rotate(-6deg); opacity:1; }
+  }
+  body.section-open #winmodal, body.section-open #egg{opacity:0;pointer-events:none;display:none;}
+
+  @media (max-width:900px){
+    #shop-grid{grid-template-columns:1fr;}
+    #about-top{flex-direction:column;}
+    #contact-grid{grid-template-columns:1fr;}
+    #press-grid{grid-template-columns:1fr 1fr;}
+  }

@@ -1,0 +1,38 @@
+---
+/* community.exe -- src/content/community.json. A program marked hidden in
+   the CMS isn't drawn (that is where "group dumb down" is parked). The
+   newsletter signup is off until there is somewhere for the emails to go. */
+import { COPY } from "../lib/content";
+import { esc, lines, paras, rich, DOTS_PAGE } from "../lib/html";
+const c = COPY.community;
+---
+<div class="gi-page">
+  <div class="dots" set:html={DOTS_PAGE()} />
+  <div class="gi-in">
+    <h2>{c.heading}</h2>
+    {c.lede && <p class="gi-lede" set:html={rich(c.lede)} />}
+    <div class="gi-drops">
+      {c.programs.map((pg) => (
+        <details class="gi-drop">
+          <summary>
+            <span class="gi-sum">
+              {pg.kicker && <span class="gi-kicker">{pg.kicker}</span>}
+              <span class="gi-name" set:html={lines(pg.name)} />
+            </span>
+            <span class="gi-chev" aria-hidden="true">+</span>
+          </summary>
+          <div class="gi-body">
+            <Fragment set:html={paras(pg.body)} />
+            {pg.link_url && (/^https?:/i.test(pg.link_url)
+              ? <a class="gi-go" href={pg.link_url} target="_blank" rel="noopener noreferrer">{pg.link_label || pg.link_url}</a>
+              : <a class="gi-go" href={pg.link_url}>{pg.link_label || pg.link_url.replace(/^mailto:/i, "")}</a>)}
+          </div>
+        </details>
+      ))}
+    </div>
+    <div class="gi-foot">
+      <span>{c.footer_text}</span>
+      {c.footer_email && <a href={`mailto:${c.footer_email}`}>{c.footer_email}</a>}
+    </div>
+  </div>
+</div>

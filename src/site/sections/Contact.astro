@@ -1,0 +1,26 @@
+---
+/* contact.exe -- support details from src/content/settings.json */
+import { COPY } from "../lib/content";
+import { DOTS_EDGE } from "../lib/html";
+const c = COPY.contact;
+const tel = c.support_phone.replace(/[^\d+]/g, "");
+---
+<div class="contact-ground">
+  <h2>{c.contact_heading}</h2>
+  <div class="contact-card support">
+    <div class="dots" set:html={DOTS_EDGE()} />
+    <div class="cc-head">
+      <h3>{c.support_heading}</h3>
+      {c.support_tagline && <div class="card-sub">{c.support_tagline}</div>}
+    </div>
+    <div class="cc-lines">
+      <div class="contact-line"><span class="ico">✉</span><a href={`mailto:${c.support_email}`}>{c.support_email}</a></div>
+      {c.support_phone && <div class="contact-line"><span class="ico">☎</span><a href={`tel:${tel}`}>{c.support_phone}</a></div>}
+    </div>
+    {c.hours.length > 0 && (
+      <div class="contact-hours-block">
+        {c.hours.map((h) => <div class="hr-row"><span>{h.days}</span><b>{h.hours}</b></div>)}
+      </div>
+    )}
+  </div>
+</div>

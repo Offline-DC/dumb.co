@@ -1,3 +1,5 @@
+> **Superseded:** written for the old Vite app and the prototype. The site is Astro now -- see the root README.
+
 # SEO — what has to happen, desktop and mobile
 
 Written against the live app (the repo root) and this prototype. The prototype
