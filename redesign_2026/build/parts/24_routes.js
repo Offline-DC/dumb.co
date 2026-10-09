@@ -10,8 +10,8 @@
 
      Reloading /shop needs the server to answer with this page, which a
      static host does not do on its own:
-       - GitHub Pages serves 404.html for any unknown path, and
-         publish_preview.sh already writes 404.html as a copy of index.html.
+       - GitHub Pages answers /shop with shop.html when it exists, else
+         404.html. publish_preview.sh (via split_assets.py) writes both.
        - build/spa_server.py (used by serve.sh and dev.sh) does the same
          thing locally. `python3 -m http.server` does NOT -- it 404s.
        - The React port gets it from react-router plus the prerender step.

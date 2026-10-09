@@ -17,6 +17,7 @@ build/build.py             builds index.html from v6_baseline + build/parts/*
 build/build_mobile.py      builds the two mobile files (run build.py first)
 build/build_review.py      builds the one offline file to send the team
 build/serve.sh             serves concept/ on the wifi so a phone can open it
+build/split_assets.py      the served copy: images out to assets/, a .html per route
 build/check_deploy.py      read-only pre-flight on the app before a deploy
 build/check_routes.sh      asks a site for every route, prints the status code
 build/serve_dist.sh        serves the app's dist/ like GitHub Pages would
@@ -111,8 +112,9 @@ the same file routes at `localhost:8010/shop`, at
 
 Reloading a path needs the server to answer it with the page:
 
-- **GitHub Pages** serves `404.html` for unknown paths, and
-  `publish_preview.sh` writes `404.html` as a copy of `index.html`.
+- **GitHub Pages** answers `/shop` with `shop.html` if there is one, and
+  `404.html` (with a 404 status) if not. `publish_preview.sh` runs
+  `build/split_assets.py`, which writes both.
 - **Locally**, `build/serve.sh` and `build/dev.sh` run `build/spa_server.py`,
   which does the same. Plain `python3 -m http.server` does not — it 404s on
   `/shop`.
@@ -311,3 +313,17 @@ dev.sh watches build/parts, build/*.py and concept/v6_baseline.html. It does
 not watch assets/ -- a new drawing needs its own step first (make_dpad_arrows,
 expand_screen, then trace_screen), and guessing which would be worse than
 typing it.
+
+## Page weight
+
+`concept/index.html` inlines every image as base64 (about 6.7 MB) so it
+opens from disk with nothing beside it. Don't publish that file as it is: on
+the preview it took ~6 s on a laptop and ~25 s to first paint on a phone
+(Lighthouse, Oct 8), and every section's photos were paid for up front.
+
+`build/split_assets.py OUT --prefix /<where the site lives>/` writes the
+served copy: a ~0.3 MB page, the images in `OUT/assets/` (photos recompressed
+to WebP, content-hashed names) and a `<slug>.html` per section.
+`publish_preview.sh` does this for you. On throttled "slow 4G" the home page
+went from 6.7 MB / 34 s to 1.1 MB / 6 s.
+

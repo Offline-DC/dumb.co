@@ -367,7 +367,7 @@ deskphone = (
     '    <div id="deskphone">\n'
     '      <div class="phone-frame">\n'
     '        <div class="pf-screen" id="tcl-screen"></div>\n'
-    f'        <img class="pf-art" src="{flipphone_uri}" alt="dumbphone 2" />\n'
+    f'        <img class="pf-art" src="{flipphone_uri}" width="1200" height="3600" alt="dumbphone 2" />\n'
     '        <div class="pf-keys">\n'
     "          <button type=\"button\" class=\"k-up\"    aria-label=\"up\"    onclick=\"teamKey('up')\">&#8593;</button>\n"
     "          <button type=\"button\" class=\"k-left\"  aria-label=\"left\"  onclick=\"teamKey('left')\">&#8592;</button>\n"
@@ -470,8 +470,14 @@ must("__DPAD_" not in html, "a __DPAD_*__ token is still in the markup - "
      "the generated arrows were retired when Marco drew them into the handset")
 
 # ------------------------------------------------------------------ 9. title
+# the description is what link previews and search show; the preconnects let
+# the Rubik request start while the stylesheet is still being parsed
 html = html.replace("<title>dumb.co — 2026 redesign concept v3</title>",
-                    "<title>dumb.co — 2026 redesign concept v8</title>", 1)
+                    "<title>dumb.co — 2026 redesign concept v8</title>\n"
+                    '<meta name="description" content="dumb.co makes the dumbphone 2: a $20 flip phone '
+                    'that keeps maps, music, rideshare and ur messages, and leaves the rest behind." />\n'
+                    '<link rel="preconnect" href="https://fonts.googleapis.com" />\n'
+                    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />', 1)
 # no version number in the footer label — it only ever goes stale
 html = re.sub(r"dumb\.co 2026 redesign( v\d+)? — not final copy",
               "dumb.co 2026 redesign — not final copy", html, count=1)

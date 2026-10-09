@@ -14,8 +14,15 @@
 # Nothing here touches dumb.co: different repo, different Pages site. The
 # prototype routes at real paths (/shop) and works out its own base from the
 # address, so there is no --base prefix to get wrong -- it works at any URL.
-# The 404.html copy below is what makes /dumb.co-redesign-preview/shop load:
-# Pages answers any unknown path with it.
+# split_assets.py (step 2) writes a <slug>.html copy per section, which is
+# what makes /dumb.co-redesign-preview/shop load with a 200; 404.html catches
+# anything else.
+#
+# The published page is NOT concept/index.html as built. That file inlines
+# every image as base64 (6.7 MB) so it opens from disk; served like that it
+# took ~6 s on a laptop and 25 s on a phone before anything showed. The
+# split moves the images out to assets/, recompressed, so the page itself
+# is ~0.3 MB and section photos load only when the section opens.
 set -euo pipefail
 
 # The repo that actually exists. The old default (dumb.co-preview) was a
@@ -44,10 +51,10 @@ NEWEST_PART="$(find "$HERE/build/parts" "$HERE/build/build.py" -type f -newer "$
 # ---- 2. what the team gets -------------------------------------------
 OUT="$(mktemp -d)"
 trap 'rm -rf "$OUT"' EXIT
-cp "$CONCEPT/index.html" "$OUT/index.html"
+# index.html, 404.html, <slug>.html and assets/ -- see split_assets.py
+python3 "$HERE/build/split_assets.py" "$OUT" --prefix "/$REPO_NAME/"
 cp "$CONCEPT/quiz.html"  "$OUT/quiz.html"
 [ -f "$CONCEPT/mobile-current.html" ] && cp "$CONCEPT/mobile-current.html" "$OUT/"
-cp "$OUT/index.html" "$OUT/404.html"   # any stray path still renders the site
 touch "$OUT/.nojekyll"                 # stop Jekyll eating underscore paths
 
 BRANCH=$(git -C "$HERE" rev-parse --abbrev-ref HEAD)
@@ -61,7 +68,7 @@ built  : $(date -u '+%Y-%m-%d %H:%M UTC')
 TXT
 
 echo "==> $BRANCH @ $SHA$DIRTY"
-for f in "$OUT"/*.html; do
+for f in "$OUT/index.html" "$OUT/quiz.html"; do
   printf '    %-22s %6.2f MB raw  %6.2f MB gzip\n' "$(basename "$f")" \
     "$(echo "$(wc -c <"$f")/1048576" | bc -l)" "$(echo "$(gzip -9 -c "$f" | wc -c)/1048576" | bc -l)"
 done
