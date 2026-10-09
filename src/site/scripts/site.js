@@ -1632,6 +1632,26 @@ function plansDrawer(){
     return el;
   }
 
+  /* The card was only built on the first tap, so its picture started loading
+     then, and its heading font (Cheltenham, used nowhere else on a phone)
+     too: for a frame it showed in the fallback face with no d-pad, then
+     jumped into shape (Jack's video, Oct 9). Built hidden at load instead,
+     with the font and picture fetched and decoded, and the first tap waits
+     for them (briefly -- it shows regardless after 800ms). */
+  let nudgeReady = null;
+  function prepNudge(){
+    if(nudgeReady) return nudgeReady;
+    const el = nudgeEl(), img = el.querySelector('.nt-keys');
+    const font = (document.fonts && document.fonts.load)
+      ? document.fonts.load('700 32px "Cheltenham"').catch(() => {}) : Promise.resolve();
+    const pic = (img.decode ? img.decode() : new Promise((ok, no) => {
+      if(img.complete) ok(); else { img.onload = ok; img.onerror = no; }
+    })).catch(() => {});
+    nudgeReady = Promise.all([font, pic]);
+    return nudgeReady;
+  }
+  if(isPhone()) (window.requestIdleCallback || setTimeout)(prepNudge);
+
   let nudgeTimer = null;
   /* The shake is the surprise, and a surprise only works once (Matteo: "after
      the first time, the shaking can be annoying"). First tap of the visit
@@ -1656,7 +1676,10 @@ function plansDrawer(){
          the shake has to carry it on its own there */
       if(navigator.vibrate){ try { navigator.vibrate([16, 38, 16]); } catch(e){} }
     }
-    nudgeEl().classList.add('on');
+    let shown = false;
+    const show = () => { if(!shown){ shown = true; nudgeEl().classList.add('on'); } };
+    prepNudge().then(show);
+    setTimeout(show, 800);
   }
 
   document.addEventListener('click', (e) => {
