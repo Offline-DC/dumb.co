@@ -170,7 +170,9 @@ if (section === "shop") ld.push({
          window and this is what is left (and it plays snake) -->
     <div id="deskphone">
       <div class="phone-frame">
-        <div class="pf-screen" id="tcl-screen"></div>
+        <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
+          <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.label}</a>
+        ))}</div></div></div>
         <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
         <div class="pf-keys">
           <button type="button" class="k-up"    aria-label="up"     onclick="teamKey('up')">&#8593;</button>
@@ -181,6 +183,25 @@ if (section === "shop") ld.push({
         </div>
       </div>
     </div>
+    <!-- Size the handset before the first paint, on a phone. site.js does
+         the same (phoneFit) but runs after the page has painted, so without
+         this the phone arrived at a stock size and shrank into place. Same
+         numbers as ART / phoneFit / setRowVars in site.js. -->
+    <script is:inline define:vars={{ rows: NAV.length }}>
+      (function(){
+        if (window.innerWidth > 760) return;
+        var ratio = 3, drawnTop = 0.0128, drawnW = 0.8225, keysBottom = 0.6650, screenH = 0.3833;
+        var availH = Math.max(240, window.innerHeight - 10 - 6), availW = Math.max(200, window.innerWidth - 8);
+        var w = Math.min(availH / ((keysBottom - drawnTop) * ratio), availW / drawnW);
+        var r = document.documentElement.style;
+        r.setProperty('--mpw', Math.round(w) + 'px');
+        r.setProperty('--mtop', Math.round(10 - drawnTop * ratio * w) + 'px');
+        var rowH = Math.max(11, Math.floor((screenH * ratio * w) / rows));
+        r.setProperty('--pmn-rowh', rowH + 'px');
+        r.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
+        r.setProperty('--pmn-barf', '6px');
+      })();
+    </script>
     <div id="walkduck"><img src={A.duckWalk} alt="dumb.co duck" /></div>
     <div id="egg" onclick="expandModal()"><img src={A.egg} alt="tap to open" /></div>
   </div>

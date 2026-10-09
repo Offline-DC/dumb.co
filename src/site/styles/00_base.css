@@ -61,7 +61,12 @@
     position:absolute; top:0; left:0; bottom:0; width:400px;
     background:var(--yellow); border-right:none;
     display:flex; flex-direction:column; padding:32px 30px;
-    transition:all .55s cubic-bezier(.7,0,.2,1);
+    /* only the slide-away when a section opens. This was "all", so crossing
+       a breakpoint (zooming the browser does) animated the padding, and the
+       ink measurement taken on resize caught the logo mid-slide: #home, which
+       sits above the sidebar, then started too far left and cut the end off
+       the wordmark (Jack, Oct 9). */
+    transition:left .55s cubic-bezier(.7,0,.2,1);
     z-index:20;
   }
   #logo{ cursor:pointer; margin-bottom:34px; width:250px; transition:transform .18s ease; }

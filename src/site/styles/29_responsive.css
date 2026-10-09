@@ -219,6 +219,11 @@
     }
     #deskphone .phone-frame{
       width:var(--mpw, 480px); flex:0 0 auto; pointer-events:auto;
+    }
+    /* Only once the page has settled. The handset is sized before the first
+       paint (the inline script after #deskphone in Site.astro); animating
+       that first size is what made the phone load zoomed in and shrink. */
+    html.m-settled #deskphone .phone-frame{
       transition:width .45s cubic-bezier(.6,0,.2,1);
     }
 

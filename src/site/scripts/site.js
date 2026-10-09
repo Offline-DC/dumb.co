@@ -1180,6 +1180,9 @@ function plansDrawer(){
       external: el.classList.contains('external'),
       href: el.getAttribute('href') || '',
     }));
+    /* the menu is in the page already (Site.astro), so the phone shows it
+       from the first paint; only build it if it somehow isn't */
+    if(screen.querySelector('.pmn')) return;
     screen.insertAdjacentHTML('afterbegin',
       '<div class="pmn">' +
         '<div class="pmn-list">' +
@@ -1663,7 +1666,10 @@ function plansDrawer(){
   function setRowVars(frameW){
     const root = document.documentElement;
     const screenH = ART.screenH * ART.ratio * frameW;
-    const n = Math.max(1, pmItems.length);
+    /* counted from the nav, not pmItems: the first fit runs before the menu
+       is wired up, and with n=1 every row was sized for a one-item menu --
+       the menu loaded zoomed in and then shrank (Jack, Oct 9) */
+    const n = Math.max(1, pmItems.length || document.querySelectorAll('#navlist .navitem').length);
     /* The strip at the top of the screen used to hold "DUMB.CO ..."; that was
        removed in the copy pass, but 6% of the screen was still being reserved
        for it on every build since. Measured: 26px of a 447px screen held back
@@ -1740,7 +1746,15 @@ function plansDrawer(){
     document.documentElement.style.setProperty('--nav-ink', Math.ceil(right) + 'px');
   }
 
-  window.addEventListener('resize', () => { logoHome(); phoneFit(); onBreakpoint(); navInk(); });
+  /* measured on every resize, and again once the resizing stops and anything
+     still easing has landed -- a zoom is a burst of resizes, and the last one
+     can arrive before layout has settled */
+  let inkTimer = 0;
+  window.addEventListener('resize', () => {
+    logoHome(); phoneFit(); onBreakpoint(); navInk();
+    clearTimeout(inkTimer); inkTimer = setTimeout(navInk, 650);
+  });
+  document.getElementById('sidebar')?.addEventListener('transitionend', navInk);
   logoHome();
   phoneFit();
   navInk();
@@ -1764,7 +1778,11 @@ function plansDrawer(){
 
   /* the mobile sheet stays hidden until this lands, so the .exe window cannot
      paint full-screen for a frame before the phone does */
-  requestAnimationFrame(() => document.documentElement.classList.add('m-ready'));
+  requestAnimationFrame(() => {
+    document.documentElement.classList.add('m-ready');
+    /* resizes animate from here on; the first fit never does */
+    requestAnimationFrame(() => document.documentElement.classList.add('m-settled'));
+  });
   window.addEventListener('orientationchange', () => setTimeout(() => { phoneFit(); onBreakpoint(); }, 120));
 
   /* ------------------------------------------------------- wiring it up */
