@@ -196,18 +196,142 @@
      not a fixed fraction of the frame (the hit areas have a px floor), so the
      offset is measured at the moment of the press rather than worked out in
      CSS. */
+  /* Only the key's own ink moves (Jack, Oct 9: "remove the circle hover and
+     just have the movement state of the button shifting").
+
+     The patch used to be the whole round hit area, painted over the handset
+     with the drawing 2px lower on a flat yellow. That flat yellow never
+     matched -- the handset is transparent and its drop-shadow tints the page
+     under every stroke -- so it read as a shaded disc, and it dragged slices
+     of the hinge line and the OK ring down with it.
+
+     Now the drawing is read once into a canvas, and for each key we take
+     just its own strokes: the connected ink inside its hit area, minus any
+     stroke that runs out of the area (that is a neighbour -- the hinge, the
+     ring, the next arrow). The OK key looks a little wider than its hit area
+     so its ring comes along. On press, those strokes are cut out of the
+     handset with a mask and drawn again 2px lower, with the same shadow. No
+     background is painted at all, so there is nothing to mismatch. */
+  let artCanvas = null;
+  function artPixels(art){
+    if(artCanvas && artCanvas.src === art.currentSrc) return artCanvas;
+    if(!art.complete || !art.naturalWidth) return null;
+    try{
+      const c = document.createElement('canvas');
+      c.width = art.naturalWidth; c.height = art.naturalHeight;
+      const g = c.getContext('2d', {willReadFrequently:true});
+      g.drawImage(art, 0, 0);
+      g.getImageData(0, 0, 1, 1);               // throws now if the canvas is tainted
+      artCanvas = {src: art.currentSrc, g, w: c.width, h: c.height, keys: new Map()};
+      return artCanvas;
+    }catch(e){ return null; }
+  }
+  /* the key's strokes, in art pixels: {x, y, w, h, ink, mask} where ink is
+     the strokes alone and mask the same grown by 2px (data URLs) */
+  function keyStrokes(btn, art, a, b){
+    const px = artPixels(art);
+    if(!px) return null;
+    const id = btn.className.match(/k-\w+/)?.[0] + '@' + Math.round(a.width);
+    if(px.keys.has(id)) return px.keys.get(id);
+    const k = px.w / a.width;                          // art px per css px
+    const grow = btn.classList.contains('k-ok') ? 0.16 : 0;
+    const gx = b.width * grow, gy = b.height * grow;
+    const x0 = Math.max(0, Math.floor((b.left - gx - a.left) * k));
+    const y0 = Math.max(0, Math.floor((b.top  - gy - a.top)  * k));
+    const x1 = Math.min(px.w, Math.ceil((b.right  + gx - a.left) * k));
+    const y1 = Math.min(px.h, Math.ceil((b.bottom + gy - a.top)  * k));
+    const W = x1 - x0, H = y1 - y0;
+    if(W < 4 || H < 4){ px.keys.set(id, null); return null; }
+    const d = px.g.getImageData(x0, y0, W, H).data;
+    const isInk = (i) => d[i*4+3] > 40;
+    const seen = new Uint8Array(W * H), keep = new Uint8Array(W * H), stack = [];
+    for(let s0 = 0; s0 < W * H; s0++){
+      if(seen[s0] || !isInk(s0)) continue;
+      const comp = []; let edge = false;
+      stack.push(s0); seen[s0] = 1;
+      while(stack.length){
+        const i = stack.pop(), x = i % W, y = (i / W) | 0;
+        comp.push(i);
+        if(x === 0 || y === 0 || x === W - 1 || y === H - 1) edge = true;
+        if(x > 0     && !seen[i-1] && isInk(i-1)){ seen[i-1] = 1; stack.push(i-1); }
+        if(x < W - 1 && !seen[i+1] && isInk(i+1)){ seen[i+1] = 1; stack.push(i+1); }
+        if(y > 0     && !seen[i-W] && isInk(i-W)){ seen[i-W] = 1; stack.push(i-W); }
+        if(y < H - 1 && !seen[i+W] && isInk(i+W)){ seen[i+W] = 1; stack.push(i+W); }
+      }
+      if(!edge) comp.forEach(i => keep[i] = 1);
+    }
+    let L = W, T = H, R = -1, B = -1;
+    for(let i = 0; i < W * H; i++) if(keep[i]){
+      const x = i % W, y = (i / W) | 0;
+      if(x < L) L = x; if(x > R) R = x; if(y < T) T = y; if(y > B) B = y;
+    }
+    if(R < 0){ px.keys.set(id, null); return null; }
+    const pad = Math.ceil(3 * k);                       // room for the 2px grow
+    L = Math.max(0, L - pad); T = Math.max(0, T - pad);
+    R = Math.min(W - 1, R + pad); B = Math.min(H - 1, B + pad);
+    const w = R - L + 1, h = B - T + 1;
+    const mk = (grown) => {
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const g = c.getContext('2d'), out = g.createImageData(w, h), o = out.data;
+      const r = grown ? Math.ceil(2 * k) : 0;
+      for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
+        const si = (y + T) * W + (x + L);
+        let on = keep[si], al = on ? d[si*4+3] : 0;
+        if(!on && r){
+          for(let dy = -r; dy <= r && !on; dy++) for(let dx = -r; dx <= r; dx++){
+            const yy = y + T + dy, xx = x + L + dx;
+            if(yy >= 0 && yy < H && xx >= 0 && xx < W && keep[yy * W + xx]){ on = 1; break; }
+          }
+          al = on ? 255 : 0;
+        }
+        if(!on) continue;
+        const oi = (y * w + x) * 4;
+        if(grown){ o[oi] = o[oi+1] = o[oi+2] = 0; o[oi+3] = 255; }
+        else { o[oi] = d[si*4]; o[oi+1] = d[si*4+1]; o[oi+2] = d[si*4+2]; o[oi+3] = al; }
+      }
+      g.putImageData(out, 0, 0);
+      return c.toDataURL();
+    };
+    const res = {x: x0 + L, y: y0 + T, w, h, k, ink: mk(false), mask: mk(true)};
+    px.keys.set(id, res);
+    return res;
+  }
+  let maskedBy = null;
   function keyDown(btn){
     const art = btn.closest('.phone-frame')?.querySelector('.pf-art');
     if(!art) return;
     const a = art.getBoundingClientRect(), b = btn.getBoundingClientRect();
-    btn.style.backgroundSize = a.width + 'px ' + a.height + 'px';
-    btn.style.backgroundPosition = (a.left - b.left) + 'px ' + (a.top - b.top + 2) + 'px';
+    const sk = keyStrokes(btn, art, a, b);
+    if(!sk) return;                                      // can't read the art: no press, rather than a wrong one
+    const k = sk.k, w = sk.w / k, h = sk.h / k, ax = sk.x / k, ay = sk.y / k;
+    const st = btn.style;
+    st.setProperty('--pl', (a.left - b.left + ax) + 'px');
+    st.setProperty('--pt', (a.top - b.top + ay + 2) + 'px');
+    st.setProperty('--pw', w + 'px'); st.setProperty('--ph', h + 'px');
+    st.setProperty('--pi', 'url("' + sk.ink + '")');
+    st.setProperty('--pf', getComputedStyle(art).filter);
+    const m = art.style;
+    m.webkitMaskImage = m.maskImage = 'url("' + sk.mask + '"), linear-gradient(#000, #000)';
+    m.webkitMaskSize = m.maskSize = w + 'px ' + h + 'px, 100% 100%';
+    m.webkitMaskPosition = m.maskPosition = ax + 'px ' + ay + 'px, 0 0';
+    m.webkitMaskRepeat = m.maskRepeat = 'no-repeat';
+    m.maskComposite = 'exclude'; m.webkitMaskComposite = 'xor';
+    maskedBy = btn;
     btn.classList.add('down');
+  }
+  function keyRelease(btn){
+    btn.classList.remove('down');
+    if(maskedBy !== btn) return;
+    maskedBy = null;
+    const art = btn.closest('.phone-frame')?.querySelector('.pf-art');
+    if(!art) return;
+    ['maskImage','webkitMaskImage','maskSize','webkitMaskSize','maskPosition','webkitMaskPosition',
+     'maskRepeat','webkitMaskRepeat','maskComposite','webkitMaskComposite'].forEach(p => art.style[p] = '');
   }
   const keyTimers = new WeakMap();
   function keyUp(btn, after){
     clearTimeout(keyTimers.get(btn));
-    keyTimers.set(btn, setTimeout(() => btn.classList.remove('down'), after || 0));
+    keyTimers.set(btn, setTimeout(() => keyRelease(btn), after || 0));
   }
   /* a key pressed from the keyboard (or by a click that never had a
      pointerdown, e.g. assistive tech) still shows the press */

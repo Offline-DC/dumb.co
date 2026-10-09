@@ -106,86 +106,18 @@
   /* PRESSED (Jack: "visually looks like it's being pressed down and feels more
      tactile. Current website does this." -- src/Phone/NavButton.tsx drops the
      key 2px on mousedown). The keys are part of one drawing here, so the
-     drawing can't move; instead the pressed key paints its own patch of the
-     handset art 2px lower over a shade of the page colour, which reads as the
-     key sinking into the body. 30_phone.js sets the patch geometry (keyDown);
-     the scale(.88) it replaces did nothing visible, because the button has no
-     pixels of its own. */
+     drawing can't move; instead the pressed key's own strokes are cut out of
+     the handset and drawn again 2px lower, which reads as the key sinking
+     into the body (30_phone.js, keyDown). The scale(.88) this replaced did
+     nothing visible, because the button has no pixels of its own. */
   .phone-frame .pf-keys button:active{transform:translate(-50%,-50%);}
-  .phone-frame .pf-keys button.down{
-    background-image:var(--pf-art); background-repeat:no-repeat;
-    background-color:color-mix(in srgb, var(--yellow) 84%, #000);
-    transform:translate(-50%,-50%);
-    transition:none;
-  }
-  /* No background images any more: Marco DREW the arrows into the handset, so
-     the four buttons are invisible hit targets sitting on top of his ink.
-     Painting the generated chevrons here as well drew every arrow twice.
-
-     build/make_dpad_arrows.py is therefore retired, and with it all the pen-
-     weight matching -- the distance-transform stroke estimator, the grain
-     re-imprinting, the business of cropping to real ink rather than the alpha
-     bbox. trace_screen.py still imports ARROW_ART_W from it to size the hit
-     targets against the art, which is the only reason the file is still here. */
-
-
-  .phone-frame .pf-screen.playing img,
-  .phone-frame .pf-screen.playing .pf-hint{opacity:0 !important; display:none;}
-
-  #snake-root{position:absolute; inset:0; display:flex; flex-direction:column;}
-  #snake-root .sn-hud{
-    flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:4px;
-    font-family:var(--body); font-weight:700; font-size:9px; color:#1a1a1a;
-    border-bottom:1px solid rgba(0,0,0,.28); padding:1px 0;
-  }
-  #snake-root .sn-pill{
-    width:5px; height:8px; border:1.2px solid #1a1a1a; border-radius:1.5px; display:block;
-  }
-  #snake-root .sn-grid{flex:1 1 auto; display:grid; overflow:hidden;}
-  #snake-root .sn-grid i{display:block;}
-  #snake-root .sn-grid i.body{background:#3f3f34; border-radius:1px;}
-  #snake-root .sn-grid i.head{background:#141410; border-radius:2px;}
-  #snake-root .sn-grid i.food{
-    background:#1a1a14; border-radius:1px;
-    transform:scale(.62); box-shadow:0 0 0 1px rgba(0,0,0,.25);
-  }
-  #snake-root .sn-over{
-    position:absolute; inset:0; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; gap:2px; text-align:center;
-    font-family:var(--body); color:#151510;
-  }
-  #snake-root .sn-over span{font-weight:800; font-size:13px; line-height:1.05; letter-spacing:.02em;}
-  #snake-root .sn-over b{font-size:14px;}
-  #snake-root .sn-over i{font-style:normal; font-size:8px; opacity:.65;}
-
-  /* ==========================================================================
-     the flip-phone on the desktop, behind the .exe window
-     Minimise the window into the egg and the phone is what's left — and it's
-     playable at that point (Grant's ↑↑↓↓←→).
-     ========================================================================== */
-  #deskphone{
-    position:absolute; top:0; bottom:0; left:47%; right:2%; z-index:20;
-    display:flex; align-items:center; justify-content:center;
-    pointer-events:none;
-  }
-  /* the illustration carries ~27% transparent margin on each side, so the
-     drawn phone is about 45% of this width — 420px reads as a phone you
-     could pick up next to the .exe window, where 300px read as a thumbnail. */
-  /* 218px is what phoneFit() computes for Marco's art; it sets the real
-     value inline on load, this is only here so the first paint is not a
-     420px-wide handset that then jumps. */
-  #deskphone .phone-frame{flex:0 0 auto; width:218px; pointer-events:auto;}
-  #deskphone .pf-art{filter:drop-shadow(0 8px 14px rgba(0,0,0,.14));}
-  #deskphone .pf-keys button{cursor:pointer;}
-  @media (max-width:1000px){ #deskphone{display:none;} }
-
-  /* Milk: no drawn phone on the home page. Above the phone breakpoint the
-     handset only appears once a window has been minimised into the egg -- that
-     is the state it is actually for (snake, and the power-on duck on the blank
-     screen). While a section is open it sits behind the window anyway, so
-     hiding it there costs nothing. Mobile is untouched: below 760px the
-     handset IS the navigation. */
-  @media (min-width:761px){
-    #deskphone{display:none;}
-    body.win-collapsed #deskphone{display:flex;}
+  .phone-frame .pf-keys button.down{transform:translate(-50%,-50%); transition:none;}
+  /* the key's own strokes, 2px lower (30_phone.js, keyDown). Only ink, no
+     background: the original strokes are masked out of the handset rather
+     than painted over, so there is no patch colour to get wrong. */
+  .phone-frame .pf-keys button.down::before{
+    content:""; position:absolute; pointer-events:none;
+    left:var(--pl); top:var(--pt); width:var(--pw); height:var(--ph);
+    background:var(--pi) no-repeat 0 0 / 100% 100%;
+    filter:var(--pf, none);
   }
