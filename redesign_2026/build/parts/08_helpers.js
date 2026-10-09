@@ -36,7 +36,7 @@
     host.innerHTML = `
       <div class="quizframe">
         <div class="qf-bar">
-          <button type="button" class="wm-back" onclick="openSection('shop')">‹ back to Shop.exe</button>
+          <button type="button" class="wm-back" onclick="openSection('shop')">‹ back to shop.exe</button>
           <a class="qf-open" href="quiz.html" target="_blank" rel="noopener">open on its own ↗</a>
         </div>
         <iframe class="qf-frame" src="quiz.html" title="dumb.co — find your plan"
@@ -67,7 +67,7 @@ function plansDrawer(){
     const host = document.getElementById('wm-section');
     host.innerHTML = `
       <div class="wm-pad">
-        <div class="wm-back" onclick="openSection('shop')">‹ back to Shop.exe</div>
+        <div class="wm-back" onclick="openSection('shop')">‹ back to shop.exe</div>
         <h2>the plans</h2>
         <!-- Marco's cards. This used to rebuild them as a div table from
              PLANS/FEATURES -- an approximation of a finished design, which is

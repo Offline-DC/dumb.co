@@ -2,17 +2,18 @@
      v8 — one window, reused
      Nav items no longer spawn pop-ups. They retitle and refill #winmodal, which
      is the same frame flipoff.exe lives in on the home state. The .exe names
-     below are the ones written on the mock-up slides.
+     below are the ones written on the mock-up slides, all lowercase (Jack,
+     Oct 9: "Community.exe is community.exe").
      ========================================================================== */
   const EXE = {
     home:     "flipoff.exe",
     about:    "about.exe",
-    shop:     "Shop.exe",
-    community: "Community.exe",
-    press:    "Press.exe",
-    memories: "Memories.exe",
-    faq:      "FAQ.exe",
-    contact:  "Contact.exe",
+    shop:     "shop.exe",
+    community: "community.exe",
+    press:    "press.exe",
+    memories: "memories.exe",
+    faq:      "faq.exe",
+    contact:  "contact.exe",
     quiz:     "quiz.exe",
   };
 
