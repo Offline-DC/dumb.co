@@ -121,16 +121,19 @@
       return;
     }
 
-    /* On desktop the handset is scenery, not navigation -- the sidebar does
-       that job -- so a minimised window leaves the screen BLANK. It used to
-       show a scaled clone of the section you had just closed; Jack: "it should
-       stay empty while the user is on desktop". Blank also means the screen is
-       clear for snake, which is the one thing the desktop handset is actually
-       for once the window is in the egg. The menu is hidden rather than
-       removed so expandModal() can put it straight back. */
+    /* On desktop the minimised window leaves the handset showing the same
+       menu it has on a phone, and it works the same way: the arrows move,
+       OK opens that section (Jack, Oct 9: "have the phone from the mobile
+       version be in the blank space behind the modal so if somebody closes
+       it they can see it and use it ... similar to how they use it on
+       mobile"). It used to go blank here, with a power-on duck -- an earlier
+       note of Jack's ("it should stay empty while the user is on desktop"),
+       which this replaces. Snake still unlocks from the menu the way it does
+       on a phone. */
     if(mir) mir.remove();
-    if(menu) menu.style.display = 'none';
-    bootDuck(screen);
+    screen.querySelector('.pf-boot')?.remove();
+    if(menu) menu.style.display = '';
+    phonePaint();
     return;
 
     const src = document.getElementById('wm-section') || document.getElementById('wm-body');
