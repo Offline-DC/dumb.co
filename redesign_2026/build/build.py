@@ -63,7 +63,11 @@ def grab(alt):
 
 assets = {
     "phone":      grab("dumbphone 2"),
-    "polaroid":   grab("dumb.co team polaroid"),
+    # the team polaroid is assets/polaroid.png, cut out with a transparent
+    # background (from the live site's src/polaroid.webp). The baseline's
+    # copy was a JPEG scan with the black scanner bed still around it.
+    "polaroid":   "data:image/png;base64," + base64.b64encode(
+                      (ROOT / "assets" / "polaroid.png").read_bytes()).decode(),
     "madeindc":   grab("made in D.C."),
     "coffin":     grab("smartphone coffin"),
     "friendfone": grab("friend fone"),

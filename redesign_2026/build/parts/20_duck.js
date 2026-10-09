@@ -38,15 +38,38 @@
     const eggX = (egg && egg.offsetWidth)
       ? leftWithin(egg, root)
       : (root.clientWidth || window.innerWidth) - 100;
-    const x1 = eggX - swing - duckW - 14;
-    return { x0: Math.round(x0), x1: Math.round(Math.max(x1, x0 + 80)) };
+    let x1 = eggX - swing - duckW - 14;
+
+    /* The handset stands in the empty half of the page once the window is in
+       the egg, and on a short screen its top reaches the duck's row -- the
+       duck walked straight across the phone's screen (Jack, Oct 9). So if
+       the drawn phone comes up as high as the duck, the walk turns back
+       short of it. If that leaves no room to walk at all, the duck stays
+       home rather than crossing the phone. */
+    const frame = document.querySelector('#deskphone .phone-frame');
+    if(frame && frame.offsetWidth){
+      const rr = root.getBoundingClientRect(), fr = frame.getBoundingClientRect();
+      const duckTop = duck.offsetTop, duckBottom = duckTop + (duck.offsetHeight || 60);
+      const drawnTop = fr.top - rr.top + fr.height * ((typeof ART !== 'undefined' && ART.drawnTop) || 0.0128);
+      if(drawnTop < duckBottom + 8){
+        /* the widest the drawing gets on its left side, as a fraction of the art */
+        const leftFrac = (typeof ART !== 'undefined' && ART.edges)
+          ? Math.min(...ART.edges.slice(0, -1).map(e => e[0])) : 0.09;
+        const phoneLeft = fr.left - rr.left + fr.width * leftFrac;
+        x1 = Math.min(x1, phoneLeft - duckW - 14);
+      }
+    }
+    if(x1 < x0 + 80) return null;
+    return { x0: Math.round(x0), x1: Math.round(x1) };
   }
 
   function startDuckWalk(){
     const duck = document.getElementById('walkduck');
     if(!duck) return;
     stopDuckWalk();
-    const { x0, x1 } = duckWalkPath();
+    const path = duckWalkPath();
+    if(!path) return;                  // no room that isn't the phone
+    const { x0, x1 } = path;
     duck.classList.add('on');
     // ~95px a second, so the trip reads as a stroll rather than a scuttle
     const leg = Math.max(2200, Math.round((x1 - x0) / 95 * 1000));
