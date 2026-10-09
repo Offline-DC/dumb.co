@@ -1,61 +1,149 @@
-
   /* ==========================================================================
-     addressable sections  (Jack's note: every page should have an address
-     people can copy and paste)
+     addressable sections, at real paths  (Jack: "when you click on a tab,
+     have it just append /shop instead of /#/shop"; again on Oct 5: "instead
+     of #/about it should just be /about")
 
-     The prototype is one static file, so a real path (/shop) can't survive a
-     reload — pasting it into a new tab would 404. The slug therefore rides in
-     the hash: index.html#/shop, index.html#/get_involved. It copies, pastes,
-     bookmarks, reloads and back-buttons correctly, and the nav items are real
-     <a href> elements, so right-click > copy link address works too.
+     Every section has a path: <site>/shop, <site>/about ... It copies,
+     pastes, bookmarks, reloads and back-buttons. The nav items are real
+     <a href> elements, so right-click > copy link address gives the clean
+     path too.
+
+     Reloading /shop needs the server to answer with this page, which a
+     static host does not do on its own:
+       - GitHub Pages serves 404.html for any unknown path, and
+         publish_preview.sh already writes 404.html as a copy of index.html.
+       - build/spa_server.py (used by serve.sh and dev.sh) does the same
+         thing locally. `python3 -m http.server` does NOT -- it 404s.
+       - The React port gets it from react-router plus the prerender step.
+
+     The page works out where it lives (BASE) from its own address rather
+     than assuming the site root, because the preview is served from
+     /dumb.co-redesign-preview/ and dumb.co itself from /.
+
+     Opened straight from disk (file://) there is no server to answer a
+     path, so there -- and only there -- the slug falls back to the hash.
+
+     Old #/shop links still work: they are read once on load and rewritten
+     to /shop in place.
 
      ROUTES (built by build.py from NAV_ITEMS) is the same slug map the React
-     port should hand to react-router, where they become dumb.co/shop etc.
+     port should hand to react-router.
      ========================================================================== */
   const SLUG_TO_KEY = Object.fromEntries(Object.entries(ROUTES).map(([k, s]) => [s, k]));
+  const USE_HASH = location.protocol === 'file:';
 
-  let routing = false;          // set while we are the ones changing the hash
+  /* the directory the site lives in, always ending in "/" */
+  const BASE = (function(){
+    let p = location.pathname;
+    const parts = p.split('/');
+    const last = (parts[parts.length - 1] || '').toLowerCase();
+    if(SLUG_TO_KEY[last] || /\.html?$/.test(last)) parts.pop();
+    else if(last === '' && parts.length > 2 && SLUG_TO_KEY[(parts[parts.length - 2] || '').toLowerCase()]){
+      parts.pop(); parts.pop();                 // "/shop/" -- trailing slash
+    }
+    p = parts.join('/');
+    return p.endsWith('/') ? p : p + '/';
+  })();
 
-  function slugFromHash(){
-    const h = (location.hash || '').replace(/^#\/?/, '').replace(/\/$/, '');
-    return h.toLowerCase();
+  function hrefFor(key){
+    const slug = key ? ROUTES[key] : '';
+    if(USE_HASH) return slug ? '#/' + slug : location.pathname;
+    return BASE + (slug || '');
+  }
+
+  function currentSlug(){
+    if(USE_HASH) return (location.hash || '').replace(/^#\/?/, '').replace(/\/$/, '').toLowerCase();
+    const rest = location.pathname.slice(BASE.length).replace(/\/$/, '');
+    return rest.toLowerCase();
   }
 
   function setRoute(key){
-    const slug = key ? ROUTES[key] : null;
-    const next = slug ? '#/' + slug : '';
-    const here = location.hash || '';
-    if(here === next || (!slug && here === '')) return;
-    routing = true;
-    try {
-      if(slug) location.hash = '#/' + slug;
-      else if(history.replaceState) history.replaceState(null, '', location.pathname + location.search);
-      else location.hash = '';
-    } finally {
-      // hashchange fires on the next tick
-      setTimeout(() => { routing = false; }, 0);
+    const next = hrefFor(key);
+    if(USE_HASH){
+      const slug = key ? ROUTES[key] : null;
+      if((location.hash || '') === (slug ? next : '')) return;
+      if(slug){ history.pushState(null, '', next); }
+      else history.replaceState(null, '', location.pathname + location.search);
+      return;
     }
+    if(location.pathname === next && !location.hash) return;
+    history.pushState(null, '', next + location.search);
   }
 
   function applyRoute(){
-    const key = SLUG_TO_KEY[slugFromHash()];
-    if(key && sections[key]) openSection(key);
-    else goHome();
+    const key = SLUG_TO_KEY[currentSlug()];
+    if(key && sections[key]) openSection(key, true);
+    else goHome(true);
   }
 
-  window.addEventListener('hashchange', () => { if(!routing) applyRoute(); });
+  /* an old #/shop link (from before the paths, or bookmarked): rewrite the
+     address to /shop in place. True if it did. */
+  function legacyHash(){
+    if(USE_HASH) return false;
+    const m = (location.hash || '').match(/^#\/?([a-z0-9_-]+)\/?$/i);
+    if(!m || !SLUG_TO_KEY[m[1].toLowerCase()]) return false;
+    history.replaceState(null, '', BASE + m[1].toLowerCase() + location.search);
+    return true;
+  }
 
-  /* wrap the openers so the address follows whatever the window is showing */
+  /* back/forward; a hand-typed #/slug on the file:// fallback; and an old
+     #/slug link followed from INSIDE the page, which only changes the hash
+     and so never reloads */
+  window.addEventListener('popstate', applyRoute);
+  window.addEventListener('hashchange', () => {
+    if(USE_HASH || legacyHash()) applyRoute();
+  });
+
+  /* wrap the openers so the address follows whatever the window is showing.
+     The second argument means "this came FROM the address" -- don't push it
+     back onto history, or back would need pressing twice. */
   const _openSectionRoute = openSection;
-  openSection = function(key){
+  openSection = function(key, fromRoute){
     _openSectionRoute(key);
-    setRoute(key);
+    if(!fromRoute) setRoute(key);
   };
   const _goHomeRoute = goHome;
-  goHome = function(){
+  goHome = function(fromRoute){
     _goHomeRoute();
-    setRoute(null);
+    if(!fromRoute) setRoute(null);
   };
 
-  /* a deep link should land on that section rather than the home carousel */
-  if(SLUG_TO_KEY[slugFromHash()]) applyRoute();
+  /* the nav's hrefs are written by the build as bare slugs; point them at the
+     real address, and let a plain click route in place instead of loading a
+     page. Modified clicks (cmd/ctrl/shift/middle) keep the browser's own
+     behaviour, so "open in new tab" works. */
+  function wireNavLinks(root){
+    (root || document).querySelectorAll('a[data-slug], a.pmn-row[data-key]').forEach(a => {
+      const key = a.dataset.key;
+      if(!ROUTES[key]) return;
+      a.setAttribute('href', hrefFor(key));
+    });
+  }
+  wireNavLinks();
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a.navitem[data-slug]');
+    if(!a) return;
+    if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    openSection(a.dataset.key);
+  });
+
+  legacyHash();
+
+  /* "/shop/" and "/SHOP" settle on "/shop", so relative URLs (quiz.html)
+     resolve against the right directory */
+  (function tidy(){
+    if(USE_HASH) return;
+    const key = SLUG_TO_KEY[currentSlug()];
+    if(key && location.pathname !== hrefFor(key)) history.replaceState(null, '', hrefFor(key) + location.search);
+  })();
+
+  /* a deep link should land on that section rather than the home carousel.
+     Deferred to the end of the script, not run here: two things later in the
+     page used to undo or break it. On a phone, initPhone() collapses the
+     window on load to show the handset -- which collapsed a deep-linked
+     /shop straight back to the menu. And /faq threw, because FAQ.exe's
+     state (faqItems) is declared further down than this file. A microtask
+     runs once the whole script has, and still before the first paint, so
+     there is no flash of the home window either. */
+  if(SLUG_TO_KEY[currentSlug()]) queueMicrotask(applyRoute);

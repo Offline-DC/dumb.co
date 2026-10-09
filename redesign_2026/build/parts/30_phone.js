@@ -190,10 +190,52 @@
     phoneOpen(i);
   }
 
+  /* ---- the keys press (22_snake.css > PRESSED) -------------------------
+     The pressed key paints the handset art over itself, 2px low. The patch
+     has to line up with the drawing to the pixel, and the button's box is
+     not a fixed fraction of the frame (the hit areas have a px floor), so the
+     offset is measured at the moment of the press rather than worked out in
+     CSS. */
+  function keyDown(btn){
+    const art = btn.closest('.phone-frame')?.querySelector('.pf-art');
+    if(!art) return;
+    const a = art.getBoundingClientRect(), b = btn.getBoundingClientRect();
+    btn.style.backgroundSize = a.width + 'px ' + a.height + 'px';
+    btn.style.backgroundPosition = (a.left - b.left) + 'px ' + (a.top - b.top + 2) + 'px';
+    btn.classList.add('down');
+  }
+  const keyTimers = new WeakMap();
+  function keyUp(btn, after){
+    clearTimeout(keyTimers.get(btn));
+    keyTimers.set(btn, setTimeout(() => btn.classList.remove('down'), after || 0));
+  }
+  /* a key pressed from the keyboard (or by a click that never had a
+     pointerdown, e.g. assistive tech) still shows the press */
+  function keyFlash(dir){
+    const btn = document.querySelector('#deskphone .pf-keys .k-' + dir);
+    if(!btn || btn.classList.contains('down')) return;
+    keyDown(btn); keyUp(btn, 120);
+  }
+  (function wireKeys(){
+    const frame = document.querySelector('#deskphone .phone-frame');
+    const art = frame && frame.querySelector('.pf-art');
+    if(!art) return;
+    /* one reference to the inlined drawing, not a second copy of it */
+    frame.style.setProperty('--pf-art', 'url("' + art.getAttribute('src') + '")');
+    frame.querySelectorAll('.pf-keys button').forEach(btn => {
+      /* a tap is shorter than a frame, so hold the press at least 90ms or it
+         is never seen */
+      btn.addEventListener('pointerdown', () => { clearTimeout(keyTimers.get(btn)); keyDown(btn); });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev =>
+        btn.addEventListener(ev, () => { if(btn.classList.contains('down')) keyUp(btn, 90); }));
+    });
+  })();
+
   /* the drawn keys: snake keeps first claim (including its ↑↑↓↓←→ unlock),
      the menu gets everything else */
   const _teamKeySnake = teamKey;
   teamKey = function(dir){
+    keyFlash(dir);
     if(snakeOn()){ _teamKeySnake(dir); return; }
     _teamKeySnake(dir);                  // feeds the unlock buffer
     if(snakeOn()) return;                // that press was the last of the unlock
@@ -283,10 +325,12 @@
     el = document.createElement('div');
     el.id = 'nottouch';
     el.innerHTML =
+      /* Matteo's copy (Oct 5): a heading in Cheltenham and one plain
+         instruction in Helvetica, replacing "oh, you thought you could use a
+         touch screen. that's real funny, hehehehe / try the buttons below!". */
       '<div class="nt-card" role="alertdialog" aria-live="assertive">' +
-        '<p class="nt-ha">oh, you thought you could use a touch screen.<br>' +
-        'that\u2019s real funny, hehehehe</p>' +
-        '<p class="nt-go">try the buttons below!</p>' +
+        '<p class="nt-go">helping you get ready for the dumb life</p>' +
+        '<p class="nt-ha">try clicking the buttons below</p>' +
         '<img class="nt-keys" src="' + A.dpadCluster + '" alt="the four arrows and the OK button">' +
         '<button type="button" class="nt-x">got it</button>' +
       '</div>';
@@ -296,19 +340,29 @@
   }
 
   let nudgeTimer = null;
+  /* The shake is the surprise, and a surprise only works once (Matteo: "after
+     the first time, the shaking can be annoying"). First tap of the visit
+     shakes and buzzes; every tap after that just shows the card. Remembered
+     for the tab, so a reload does not start shaking again. */
+  let shookOnce = false;
+  try { shookOnce = sessionStorage.getItem('dumb-shook') === '1'; } catch(e){}
   function touchNudge(){
     const frame = document.querySelector('#deskphone .phone-frame');
     if(!frame) return;
-    /* restart the shake even if one is already running: offsetWidth forces
-       the reflow that makes the browser treat it as a new animation */
-    frame.classList.remove('shake');
-    void frame.offsetWidth;
-    frame.classList.add('shake');
-    clearTimeout(nudgeTimer);
-    nudgeTimer = setTimeout(() => frame.classList.remove('shake'), 500);
-    /* a real buzz where the hardware has one; iOS Safari has no vibrate, so
-       the shake has to carry it on its own there */
-    if(navigator.vibrate){ try { navigator.vibrate([16, 38, 16]); } catch(e){} }
+    if(!shookOnce){
+      shookOnce = true;
+      try { sessionStorage.setItem('dumb-shook', '1'); } catch(e){}
+      /* offsetWidth forces the reflow that makes the browser treat it as a
+         new animation */
+      frame.classList.remove('shake');
+      void frame.offsetWidth;
+      frame.classList.add('shake');
+      clearTimeout(nudgeTimer);
+      nudgeTimer = setTimeout(() => frame.classList.remove('shake'), 500);
+      /* a real buzz where the hardware has one; iOS Safari has no vibrate, so
+         the shake has to carry it on its own there */
+      if(navigator.vibrate){ try { navigator.vibrate([16, 38, 16]); } catch(e){} }
+    }
     nudgeEl().classList.add('on');
   }
 
@@ -457,20 +511,22 @@
     buildPhoneMenu();
 
     /* clicking the tab that is already open pops the window back out of the
-       egg. The nav items are plain <a href="#/slug"> now, so an already-current
-       slug fires no hashchange and nothing used to happen. */
+       egg. 24_routes.js opens the section on every plain click now (it routes
+       in place rather than following the href), so this only has to bring
+       the window back first. */
     document.querySelectorAll('#navlist .navitem').forEach(el => {
       el.addEventListener('click', () => {
         if(el.classList.contains('external')) return;
         if(collapsed() && typeof expandModal === 'function') expandModal();
-        if(location.hash === el.getAttribute('href')) openSection(el.dataset.key);
       });
     });
 
-    /* every opener also updates the handset */
+    /* every opener also updates the handset. Arguments pass straight
+       through: 24_routes.js uses the second one to tell a back/forward
+       apart from a click. */
     const _openSectionPhone = openSection;
     openSection = function(key){
-      _openSectionPhone(key);
+      _openSectionPhone.apply(this, arguments);
       phoneReflect(key);
       /* if we're opening while minimised (the phone is the nav on mobile),
          refresh the mirror to the section just picked */

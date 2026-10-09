@@ -119,12 +119,14 @@
     animation:nt-pop .22s cubic-bezier(.2,1.3,.4,1) both;
   }
   @keyframes nt-pop{from{transform:scale(.9) rotate(-1.5deg);} to{transform:none;}}
-  #nottouch .nt-ha{
-    font-family:var(--body); font-weight:700; font-size:15px; line-height:1.35;
+  /* heading in Cheltenham, instruction in Helvetica (Matteo) */
+  #nottouch .nt-go{
+    font-family:var(--headline); font-weight:700; font-size:28px; line-height:1.05;
     margin:0 0 10px;
   }
-  #nottouch .nt-go{
-    font-family:var(--headline); font-size:26px; line-height:1.1; margin:0 0 6px;
+  #nottouch .nt-ha{
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:400;
+    font-size:16px; line-height:1.35; margin:0 0 8px;
   }
   /* the cluster is cut from the handset with its transparent margin intact,
      so it needs no frame of its own -- it just sits on the paper */
@@ -188,7 +190,11 @@
       height:calc(var(--hinge-h, 4.2%) * 0.72);
       display:flex; align-items:center; justify-content:center;
       box-sizing:border-box;
-      pointer-events:auto;
+      /* Printed on the hinge, not a button. It still carried the sidebar's
+         onclick="goHome()", so a stray tap on the hinge opened flipoff.exe
+         over the menu (Jack: "I clicked it on accident and got confused").
+         Taps go through to the frame, which does nothing with them. */
+      pointer-events:none; cursor:default;
     }
     .phone-frame > #logo.on-hinge img{
       width:100%; height:100%; object-fit:contain; object-position:center;
@@ -237,12 +243,25 @@
       border-radius:0 !important; box-shadow:none !important; z-index:200 !important;
     }
     #winmodal:not(.collapsed){transform:none !important;}
-    #winmodal .wm-bar{height:48px; padding:0 8px 0 14px; cursor:default;}
-    #winmodal .wm-bar span:first-child{font-size:15px !important;}
-    #winmodal .wm-x{width:36px; height:36px; font-size:21px;}
+    /* The title bar is the only label a sheet has on a phone, and at 15px
+       "Shop.exe" read as small print (Kunal: "make the .exe's larger on
+       mobile"). 22px title, 58px bar, and a 44px close -- Matteo's minimum. */
+    #winmodal .wm-bar{height:58px; padding:0 8px 0 16px; cursor:default;}
+    #winmodal .wm-bar span:first-child{font-size:22px !important;}
+    #winmodal .wm-x{width:44px; height:44px; font-size:25px;}
     #winmodal .wm-resize{display:none !important;}
-    #winmodal .wm-body{height:calc(100% - 48px) !important;}
+    #winmodal .wm-body{height:calc(100% - 58px) !important;}
     #wm-section .wm-pad:not(.bleed){padding:18px 18px 30px;}
+
+    /* 32px sides, not 60 (Matteo, agreeing with Kunal). about.exe was the
+       worst of it -- 60px a side left a 270px column of type on a 390px
+       phone. Contact's card text (50px in) comes to the same 32px line.
+       Community already sits at 34 and FAQ/Memories are tighter than 32, so
+       they are left alone: the ask was to reduce. */
+    #about-pink{padding:40px 32px 36px !important;}
+    .contact-ground{padding:20px 16px 22px;}
+    .contact-card.support{padding:22px 16px;}
+    #wm-section .contact-ground h2{padding-left:16px;}
     #wm-section h2{font-size:30px !important;}
     #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
 
@@ -301,7 +320,35 @@
       width:min(520px, 35vw) !important;
       max-height:78vh;
     }
+
+    /* A SECTION GETS THE HERO'S SPACE. At 35vw an open Shop.exe was 290px
+       wide on an iPad -- the hero photo, the buy button and the spec list all
+       crushed into a strip beside a headline nobody was reading any more
+       (Jack: "the modals for each page are too small and not navigable ...
+       maybe on medium screen-size you drop the 'your life is waiting for
+       you' and let the modal take up that space").
+
+       Only while a section is open. On the home state the hero IS the page
+       and flipoff.exe is the picture beside it, so nothing changes there; and
+       minimising the section brings the hero straight back, because the rule
+       is keyed off the window's own state rather than set by a handler that
+       has to be undone. */
+    body:has(#winmodal.sectionmode:not(.collapsed)) #home{display:none !important;}
+    #winmodal.sectionmode:not(.collapsed){
+      left:calc(var(--nav-ink, 220px) + 24px) !important;
+      right:20px !important;
+      top:20px !important; bottom:20px !important;
+      width:auto !important; height:auto !important;
+      max-width:none !important; max-height:none !important;
+    }
   }
+
+  /* Double-tap-to-zoom, for good this time (Jack, twice). touch-action is not
+     inherited, and the baseline only set it on html and body -- so inside the
+     .exe window, which is its own scroll container, a double tap still
+     zoomed. Every element, so it holds in every scroller. "manipulation"
+     still allows pan and pinch, so nobody who needs to zoom loses it. */
+  *{touch-action:manipulation;}
 
   /* wide screens: the handset keeps the size Kunal asked for and the menu on
      its screen is small but legible */

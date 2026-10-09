@@ -303,11 +303,10 @@ NAV_ITEMS = [
     ("contact",   "Contact",   None, "contact"),
 ]
 
-# Every section is addressable, so a section can be linked, copy-pasted and
-# bookmarked (Jack's note). A static prototype can't answer a pushState path
-# like /shop on reload — it would 404 the moment someone pasted it — so the
-# prototype carries the slug in the hash (index.html#/shop) and ROUTES below is
-# the exact map react-router should use when this is ported (dumb.co/shop).
+# Every section is addressable at a real path -- /shop, /about -- so it can be
+# linked, copy-pasted and bookmarked (Jack: no "#/"). Reloading a path needs
+# the server to hand back this page: 404.html on GitHub Pages, spa_server.py
+# locally. ROUTES below is the exact map react-router should use on the port.
 def nav_html(indent, count_badge):
     out = []
     for key, label, href, slug in NAV_ITEMS:
@@ -316,8 +315,11 @@ def nav_html(indent, count_badge):
                        f'target="_blank" rel="noopener noreferrer" '
                        f'title="opens the existing Month Offline site">{label}</a>')
         else:
+            # a bare slug; 24_routes.js points it at the real address once it
+            # knows where the page lives (/shop on dumb.co,
+            # /dumb.co-redesign-preview/shop on the preview)
             out.append(f'{indent}<a class="navitem" data-key="{key}" data-slug="{slug}" '
-                       f'href="#/{slug}">{label}</a>')
+                       f'href="{slug}">{label}</a>')
     return "\n".join(out)
 
 html, n = re.subn(r'      <nav id="navlist">.*?\n      </nav>',
@@ -480,7 +482,10 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "4 month minimum", "SHOW_PLAN_CARDS", "MEMORY_EVENTS",
                "PRESS_MIRROR", "press-mirror", "railStep", "$15.99",
                "project xtraordinary", "community: () =>",   # no hyphen: Sonya
-               'href="#/community"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
+               'href="community"', "const ROUTES", "function applyRoute", "SLUG_TO_KEY",
+               "history.pushState", "const BASE", "legacyHash",
+               "helping you get ready for the dumb life", "class=\"sh-end\"", "DOTS_SHOP_NARROW",
+               "function keyDown", "--pf-art", "dumb-shook",
                ">Community<", "gi-drop", f'href="{MONTH_OFFLINE_URL}"',
                "1209576549", "1215826540",
                "about-team", 'onclick="openQuiz()"', "signatures: [",
@@ -512,6 +517,9 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                "that's a sandbox thing", "compare all three plans", "not sure which plan fits",
                ">compare plans<",
                "reviews on Google",                      # the link says just "reviews" now
+               'href="#/',                               # paths, not hashes (Jack)
+               'class="sh-buy"',                         # one buy per screen (Matteo)
+               "that\\u2019s real funny",                 # Matteo's nudge copy replaced it
                "querySelector('.shs-sub')"]:             # must be by id, see 31_reviews.js
     must(banned not in html, f"v7 leftover still present: {banned}")
 must(html.count("data:image/webp;base64") >= len(press), "press thumbnails not all embedded")

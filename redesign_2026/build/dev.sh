@@ -65,7 +65,7 @@ echo "  on this mac:  http://localhost:$PORT/index.html"
 echo "  watching build/parts + build/*.py — edit, save, reload. ctrl-c to stop."
 echo
 
-"$PY" -m http.server "$PORT" -d "$HERE/concept" --bind 0.0.0.0 >/dev/null 2>&1 &
+"$PY" "$HERE/build/spa_server.py" "$PORT" --dir "$HERE/concept" >/dev/null 2>&1 &   # /shop etc. need the SPA fallback
 SERVER=$!
 trap 'kill $SERVER 2>/dev/null || true; echo; echo "stopped."; exit 0' INT TERM
 

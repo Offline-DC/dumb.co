@@ -91,6 +91,33 @@
      phone. 13px of a 1200px-wide drawing, so the pen matches at any size. */
   .phone-frame .pf-keys button{background-size:1.08cqw 1.08cqw;}
   /* <<< dpad */
+  /* ---- up/down: square, and they press -------------------------------
+     Outside the generated block on purpose, so trace_screen.py can rewrite
+     the measurements without losing this.
+
+     SQUARE (Jack): up and down were wide, short targets -- 14.09 x 7.95cqw
+     for up -- which is the hardest shape to hit with a thumb moving
+     vertically. There is room in the drawing for each to be as tall as it is
+     wide without reaching the OK circle, so they are. The art is unchanged;
+     these are invisible hit areas. */
+  .phone-frame .pf-keys button.k-up  {height:14.09cqw;}
+  .phone-frame .pf-keys button.k-down{height:12.65cqw;}
+
+  /* PRESSED (Jack: "visually looks like it's being pressed down and feels more
+     tactile. Current website does this." -- src/Phone/NavButton.tsx drops the
+     key 2px on mousedown). The keys are part of one drawing here, so the
+     drawing can't move; instead the pressed key paints its own patch of the
+     handset art 2px lower over a shade of the page colour, which reads as the
+     key sinking into the body. 30_phone.js sets the patch geometry (keyDown);
+     the scale(.88) it replaces did nothing visible, because the button has no
+     pixels of its own. */
+  .phone-frame .pf-keys button:active{transform:translate(-50%,-50%);}
+  .phone-frame .pf-keys button.down{
+    background-image:var(--pf-art); background-repeat:no-repeat;
+    background-color:color-mix(in srgb, var(--yellow) 84%, #000);
+    transform:translate(-50%,-50%);
+    transition:none;
+  }
   /* No background images any more: Marco DREW the arrows into the handset, so
      the four buttons are invisible hit targets sitting on top of his ink.
      Painting the generated chevrons here as well drew every arrow twice.

@@ -42,8 +42,10 @@ else
   echo "  mac's IP and use http://<that-ip>:$PORT/index.html on the phone"
 fi
 echo
-echo "  a section links straight in, e.g.  http://${IP:-localhost}:$PORT/index.html#/shop"
+echo "  a section links straight in, e.g.  http://${IP:-localhost}:$PORT/shop"
 echo "  ctrl-c to stop"
 echo
 
-exec python3 -m http.server "$PORT" -d "$HERE/concept" --bind 0.0.0.0
+# not `python3 -m http.server`: it 404s on /shop, and the sections live at
+# real paths now. spa_server.py answers them with index.html, as Pages does.
+exec python3 "$HERE/build/spa_server.py" "$PORT" --dir "$HERE/concept"

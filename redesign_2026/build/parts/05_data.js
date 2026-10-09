@@ -27,6 +27,14 @@
   }
   const DOTS      = makeDots(20, 7);
   const DOTS_EDGE = makeDots(18, 11, [0, 0, 62, 58]);   // clear of a top-left heading
+  /* Shop.exe's hero on a phone is ONE column -- heading, three lines and the
+     button stacked down the left, the photo below them -- so DOTS_EDGE's
+     "clear of a top-left heading" zone no longer covers where the words are,
+     and dots landed inside "everything u need 2 go out" (Kunal: "some of the
+     neurons make it hard to read"). This field keeps clear of the whole text
+     block; anything under the photo is hidden by the photo anyway. */
+  const DOTS_SHOP_NARROW = makeDots(14, 11, [0, 0, 80, 46]);
+  const DOTS_SHOP_END    = makeDots(12, 5,  [0, 0, 72, 100]);
   const DOTS_PAGE = makeDots(46, 3,  [[0, 0, 46, 20], [0, 70, 100, 30]]);  // clear of the heading and the bottom rows
   const DOTS_CARD = (seed) => makeDots(11, seed, [0, 0, 74, 46]);
 

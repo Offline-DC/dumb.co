@@ -1,6 +1,7 @@
     shop: () => `
       <div class="sh-hero">
-        <div class="dots">${DOTS_EDGE}</div>
+        <div class="dots dots-wide">${DOTS_EDGE}</div>
+        <div class="dots dots-narrow">${DOTS_SHOP_NARROW}</div>
         <div class="hero-in">
           <div>
             <h3>dumbphone 2</h3>
@@ -22,7 +23,6 @@
           <div class="spec-head">
             <span class="spec-name">dumbphone 2</span>
             <span class="spec-price">$20</span>
-            <a class="sh-buy" href="${DUMBPHONE_CHECKOUT}" target="_blank" rel="noopener">buy</a>
           </div>
           <p class="spec-plan">all phones come with a
             <a href="#" onclick="event.preventDefault(); renderAllPlans();">plan</a>
@@ -171,6 +171,19 @@
                 <div class="rc-body">${r.body}</div>
               </div>
             `).join('')}
+          </div>
+        </div>
+
+        <!-- Matteo: once someone has read to the bottom, ask them. The only
+             buy button used to be in the hero, a full page of scrolling back
+             up. Copy is the home page's own headline and the hero's own
+             button label, both already approved, rather than new words. -->
+        <div class="sh-end">
+          <div class="dots">${DOTS_SHOP_END}</div>
+          <div class="sh-end-in">
+            <h3>your life is waiting for you.</h3>
+            <p>dumbphone 2 &middot; $20 phone, plans from $15.99/mo + tax</p>
+            <a class="sh-cta" href="${DUMBPHONE_CHECKOUT}" target="_blank" rel="noopener">click here to buy</a>
           </div>
         </div>
 

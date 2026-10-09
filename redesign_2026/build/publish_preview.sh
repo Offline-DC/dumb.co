@@ -12,9 +12,10 @@
 # here. Running the wrong one is how the team ends up reviewing the old site.
 #
 # Nothing here touches dumb.co: different repo, different Pages site. The
-# prototype uses hash routes (#/shop) and inlines every asset, so unlike the
-# vite build there is no --base prefix that can be got wrong -- it works at
-# any URL.
+# prototype routes at real paths (/shop) and works out its own base from the
+# address, so there is no --base prefix to get wrong -- it works at any URL.
+# The 404.html copy below is what makes /dumb.co-redesign-preview/shop load:
+# Pages answers any unknown path with it.
 set -euo pipefail
 
 # The repo that actually exists. The old default (dumb.co-preview) was a
