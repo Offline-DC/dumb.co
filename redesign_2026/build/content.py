@@ -124,7 +124,7 @@ def load():
             **{k: text(shop, k, "shop") for k in (
                 "product_name", "buy_button", "price", "plan_line", "quiz_link",
                 "what_is_title", "what_is", "included_title", "essentials_title",
-                "specs_title", "specs_intro", "plans_title", "plans_sub", "plans_note",
+                "specs_title", "specs_intro", "plans_title", "plans_sub", "plans_note", "quiz_button",
                 "reviews_heading", "end_heading", "end_line")},
             "checkout_url": https_or_default(text(shop, "checkout_url"), "shop.checkout_url"),
             "hero_lines": [s for s in (str(x).strip() for x in items(shop, "hero_lines")) if s],
@@ -137,8 +137,7 @@ def load():
         },
         "community": {
             **{k: text(community, k) for k in (
-                "heading", "lede", "newsletter_title", "newsletter_sub",
-                "newsletter_placeholder", "newsletter_button", "footer_text", "footer_email")},
+                "heading", "lede", "footer_text", "footer_email")},
             "programs": [
                 {"kicker": text(x, "kicker"), "name": text(x, "name"), "body": text(x, "body"),
                  "link_label": text(x, "link_label"), "link_url": link(text(x, "link_url"))}

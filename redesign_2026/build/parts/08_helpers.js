@@ -63,27 +63,17 @@ function plansDrawer(){
   }
 }
 
-  function renderAllPlans(){
-    const host = document.getElementById('wm-section');
-    host.innerHTML = `
-      <div class="wm-pad">
-        <div class="wm-back" onclick="openSection('shop')">‹ back to shop.exe</div>
-        <h2>the plans</h2>
-        <!-- Marco's cards. This used to rebuild them as a div table from
-             PLANS/FEATURES -- an approximation of a finished design, which is
-             the one thing it should not have been. -->
-        <div class="plan-cards">
-          <img src="${A.planDumb}"    alt="the dumb plan, $25.99 a month"/>
-          <img src="${A.planDumber}"  alt="the dumber plan, $20.99 a month"/>
-          <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
-        </div>
-        <div class="qr-min" style="margin-top:16px;">4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.</div>
-        <div class="quiz-foot" style="margin-top:16px;">
-          <a class="qr-cta" href="${DUMBPHONE_CHECKOUT}" target="_blank" rel="noopener">shop dumbphone 2 →</a>
-          <button type="button" class="quiz-link" onclick="openQuiz()">take the quiz</button>
-        </div>
-      </div>`;
-    host.scrollTop = 0;
+  /* "plan" and "Find out what plan works for you" open the plans drawer
+     in shop.exe and scroll to it, rather than swapping the window for a
+     separate page of plans you then had to back out of (Jack, Oct 9:
+     "it should just scroll you down to the plans dropdown, and then open
+     it"). From any other window it opens shop.exe first. */
+  function showPlans(){
+    if(openKey !== 'shop') openSection('shop');
+    const d = document.querySelector('#wm-section .plans-drop');
+    if(!d) return;
+    d.open = true;
+    requestAnimationFrame(() => d.scrollIntoView({behavior:'smooth', block:'start'}));
   }
 
   /* ---------------- memories.exe ----------------

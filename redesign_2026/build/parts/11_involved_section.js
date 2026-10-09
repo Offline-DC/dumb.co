@@ -1,7 +1,7 @@
     /* Community.exe — was "Get Involved". Afreka asked for Month Offline and
        Get Involved to merge into one Community section housing the organizing,
        career and community work; Jack asked for the contents to be dropdowns.
-       The DIAL-UP sits at the bottom. `group dumb down` is parked as a hidden
+       `group dumb down` is parked as a hidden
        program in community.json -- untick "hidden" in the CMS to bring it back.
        (File keeps its old name so build.py's anchors stay put.) */
     community: () => `
@@ -30,14 +30,9 @@
             </details>`).join('')}
           </div>
 
-          <!-- the DIAL-UP sits at the bottom now, and bigger: it was competing
-               with the section heading up top and nobody reads a signup form
-               before they know what they are signing up for. -->
-          <div id="newsletter" class="nl-big">
-            <span class="nl-label"><span class="nl-kicker">${esc(COPY.community.newsletter_title)}</span><span class="nl-sub">${esc(COPY.community.newsletter_sub)}</span></span>
-            <input type="email" placeholder="${esc(COPY.community.newsletter_placeholder)}" />
-            <button type="button">${esc(COPY.community.newsletter_button)}</button>
-          </div>
+          <!-- the DIAL-UP signup is off until there is somewhere for the
+               emails to go: the button never did anything (Jack, Oct 9).
+               Its styles are still in 12_involved.css (#newsletter). -->
 
           <!-- one email, at the bottom -->
           <div class="gi-foot">

@@ -611,7 +611,7 @@ for needle in ['id="wm-section"', 'id="wm-carousel"', "const EXE",
                "function keyboardNav", "kbfocus", "function buildPhoneMenu", "pm-row",
                "function phoneFit", "k-ok", "--bp-phone",
                "gi-foot",
-               'src="quiz.html"', 'class="qf-frame"', "renderAllPlans()",
+               'src="quiz.html"', 'class="qf-frame"', "function showPlans", "showPlans();",
                'id="review-sub"', "getElementById('review-sub')", 'class="plans-sub"']:
     must(needle in html, f"post-build check failed, missing: {needle}")
 for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindow", 'id="taskbar"',
@@ -631,7 +631,8 @@ for banned in ["body.classList.add('section-open')", 'class="xwin', "createWindo
                'class="sh-buy"',                         # one buy per screen (Matteo)
                "that\\u2019s real funny",                 # Matteo's nudge copy replaced it
                "querySelector('.shs-sub')",
-               "not final copy", "redesign concept", "<title>dumb.co —"]:                        # Jack: not on the site at all             # must be by id, see 31_reviews.js
+               "not final copy", "redesign concept", "<title>dumb.co —",
+               'id="newsletter"']:                       # off until it can store emails                        # Jack: not on the site at all             # must be by id, see 31_reviews.js
     must(banned not in html, f"v7 leftover still present: {banned}")
 must(press and all(p_["img"] in html for p_ in press), "press thumbnails not all embedded")
 if C.warnings:

@@ -108,6 +108,9 @@
                 <img src="${A.planDumbest}" alt="the dumbest plan, $15.99 a month"/>
               </div>
               ${COPY.shop.plans_note ? `<div class="qr-min" style="margin-top:14px;">${rich(COPY.shop.plans_note)}</div>` : ``}
+              <!-- the quiz used to be reached from the separate plans page,
+                   which is gone; it lives with the plans now -->
+              ${COPY.shop.quiz_button ? `<div class="quiz-foot" style="margin-top:14px;"><button type="button" class="quiz-link" onclick="openQuiz()">${esc(COPY.shop.quiz_button)}</button></div>` : ``}
             </div>
           </details>
         </div>

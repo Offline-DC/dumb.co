@@ -339,6 +339,9 @@ content:
           - name: plans_note
             label: Plans drawer small print
             type: string
+          - name: quiz_button
+            label: Quiz button (in the plans drawer)
+            type: string
           - name: reviews_heading
             label: Reviews heading
             type: string
@@ -390,18 +393,6 @@ content:
                 label: Hide this drawer
                 type: boolean
                 default: false
-          - name: newsletter_title
-            label: Newsletter name
-            type: string
-          - name: newsletter_sub
-            label: Newsletter line
-            type: string
-          - name: newsletter_placeholder
-            label: Email box placeholder
-            type: string
-          - name: newsletter_button
-            label: Newsletter button
-            type: string
           - name: footer_text
             label: Bottom line
             type: string

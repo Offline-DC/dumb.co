@@ -19,7 +19,7 @@
       .replace(/\*\*\*(.+?)\*\*\*/g, '<b>$1</b>')
       .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
       .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, u) => {
-        if(u === 'plans') return `<a href="#" onclick="event.preventDefault(); renderAllPlans();">${t}</a>`;
+        if(u === 'plans') return `<a href="#" onclick="event.preventDefault(); showPlans();">${t}</a>`;
         const raw = u.replace(/&amp;/g, '&');
         if(/^(mailto|tel):/i.test(raw)) return `<a href="${u}">${t}</a>`;
         if(/^https?:\/\//i.test(raw)) return `<a href="${u}" target="_blank" rel="noopener">${t}</a>`;
