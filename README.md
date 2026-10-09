@@ -60,8 +60,9 @@ homes (`astro.config.mjs`, and `src/pages/404.astro` for `/faq/videos`).
 Every push to `main` builds and publishes to dumb.co
 (`.github/workflows/deploy.yml`). Pushes to `dumb.co_redesign_v1` publish the
 preview at offline-dc.github.io/dumb.co-redesign-preview
-(`.github/workflows/redesign-preview.yml`; `npm run build:preview` builds it
-locally under that sub-path).
+(`.github/workflows/redesign-preview.yml`, once its deploy key is set up).
+Until then, or to publish by hand: `bash scripts/publish-preview.sh`, with a
+clone of the preview repo next to this one.
 
 ## Editing content (Pages CMS)
 
