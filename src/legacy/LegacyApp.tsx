@@ -8,7 +8,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import OfflineMode from "../OfflineMode";
-import DumbDumb from "../DumbDumb.tsx";
 import Support from "../Support";
 import Internship from "../Internship/Internship.tsx";
 import NotFound from "../NotFound";
@@ -16,7 +15,8 @@ import AndroidDownload from "../Android/AndroidDownload.tsx";
 import AppsDownload from "../Android/AppsDownload.tsx";
 import DesktopDownload from "../Desktop/DesktopDownload.tsx";
 import AppRedirect from "../AppRedirect.tsx";
-import MobileRedirect from "../MobileRedirect.tsx";
+import FSADownload from "../FSA/FSADownload.tsx";
+import SpotifyLink from "../Link/SpotifyLink.tsx";
 import CenteredShell from "../CenteredLayout.tsx";
 import "../App.css";
 
@@ -31,7 +31,7 @@ export default function LegacyApp() {
       <BrowserRouter basename={basename}>
         <Routes>
           <Route element={<CenteredShell />}>
-            <Route path="/dumbdown" element={<DumbDumb />} />
+            <Route path="/dumbdown" element={<AppRedirect />} />
             <Route path="/setup" element={<OfflineMode />} />
             <Route path="/support" element={<Support />} />
             <Route path="/internship" element={<Internship />} />
@@ -41,7 +41,10 @@ export default function LegacyApp() {
             <Route path="/desktop-signin" element={<DesktopDownload />} />
             <Route path="/desktop" element={<DesktopDownload />} />
             <Route path="/app" element={<AppRedirect />} />
-            <Route path="/mobile" element={<MobileRedirect />} />
+            <Route path="/fsa" element={<FSADownload />} />
+            {/* Spotify sign-in hand-off for the dumbphone: the phone's WebView
+                can't render Spotify's consent page (src/Link/SpotifyLink.tsx) */}
+            <Route path="/link" element={<SpotifyLink />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

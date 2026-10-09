@@ -5,7 +5,6 @@
  */
 import LegacyApp from "../legacy/LegacyApp";
 import Internship from "../Internship/Internship.tsx";
-import DumbDumb from "../DumbDumb.tsx";
 import Analytics from "../site/Analytics.astro";
 import "../App.css";
 
@@ -41,7 +40,6 @@ const canonical = new URL(path, new URL(base, Astro.site ?? "https://dumb.co")).
       <div id="root"><div style="height:100vh;width:100%;background-color:#F9F594;display:flex;margin:auto">
         <div style="display:flex;justify-content:center;align-items:center;margin:auto 0rem;background-color:#F9F594;max-width:100%;width:100%">
           {path === "internship" && <Internship client:load />}
-          {path === "dumbdown" && <DumbDumb client:load />}
         </div>
       </div></div>
     )
