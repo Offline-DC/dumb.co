@@ -52,7 +52,7 @@ FAQ.exe fetches the live published Google Sheet, which a `file://` page can't do
 Serve it to see that tab work:
 
 ```
-python3 -m http.server 8000 -d concept    # then open localhost:8000
+python3 build/spa_server.py 8000          # then open localhost:8000
 ```
 
 ## One site, two shapes
@@ -92,25 +92,37 @@ sequence included.
 
 ## Addresses you can copy and paste
 
-Every section has its own address, and the nav items are real `<a href>` links,
+Every section has its own path, and the nav items are real `<a href>` links,
 so right-click > copy link address works:
 
-| section | prototype | after the React port |
+| section | prototype / preview | after the React port |
 | --- | --- | --- |
-| Shop | `index.html#/shop` | `dumb.co/shop` |
-| About | `index.html#/about` | `dumb.co/about` |
-| Community | `index.html#/community` | `dumb.co/community` |
-| Press | `index.html#/press` | `dumb.co/press` |
-| Memories | `index.html#/memories` | `dumb.co/memories` |
-| FAQ | `index.html#/faq` | `dumb.co/faq` |
-| Contact | `index.html#/contact` | `dumb.co/contact` |
+| Shop | `…/shop` | `dumb.co/shop` |
+| About | `…/about` | `dumb.co/about` |
+| Community | `…/community` | `dumb.co/community` |
+| Press | `…/press` | `dumb.co/press` |
+| Memories | `…/memories` | `dumb.co/memories` |
+| FAQ | `…/faq` | `dumb.co/faq` |
+| Contact | `…/contact` | `dumb.co/contact` |
 
-The prototype is one static file, so a pushState path like `/shop` would 404 the
-moment anyone pasted it — the slug therefore rides in the hash. It copies,
-pastes, bookmarks, reloads and back-buttons correctly. `ROUTES` in
-`build/parts/24_routes.js` (generated from `NAV_ITEMS` in `build.py`) is the
-exact slug map react-router should be handed on the port. See `SEO.md` — real
-paths need prerendering, and the current GitHub Pages deploy would 404 them.
+No `#/` any more (Jack). The page works out its own base from the address, so
+the same file routes at `localhost:8010/shop`, at
+`offline-dc.github.io/dumb.co-redesign-preview/shop`, and at `dumb.co/shop`.
+
+Reloading a path needs the server to answer it with the page:
+
+- **GitHub Pages** serves `404.html` for unknown paths, and
+  `publish_preview.sh` writes `404.html` as a copy of `index.html`.
+- **Locally**, `build/serve.sh` and `build/dev.sh` run `build/spa_server.py`,
+  which does the same. Plain `python3 -m http.server` does not — it 404s on
+  `/shop`.
+- **From disk** (`file://`) there is no server, so the slug falls back to
+  `index.html#/shop`.
+
+Old `#/shop` links still work: they open the section and the address is
+rewritten to `/shop`. `ROUTES` in `build/parts/24_routes.js` (generated from
+`NAV_ITEMS` in `build.py`) is the exact slug map react-router should be handed
+on the port. See `SEO.md` — real paths need prerendering on the React app.
 
 ## Memories from a spreadsheet
 
