@@ -3,7 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import contentRaw from "./android.md?raw";
 import styles from "./index.module.css";
-import launchIcon from "./LaunchIcon.png";
+import launchIconAsset from "./LaunchIcon.png";
+// Under Astro an imported image is {src, width, height}, not a URL string.
+const launchIcon: string = typeof launchIconAsset === "string" ? launchIconAsset : launchIconAsset.src;
 
 type VersionInfo = {
   latest_version?: string;

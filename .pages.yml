@@ -1,0 +1,532 @@
+# Pages CMS configuration (https://pagescms.org)
+#
+# The forms the team sees after signing in at https://app.pagescms.org and
+# opening Offline-DC/dumb.co. Every save is a commit to the branch picked in
+# the CMS; what happens next depends on the branch (see "Editing content" in
+# README.md):
+#   dumb.co_redesign_v1  -> the preview site rebuilds (redesign-preview.yml)
+#   main                 -> dumb.co rebuilds (deploy.yml)
+#
+# The forms edit the JSON in src/content/. The site is built from it by
+# Astro (src/site/lib/content.ts): every page is plain HTML with the content
+# already in it, and nothing is fetched by visitors' browsers. A field left
+# empty is simply not shown, a press item or photo whose image is missing is
+# skipped, and the checkout link only ever accepts an https address.
+
+media:
+  - name: press
+    label: Press images
+    input: src/Press/images
+    output: /src/Press/images
+    categories: [image]
+    rename: safe
+  - name: memories
+    label: Memories photos
+    input: src/site/assets/memories
+    output: /src/site/assets/memories
+    categories: [image]
+    rename: safe
+
+content:
+  # ----------------------------------------------------------------- Press
+  - name: press
+    label: Press
+    description: The articles in press.exe, top to bottom. Drag to reorder.
+    type: file
+    path: src/content/press.json
+    format: json
+    fields:
+      - name: heading
+        label: Heading
+        type: string
+      - name: contact_email
+        label: Press contact (under the heading)
+        type: string
+      - name: items
+        label: Articles
+        type: object
+        list:
+          collapsible:
+            summary: "{source}: {title}"
+        fields:
+          - name: title
+            label: Headline (our words, keep it short)
+            type: string
+            required: true
+          - name: source
+            label: Publication
+            type: string
+          - name: link
+            label: Link to the article
+            type: string
+            required: true
+            pattern:
+              regex: "^https?://.+"
+              message: Must start with https://
+          - name: image
+            label: Image
+            description: Cropped to a square. An article without an image isn't shown.
+            type: image
+            required: true
+            options:
+              media: press
+          - name: hidden
+            label: Hide this article
+            type: boolean
+            default: false
+          - name: id
+            label: ID
+            description: Leave blank for new articles.
+            type: string
+
+  # --------------------------------------------------------------- Memories
+  - name: memories
+    label: Memories
+    description: Events we've done, newest first. An event with no photos says "photos coming soon".
+    type: file
+    path: src/content/memories.json
+    format: json
+    fields:
+      - name: heading
+        label: Heading
+        type: string
+      - name: events
+        label: Events
+        type: object
+        list:
+          collapsible:
+            summary: "{name} ({when})"
+        fields:
+          - name: name
+            label: Event name
+            type: string
+            required: true
+          - name: when
+            label: When
+            description: e.g. "August 2026"
+            type: string
+          - name: where
+            label: Where
+            description: e.g. "New York, NY"
+            type: string
+          - name: blurb
+            label: Blurb
+            description: Optional. Only write what someone who was there would say.
+            type: text
+          - name: video
+            label: Vimeo link
+            description: Optional. Shows as the last tile.
+            type: string
+          - name: photos
+            label: Photos
+            description: Only photos everyone in them has agreed to. Any size; the site resizes them.
+            type: object
+            list:
+              collapsible:
+                summary: "{caption}"
+            fields:
+              - name: image
+                label: Photo
+                type: image
+                required: true
+                options:
+                  media: memories
+              - name: caption
+                label: Caption
+                description: Optional.
+                type: string
+          - name: hidden
+            label: Hide this event
+            type: boolean
+            default: false
+
+  # -------------------------------------------------------------------- FAQ
+  - name: faq
+    label: FAQ
+    description: faq.exe. Replaces the FAQ Google Sheet.
+    type: file
+    path: src/content/faq.json
+    format: json
+    fields:
+      - name: heading
+        label: Heading
+        type: string
+      - name: sub
+        label: Line under the heading
+        type: string
+      - name: general_tab
+        label: First tab
+        type: string
+      - name: tech_tab
+        label: Second tab
+        type: string
+      - name: videos_tab
+        label: Videos tab
+        type: string
+      - name: questions
+        label: Questions
+        type: object
+        list:
+          collapsible:
+            summary: "{question}"
+        fields:
+          - name: question
+            label: Question
+            type: string
+            required: true
+          - name: answer
+            label: Answer
+            description: "Blank line = new paragraph. **bold**, [link text](https://...)"
+            type: text
+            required: true
+          - name: category
+            label: Tab
+            type: select
+            default: general
+            options:
+              values:
+                - name: general
+                  label: General
+                - name: tech
+                  label: Tech Help
+          - name: hidden
+            label: Hide this question
+            type: boolean
+            default: false
+      - name: videos
+        label: Videos
+        type: object
+        list:
+          collapsible:
+            summary: "{title}"
+        fields:
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: link
+            label: Vimeo link
+            type: string
+            required: true
+
+  # -------------------------------------------------------------- Site copy
+  - name: copy
+    label: Site copy
+    type: group
+    items:
+      - name: home
+        label: Home (flipoff.exe beside the headline)
+        type: file
+        path: src/content/home.json
+        format: json
+        fields:
+          - name: kicker
+            label: Small line above the headline
+            type: string
+          - name: headline
+            label: Headline
+            description: One line per line.
+            type: text
+          - name: body
+            label: Paragraph
+            type: text
+          - name: button
+            label: Button
+            type: string
+
+      - name: about
+        label: about.exe
+        type: file
+        path: src/content/about.json
+        format: json
+        fields:
+          - name: heading
+            label: Heading
+            description: One line per line.
+            type: text
+          - name: body
+            label: Letter
+            description: Blank line = new paragraph.
+            type: text
+          - name: sign_off
+            label: Sign-off
+            description: One line per line.
+            type: text
+
+      - name: shop
+        label: shop.exe
+        description: "In any of these: **bold**, [link text](https://...), and [plan](plans) opens the plans."
+        type: file
+        path: src/content/shop.json
+        format: json
+        fields:
+          - name: product_name
+            label: Product name
+            type: string
+          - name: hero_lines
+            label: Lines beside the photo
+            type: string
+            list: true
+          - name: buy_button
+            label: Buy button
+            type: string
+          - name: checkout_url
+            label: Checkout link (Stripe)
+            description: Both buy buttons go here. Must be https://, or the site keeps the old one.
+            type: string
+            pattern:
+              regex: "^https://.+"
+              message: Must start with https://
+          - name: price
+            label: Price
+            type: string
+          - name: plan_line
+            label: Line under the price
+            type: string
+          - name: highlights
+            label: Bullet points
+            type: string
+            list: true
+          - name: quiz_link
+            label: Link to the plans
+            type: string
+          - name: what_is_title
+            label: Drawer 1 title
+            type: string
+          - name: what_is
+            label: Drawer 1 text
+            type: text
+          - name: included_title
+            label: Drawer 2 title
+            type: string
+          - name: included
+            label: Drawer 2 list
+            type: string
+            list: true
+          - name: essentials_title
+            label: Drawer 3 title
+            type: string
+          - name: essentials
+            label: Drawer 3 list
+            type: string
+            list: true
+          - name: specs_title
+            label: Drawer 4 title
+            type: string
+          - name: specs_intro
+            label: Drawer 4 intro
+            type: text
+          - name: specs
+            label: Specs
+            type: object
+            list:
+              collapsible:
+                summary: "{label}"
+            fields:
+              - name: label
+                label: Name
+                type: string
+              - name: value
+                label: Value
+                type: string
+          - name: plans_title
+            label: Plans drawer title
+            type: string
+          - name: plans_sub
+            label: Plans drawer subtitle
+            type: string
+          - name: plans_note
+            label: Plans drawer small print
+            type: string
+          - name: quiz_button
+            label: Quiz button (in the plans drawer)
+            type: string
+          - name: reviews_heading
+            label: Reviews heading
+            type: string
+          - name: end_heading
+            label: Closing box heading
+            type: string
+          - name: end_line
+            label: Closing box line
+            type: string
+
+      - name: community
+        label: community.exe
+        type: file
+        path: src/content/community.json
+        format: json
+        fields:
+          - name: heading
+            label: Heading
+            type: string
+          - name: lede
+            label: Line under the heading
+            type: text
+          - name: programs
+            label: Drawers
+            type: object
+            list:
+              collapsible:
+                summary: "{name}"
+            fields:
+              - name: kicker
+                label: Small line above the name
+                type: string
+              - name: name
+                label: Name
+                type: string
+                required: true
+              - name: body
+                label: Text
+                description: "**bold** works."
+                type: text
+              - name: link_label
+                label: Button
+                type: string
+              - name: link_url
+                label: Button link
+                description: https://... or mailto:someone@dumb.co
+                type: string
+              - name: hidden
+                label: Hide this drawer
+                type: boolean
+                default: false
+          - name: footer_text
+            label: Bottom line
+            type: string
+          - name: footer_email
+            label: Bottom email
+            type: string
+
+  # ---------------------------------------------------------- Site settings
+  - name: settings
+    label: Site settings
+    description: Page titles and descriptions for Google, link-preview text, support contact details (contact.exe and the sidebar).
+    type: file
+    path: src/content/settings.json
+    format: json
+    fields:
+      - name: pages
+        label: Page titles and descriptions (what Google and link previews show)
+        description: Titles work best around 50-60 characters, descriptions around 150-160.
+        type: object
+        fields:
+          - name: home
+            label: Home
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: shop
+            label: shop.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: about
+            label: about.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: community
+            label: community.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: press
+            label: press.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: memories
+            label: memories.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: faq
+            label: faq.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+          - name: contact
+            label: contact.exe
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: description
+                label: Description
+                type: text
+      - name: site_description
+        label: Fallback description (for any page without its own)
+        type: text
+      - name: share_title
+        label: Title on link previews
+        type: string
+      - name: share_image_alt
+        label: Description of the link-preview image
+        type: string
+      - name: support_email
+        label: Support email
+        type: string
+      - name: support_phone
+        label: Support phone
+        type: string
+      - name: contact_heading
+        label: contact.exe heading
+        type: string
+      - name: support_heading
+        label: Support card heading
+        type: string
+      - name: support_tagline
+        label: Support card line
+        type: string
+      - name: hours
+        label: Support hours
+        type: object
+        list: true
+        fields:
+          - name: days
+            label: Days
+            type: string
+          - name: hours
+            label: Hours
+            type: string
+      - name: social_line
+        label: Line under the social icons
+        type: string

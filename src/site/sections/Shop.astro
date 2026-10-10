@@ -1,0 +1,147 @@
+---
+/* shop.exe -- words from src/content/shop.json, reviews from
+   src/content/reviews_snapshot.csv */
+import { COPY } from "../lib/content";
+import { A } from "../lib/assets";
+import { REVIEWS, REVIEWS_PAGE } from "../lib/reviews";
+import { paras, rich, starRow, DOTS_EDGE, DOTS_SHOP_NARROW, DOTS_SHOP_END } from "../lib/html";
+const c = COPY.shop;
+const avg = REVIEWS.avg && REVIEWS.count;
+---
+<div class="sh-hero">
+  <div class="dots dots-wide" set:html={DOTS_EDGE()} />
+  <div class="dots dots-narrow" set:html={DOTS_SHOP_NARROW()} />
+  <div class="hero-in">
+    <div>
+      <h3>{c.product_name}</h3>
+      <p class="hero-lines">{c.hero_lines.map((l) => <span>{l}</span>)}</p>
+      <a class="sh-cta" href={c.checkout_url} target="_blank" rel="noopener">{c.buy_button}</a>
+    </div>
+    <div class="hero-phone">
+      <button type="button" class="hp-arrow prev" onclick="shopPhotoStep(-1)" aria-label="previous photo">‹</button>
+      <img id="sh-main-img" src={A.shopPhotos[0]} data-i="0" alt={c.product_name} />
+      <button type="button" class="hp-arrow next" onclick="shopPhotoStep(1)" aria-label="next photo">›</button>
+      <div class="hp-dots">{A.shopPhotos.map((_, i) => <i class={i === 0 ? "on" : ""}></i>)}</div>
+    </div>
+  </div>
+</div>
+
+<div class="wm-pad">
+  <div class="sh-spec">
+    <div class="spec-head">
+      <span class="spec-name">{c.product_name}</span>
+      <span class="spec-price">{c.price}</span>
+    </div>
+    {c.plan_line && <p class="spec-plan" set:html={rich(c.plan_line)} />}
+    <ul>
+      {c.highlights.map((h) => <li set:html={rich(h)} />)}
+    </ul>
+    {c.quiz_link && <div class="spec-quiz" set:html={rich(c.quiz_link)} />}
+  </div>
+
+  <!-- Milk's drawers. Same .gi-drop furniture community.exe uses. -->
+  <div class="gi-drops sh-drops">
+    <details class="gi-drop">
+      <summary>
+        <span class="gi-sum"><span class="gi-name">{c.what_is_title}</span></span>
+        <span class="gi-chev" aria-hidden="true">+</span>
+      </summary>
+      <div class="gi-body" set:html={paras(c.what_is)} />
+    </details>
+
+    <details class="gi-drop">
+      <summary>
+        <span class="gi-sum"><span class="gi-name">{c.included_title}</span></span>
+        <span class="gi-chev" aria-hidden="true">+</span>
+      </summary>
+      <div class="gi-body">
+        <ul class="sh-list">{c.included.map((x) => <li set:html={rich(x)} />)}</ul>
+      </div>
+    </details>
+
+    <details class="gi-drop">
+      <summary>
+        <span class="gi-sum"><span class="gi-name">{c.essentials_title}</span></span>
+        <span class="gi-chev" aria-hidden="true">+</span>
+      </summary>
+      <div class="gi-body">
+        <ul class="sh-list two-up">{c.essentials.map((x) => <li set:html={rich(x)} />)}</ul>
+      </div>
+    </details>
+
+    <details class="gi-drop">
+      <summary>
+        <span class="gi-sum"><span class="gi-name">{c.specs_title}</span></span>
+        <span class="gi-chev" aria-hidden="true">+</span>
+      </summary>
+      <div class="gi-body">
+        <Fragment set:html={paras(c.specs_intro)} />
+        <dl class="sh-specs">
+          {c.specs.map((x) => <><dt>{x.label}</dt><dd set:html={rich(x.value)} /></>)}
+        </dl>
+      </div>
+    </details>
+
+    <!-- Marco's plan cards, in a drawer: at full size they are taller than
+         the window twice over. On a phone plansDrawer() holds it open. "plan"
+         links anywhere on the page open this and scroll to it (showPlans). -->
+    <details class="gi-drop plans-drop">
+      <summary>
+        <span class="gi-sum"><span class="gi-name">{c.plans_title}</span></span>
+        <span class="gi-chev" aria-hidden="true">+</span>
+      </summary>
+      <div class="gi-body">
+        <div class="plans-sub">{c.plans_sub}</div>
+        <div class="plan-cards">
+          <img src={A.planDumb} alt="the dumb plan, $25.99 a month" loading="lazy" />
+          <img src={A.planDumber} alt="the dumber plan, $20.99 a month" loading="lazy" />
+          <img src={A.planDumbest} alt="the dumbest plan, $15.99 a month" loading="lazy" />
+        </div>
+        {c.plans_note && <div class="qr-min" style="margin-top:14px;" set:html={rich(c.plans_note)} />}
+        {c.quiz_button && (
+          <div class="quiz-foot" style="margin-top:14px;"><button type="button" class="quiz-link" onclick="openQuiz()">{c.quiz_button}</button></div>
+        )}
+      </div>
+    </details>
+  </div>
+
+  <div class="shop-sec" style="margin-bottom:6px;">
+    <div class="rail-head">
+      <div>
+        <h3>{c.reviews_heading}</h3>
+        <div class="shs-sub" id="review-sub">
+          {avg && <><Fragment set:html={starRow(Math.round(parseFloat(REVIEWS.avg) || 5))} /> {REVIEWS.avg} · <a class="rv-src" href={REVIEWS_PAGE} target="_blank" rel="noopener noreferrer">reviews &#8599;</a></>}
+        </div>
+      </div>
+      <div class="rail-nav">
+        <button type="button" onclick="railStep('review-rail',-1)">‹</button>
+        <button type="button" onclick="railStep('review-rail',1)">›</button>
+      </div>
+    </div>
+    <div class="rail" id="review-rail">
+      {REVIEWS.list.map((r) => (
+        <div class="review-card">
+          <div class="rc-top">
+            <div class="rc-av">{r.avatar}</div>
+            <div>
+              <div class="rc-name">{r.name}</div>
+              <div class="rc-meta">{r.meta}</div>
+            </div>
+            <div style="margin-left:auto;" set:html={starRow(r.stars)} />
+          </div>
+          <div class="rc-body">{r.body}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- once someone has read to the bottom, ask them (Matteo) -->
+  <div class="sh-end">
+    <div class="dots" set:html={DOTS_SHOP_END()} />
+    <div class="sh-end-in">
+      <h3>{c.end_heading}</h3>
+      {c.end_line && <p set:html={rich(c.end_line)} />}
+      <a class="sh-cta" href={c.checkout_url} target="_blank" rel="noopener">{c.buy_button}</a>
+    </div>
+  </div>
+</div>

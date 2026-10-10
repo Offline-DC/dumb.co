@@ -1,0 +1,101 @@
+{
+  "product_name": "dumbphone 2",
+  "hero_lines": [
+    "everything",
+    "u need 2",
+    "go out"
+  ],
+  "buy_button": "click here to buy",
+  "checkout_url": "https://buy.stripe.com/00w3cocK48f87HBakE8N20D",
+  "price": "$20",
+  "plan_line": "all phones come with a [plan](plans) starting at $15.99/mo + tax",
+  "highlights": [
+    "$20 phone hardware with custom dumbOS + SIM card. plans start at $15.99/mo + tax, activated when u receive the phone.",
+    "**4 month minimum plan, auto-renews monthly after that.**",
+    "every phone comes with the essentials: unlimited call/text, maps, signal, rideshare, 2-factor auth, bluetooth, hotspot, alarm, camera, weather + more.",
+    "optional features: fwd calls from ur smartphone, sync smartphone texts + contacts, whatsapp, spotify, apple music, podcasts.",
+    "iphone + android compatible."
+  ],
+  "quiz_link": "[**Find out what plan works for you**](plans).",
+  "what_is_title": "what is the dumbphone 2?",
+  "what_is": "a companion device that syncs with ur smartphone: maps, music, rideshare and all ur messages, but only if u want them. a highly modified TCL Flip 2 running our own dumbOS.",
+  "included_title": "what's included",
+  "included": [
+    "dumbphone 2 hardware",
+    "SIM card w/ an active phone number — choose a brand new number or transfer ur current one",
+    "monthly [plan](plans)",
+    "USB-C charging cable",
+    "USB-C charging block"
+  ],
+  "essentials_title": "essentials",
+  "essentials": [
+    "active phone line",
+    "unlimited calls and SMS texts",
+    "1 GB data (all u need for a dumbphone)",
+    "voice-to-text and TT9",
+    "camera",
+    "bluetooth and wifi",
+    "maps",
+    "rideshare (uber and lyft)",
+    "2-factor authentication",
+    "calendar (syncs with google cal)",
+    "weather",
+    "music streaming (spotify & apple music)",
+    "Signal",
+    "WhatsApp",
+    "clock (alarm, timer, stopwatch)",
+    "recorder",
+    "snake :p"
+  ],
+  "specs_title": "specs",
+  "specs_intro": "the dumbphone 2 is a highly modified version of the classic TCL Flip 2 with our custom dumbOS.",
+  "specs": [
+    {
+      "label": "screen",
+      "value": "2.8″ main screen and 1.44″ outer screen for caller ID & time"
+    },
+    {
+      "label": "battery",
+      "value": "1,850 mAh, charges with USB-C"
+    },
+    {
+      "label": "camera",
+      "value": "2MP rear camera"
+    },
+    {
+      "label": "storage",
+      "value": "4GB storage, 1GB RAM — microSD slot for more photos and downloaded music"
+    },
+    {
+      "label": "connectivity",
+      "value": "4G LTE"
+    },
+    {
+      "label": "carrier",
+      "value": "T-Mobile"
+    },
+    {
+      "label": "wireless",
+      "value": "wi-fi, bluetooth (connects with car audio), headphone jack"
+    },
+    {
+      "label": "weight",
+      "value": "140g"
+    },
+    {
+      "label": "dimensions",
+      "value": "4.2″ × 2.2″ × 0.8″"
+    },
+    {
+      "label": "color",
+      "value": "blue (refurbished) or grey (new)"
+    }
+  ],
+  "plans_title": "the plans",
+  "plans_sub": "dumb, dumber, dumbest.",
+  "plans_note": "4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.",
+  "quiz_button": "take the quiz",
+  "reviews_heading": "what dumb ppl say",
+  "end_heading": "your life is waiting for you.",
+  "end_line": "dumbphone 2 · $20 phone, plans from $15.99/mo + tax"
+}

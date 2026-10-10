@@ -1,0 +1,357 @@
+
+  /* ==========================================================================
+     ONE SITE, TWO SHAPES  (Jack: mobile-first, the desktop collapses into the
+     mobile view rather than being a second file)
+
+     Below the breakpoint the sidebar, hero and top bar step out, the flip
+     phone grows to fill the screen, and the .exe window becomes a full-screen
+     sheet. Nothing moves in the DOM — it's all position, so crossing the
+     breakpoint in either direction is reversible and there's no second build.
+     ========================================================================== */
+  :root{ --bp-phone: 760px; }
+
+  /* the phone's screen carries the menu in BOTH shapes, so the handset always
+     reflects whatever the window is showing (Jack: "the phone and the modal
+     reflect one another") */
+  /* The screen box is now the drawn aperture exactly (see trace_screen.py), so
+     its top and bottom edges sit under the ink stroke. Inset the content
+     vertically to clear it -- vertical only, so the highlight bar still bleeds
+     out to the traced edge instead of floating in a box. */
+  #tcl-screen .pmn{
+    position:absolute; inset:0; box-sizing:border-box;
+    /* The inset is NOT applied here any more. It used to pad the whole menu
+       in by how far the drawn edge bows inward at its worst, which kept the
+       highlight off the ink -- but it also meant the bar stopped short of the
+       screen everywhere the edge did NOT bow, leaving the yellow border Laffy
+       asked to get rid of. On Marco's handset that is much worse: his screen
+       outline wobbles ~3% against the old art's ~0%, so the traced inset went
+       from 1.50% to 4.48% and the gap roughly tripled.
+
+       The bar now runs the full width and the clip-path shapes it, which is
+       what the clip is for: it is traced from the same ink, so the highlight
+       ends exactly where the drawn edge does -- no yellow, and it follows the
+       wobble instead of standing off from it. The inset moves to the row's
+       own padding, so the TEXT still keeps clear of the ink. */
+    /* No padding. The rows ARE the screen: a 5%/3% band top and bottom left
+       a strip of bare yellow above Shop and below Contact, which on a screen
+       this size reads as the menu not quite fitting rather than as margin.
+       setRowVars divides the full screen height by the row count, so seven
+       rows now land flush against the drawn edge at both ends. */
+    padding:0;
+    display:flex; flex-direction:column;
+  }
+  #tcl-screen .pmn-bar{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+    font-family:var(--body); font-weight:700; font-size:var(--pmn-barf, 7px);
+    letter-spacing:.06em; color:var(--text-weak); padding:2px 5px 1px;
+    border-bottom:1px solid rgba(0,0,0,.22); text-transform:uppercase;
+  }
+  /* The rows DIVIDE the list rather than each being a fixed height. A fixed
+     --pmn-rowh is floor()ed, so seven of them left up to 6px of bare yellow
+     under Contact -- small in CSS pixels, obvious on a 2x screen against a
+     drawn edge. Sharing the height leaves no remainder to round away. */
+  #tcl-screen .pmn-list{
+    flex:1 1 auto; min-height:0; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  #tcl-screen .pmn-row{
+    display:flex; align-items:center; gap:4px;
+    /* equal shares of whatever the screen is, instead of a rounded height.
+       --pmn-rowh still drives the font size (see setRowVars) -- it is only
+       the BOX that stopped using it. */
+    flex:1 1 0; min-height:0;
+    /* the text, not the highlight, is what has to clear the drawn edge */
+    padding:0 calc(var(--screen-inset, 4%) + 5px);
+    font-family:var(--body); font-weight:700; line-height:1;
+    font-size:var(--pmn-rowf, 10px); color:var(--black); text-decoration:none;
+    white-space:nowrap; overflow:hidden;
+  }
+  /* the highlight uses the same per-position colour cycle as the sidebar nav,
+     so the two can't drift apart (see .navitem:nth-child rules) */
+  #tcl-screen .pmn-row.on:nth-child(4n+1){background:var(--pink);   color:var(--black);}
+  #tcl-screen .pmn-row.on:nth-child(4n+2){background:var(--blue);   color:var(--black);}
+  #tcl-screen .pmn-row.on:nth-child(4n+3){background:var(--orange); color:var(--white);}
+  #tcl-screen .pmn-row.on:nth-child(4n+4){background:var(--red);    color:var(--white);}
+  /* ---- the screen mirrors the minimised window -------------------------
+     While a section is collapsed, the handset shows a live scaled clone of
+     the window's own content rather than the menu with a row highlighted --
+     so minimising reads as "it went into the phone". The clone is rendered
+     at a fixed 560px and scaled down to whatever the screen is, which keeps
+     the proportions identical at every handset size. It is inert: no
+     pointer events, so taps still fall through to the drawn keys. */
+  #tcl-screen .pmn-mirror{
+    position:absolute; inset:0; overflow:hidden;
+    background:var(--yellow); z-index:2;
+  }
+  #tcl-screen .pmn-mirror .pmn-mirror-in{
+    transform-origin:0 0; pointer-events:none; user-select:none;
+  }
+  #tcl-screen.playing .pmn,
+  #tcl-screen.playing .pmn-mirror{display:none;}
+
+  /* ------------------------------------------------------------ the phone */
+  /* ---- "that's not a touchscreen" ------------------------------------- */
+  /* Lives outside the media query because the keyframes and the card want to
+     be defined once; only the handler is mobile-only (30_phone.js checks the
+     breakpoint), so none of this can fire on a desktop. */
+  @keyframes nt-shake{
+    0%,100%{transform:translateX(0) rotate(0);}
+    15%{transform:translateX(-7px) rotate(-1.1deg);}
+    30%{transform:translateX(6px)  rotate(.9deg);}
+    45%{transform:translateX(-5px) rotate(-.7deg);}
+    60%{transform:translateX(4px)  rotate(.5deg);}
+    78%{transform:translateX(-2px) rotate(-.25deg);}
+  }
+  .phone-frame.shake{animation:nt-shake .45s cubic-bezier(.36,.07,.19,.97) both;}
+
+  #nottouch{
+    position:fixed; inset:0; z-index:400; display:none;
+    align-items:center; justify-content:center; padding:22px;
+    background:rgba(20,20,12,.34);
+  }
+  #nottouch.on{display:flex; animation:nt-in .16s ease both;}
+  @keyframes nt-in{from{opacity:0;} to{opacity:1;}}
+  #nottouch .nt-card{
+    background:var(--yellow); color:var(--text-strong);
+    border:3px solid var(--black); border-radius:14px;
+    padding:20px 18px 16px; max-width:330px; width:100%; text-align:center;
+    box-shadow:6px 7px 0 rgba(0,0,0,.9);
+    animation:nt-pop .22s cubic-bezier(.2,1.3,.4,1) both;
+  }
+  @keyframes nt-pop{from{transform:scale(.9) rotate(-1.5deg);} to{transform:none;}}
+  /* heading in Cheltenham, instruction in Helvetica (Matteo) */
+  #nottouch .nt-go{
+    font-family:var(--headline); font-weight:700; font-size:28px; line-height:1.05;
+    margin:0 0 10px;
+  }
+  #nottouch .nt-ha{
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:400;
+    font-size:16px; line-height:1.35; margin:0 0 8px;
+  }
+  /* the cluster is cut from the handset with its transparent margin intact,
+     so it needs no frame of its own -- it just sits on the paper */
+  #nottouch .nt-keys{
+    display:block; width:62%; max-width:190px; height:auto; margin:2px auto 12px;
+  }
+  #nottouch .nt-x{
+    font-family:var(--body); font-weight:700; font-size:13px; letter-spacing:.04em;
+    background:var(--black); color:var(--yellow); border:0; border-radius:999px;
+    padding:9px 20px; min-width:112px; cursor:pointer;
+  }
+  /* someone who has asked not to be moved around still gets the message, just
+     without the shake */
+  @media (prefers-reduced-motion: reduce){
+    .phone-frame.shake{animation:none;}
+    #nottouch.on, #nottouch .nt-card{animation:none;}
+  }
+
+  @media (max-width: 760px){
+    #topbar, #walkduck{display:none !important;}
+    #home{display:none !important;}
+    html, body{height:100%; overflow:hidden;}
+
+    /* the sidebar stops being a column and becomes a transparent layer that
+       only still carries the logo */
+    #sidebar{
+      position:fixed !important; inset:0 !important;
+      width:auto !important; height:auto !important; padding:0 !important;
+      background:transparent !important; border:0 !important;
+      pointer-events:none; z-index:5; display:block !important;
+    }
+    #sidebar nav#navlist, #sidebar #sidebar-foot{display:none !important;}
+    /* fallback only: if the hinge was never traced, or the node has not been
+       moved yet, the wordmark still has somewhere sensible to be */
+    #sidebar #logo{
+      position:absolute; top:14px; left:50%; transform:translateX(-50%);
+      width:132px; margin:0; pointer-events:auto;
+    }
+
+    /* ON THE HINGE. 30_phone.js moves the node into .phone-frame at this
+       width; --hinge-* is the drawn panel's box, measured off the artwork by
+       build/trace_screen.py. object-fit:contain means the wordmark sits in
+       that panel at its own proportions however the handset is scaled -- the
+       hinge is 2.8:1 and the wordmark is wider than that, so it fills the
+       width and centres on the height rather than being squashed to fit. */
+    .phone-frame > #logo.on-hinge{
+      position:absolute; z-index:4; margin:0; transform:none;
+      /* --hinge-* is the panel's INTERIOR, so a wordmark filling it touches
+         the drawn stroke on every side and reads as crammed in rather than
+         printed on. Inset by a share of the panel, so the band of body around
+         it stays proportional at any handset size.
+
+         Done with calc on the box rather than padding: a percentage padding
+         resolves against the CONTAINING BLOCK'S WIDTH, never the element's
+         own height -- so 9% here meant 38px of a 423px-wide frame, top and
+         bottom, inside a box 54px tall. The content box collapsed to zero and
+         the wordmark disappeared off the hinge entirely. */
+      left:calc(var(--hinge-left, 32%) + var(--hinge-w, 36%) * 0.07);
+      width:calc(var(--hinge-w, 36%) * 0.86);
+      top:calc(var(--hinge-top, 46%) + var(--hinge-h, 4.2%) * 0.14);
+      height:calc(var(--hinge-h, 4.2%) * 0.72);
+      display:flex; align-items:center; justify-content:center;
+      box-sizing:border-box;
+      /* Printed on the hinge, not a button. It still carried the sidebar's
+         onclick="goHome()", so a stray tap on the hinge opened flipoff.exe
+         over the menu (Jack: "I clicked it on accident and got confused").
+         Taps go through to the frame, which does nothing with them. */
+      pointer-events:none; cursor:default;
+    }
+    .phone-frame > #logo.on-hinge img{
+      width:100%; height:100%; object-fit:contain; object-position:center;
+      display:block;
+    }
+    /* the hover tilt is a desktop affordance and looks like a glitch on a
+       panel this small */
+    .phone-frame > #logo.on-hinge:hover{transform:none;}
+
+    /* the handset fills what's left. --mpw is the image width the shim
+       computes; the illustration carries ~27% transparent margin each side and
+       2.6% on top, so it's scaled by the drawn phone, not by the file. */
+    #deskphone{
+      display:block !important; position:fixed !important;
+      /* every edge needs !important individually — `inset:auto !important`
+         outranks a plain left/top in the same rule, which parked the handset
+         at the viewport's left edge */
+      left:50% !important; right:auto !important; bottom:auto !important;
+      top:var(--mtop, 56px) !important;
+      transform:translateX(-50%); z-index:2; pointer-events:none;
+      overflow:visible;
+    }
+    #deskphone .phone-frame{
+      width:var(--mpw, 480px); flex:0 0 auto; pointer-events:auto;
+      transition:width .45s cubic-bezier(.6,0,.2,1);
+    }
+
+    /* Jack: "on mobile it briefly flashes a modal before showing the phone."
+       Two separate causes, both here. The window sits in the markup without
+       .collapsed, so at this width it paints as a full-screen sheet for the
+       frames before the shell runs; and .collapsed inherited the desktop's
+       shrink-into-the-egg transition, so dismissing it faded out over ~300ms
+       rather than just going. Measured: opacity was still 0.59 at 591ms.
+       Nothing paints until the shell sets .m-ready, and collapsed is gone
+       outright -- the egg it would shrink into does not exist here. */
+    html:not(.m-ready) #winmodal{display:none !important;}
+    #winmodal.collapsed{display:none !important; transition:none !important;}
+
+    /* the .exe window becomes a sheet. !important beats the inline geometry
+       the desktop controller writes, so nothing can drag it out of frame. */
+    #winmodal{
+      position:fixed !important; left:0 !important; top:0 !important;
+      right:0 !important; bottom:0 !important;
+      width:100% !important; height:100% !important;
+      max-width:none !important; max-height:none !important;
+      border-radius:0 !important; box-shadow:none !important; z-index:200 !important;
+    }
+    #winmodal:not(.collapsed){transform:none !important;}
+    /* The title bar is the only label a sheet has on a phone, and at 15px
+       "Shop.exe" read as small print (Kunal: "make the .exe's larger on
+       mobile"). 22px title, 58px bar, and a 44px close -- Matteo's minimum. */
+    #winmodal .wm-bar{height:58px; padding:0 8px 0 16px; cursor:default;}
+    #winmodal .wm-bar span:first-child{font-size:22px !important;}
+    #winmodal .wm-x{width:44px; height:44px; font-size:25px;}
+    #winmodal .wm-resize{display:none !important;}
+    #winmodal .wm-body{height:calc(100% - 58px) !important;}
+    #wm-section .wm-pad:not(.bleed){padding:18px 18px 30px;}
+
+    /* 32px sides, not 60 (Matteo, agreeing with Kunal). about.exe was the
+       worst of it -- 60px a side left a 270px column of type on a 390px
+       phone. Contact's card text (50px in) comes to the same 32px line.
+       Community already sits at 34 and FAQ/Memories are tighter than 32, so
+       they are left alone: the ask was to reduce. */
+    #about-pink{padding:40px 32px 36px !important;}
+    .contact-ground{padding:20px 16px 22px;}
+    .contact-card.support{padding:22px 16px;}
+    #wm-section .contact-ground h2{padding-left:16px;}
+    #wm-section h2{font-size:30px !important;}
+    #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
+
+    /* Full-bleed highlight on a phone. The inset exists on desktop so the
+       selected row does not butt against the wobbly drawn edge; here the
+       colour running wall to wall is the point -- no yellow gutter between
+       the bar and the screen. The clip-path still trims it to the ink. */
+    #tcl-screen .pmn{padding-left:0; padding-right:0;}
+
+    /* Arrows only. Tapping a row selected it, which meant two ways to do the
+       same thing and neither of them the one the handset is for. The d-pad
+       keys keep their own pointer-events, so they still work. */
+    #tcl-screen .pmn-row{pointer-events:none;}
+
+    /* The egg is desktop furniture — it reads as a stray sticker floating over
+       the handset on a phone. It used to stay because it was the way to pop a
+       minimised sheet back open, but the handset already does that: phoneOpen()
+       calls expandModal() before openSection(), so any menu row or the OK key
+       brings the sheet back. Nothing can strand you with this hidden.
+       (#walkduck is already hidden above, and duck.js falls back to a fixed x
+       when the egg has no box, so the walk path doesn't break either.) */
+    #egg{display:none !important;}
+  }
+
+  /* ---- tablet / small laptop: 761px to 1100px --------------------------
+     The desktop layout is three columns -- sidebar, hero, handset -- and they
+     stop fitting around 1100px. #home is pinned left:296px right:54%, so at
+     820px the hero column computes to about -6px and the headline wrapped one
+     word per line (Jack's screenshot).
+
+     Under 1250px it becomes two columns: the handset cameo steps out and the
+     hero takes the space back. The handset isn't lost -- below 760px it
+     becomes the whole interface. flipoff.exe still floats above, which is
+     what a window is for. */
+  @media (min-width: 761px) and (max-width: 1250px){
+    #sidebar{width:244px; padding:18px 18px;}
+    #logo{width:150px; margin-bottom:12px;}
+    #sidebar .navitem{font-size:23px; padding:3px 8px;}
+    nav#navlist{gap:5px;}
+
+    #deskphone{display:none !important;}
+    /* keep a reserve for the window, just a smaller one than desktop's 54%,
+       so the hero and the window sit side by side instead of on top of each
+       other -- the same shape as desktop, only tighter */
+    #home{left:244px; right:40%; padding:0 24px;}
+    #home-copy{max-width:min(380px, 100%);}
+    #home-copy h1{font-size:clamp(30px, 4.6vw, 46px);}
+
+    /* the window's left/top are set inline by the drag code against the
+       desktop layout, so at this width it ran off the right edge. Pin it into
+       the reserve instead; dragging still works once it's open. */
+    #winmodal:not(.collapsed){
+      left:auto !important;
+      right:2.5vw !important;
+      top:72px !important;
+      width:min(520px, 35vw) !important;
+      max-height:78vh;
+    }
+
+    /* A SECTION GETS THE HERO'S SPACE. At 35vw an open Shop.exe was 290px
+       wide on an iPad -- the hero photo, the buy button and the spec list all
+       crushed into a strip beside a headline nobody was reading any more
+       (Jack: "the modals for each page are too small and not navigable ...
+       maybe on medium screen-size you drop the 'your life is waiting for
+       you' and let the modal take up that space").
+
+       Only while a section is open. On the home state the hero IS the page
+       and flipoff.exe is the picture beside it, so nothing changes there; and
+       minimising the section brings the hero straight back, because the rule
+       is keyed off the window's own state rather than set by a handler that
+       has to be undone. */
+    body:has(#winmodal.sectionmode:not(.collapsed)) #home{display:none !important;}
+    #winmodal.sectionmode:not(.collapsed){
+      left:calc(var(--nav-ink, 220px) + 24px) !important;
+      right:20px !important;
+      top:20px !important; bottom:20px !important;
+      width:auto !important; height:auto !important;
+      max-width:none !important; max-height:none !important;
+    }
+  }
+
+  /* Double-tap-to-zoom, for good this time (Jack, twice). touch-action is not
+     inherited, and the baseline only set it on html and body -- so inside the
+     .exe window, which is its own scroll container, a double tap still
+     zoomed. Every element, so it holds in every scroller. "manipulation"
+     still allows pan and pinch, so nobody who needs to zoom loses it. */
+  *{touch-action:manipulation;}
+
+  /* wide screens: the handset keeps the size Kunal asked for and the menu on
+     its screen is small but legible */
+  @media (min-width: 761px){
+    #deskphone .phone-frame{transition:width .45s cubic-bezier(.6,0,.2,1);}
+  }

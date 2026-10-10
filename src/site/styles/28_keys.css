@@ -1,0 +1,8 @@
+
+  /* ==========================================================================
+     where the keyboard cursor is (build/parts/27_keys.js)
+     ========================================================================== */
+  #navlist .navitem.kbfocus{
+    outline:2px solid var(--black); outline-offset:2px; border-radius:6px;
+  }
+  #navlist .navitem.kbfocus.active{outline-color:var(--black);}

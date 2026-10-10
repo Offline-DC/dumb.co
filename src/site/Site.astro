@@ -1,0 +1,220 @@
+---
+/**
+ * One page of the site. Every address -- / and /shop, /about, ... -- is this
+ * same desktop with the .exe window, built as real HTML: the section the
+ * address is for is already open in the window when the page arrives, with
+ * its own <title>, description and canonical URL, so search engines and link
+ * previews read the actual content without running any JavaScript.
+ *
+ * site.js then takes over in the browser, and moving between sections
+ * happens in place (the other sections are here as <template>s), with the
+ * address following along.
+ */
+import { COPY } from "./lib/content";
+import { A } from "./lib/assets";
+import { MEMORIES } from "./lib/data";
+import { lines } from "./lib/html";
+import { NAV, EXE, BLEED, type SectionKey } from "./nav";
+import Section from "./Section.astro";
+import Analytics from "./Analytics.astro";
+
+import "./styles/00_base.css";
+import "./styles/01_wm.css";
+import "./styles/02_shop.css";
+import "./styles/03_memories.css";
+import "./styles/09_press.css";
+import "./styles/12_involved.css";
+import "./styles/18_quiz.css";
+import "./styles/19_duck.css";
+import "./styles/22_snake.css";
+import "./styles/28_keys.css";
+import "./styles/29_responsive.css";
+
+interface Props { section?: SectionKey | null }
+const { section = null } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const page = COPY.pages[section ?? "home"];
+const canonical = new URL((section ?? ""), new URL(base, Astro.site ?? "https://dumb.co")).href;
+const shareImage = new URL("og-image-wide.jpg", "https://dumb.co/").href;   // public/og-image-wide.jpg on dumb.co
+const home = COPY.home;
+const c = COPY.contact;
+
+/* what site.js needs that isn't in the markup */
+const siteData = {
+  heroes: A.heroes,
+  shopPhotos: A.shopPhotos,
+  dpadCluster: A.dpadCluster,
+  checkout: COPY.shop.checkout_url,
+  routes: Object.fromEntries(NAV.map((n) => [n.key, n.slug])),
+  memories: MEMORIES,
+};
+const json = JSON.stringify(siteData).replace(/</g, "\\u003c");
+
+/* structured data: who we are on every page, plus the FAQ as FAQPage and
+   the phone as a Product where those pages are */
+const strip = (s: string) => s.replace(/\*\*\*?|\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
+const ld: object[] = [{
+  "@context": "https://schema.org", "@type": "Organization",
+  name: "dumb.co", url: "https://dumb.co/", email: c.support_email,
+  logo: new URL(A.logo, Astro.site ?? "https://dumb.co").href,
+}];
+if (section === "faq") ld.push({
+  "@context": "https://schema.org", "@type": "FAQPage",
+  mainEntity: COPY.faq.questions.map((q) => ({
+    "@type": "Question", name: q.question,
+    acceptedAnswer: { "@type": "Answer", text: strip(q.answer) },
+  })),
+});
+if (section === "shop") ld.push({
+  "@context": "https://schema.org", "@type": "Product",
+  name: COPY.shop.product_name, description: page.description, brand: { "@type": "Brand", name: "dumb.co" },
+  image: A.shopPhotos.map((u) => new URL(u, Astro.site ?? "https://dumb.co").href),
+  offers: { "@type": "Offer", price: "20.00", priceCurrency: "USD", url: COPY.shop.checkout_url, availability: "https://schema.org/InStock" },
+});
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{page.title}</title>
+  <meta name="description" content={page.description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/png" href={`${base}favicon.png`} />
+  <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
+  <link rel="apple-touch-icon" href={`${base}favicon.png`} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" />
+  <link rel="preload" as="image" href={section ? (section === "shop" ? A.shopPhotos[0] : A.logo) : A.heroes[0]} fetchpriority="high" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={section ? page.title : COPY.site.share_title} />
+  <meta property="og:description" content={page.description} />
+  <meta property="og:image" content={shareImage} />
+  <meta property="og:image:secure_url" content={shareImage} />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  {COPY.site.share_image_alt && <meta property="og:image:alt" content={COPY.site.share_image_alt} />}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonical} />
+  <meta name="twitter:title" content={section ? page.title : COPY.site.share_title} />
+  <meta name="twitter:description" content={page.description} />
+  <meta name="twitter:image" content={shareImage} />
+  {COPY.site.share_image_alt && <meta name="twitter:image:alt" content={COPY.site.share_image_alt} />}
+  <script type="application/ld+json" set:html={JSON.stringify(ld.length === 1 ? ld[0] : ld).replace(/</g, "\\u003c")} />
+
+  <Analytics />
+</head>
+<body>
+  <div id="app">
+
+    <aside id="sidebar">
+      <div id="logo" onclick="goHome()"><img src={A.logo} alt="dumb.co" /></div>
+      <nav id="navlist">
+        {NAV.map((n) => <a class={`navitem${section === n.key ? " active" : ""}`} data-key={n.key} data-slug={n.slug} href={`${base}${n.slug}`}>{n.label}</a>)}
+      </nav>
+      <div id="sidebar-foot">
+        <a href={`mailto:${c.support_email}`}>{c.support_email}</a>
+        <div id="no-socials">
+          <img class="ns-icon" src={A.noX} alt="no twitter/x" />
+          <img class="ns-icon" src={A.noInstagram} alt="no instagram" />
+          <img class="ns-icon" src={A.noFacebook} alt="no facebook" />
+        </div>
+        <div class="ns-label">{c.social_line}</div>
+      </div>
+    </aside>
+
+    <div id="home">
+      <div id="home-copy">
+        {home.kicker && <div class="kicker">{home.kicker}</div>}
+        {home.headline && <h1 set:html={lines(home.headline)} />}
+        {home.body && <p>{home.body}</p>}
+        <div id="home-cta" onclick="openSection('shop')">{home.button}</div>
+      </div>
+    </div>
+
+    <div id="topbar">
+      <div id="logo-small" onclick="goHome()"><img src={A.logo} alt="dumb.co" /></div>
+      <div id="topbar-nav">
+        {NAV.map((n) => <a class="navitem" data-key={n.key} data-slug={n.slug} href={`${base}${n.slug}`}>{n.label}</a>)}
+      </div>
+      <div id="topbar-duck"><img src={A.duckDance} alt="dumb.co duck, dancing while you browse" /></div>
+    </div>
+
+    <!-- the .exe window: flipoff.exe's carousel at /, the section at /shop etc. -->
+    <div id="winmodal" class={section ? "sectionmode" : undefined}>
+      <div class="wm-bar" id="wm-drag">
+        <span>{EXE[section ?? "home"]}</span>
+        <span class="wm-x" onclick="collapseModal()">×</span>
+      </div>
+      <div class="wm-body" id="wm-body">
+        <div id="wm-carousel">
+          <div class="wm-arrow wm-prev" onclick="carouselStep(-1)">‹</div>
+          <img id="wm-img" src={A.heroes[0]} alt="dumb.co" />
+          <div class="wm-arrow wm-next" onclick="carouselStep(1)">›</div>
+          <div class="wm-dots" id="wm-dots"></div>
+        </div>
+        <div id="wm-section">{section && (
+          <div class={`wm-pad${BLEED.includes(section) ? " bleed" : ""}`}><Section name={section} /></div>
+        )}</div>
+      </div>
+      <div class="wm-resize wm-resize-br" id="wm-resize"></div>
+      <div class="wm-resize wm-resize-bl" id="wm-resize-bl"></div>
+    </div>
+
+    <!-- the flip phone lives on the desktop behind the window; close the
+         window and this is what is left (and it plays snake) -->
+    <div id="deskphone">
+      <div class="phone-frame">
+        <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
+          <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.label}</a>
+        ))}</div></div></div>
+        <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
+        <div class="pf-keys">
+          <button type="button" class="k-up"    aria-label="up"     onclick="teamKey('up')">&#8593;</button>
+          <button type="button" class="k-left"  aria-label="left"   onclick="teamKey('left')">&#8592;</button>
+          <button type="button" class="k-right" aria-label="right"  onclick="teamKey('right')">&#8594;</button>
+          <button type="button" class="k-down"  aria-label="down"   onclick="teamKey('down')">&#8595;</button>
+          <button type="button" class="k-ok"    aria-label="select" onclick="phoneOk()">OK</button>
+        </div>
+      </div>
+    </div>
+    <!-- Size the handset before the first paint, on a phone. site.js does
+         the same (phoneFit) but runs after the page has painted, so without
+         this the phone arrived at a stock size and shrank into place. Same
+         numbers as ART / phoneFit / setRowVars in site.js. -->
+    <script is:inline define:vars={{ rows: NAV.length }}>
+      (function(){
+        if (window.innerWidth > 760) return;
+        var ratio = 3, drawnTop = 0.0128, drawnW = 0.8225, keysBottom = 0.6650, screenH = 0.3833;
+        var availH = Math.max(240, window.innerHeight - 10 - 40), availW = Math.max(200, window.innerWidth - 8);
+        var w = Math.min(availH / ((keysBottom - drawnTop) * ratio), availW / drawnW);
+        var r = document.documentElement.style;
+        r.setProperty('--mpw', Math.round(w) + 'px');
+        r.setProperty('--mtop', Math.round(10 - drawnTop * ratio * w) + 'px');
+        var rowH = Math.max(11, Math.floor((screenH * ratio * w) / rows));
+        r.setProperty('--pmn-rowh', rowH + 'px');
+        r.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
+        r.setProperty('--pmn-barf', '6px');
+        /* the wordmark onto the hinge now, not when site.js gets to it
+           (logoHome): it painted at the top of the screen first and then
+           jumped (Jack, Oct 9) */
+        var logo = document.getElementById('logo'), frame = document.querySelector('#deskphone .phone-frame');
+        if (logo && frame) { frame.appendChild(logo); logo.classList.add('on-hinge'); }
+      })();
+    </script>
+    <div id="walkduck"><img src={A.duckWalk} alt="dumb.co duck" /></div>
+    <div id="egg" onclick="expandModal()"><img src={A.egg} alt="tap to open" /></div>
+  </div>
+
+  <!-- every section, ready to drop into the window without a page load -->
+  {NAV.map((n) => <template id={`tpl-${n.key}`}><Section name={n.key} /></template>)}
+
+  <script type="application/json" id="site-data" set:html={json} />
+  <script src="./scripts/site.js"></script>
+</body>
+</html>

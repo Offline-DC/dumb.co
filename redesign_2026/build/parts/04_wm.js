@@ -1,0 +1,135 @@
+  /* ==========================================================================
+     v8 — one window, reused
+     Nav items no longer spawn pop-ups. They retitle and refill #winmodal, which
+     is the same frame flipoff.exe lives in on the home state. The .exe names
+     below are the ones written on the mock-up slides, all lowercase (Jack,
+     Oct 9: "Community.exe is community.exe").
+     ========================================================================== */
+  const EXE = {
+    home:     "flipoff.exe",
+    about:    "about.exe",
+    shop:     "shop.exe",
+    community: "community.exe",
+    press:    "press.exe",
+    memories: "memories.exe",
+    faq:      "faq.exe",
+    contact:  "contact.exe",
+    quiz:     "quiz.exe",
+  };
+
+  /* optional per-section size caps; anything not listed uses the defaults in
+     sizeForSection. Contact is deliberately small. */
+  const SIZE = {
+    contact: { w: 680, h: 560 },
+  };
+
+  const winEl     = () => document.getElementById('winmodal');
+  const titleEl   = () => document.querySelector('#wm-drag span:first-child');
+  const sectionEl = () => document.getElementById('wm-section');
+
+  let openKey = null;   // which section the window is showing
+
+  function setExeTitle(key){ titleEl().textContent = EXE[key] || EXE.home; }
+
+  /* Sections are denser than the carousel, so the window grows when one opens —
+     still clamped to leave the sidebar nav clickable. */
+  /* The window sits to the RIGHT of the hero, never over it. The hero column
+     ends at 46vw (see #home), so the window starts at 47vw and runs to ~98vw. */
+  const SPLIT = 0.47;
+  function sizeForSection(cfg){
+    const w = winEl();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    if(vw < 1000){
+      w.style.left = '10px'; w.style.top = '10px';
+      w.style.width = (vw - 20) + 'px'; w.style.height = (vh - 20) + 'px';
+      return;
+    }
+    const left   = Math.round(vw * SPLIT);
+    const width  = Math.min(cfg?.w ?? 940, vw - left - 30);
+    const height = Math.min(cfg?.h ?? 820, vh - 48);
+    w.style.left = left + 'px';
+    w.style.top = Math.round((vh - height) / 2) + 'px';
+    w.style.width = width + 'px';
+    w.style.height = height + 'px';
+  }
+
+  /* flipoff.exe gets the same frame the sections do, worked out fresh from
+     the viewport every time. (Jack, Oct 9: "the homepage version of the
+     modal is scrunched ... make it expand and function like the other
+     modals, like the community one".) It used to be put back from a
+     snapshot taken the first time a section opened -- so open About in a
+     narrow window, widen the browser, go home, and flipoff.exe came back at
+     the narrow size, a 330px strip over the headline. Below 1000px the
+     stylesheet places it (29_responsive.css), so the inline box is cleared
+     rather than fought with. */
+  function placeHome(){
+    const w = winEl();
+    if(window.innerWidth < 1000){
+      w.style.left = w.style.top = w.style.width = w.style.height = '';
+      return;
+    }
+    sizeForSection(null);
+  }
+
+  function openSection(key){
+    if(!sections[key]) return;
+    if(typeof stopSnake === 'function') stopSnake();
+    /* the duck only walks while the window is in the egg; opening a section
+       from that state used to leave it walking over the open window */
+    if(typeof stopDuckWalk === 'function') stopDuckWalk();
+
+    const w = winEl();
+    // if it was collapsed into the egg, bring it back
+    document.getElementById('egg').classList.remove('show', 'pop');
+    w.classList.remove('collapsed');
+
+    w.classList.add('sectionmode');
+    setExeTitle(key);
+    sizeForSection(SIZE[key]);
+
+    const host = sectionEl();
+    host.className = '';
+    const BLEED = ['about', 'press', 'shop', 'community', 'contact'];   // these draw their own edge-to-edge blocks
+    host.innerHTML = '<div class="wm-pad' + (BLEED.includes(key) ? ' bleed' : '') + '">'
+                   + sections[key]() + '</div>';
+    host.scrollTop = 0;
+
+    document.querySelectorAll('.navitem').forEach(el => {
+      el.classList.toggle('active', el.dataset.key === key);
+    });
+    openKey = key;
+    if(key === 'faq') loadFaq();
+    if(key === 'shop' && typeof loadReviews === 'function') loadReviews();
+    if(key === 'shop' && typeof plansDrawer === 'function') plansDrawer();
+  }
+
+  function goHome(){
+    openKey = null;
+    if(typeof stopSnake === 'function') stopSnake();
+    const w = winEl();
+    w.classList.remove('sectionmode');
+    setExeTitle('home');
+    sectionEl().innerHTML = '';
+    placeHome();
+    document.getElementById('egg').classList.remove('show', 'pop');
+    w.classList.remove('collapsed');
+    document.querySelectorAll('.navitem').forEach(el => el.classList.remove('active'));
+  }
+
+  /* Month Offline is NOT an .exe. It's a real <a> in the nav pointing at the
+     existing MO site (see MONTH_OFFLINE_URL in build.py, which matches
+     src/Phone/Screen.tsx). It used to call window.open() and browsers blocked
+     it silently, so the nav item did nothing and whatever section was already
+     open just stayed in the window. A plain link can't be blocked, and it also
+     gets cmd-click, middle-click and "copy link address" for free. */
+
+  /* Escape, the arrows and return are handled in build/parts/27_keys.js */
+
+  window.addEventListener('resize', () => {
+    if(winEl().classList.contains('sectionmode')) sizeForSection(SIZE[openKey]);
+    else placeHome();
+    if(typeof plansDrawer === 'function') plansDrawer();
+  });
+
+  placeHome();
+

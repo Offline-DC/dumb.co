@@ -1,0 +1,90 @@
+{
+  "heading": "Memories",
+  "events": [
+    {
+      "name": "baird x dumb.co",
+      "when": "coming soon",
+      "where": "",
+      "blurb": "",
+      "video": "",
+      "photos": [],
+      "hidden": false
+    },
+    {
+      "name": "Month Offline gallery",
+      "when": "August 2026",
+      "where": "New York, NY",
+      "blurb": "",
+      "video": "",
+      "photos": [
+        {
+          "image": "/src/site/assets/memories/mo-1.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-2.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-3.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-4.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-5.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-6.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-7.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/mo-8.jpg",
+          "caption": ""
+        }
+      ],
+      "hidden": false
+    },
+    {
+      "name": "DC Pride",
+      "when": "June 2026",
+      "where": "Washington, DC",
+      "blurb": "",
+      "video": "",
+      "photos": [
+        {
+          "image": "/src/site/assets/memories/pride-1.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/pride-2.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/pride-3.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/pride-4.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/pride-5.jpg",
+          "caption": ""
+        },
+        {
+          "image": "/src/site/assets/memories/pride-6.jpg",
+          "caption": ""
+        }
+      ],
+      "hidden": false
+    }
+  ]
+}

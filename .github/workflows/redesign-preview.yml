@@ -1,0 +1,72 @@
+# Rebuilds the preview site (offline-dc.github.io/dumb.co-redesign-preview)
+# whenever the redesign branch changes -- including every save in Pages CMS
+# while the CMS is pointed at that branch. The same Astro build as dumb.co,
+# under /dumb.co-redesign-preview/.
+#
+# Only ever runs for dumb.co_redesign_v1, so once the redesign is merged into
+# main this file does nothing (main has its own deploy.yml).
+#
+# One-time setup, because it pushes to a different repo:
+#   1. ssh-keygen -t ed25519 -N "" -f preview_key
+#   2. Offline-DC/dumb.co-redesign-preview > Settings > Deploy keys >
+#      Add deploy key: paste preview_key.pub, tick "Allow write access".
+#   3. Offline-DC/dumb.co > Settings > Secrets and variables > Actions >
+#      New repository secret: PREVIEW_DEPLOY_KEY = the contents of preview_key.
+#   4. Delete both files from your machine.
+name: Redesign preview
+
+on:
+  push:
+    branches: [dumb.co_redesign_v1]
+  workflow_dispatch:
+
+concurrency:
+  group: redesign-preview
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (under the preview's sub-path)
+        run: npm run build:preview
+        env:
+          SITE_URL: https://offline-dc.github.io
+
+      - name: Mark it as a preview
+        run: |
+          touch dist/.nojekyll
+          # the videos, APKs and downloads in public/ (~350 MB) are for
+          # dumb.co; the preview doesn't need its own copy of them
+          find dist -type f -size +5M -delete
+          # a preview must never be indexed in place of dumb.co
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+          cat > dist/PREVIEW.txt <<TXT
+          what   : dumb.co new site, preview
+          branch : ${GITHUB_REF_NAME}
+          commit : ${GITHUB_SHA::8}
+          built  : $(date -u '+%Y-%m-%d %H:%M UTC')
+          TXT
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.PREVIEW_DEPLOY_KEY }}
+          external_repository: Offline-DC/dumb.co-redesign-preview
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "preview: ${{ github.ref_name }} @ ${{ github.sha }}"
