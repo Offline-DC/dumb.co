@@ -191,7 +191,7 @@ if (section === "shop") ld.push({
       (function(){
         if (window.innerWidth > 760) return;
         var ratio = 3, drawnTop = 0.0128, drawnW = 0.8225, keysBottom = 0.6650, screenH = 0.3833;
-        var availH = Math.max(240, window.innerHeight - 10 - 6), availW = Math.max(200, window.innerWidth - 8);
+        var availH = Math.max(240, window.innerHeight - 10 - 40), availW = Math.max(200, window.innerWidth - 8);
         var w = Math.min(availH / ((keysBottom - drawnTop) * ratio), availW / drawnW);
         var r = document.documentElement.style;
         r.setProperty('--mpw', Math.round(w) + 'px');

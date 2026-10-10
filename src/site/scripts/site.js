@@ -959,14 +959,37 @@ function plansDrawer(){
       return;
     }
     if(location.pathname === next && !location.hash) return;
-    history.pushState(null, '', next + location.search);
+    /* marked, so closing on a phone knows it can step back over it */
+    history.pushState({dc: key || 'home'}, '', next + location.search);
   }
 
   function applyRoute(){
     const key = SLUG_TO_KEY[currentSlug()];
     if(key && sections[key]) openSection(key, true);
+    /* On a phone the handset IS home: back (or the iPhone swipe) from a
+       section has to land on it, not on flipoff.exe, which is the desktop's
+       home window (Jack, Oct 10: "swipe left ... should take you back to the
+       phone and not take you to another modal"). */
+    else if(window.matchMedia('(max-width: 760px)').matches){
+      const win = document.getElementById('winmodal');
+      if(win && !win.classList.contains('collapsed')) collapseModal(true);
+    }
     else goHome(true);
   }
+
+  /* and the other way round: closing a section on a phone (the ×) goes back
+     to the handset, so the address goes back to / with it. If we pushed the
+     section's address, step back over it -- then the next swipe back leaves
+     the site, as it should, instead of doing nothing visible. Opened from a
+     link (no entry of ours behind it), the address is rewritten in place. */
+  const _collapseRoute = collapseModal;
+  collapseModal = function(fromRoute){
+    _collapseRoute.apply(this, arguments);
+    if(fromRoute === true || USE_HASH) return;
+    if(!window.matchMedia('(max-width: 760px)').matches || !currentSlug()) return;
+    if(history.state && history.state.dc) history.back();
+    else history.replaceState(null, '', BASE + location.search);
+  };
 
   /* an old #/shop link (from before the paths, or bookmarked): rewrite the
      address to /shop in place. True if it did. */
@@ -1366,8 +1389,7 @@ function plansDrawer(){
       return artCanvas;
     }catch(e){ return null; }
   }
-  /* the key's strokes, in art pixels: {x, y, w, h, ink, mask} where ink is
-     the strokes alone and mask the same grown by 2px (data URLs) */
+  /* the patch around a key, in art pixels: {x, y, orig, pressed} (ImageData) */
   function keyStrokes(btn, art, a, b){
     const px = artPixels(art);
     if(!px) return null;
@@ -1410,48 +1432,68 @@ function plansDrawer(){
     L = Math.max(0, L - pad); T = Math.max(0, T - pad);
     R = Math.min(W - 1, R + pad); B = Math.min(H - 1, B + pad);
     const w = R - L + 1, h = B - T + 1;
-    const mk = (grown) => {
-      const c = document.createElement('canvas'); c.width = w; c.height = h;
-      const g = c.getContext('2d'), out = g.createImageData(w, h), o = out.data;
-      const r = grown ? Math.ceil(2 * k) : 0;
-      for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
-        const si = (y + T) * W + (x + L);
-        let on = keep[si], al = on ? d[si*4+3] : 0;
-        if(!on && r){
-          for(let dy = -r; dy <= r && !on; dy++) for(let dx = -r; dx <= r; dx++){
-            const yy = y + T + dy, xx = x + L + dx;
-            if(yy >= 0 && yy < H && xx >= 0 && xx < W && keep[yy * W + xx]){ on = 1; break; }
-          }
-          al = on ? 255 : 0;
-        }
-        if(!on) continue;
-        const oi = (y * w + x) * 4;
-        if(grown){ o[oi] = o[oi+1] = o[oi+2] = 0; o[oi+3] = 255; }
-        else { o[oi] = d[si*4]; o[oi+1] = d[si*4+1]; o[oi+2] = d[si*4+2]; o[oi+3] = al; }
+    /* Two patches of the drawing around this key, in art pixels: as drawn,
+       and pressed -- the key's strokes (plus a 2px fringe, which takes the
+       anti-aliasing with them) cleared, and drawn again 2px lower. A press
+       just paints the pressed patch onto the live canvas, a release paints
+       the original back. */
+    const orig = px.g.getImageData(x0 + L, y0 + T, w, h);
+    const pressed = new ImageData(new Uint8ClampedArray(orig.data), w, h);
+    const o = pressed.data, r = Math.ceil(2 * k), dy = Math.round(2 * k);
+    const inKey = (xx, yy) => xx >= 0 && yy >= 0 && xx < W && yy < H && keep[yy * W + xx];
+    for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
+      const sx = x + L, sy = y + T;
+      let near = false;
+      for(let ey = -r; ey <= r && !near; ey++) for(let ex = -r; ex <= r; ex++){
+        if(inKey(sx + ex, sy + ey)){ near = true; break; }
       }
-      g.putImageData(out, 0, 0);
-      return c.toDataURL();
-    };
-    const res = {x: x0 + L, y: y0 + T, w, h, k, ink: mk(false), mask: mk(true), ready: false};
-    /* Safari paints NOTHING of a masked element until its mask image has
-       decoded, so applying a fresh data-URL mask blanked the whole handset
-       for a moment (Jack's video, Oct 9: the drawing vanished mid-tapping).
-       Both images are decoded first and only used once they are ready. */
-    Promise.all([res.mask, res.ink].map(src => {
-      const im = new Image(); im.src = src;
-      return im.decode ? im.decode() : new Promise((ok, no) => { im.onload = ok; im.onerror = no; });
-    })).then(() => { res.ready = true; }, () => {});
+      if(near) o[(y * w + x) * 4 + 3] = 0;
+    }
+    for(let y = 0; y < h; y++) for(let x = 0; x < w; x++){
+      const sx = x + L, sy = y + T - dy;
+      if(!inKey(sx, sy)) continue;
+      const si = (sy * W + sx) * 4, oi = (y * w + x) * 4;
+      const a = d[si+3] / 255, b = o[oi+3] / 255, out = a + b * (1 - a);
+      if(!out) continue;
+      for(let c = 0; c < 3; c++) o[oi+c] = (d[si+c] * a + o[oi+c] * b * (1 - a)) / out;
+      o[oi+3] = out * 255;
+    }
+    const res = {x: x0 + L, y: y0 + T, orig, pressed};
     px.keys.set(id, res);
     return res;
   }
-  /* work the strokes out (and decode them) before the first tap, and again
-     whenever the handset is resized, so a press never waits on them */
+
+  /* The handset as a canvas. The press used to cut the key out of the <img>
+     with a CSS mask, and iPhone Safari intermittently drew NOTHING of a
+     masked element that large with a drop-shadow on it: the whole handset
+     blinked out as you tapped (Jack's videos, Oct 9 and 10; decoding the
+     mask first did not help, it is the masking itself). Now the drawing is
+     copied once into a canvas laid exactly over the <img>, the <img> is
+     hidden (it still sets the size and every measurement), and a press
+     repaints one small patch of the canvas. No mask, nothing to drop. */
+  function liveArt(frame){
+    let cv = frame.querySelector('canvas.pf-live');
+    if(cv) return cv;
+    const art = frame.querySelector('.pf-art');
+    if(!art || !art.complete || !art.naturalWidth || !artPixels(art)) return null;
+    cv = document.createElement('canvas');
+    cv.className = 'pf-live';
+    cv.width = art.naturalWidth; cv.height = art.naturalHeight;
+    cv.setAttribute('aria-hidden', 'true');
+    try{ cv.getContext('2d').drawImage(art, 0, 0); }catch(e){ return null; }
+    art.after(cv);
+    art.classList.add('pf-art-under');                 // hidden in the same frame the canvas appears
+    return cv;
+  }
+
+  /* work the strokes out before the first tap, and again whenever the
+     handset is resized, so a press never waits on them */
   function warmKeys(){
     const frame = document.querySelector('#deskphone .phone-frame');
     const art = frame && frame.querySelector('.pf-art');
     if(!art || !art.complete || !art.naturalWidth) return;
     const a = art.getBoundingClientRect();
-    if(!a.width) return;
+    if(!a.width || !liveArt(frame)) return;
     frame.querySelectorAll('.pf-keys button').forEach(btn => {
       const b = btn.getBoundingClientRect();
       if(b.width) keyStrokes(btn, art, a, b);
@@ -1462,38 +1504,26 @@ function plansDrawer(){
     clearTimeout(warmTimer);
     warmTimer = setTimeout(() => (window.requestIdleCallback || setTimeout)(warmKeys), delay);
   }
-  let maskedBy = null;
+  let pressedBy = null;
   function keyDown(btn){
-    const art = btn.closest('.phone-frame')?.querySelector('.pf-art');
+    const frame = btn.closest('.phone-frame');
+    const art = frame?.querySelector('.pf-art');
     if(!art) return;
-    const a = art.getBoundingClientRect(), b = btn.getBoundingClientRect();
-    const sk = keyStrokes(btn, art, a, b);
-    if(!sk) return;                                      // can't read the art: no press, rather than a wrong one
-    if(!sk.ready) return;                                // not decoded yet: skip the press look, never blank the phone
-    const k = sk.k, w = sk.w / k, h = sk.h / k, ax = sk.x / k, ay = sk.y / k;
-    const st = btn.style;
-    st.setProperty('--pl', (a.left - b.left + ax) + 'px');
-    st.setProperty('--pt', (a.top - b.top + ay + 2) + 'px');
-    st.setProperty('--pw', w + 'px'); st.setProperty('--ph', h + 'px');
-    st.setProperty('--pi', 'url("' + sk.ink + '")');
-    st.setProperty('--pf', getComputedStyle(art).filter);
-    const m = art.style;
-    m.webkitMaskImage = m.maskImage = 'url("' + sk.mask + '"), linear-gradient(#000, #000)';
-    m.webkitMaskSize = m.maskSize = w + 'px ' + h + 'px, 100% 100%';
-    m.webkitMaskPosition = m.maskPosition = ax + 'px ' + ay + 'px, 0 0';
-    m.webkitMaskRepeat = m.maskRepeat = 'no-repeat';
-    m.maskComposite = 'exclude'; m.webkitMaskComposite = 'xor';
-    maskedBy = btn;
     btn.classList.add('down');
+    const cv = liveArt(frame);
+    if(!cv) return;                                      // can't read the art: no press look, rather than a wrong one
+    const sk = keyStrokes(btn, art, art.getBoundingClientRect(), btn.getBoundingClientRect());
+    if(!sk) return;
+    if(pressedBy && pressedBy !== btn) keyRelease(pressedBy);
+    cv.getContext('2d').putImageData(sk.pressed, sk.x, sk.y);
+    pressedBy = btn; btn._sk = sk;
   }
   function keyRelease(btn){
     btn.classList.remove('down');
-    if(maskedBy !== btn) return;
-    maskedBy = null;
-    const art = btn.closest('.phone-frame')?.querySelector('.pf-art');
-    if(!art) return;
-    ['maskImage','webkitMaskImage','maskSize','webkitMaskSize','maskPosition','webkitMaskPosition',
-     'maskRepeat','webkitMaskRepeat','maskComposite','webkitMaskComposite'].forEach(p => art.style[p] = '');
+    if(pressedBy !== btn) return;
+    pressedBy = null;
+    const cv = btn.closest('.phone-frame')?.querySelector('canvas.pf-live');
+    if(cv && btn._sk) cv.getContext('2d').putImageData(btn._sk.orig, btn._sk.x, btn._sk.y);
   }
   const keyTimers = new WeakMap();
   function keyUp(btn, after){
@@ -1589,7 +1619,11 @@ function plansDrawer(){
        back: the phone starts at a plain 10px of air and can be scaled up into
        the space the logo was using. */
     const TOP_AIR = 10;
-    const availH = Math.max(240, window.innerHeight - TOP_AIR - 6);
+    /* room under the d-pad: at 6px the down arrow sat on Safari's toolbar
+       and people kept missing it (Jack, Oct 10). Same number as the
+       pre-paint script in Site.astro. */
+    const BOTTOM_AIR = 40;
+    const availH = Math.max(240, window.innerHeight - TOP_AIR - BOTTOM_AIR);
     const availW = Math.max(200, window.innerWidth - 8);
 
     /* scale until the D-pad reaches the bottom of the screen rather than the
@@ -1880,7 +1914,9 @@ function plansDrawer(){
     wasPhone = isPhone();
     /* on a cold load at phone width the home window is the first thing you
        see, same as desktop; closing it reveals the handset menu */
-    if(isPhone() && typeof collapseModal === 'function' && !collapsed()) collapseModal();
+    /* true: this is the page setting itself up, not someone closing a
+       section, so the address (a deep link like /press) is left alone */
+    if(isPhone() && typeof collapseModal === 'function' && !collapsed()) collapseModal(true);
   })();
 
   /* ---------------- faq.exe ----------------

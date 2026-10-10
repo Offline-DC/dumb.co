@@ -112,16 +112,16 @@
      nothing visible, because the button has no pixels of its own. */
   .phone-frame .pf-keys button:active{transform:translate(-50%,-50%);}
   .phone-frame .pf-keys button.down{transform:translate(-50%,-50%); transition:none;}
-  /* the key's own strokes, 2px lower. Only ink, no background: the original
-     strokes are masked out of the handset rather than painted over, so there
-     is no patch colour to get wrong (Jack, Oct 9: "remove the circle hover
-     and just have the movement state of the button shifting"). */
-  .phone-frame .pf-keys button.down::before{
-    content:""; position:absolute; pointer-events:none;
-    left:var(--pl); top:var(--pt); width:var(--pw); height:var(--ph);
-    background:var(--pi) no-repeat 0 0 / 100% 100%;
-    filter:var(--pf, none);
+  /* The drawing a press repaints (site.js, liveArt): a canvas copy of the
+     handset laid exactly over the <img>, which stays in the layout -- it sets
+     the frame's size and every measurement -- but is no longer painted. */
+  .phone-frame canvas.pf-live{
+    position:absolute; left:0; top:0; width:100%; height:auto; display:block;
+    z-index:2; pointer-events:none;
   }
+  #deskphone canvas.pf-live{filter:drop-shadow(0 8px 14px rgba(0,0,0,.14));}
+  .phone-frame .pf-art.pf-art-under{visibility:hidden;}
+
   /* No background images any more: Marco DREW the arrows into the handset, so
      the four buttons are invisible hit targets sitting on top of his ink.
      Painting the generated chevrons here as well drew every arrow twice.
