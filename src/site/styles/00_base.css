@@ -45,7 +45,7 @@
     --blue:#38abfb;
     --red:#e21f1f;
     --headline: "Cheltenham", Georgia, serif;
-    --body: "Rubik", "Helvetica Neue", Arial, sans-serif;
+    --body: "Helvetica Neue", Helvetica, Arial, sans-serif;   /* was Rubik (Jack, Oct 13) */
   }
   *{box-sizing:border-box;}
   /* touch-action:manipulation kills double-tap-to-zoom (Jack) while leaving
