@@ -4,16 +4,6 @@
 
 
   @font-face{
-    font-family:"Helvetica Now Text";
-    src: url('../assets/fonts/HelveticaNowText-ExtraBold.woff2') format('woff2'), url('../assets/fonts/HelveticaNowText-ExtraBold.woff') format('woff');
-    font-weight:700 800; font-style:normal; font-display:swap;
-  }
-  @font-face{
-    font-family:"Helvetica Now Text";
-    src: url('../assets/fonts/HelveticaNowText-Black.ttf') format('truetype');
-    font-weight:900; font-style:normal; font-display:swap;
-  }
-  @font-face{
     font-family:"Cheltenham";
     src: url('../assets/fonts/cheltenham-bold-extra-condensed.otf') format('opentype');
     font-weight:700; font-style:normal; font-display:swap;
@@ -55,11 +45,10 @@
     --blue:#38abfb;
     --red:#e21f1f;
     --headline: "Cheltenham", Georgia, serif;
-    /* Helvetica Now Display (Jack, Oct 13; was Rubik). The repo only has the
-       Text cut in ExtraBold and Black (public/fonts), which the @font-face
-       below serves for the heavy weights; regular and medium fall through to
-       Helvetica Neue until the Display woff2 files are added. */
-    --body: "Helvetica Now Display", "Helvetica Now Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* Helvetica Now Display (Jack, Oct 13; was Rubik), served from
+       public/fonts by public/fonts.css. Helvetica Neue stands in for any
+       weight whose file isn't there. */
+    --body: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   *{box-sizing:border-box;}
   /* touch-action:manipulation kills double-tap-to-zoom (Jack) while leaving
