@@ -1622,7 +1622,7 @@ function plansDrawer(){
     /* room under the d-pad: at 6px the down arrow sat on Safari's toolbar
        and people kept missing it (Jack, Oct 10). Same number as the
        pre-paint script in Site.astro. */
-    const BOTTOM_AIR = 40;
+    const BOTTOM_AIR = 28;
     const availH = Math.max(240, window.innerHeight - TOP_AIR - BOTTOM_AIR);
     const availW = Math.max(200, window.innerWidth - 8);
 
