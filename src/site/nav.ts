@@ -2,10 +2,10 @@
  * The sections, in nav order: their addresses (dumb.co/<slug>), the label in
  * the sidebar and the phone's menu, and the window title they open under.
  */
-/* label: the sidebar. On the phone's menu every row is lowercase, and shop
-   reads "buy dumbphone 2" (Kunal, Oct 13) -- mlabel, where it differs. */
+/* label: the sidebar. The phone's menu shows the same words, lowercase;
+   mlabel, where a row should read differently there. */
 export const NAV = [
-  { key: "shop", slug: "shop", label: "Shop", mlabel: "buy dumbphone 2" },
+  { key: "shop", slug: "shop", label: "Shop" },
   { key: "about", slug: "about", label: "About" },
   { key: "community", slug: "community", label: "Community" },
   { key: "press", slug: "press", label: "Press" },
