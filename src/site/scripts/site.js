@@ -1721,6 +1721,7 @@ function plansDrawer(){
     if(snakeOn()) return;                                   // snake owns the screen
     if(e.target.closest('#nottouch')) return;               // dismissing it
     if(e.target.closest('.pf-keys')) return;                // the buttons ARE the answer
+    if(e.target.closest('.pmn-row')) return;                // a row tap opens the section (phonePick)
     const win = document.getElementById('winmodal');
     if(win && !win.classList.contains('collapsed')) return;  // a section is open
     const scr = document.getElementById('tcl-screen');

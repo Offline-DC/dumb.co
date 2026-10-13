@@ -276,10 +276,11 @@
        the bar and the screen. The clip-path still trims it to the ink. */
     #tcl-screen .pmn{padding-left:0; padding-right:0;}
 
-    /* Arrows only. Tapping a row selected it, which meant two ways to do the
-       same thing and neither of them the one the handset is for. The d-pad
-       keys keep their own pointer-events, so they still work. */
-    #tcl-screen .pmn-row{pointer-events:none;}
+    /* The rows are tappable (Jack, Oct 13: a first-time tester kept tapping
+       the menu and got nowhere). A tap does exactly what the keys do:
+       highlights the row, opens the section, sets the address. The keys
+       still work too. */
+    #tcl-screen .pmn-row{pointer-events:auto; cursor:pointer; -webkit-tap-highlight-color:transparent;}
 
     /* The egg is desktop furniture — it reads as a stray sticker floating over
        the handset on a phone. It used to stay because it was the way to pop a
