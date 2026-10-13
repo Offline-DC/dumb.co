@@ -40,7 +40,6 @@ const DEFAULTS: Record<string, string> = {
   "faq.general_tab": "General",
   "faq.tech_tab": "Tech Help",
   "faq.videos_tab": "Phone Demo",
-  "faq.search_placeholder": "search the faq",
 };
 
 export const warnings: string[] = [];
@@ -157,7 +156,7 @@ export const COPY = {
   press: pick(press, "press", ["heading", "contact_email"]),
   memories: { heading: text(memories, "heading", "memories") },
   faq: {
-    ...pick(faq, "faq", ["heading", "sub", "general_tab", "tech_tab", "videos_tab", "search_placeholder"]),
+    ...pick(faq, "faq", ["heading", "sub", "general_tab", "tech_tab", "videos_tab"]),
     questions: objs(faq, "questions")
       .filter((x) => !hidden(x) && text(x, "question") && text(x, "answer"))
       .map((x) => ({

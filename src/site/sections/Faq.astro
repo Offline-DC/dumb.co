@@ -15,7 +15,6 @@ const groupBefore = (i: number) => {
 ---
 <h2>{c.heading}</h2>
 {c.sub && <div class="sub">{c.sub}</div>}
-<div class="faq-search"><input id="faq-search" type="search" placeholder={c.search_placeholder} aria-label={c.search_placeholder} autocomplete="off" oninput="faqSearch(this.value)" /></div>
 <div class="faq-tabs2">
   <div class="faq-tab2 on" onclick="setFaqTab('general', this)">{c.general_tab}</div>
   <div class="faq-tab2" onclick="setFaqTab('tech', this)">{c.tech_tab}</div>
@@ -44,5 +43,4 @@ const groupBefore = (i: number) => {
     ))}
   </div>
   <div id="faq-status" data-cat="none" style="display:none">nothing in this tab yet.</div>
-  <div id="faq-nomatch" style="display:none">no matches. try another word, or email <a href="mailto:support@dumb.co">support@dumb.co</a>.</div>
 </div>

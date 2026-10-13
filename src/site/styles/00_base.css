@@ -259,14 +259,10 @@
   .press-title{font-family:var(--headline); font-size:19px; line-height:1.15;}
 
   /* ---------- FAQ ---------- */
-  .faq-search{margin:0 0 12px;}
-  .faq-search input{width:100%; box-sizing:border-box; font-family:var(--body); font-size:15px; padding:10px 14px; border:2px solid var(--black); border-radius:100px; background:var(--white); color:var(--black); outline:none; -webkit-appearance:none; appearance:none;}
-  .faq-search input:focus{box-shadow:0 0 0 3px var(--yellow);}
   .faq-tabs2{display:flex; gap:8px; margin-bottom:18px;}
-  .faq-tabs2.searching{opacity:.35; pointer-events:none;}
   .faq-group{font-family:var(--headline); font-size:22px; margin:22px 0 2px; text-transform:lowercase;}
   .faq-group:first-child{margin-top:4px;}
-  #faq-nomatch{font-family:var(--body); font-size:14px; color:#555; padding:14px 0;}
+
   .faq-tab2{font-family:var(--body); font-weight:600; font-size:13px; padding:7px 14px; border-radius:100px; border:2px solid var(--black); cursor:pointer; background:var(--white);}
   .faq-tab2.on{background:var(--black); color:var(--yellow);}
   .faq-item2{border-bottom:1px solid #eee; padding:14px 0;}

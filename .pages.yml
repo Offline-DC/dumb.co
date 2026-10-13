@@ -163,9 +163,6 @@ content:
       - name: videos_tab
         label: Videos tab
         type: string
-      - name: search_placeholder
-        label: Search box placeholder
-        type: string
       - name: questions
         label: Questions
         type: object

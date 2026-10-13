@@ -1953,7 +1953,7 @@ function plansDrawer(){
     return rows;
   }
 
-  function loadFaq(){ faqTab = 'general'; faqQuery = ''; const b = document.getElementById('faq-search'); if(b) b.value = ''; renderFaq(); }
+  function loadFaq(){ faqTab = 'general'; renderFaq(); }
 
   function setFaqTab(tab, el){
     faqTab = tab;
@@ -1962,39 +1962,17 @@ function plansDrawer(){
     renderFaq();
   }
 
-  /* keyword search (Kunal, Oct 13): while there is a query the tabs step
-     aside and every question whose words match is shown, from any tab, open
-     so the answer is right there. Clearing the box goes back to the tab. */
-  let faqQuery = '';
-  function faqSearch(q){
-    faqQuery = (q || '').trim().toLowerCase();
-    renderFaq();
-  }
   function renderFaq(){
     const list = document.getElementById('faq-list2');
     if(!list) return;
-    const words = faqQuery.split(/\s+/).filter(Boolean);
-    const tabs = document.querySelector('.faq-tabs2');
-    if(tabs) tabs.classList.toggle('searching', words.length > 0);
     let shown = 0;
     list.querySelectorAll('[data-cat]').forEach(el => {
-      let on;
-      if(words.length){
-        if(!el.classList.contains('faq-item2')){ el.style.display = 'none'; return; }
-        const hay = el.textContent.toLowerCase();
-        on = words.every(w => hay.includes(w));
-        el.classList.toggle('open', on);
-      } else {
-        on = el.dataset.cat === faqTab;
-        if(el.classList.contains('faq-item2')) el.classList.remove('open');
-      }
+      const on = el.dataset.cat === faqTab;
       el.style.display = on ? '' : 'none';
       if(on && el.dataset.cat !== 'none') shown++;
     });
     const status = document.getElementById('faq-status');
-    if(status) status.style.display = (shown || words.length) ? 'none' : '';
-    const nomatch = document.getElementById('faq-nomatch');
-    if(nomatch) nomatch.style.display = (words.length && !shown) ? '' : 'none';
+    if(status) status.style.display = shown ? 'none' : '';
   }
 
   function toggleFaq(idx){
@@ -2004,7 +1982,7 @@ function plansDrawer(){
 
 /* the functions the markup's onclick="..." handlers call */
 Object.assign(window, {
-  carouselStep, goToSlide, faqSearch, collapseModal, expandModal, goHome, openSection,
+  carouselStep, goToSlide, collapseModal, expandModal, goHome, openSection,
   memScroll, memStep, openMemory, openQuiz, phoneOk, phonePick, railStep,
   setFaqTab, shopPhotoStep, showPlans, teamKey, toggleFaq,
 });
