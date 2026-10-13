@@ -45,7 +45,10 @@
     --blue:#38abfb;
     --red:#e21f1f;
     --headline: "Cheltenham", Georgia, serif;
-    --body: "Helvetica Neue", Helvetica, Arial, sans-serif;   /* was Rubik (Jack, Oct 13) */
+    /* Helvetica Neue Display (Jack, Oct 13; was Rubik). No web font file for it is
+       in the repo yet, so visitors without it installed get Helvetica Neue /
+       Helvetica. Drop the woff2 into public/fonts and add an @font-face. */
+    --body: "Helvetica Neue Display", "HelveticaNeue-Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   *{box-sizing:border-box;}
   /* touch-action:manipulation kills double-tap-to-zoom (Jack) while leaving
