@@ -1348,8 +1348,18 @@ function plansDrawer(){
     const it = pmItems[i];
     if(it && it.external) return;        // let the <a> take it
     if(ev) ev.preventDefault();
-    phoneOpen(i);
+    /* a beat with the row lit before the window comes up, so the tap is
+       seen to land (Jack, Oct 13: "when they hit it, there's kind of like an
+       interaction") */
+    setTimeout(() => phoneOpen(i), 140);
   }
+  /* the row lights up the moment the finger lands, not on release */
+  document.addEventListener('pointerdown', (e) => {
+    const row = e.target.closest('#tcl-screen .pmn-row');
+    if(!row) return;
+    const i = [...row.parentElement.children].indexOf(row);
+    if(i >= 0){ pmSel = i; phonePaint(); }
+  }, {passive: true});
 
   /* ---- the keys press (22_snake.css > PRESSED) -------------------------
      The pressed key paints the handset art over itself, 2px low. The patch
