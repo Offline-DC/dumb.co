@@ -1255,6 +1255,7 @@ function plansDrawer(){
     screen.appendChild(boot);
   }
 
+  let deskBlank = false;              // desktop, window minimised: screen blank, keys are snake's
   function phoneMirror(on){
     /* The handset is off the home page on desktop (Milk) and comes back only
        once a window has been minimised into the egg -- which is where snake
@@ -1278,22 +1279,19 @@ function plansDrawer(){
       if(mir) mir.remove();
       screen.querySelector('.pf-boot')?.remove();
       if(menu) menu.style.display = '';
+      deskBlank = false;
       return;
     }
 
-    /* On desktop the minimised window leaves the handset showing the same
-       menu it has on a phone, and it works the same way: the arrows move,
-       OK opens that section (Jack, Oct 9: "have the phone from the mobile
-       version be in the blank space behind the modal so if somebody closes
-       it they can see it and use it ... similar to how they use it on
-       mobile"). It used to go blank here, with a power-on duck -- an earlier
-       note of Jack's ("it should stay empty while the user is on desktop"),
-       which this replaces. Snake still unlocks from the menu the way it does
-       on a phone. */
+    /* On desktop the minimised window leaves the handset with a BLANK
+       screen and the power-on duck, not the menu (Jack, Oct 13: "not show
+       the links like shop about or whatever"). The sidebar is the navigation
+       up here; the handset is the cameo, and snake still lives in it. The
+       keys only feed snake while the menu is hidden. */
     if(mir) mir.remove();
-    screen.querySelector('.pf-boot')?.remove();
-    if(menu) menu.style.display = '';
-    phonePaint();
+    if(menu) menu.style.display = 'none';
+    deskBlank = true;
+    bootDuck(screen);
     return;
 
     const src = document.getElementById('wm-section') || document.getElementById('wm-body');
@@ -1332,14 +1330,14 @@ function plansDrawer(){
   }
 
   function phoneMove(step){
-    if(!pmItems.length) return;
+    if(!pmItems.length || deskBlank) return;
     pmSel = (pmSel + step + pmItems.length) % pmItems.length;
     phonePaint();
   }
 
   function phoneOpen(i){
     const it = pmItems[i];
-    if(!it) return;
+    if(!it || deskBlank) return;
     if(it.external){ window.open(it.href, '_blank', 'noopener'); return; }
     if(collapsed() && typeof expandModal === 'function') expandModal();
     openSection(it.key);
