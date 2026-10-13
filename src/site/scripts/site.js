@@ -1348,10 +1348,7 @@ function plansDrawer(){
     const it = pmItems[i];
     if(it && it.external) return;        // let the <a> take it
     if(ev) ev.preventDefault();
-    /* a beat with the row lit before the window comes up, so the tap is
-       seen to land (Jack, Oct 13: "when they hit it, there's kind of like an
-       interaction") */
-    setTimeout(() => phoneOpen(i), 140);
+    phoneOpen(i);
   }
   /* the row lights up the moment the finger lands, not on release */
   document.addEventListener('pointerdown', (e) => {
