@@ -5,12 +5,12 @@
 
   @font-face{
     font-family:"Helvetica Now Text";
-    src: url('/fonts/HelveticaNowText-ExtraBold.woff2') format('woff2'), url('/fonts/HelveticaNowText-ExtraBold.woff') format('woff');
+    src: url('../assets/fonts/HelveticaNowText-ExtraBold.woff2') format('woff2'), url('../assets/fonts/HelveticaNowText-ExtraBold.woff') format('woff');
     font-weight:700 800; font-style:normal; font-display:swap;
   }
   @font-face{
     font-family:"Helvetica Now Text";
-    src: url('/fonts/HelveticaNowText-Black.ttf') format('truetype');
+    src: url('../assets/fonts/HelveticaNowText-Black.ttf') format('truetype');
     font-weight:900; font-style:normal; font-display:swap;
   }
   @font-face{
