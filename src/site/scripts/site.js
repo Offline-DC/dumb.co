@@ -20,9 +20,17 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
   /* ---------------- carousel ---------------- */
   const carouselImgs = SITE.heroes;
   let carIdx = 0;
+  /* where each photo is cropped from. The bridge selfie and the phone held
+     up to the sky were cut too high -- faces in the lower half, the phone
+     and hand off the bottom (Lucy) -- so those two are shown from lower
+     down. Indexes follow src/site/assets/photos/hero-NN-*.jpg order. */
+  const HERO_POS = { 1: 'center 75%', 2: 'center 70%' };
   function renderCarousel(){
-    document.getElementById('wm-img').src = carouselImgs[carIdx];
+    const img = document.getElementById('wm-img');
+    img.src = carouselImgs[carIdx];
+    img.style.setProperty('--hero-pos', HERO_POS[carIdx] || 'center');
     const dots = document.getElementById('wm-dots');
+    dots.style.setProperty('--ndots', carouselImgs.length);
     dots.innerHTML = carouselImgs.map((_,i)=>`<span class="wm-dot ${i===carIdx?'on':''}" onclick="event.stopPropagation(); goToSlide(${i})"></span>`).join('');
   }
   function carouselStep(dir){ carIdx = (carIdx + dir + carouselImgs.length) % carouselImgs.length; renderCarousel(); }
@@ -1773,10 +1781,8 @@ function plansDrawer(){
        is nothing else to subtract, so seven rows reach both drawn edges */
     const rowH = Math.max(11, Math.floor((screenH - bar) / n));
     root.style.setProperty('--pmn-rowh', rowH + 'px');
-    /* the cap was 17px, which on a real handset read as small print next to
-       44px rows (Jack). 24px matches the minimum he asked for and still fits
-       seven rows on the shortest screen we support. */
-    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
+    /* 20px (Kunal, Oct 13; it was 24). */
+    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(20, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
     root.style.setProperty('--pmn-barf', Math.max(6, Math.min(10, Math.round(bar * 0.62))) + 'px');
   }
 
@@ -1947,7 +1953,7 @@ function plansDrawer(){
     return rows;
   }
 
-  function loadFaq(){ faqTab = 'general'; renderFaq(); }
+  function loadFaq(){ faqTab = 'general'; faqQuery = ''; const b = document.getElementById('faq-search'); if(b) b.value = ''; renderFaq(); }
 
   function setFaqTab(tab, el){
     faqTab = tab;
@@ -1956,17 +1962,39 @@ function plansDrawer(){
     renderFaq();
   }
 
+  /* keyword search (Kunal, Oct 13): while there is a query the tabs step
+     aside and every question whose words match is shown, from any tab, open
+     so the answer is right there. Clearing the box goes back to the tab. */
+  let faqQuery = '';
+  function faqSearch(q){
+    faqQuery = (q || '').trim().toLowerCase();
+    renderFaq();
+  }
   function renderFaq(){
     const list = document.getElementById('faq-list2');
     if(!list) return;
+    const words = faqQuery.split(/\s+/).filter(Boolean);
+    const tabs = document.querySelector('.faq-tabs2');
+    if(tabs) tabs.classList.toggle('searching', words.length > 0);
     let shown = 0;
     list.querySelectorAll('[data-cat]').forEach(el => {
-      const on = el.dataset.cat === faqTab;
+      let on;
+      if(words.length){
+        if(!el.classList.contains('faq-item2')){ el.style.display = 'none'; return; }
+        const hay = el.textContent.toLowerCase();
+        on = words.every(w => hay.includes(w));
+        el.classList.toggle('open', on);
+      } else {
+        on = el.dataset.cat === faqTab;
+        if(el.classList.contains('faq-item2')) el.classList.remove('open');
+      }
       el.style.display = on ? '' : 'none';
       if(on && el.dataset.cat !== 'none') shown++;
     });
     const status = document.getElementById('faq-status');
-    if(status) status.style.display = shown ? 'none' : '';
+    if(status) status.style.display = (shown || words.length) ? 'none' : '';
+    const nomatch = document.getElementById('faq-nomatch');
+    if(nomatch) nomatch.style.display = (words.length && !shown) ? '' : 'none';
   }
 
   function toggleFaq(idx){
@@ -1976,7 +2004,7 @@ function plansDrawer(){
 
 /* the functions the markup's onclick="..." handlers call */
 Object.assign(window, {
-  carouselStep, goToSlide, collapseModal, expandModal, goHome, openSection,
+  carouselStep, goToSlide, faqSearch, collapseModal, expandModal, goHome, openSection,
   memScroll, memStep, openMemory, openQuiz, phoneOk, phonePick, railStep,
   setFaqTab, shopPhotoStep, showPlans, teamKey, toggleFaq,
 });

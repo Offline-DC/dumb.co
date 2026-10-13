@@ -163,6 +163,9 @@ content:
       - name: videos_tab
         label: Videos tab
         type: string
+      - name: search_placeholder
+        label: Search box placeholder
+        type: string
       - name: questions
         label: Questions
         type: object
@@ -189,6 +192,12 @@ content:
                   label: General
                 - name: tech
                   label: Tech Help
+          - name: group
+            label: Bucket (Tech Help tab only)
+            description: Questions are listed under this heading in the Tech Help tab.
+            type: select
+            options:
+              values: [setup, general, porting, dumb txt, syncing, smart txt, call forwarding, contact sync, whatsapp, mp3, 2fa]
           - name: hidden
             label: Hide this question
             type: boolean
@@ -220,9 +229,6 @@ content:
         path: src/content/home.json
         format: json
         fields:
-          - name: kicker
-            label: Small line above the headline
-            type: string
           - name: headline
             label: Headline
             description: One line per line.
@@ -290,31 +296,25 @@ content:
           - name: quiz_link
             label: Link to the plans
             type: string
-          - name: what_is_title
+          - name: included_title
             label: Drawer 1 title
             type: string
-          - name: what_is
-            label: Drawer 1 text
-            type: text
-          - name: included_title
-            label: Drawer 2 title
-            type: string
           - name: included
-            label: Drawer 2 list
+            label: Drawer 1 list
             type: string
             list: true
           - name: essentials_title
-            label: Drawer 3 title
+            label: Drawer 2 title
             type: string
           - name: essentials
-            label: Drawer 3 list
+            label: Drawer 2 list
             type: string
             list: true
           - name: specs_title
-            label: Drawer 4 title
+            label: Drawer 3 title
             type: string
           - name: specs_intro
-            label: Drawer 4 intro
+            label: Drawer 3 intro
             type: text
           - name: specs
             label: Specs
@@ -370,13 +370,14 @@ content:
               collapsible:
                 summary: "{name}"
             fields:
-              - name: kicker
-                label: Small line above the name
-                type: string
               - name: name
                 label: Name
                 type: string
                 required: true
+              - name: sub
+                label: Line under the name
+                description: e.g. "a 30-day challenge"
+                type: string
               - name: body
                 label: Text
                 description: "**bold** works."

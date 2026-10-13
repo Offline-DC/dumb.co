@@ -4,88 +4,59 @@
   "general_tab": "General",
   "tech_tab": "Tech Help",
   "videos_tab": "Phone Demo",
+  "search_placeholder": "search the faq",
   "questions": [
     {
       "question": "what is the dumbphone 2?",
-      "answer": "the dumbphone 2 is a TCL Flip 2 with our own custom dumbOS. it can be used standalone or as a companion phone for your smartphone, proven to reduce your screentime and exist IRL without losing important tools.\n\neach phone comes with essentials:\n-phone line\n-unlimited calls and sms text\n-1gb data (enough for a dumbphone!)\n-maps\n-hotspot, bluetooth, wifi\n-signal\n-calendar - syncs w/ google cal!\n-voice-to-text and TT9\n-rideshare\n-2-factor authentification\n-clock (alarm, timer, stopwatch)\n-camera\n-recorder\n-weather\n-snake :)\n\nbased on the plan you choose, you can customize the phone to also have:\n-call fwding from ur smartphone to ur dumbphone\n-sync smartphone texts\n-sync contacts\n-podcasts + smart music (links spotify, apple music)",
+      "answer": "the dumbphone 2 is a TCL flip 2 with our custom dumbOS software. it can function as a standalone device or as a companion device to your smartphone, so you can confidently exist IRL without losing the must-haves.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "how does it work?",
-      "answer": "every dumbphone 2 comes with a ready to activate SIM card (which we already insert for you!). by default, outgoing calls are made from your dumbphone's number, while incoming calls can be forwarded from your smartphone and your texts can be synced to the dumbphone. you can also transfer your existing number to the dumbphone. it gives you healthier boundaries without completely disconnecting from your life.\n\nready to ditch your smartphone altogether? we can also port your existing phone number directly to the dumbphone.\n\nthe service is a monthly phone plan that automatically renews until you cancel. we simply ask for a 4-month minimum to give you enough time to build new habits. after your first four months, you can cancel anytime.",
+      "question": "plan details",
+      "answer": "the dumbphone 2 comes with its own SIM and associated phone plan. alternate SIM cards and phone plans are not supported on the dumbphone and are incompatible with our custom dumbOS.\n\nwhen your dumbphone arrives, you pick the plan that best fits your lifestyle. change anytime as your journey evolves.\n\nall plans come with unlimited calls and texts in the U.S. and 1GB of data per month.\n\n**dumb — $25.99/mo + tax** (for the music streaming lovers)\ncompanion compatible, forwards calls & texts, contacts sync, smart music (spotify + apple music compatible), whatsapp, signal, rideshare, 2FA, maps, alarm clock, camera, recorder, weather, internal MP3.\n\n**dumber — $20.99/mo + tax** (most popular plan)\ncompanion compatible, forwards calls & texts, contacts sync, whatsapp, signal, rideshare, 2FA, maps, alarm clock, camera, recorder, weather, internal MP3.\n\n**dumbest — $15.99/mo + tax** (for those ready to ditch their smartphone completely)\nrideshare, 2FA, maps, alarm clock, camera, recorder, weather, internal MP3.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "can i keep my current phone number?",
-      "answer": "yes, you can transfer your current phone number to the dumbphone OR get a new number on the dumbphone. this is NOT recommended if you plan to use the dumbphone as a companion device for your smartphone.\n\n**transferring your phone number will CANCEL the service on your current phone. after the transfer finishes, the number will only work on your dumbphone. do not choose this option if you want to keep service on your smartphone.**",
+      "question": "how does syncing work?",
+      "answer": "the syncing feature is only included with the dumb and dumber plans. using it is not required to use either plan.\n\nchoosing to sync the dumbphone 2 with your smartphone allows texts and calls to be forwarded to your dumbphone. due to current tech, outgoing calls are made from your dumbphone's number, while all incoming calls can be forwarded to your dumbphone. when texting from your dumbphone via smart txt, non-dumbphone users won't be able to tell the difference.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "how much does it cost and what features does each plan offer?",
-      "answer": "the dumbphone 2 costs just $20 upfront for the phone itself. once the dumbphone arrives, you will activate the SIM that we've already inserted in the phone for you. you'll choose the monthly plan that best fits how you want to use it. every plan includes active phone service on t-mobile's cellular network.\n\nregardless of the plan you choose, every phone comes with the essentials: active phone line, unlimited calls and text, 1gb data, maps, hotspot, bluetooth, wifi, rideshare, signal, whatsapp, microsoft 2fa, alarm clock, camera, recorder, weather, notes.\n\n**DUMB $25.99/month + tax**\na companion device for your smartphone.\n-forward calls and sync txts + contacts\n-spotify, apple music, podcasts\n-whatsapp\n\n**DUMBER $20.99/month + tax**\na companion device for your smartphone.\n-forward calls and sync txts + contacts\n-whatsapp\n\n**DUMBEST $15.99/month + tax**\na standalone device; no connection to a smartphone. a great option for kids, families, or anyone ready to say goodbye to their smartphone entirely",
+      "question": "do i need a second phone number?",
+      "answer": "if you plan to continue using your smartphone, you DO need to get a secondary number. transferring your phone number will end active service on your current device.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "can i use my own phone plan?",
-      "answer": "our custom dumbOS software on the dumbphone 2 is only available with an active dumb.co phone plan. without our phone plan, most core features of dumbOS will not work.\n\nwe encourage customers to ask for financial assistance from by emailing support@dumb.co instead of using a different phone plan.\n\nbundling the phone and choosing to continue our monthly plan (instead of a giant phone company) supports our small start-up which allows for:\n\n-low upfront and monthly cost\n-100% human in-house support for hardware, software, and phone service\n-future iterations of the dumbphone\n-simple setup\n-software updates\n-phone-free community events\n-month offline groups",
+      "question": "do i have to sync with my smartphone?",
+      "answer": "syncing is not required, but is an added feature that comes with our dumb and dumber plans. you do not have to use the syncing setup to access these plans. for those that want zero ties to their smartphone and limited apps, the dumbest plan is our most minimalistic.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "do i have to sync it to a smartphone?",
-      "answer": "nope! with our DUMBEST phone plan, there are ZERO ties to a smartphone. the dumbphone 2 has its own phone number for call and SMS text. it also has maps, WhatsApp, rideshare, camera, alarm, and 2-factor authentication. you'll just select the DUMBEST plan once activating your phone.\n\na great option for kids and families, or people who are ready to say goodbye to their smartphone entirely.",
+      "question": "where is the dumbphone 2 available?",
+      "answer": "the dumbphone 2 is available in 49 U.S. states (excluding Alaska) and Puerto Rico. if you want the dumbphone in your country, fill out this [interest form](https://forms.fillout.com/t/tXdRkWzHsvus).",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "what cellular network does it use?",
-      "answer": "the dumbphone 2 uses t-mobile's network. service is available in the U.S. + Puerto Rico. service will be available in Alaska this summer! email us support@dumb.co and we will reach out to you once it's available.",
+      "question": "is sideloading supported?",
+      "answer": "while possible, we do not support sideloading on the dumbphone. this can disrupt or cause irreversible damage to the dumbOS and slow down core functionality. our dumbOS software has been custom built and optimized for the dumbphone 2 hardware. sideloading can wipe the software and requires a replacement phone. **dumb.co does not provide technical support for personal sideloading.**",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "can i sideload apps onto it?",
-      "answer": "while it is possible, **we strongly advise against it**. this can cause disrupt or cause irreversible damage to the dumbOS on your dumbphone and slow down core functionality. the apps within our dumbOS are heavily modified to be optimized for the hardware. wiping or factory resetting dumbOS will also require a replacement phone.\n\n**dumb.co does not provide technical support for personal sideloading.** we only offer troubleshooting support for our dumbOS.\n\nproceed at your own risk​!",
+      "question": "questions about personal data + security",
+      "answer": "the dumbphone's connection is end-to-end encrypted. we do not log, store, or have access to message content or personal information at any point.",
       "category": "general",
       "hidden": false
     },
     {
       "question": "how does signal work on the phone?",
       "answer": "the dumbphone 2 links to your existing signal account as a secondary device, using the same linked-device flow as signal desktop. keys and messages remain on the phone and communicate directly with signal’s service without passing through our infrastructure.\n\nwe’re happy to answer any other questions about signal on the dumbphone 2 – just reach out to us at support@dumb.co",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "can i get email on it?",
-      "answer": "we made the intentional decision to not include email on the dumbphone 2 to stay aligned with our values. we created a communication device with essentials that help guide you off your smartphone screen, while still being able to operate in the modern world.\n\nwe encourage the dumbcurious to release supercomputer expectations. reset your nervous system with less notifications.\n\nwant to chat alternative solutions? hit us up support@dumb.co",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "is the dumbphone 2 available internationally?",
-      "answer": "currently, the dumbphone 2 is available in 49 U.S. states (minus alaska-- coming this summer) and puerto rico.\n\nif you want the dumbphone 2 in your country, please fill out this form: https://forms.fillout.com/t/tXdRkWzHsvus",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "can i use the Dumb Down app with my own smartphone + flip phone?",
-      "answer": "our custom dumbOS only exists on the dumb.co dumbphone 2; the Dumb Down app is not compatible with any other flip phone. it is only compatible with our phone lines.",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "how do i listen to music on it?",
-      "answer": "the dumbphone 2 has bluetooth and a headphone jack. with the DUMB plan, you can stream Spotify, Apple Music, and podcasts. you'll just select this plan when activating your dumbphone.",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "is the device end-to-end encrypted?",
-      "answer": "yes, the connection is end-to-end encrypted. we don't log, store, or have access to message content at any point. the data stays on your personal devices.",
       "category": "general",
       "hidden": false
     },
@@ -97,128 +68,294 @@
     },
     {
       "question": "can i cancel anytime?",
-      "answer": "in order to cancel, call our dumb line at 404-716-3605. you'll always get a human on the other end. please note our cancellation terms below.\n\nphone plans: the phone plan is a 4-month minimum commitment. if cancelled before this time is up, billing will continue until the minimum is met. your service will continue until the end of the billing period. the phone number and smartphone syncing will be lost once cancelled.\n\ndumbphone orders: as long as the physical phone has NOT shipped yet, you will receive a 100% refund on your cancelled order. once the phone has shipped, the phone itself will not be cancelled or refunded. after 4 months, the phone is yours to keep. if you prefer to return it, we will help arrange with our dumb360 program to help reduce e-waste.",
+      "answer": "upon activating your dumbphone plan, there is a 4-month minimum commitment. if cancelled before this period, billing will continue until the minimum has been met. you can process a cancellation at any time by calling [404-716-3605](tel:4047163605) or within your plan portal at [dumb.co/mobile](https://dumb.co/mobile). we are unable to pause phone service at this time.",
       "category": "general",
       "hidden": false
     },
     {
-      "question": "can i pause my service?",
-      "answer": "at this time, we are unable to pause phone service. if you’d like to start back up again later, the phone line would have to be cancelled then restarted later on (the current phone number will be lost).",
-      "category": "general",
-      "hidden": false
-    },
-    {
-      "question": "replacements + refunds",
-      "answer": "we make sure all of our dumbphone users are able to get up and running on the phone to get started on their dumb journey. should your phone or SIM arrive out of the box with any defects, notify us right away and we'll swap you out for a replacement! all other damage caused from consumer usage such as wear and tear, drops, water damage, etc. require a $65 replacement fee to cover the cost of the hardware. special circumstances may apply where we are able to accept a return for a full refund. in these cases, the device must return undamaged with all original parts, accessories, and packaging for the full refund.\n\nno partial refunds are issued for unused billing time. service continues through the paid period.",
+      "question": "replacements and refunds policy",
+      "answer": "should your phone or SIM arrive out of the box with any defects, please reach out to [support@dumb.co](mailto:support@dumb.co) or our dumb line at [404-716-3605](tel:4047163605) to get a replacement. damage caused by consumer usage requires a $65 replacement fee to cover the hardware cost. no partial refunds are issued for unused billing time.\n\nspecial circumstances may apply where full refunds are accepted. in these cases, the device must be returned undamaged with all original packaging and accessories for a full refund to be processed.",
       "category": "general",
       "hidden": false
     },
     {
       "question": "how does setup work?",
-      "answer": "1. set up your dumbphone at dumb.co/mobile and choose your plan.\n2. turn on your dumbphone and wait a minute for it to register, and continue through setup steps!\n3. if using the dumbphone as a companion device to your smartphone (via DUMB or DUMBER) plans, download the dumb down app on your smartphone and follow the prompts to link the two devices.",
+      "answer": "1. the dumbphone SIM comes pre-inserted. once you receive your dumbphone you'll register + activate your SIM on [dumb.co/mobile](https://dumb.co/mobile).\n2. pick your plan and pay.\n3. you can now power on your dumbphone. if using the dumbphone as a companion device you'll be prompted to download the dumb down app to complete setup. this is a step-by-step walkthrough for syncing contacts, logging into smart txt, and setting up call forwarding. your dumb journey has begun!",
       "category": "tech",
+      "group": "setup",
       "hidden": false
     },
     {
       "question": "where is my SIM?",
       "answer": "your SIM (a physical tiny white card) is installed in the SIM tray inside the dumbphone. we pre-insert it for you so you don’t have to worry about opening up phone back.\n\nyou’ll find that closed within the dumbphone is a large white card. the SIM # (IICD) is located on the back of this card. you’ll go to dumb.co/mobile to activate your new line by typing in this number.\n\nhaving trouble locating your SIM? email support@dumb.co.",
       "category": "tech",
+      "group": "setup",
       "hidden": false
     },
     {
-      "question": "how do i put my current phone number on the dumbphone?",
-      "answer": "**transferring your phone number will cancel the service on your current phone.** after the transfer finishes, the number will only work on your dumbphone.\n\n**do not choose this option if you want to keep service on your smartphone.**\n\nonce you’ve decided you’d like your current phone number only active on your dumbphone, follow these steps below:\n\n1. go to dumb.co/mobile and choose your plan.\n2. when prompted for a phone number, choose **keep my phone number.**\n3. contact your current phone carrier and request your **account #** and **porting credentials.**\n4. provide your **account #** and **porting credentials** in your dumb.co/mobile portal.\n5. turn your dumbphone on and wait a minute for it to register the new number.",
+      "question": "how do i put my current number on the dumbphone? should i?",
+      "answer": "if you transfer your phone number to the dumbphone, your service will be cancelled on your current phone. we do not advise this if you intend to continue using your smartphone or are new to the dumbphone lifestyle. in these cases you need to get a new number.\n\nif you're ready to make the jump, you'll need to contact your current phone carrier and request your account number and transfer PIN to keep your current phone number on the dumbphone.",
       "category": "tech",
+      "group": "setup",
       "hidden": false
     },
     {
-      "question": "i transferred my current phone number to the dumbphone, but i am not receiving some texts",
-      "answer": "it can take anywhere from a few hours up to 48 hours for a transferred number to fully update; this occurs across all carrier networks.\n\nshortly after transferring a number to a new service, you may encounter an issue in which some calls correctly come into the new carrier while others still incorrectly come in to the old carrier. this issue most commonly indicates a partial port, specifically when the old carrier still has some work to do to complete the port.\n\ntry out these steps below:\n\n- check your portal dumb.co/mobile to see the status of your phone number porting. if it says porting complete and you still are not receiving calls and texts OR porting incomplete, reach out to your old carrier for a status update.\n\n- power off your dumbphone, wait 10 seconds, then turn it back on.\n\n- if you transferred your number to the dumbphone from an iphone, make sure it is deregistered from imessage. use these instructions: https://selfsolve.apple.com/deregister-imessage/",
+      "question": "can i use the companion setup with my icloud login / on an ipad?",
+      "answer": "yes! you only need an icloud account to send and receive messages via smart txt. texts will sync between smart txt and any other apple devices you own that are signed into icloud.\n\ncall forwarding will not work, as it occurs at the cellular network level and requires a smartphone.",
       "category": "tech",
+      "group": "setup",
+      "hidden": false
+    },
+    {
+      "question": "does the dumbphone support google voice?",
+      "answer": "the dumbphone does not support syncing with smartphones on google voice plans.",
+      "category": "tech",
+      "group": "setup",
+      "hidden": false
+    },
+    {
+      "question": "can i do the companion setup without using the dumb down app?",
+      "answer": "the dumb down app supports iOS 16 and on; those with older phones will be unable to download the app. you can still use the companion setup without it, though the process varies:\n\n1. you can still log in to smart txt, you'll just need to do so manually on the dumbphone. the dumb down app simply allows for type sync (logging in using your smartphone's keyboard rather than directly on the dumbphone).\n2. call forwarding can still be enabled, but this has to be done manually. you'll need to look up your carrier's call forwarding code and enter this alongside your dumbphone number on your smartphone. the same process can be done for turning this setting off.\n3. contact sync will be the most difficult part, as the dumb down app does the brunt of this. to do this manually, export your contacts to a .vcf file and save the file onto the phone, or transfer it via USB cable or bluetooth.",
+      "category": "tech",
+      "group": "setup",
+      "hidden": false
+    },
+    {
+      "question": "SIM doesn't register on dumbphone",
+      "answer": "1. on the registration error screen on the dumbphone, use the up button + OK button to select skip.\n2. go to all apps → updates and install the latest update.\n3. if you don’t see an update, turn airplane mode on, then off, and check again.\n4. once updated, dial #686#. if the call connects, your dumbphone is successfully set up.\n\nif the above does not work, contact us at support@dumb.co.",
+      "category": "tech",
+      "group": "setup",
       "hidden": false
     },
     {
       "question": "does my smartphone have to be on for syncing to work?",
-      "answer": "here’s what works when your smartphone is on/off, and what doesn’t:\n\nstill works if phone is turned OFF:\n-call forwarding\n-imessage\n\nonly works if phone is turned ON:\n-text message forwarding (SMS on on iphone)\n-google messages for android",
+      "answer": "here's what works when your smartphone is on/off, and what doesn't:\n\n**still works if your phone is turned OFF:**\n- call forwarding (just make sure you toggle call forwarding to dumbphone only before powering off)\n- imessage\n\n**only works if your phone is turned ON:**\n- text message forwarding (SMS on iphone, aka green bubbles)\n- google messages for android",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "how to turn on/off call forwarding",
-      "answer": "1. on your smartphone, open the dumb down app.\n2. to turn on call forwarding, make sure you’ve gone through setup and correctly entered your smartphone number, dumbphone number, and phone carrier for your smartphone.\n3. once you complete setup, each time you return to the dumb down app you will see at the top of the page forward phone calls.\n4. toggle “turn on” and “turn off”.",
+      "question": "can i put my current phone number on the dumbphone?",
+      "answer": "**transferring your phone number will cancel the service on your current phone.** after the transfer finishes, the number will only work on your dumbphone.\n\n**do not choose this option if you want to keep service on your smartphone.**",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "call forward isn’t working",
-      "answer": "make sure your phone is set up for call forwarding:\n\n1. on your smartphone, open the dumb down app.\n2. scroll down to configuration and go through setup again.\n3. make sure you entered the correct information for: your smartphone number, dumbphone number, and wireless carrier for your smartphone.\n4. test that it works within the app.\n5. if call forwarding still is not working, restart your phone then toggle airplane mode on and off.\n\nafter you’ve taken all the steps above, if it still is not functioning properly, contact the carrier who you are trying to forward calls from, since it’s a network-dependent feature.",
+      "question": "i'm not getting alerts for text notifications and can't hear my ringtone sounds",
+      "answer": "mute txt, found within your notifications, must be toggled off in order to receive audio text alerts and to play ringtone sounds.",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "iphone: smart txt isn’t syncing messages",
-      "answer": "a quick reset usually fixes it.\n\n1. open smart txt.\n2. press the three dots in the top right.\n3. go to settings.\n4. scroll to the bottom and tap reset app.\n5. log back in when it reopens.",
+      "question": "how do i turn off emergency alerts?",
+      "answer": "you can turn off emergency alerts and notifications with the following steps:\n\n1. navigate to settings → wireless & networks\n2. from here go to wireless emergency alerts → settings\n3. this takes you to a menu with all possible emergency alerts. when choosing one you will have the option to select \"off,\" disabling notifications for it.",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "iphone: not receiving android, sms, or “green” texts",
-      "answer": "if you're using an iphone to sync your dumbphone:\n\n1. open settings → apps → messages.\n2. tap text message forwarding.\n3. make sure forwarding is turned on for your dumbphone.\n\nyou can also find these steps in the dumb down app on your smartphone.",
+      "question": "can i use the music features without a smartphone?",
+      "answer": "you do not need a smartphone to stream music on apple music or spotify on the dumbphone 2. all you need is an existing account or subscription for the platforms to stream their music.",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "android: smart txt isn’t syncing messages",
-      "answer": "make sure your dumbphone is set up to send and receive android messages.\n\n1. on your dumbphone, open all apps → device setup.\n2. continue until you see \"which texts r u syncing?\"\n3. choose android.\n4. smart txt will open google messages and you will log into your account.\n\nif you have an android phone and you are running a different operating system (ie: using a “de-googled” phone), this will impact text sync ability.",
+      "question": "can i download my own music?",
+      "answer": "yes! the dumbphone can serve as your personal MP3 player. you can download music within our native music application or insert a micro SD card.",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "whatsapp not logging in (qr code issues)",
-      "answer": "1. go to all apps → updates and install the latest update.\n2. open whatsapp and return to the QR code.\n3. make sure the qr code is fully loaded, then press the # key to enlarge it (this usually makes it scan more reliably).\n4. scan the code on your smartphone. once it says “logging in”, press the back button on your dumbphone.",
+      "question": "does the dumbphone support carplay?",
+      "answer": "you can play music through your car's speakers by connecting the dumbphone via bluetooth. it does not connect to carplay.",
       "category": "tech",
+      "group": "general",
+      "hidden": false
+    },
+    {
+      "question": "is email supported on the dumbphone?",
+      "answer": "the dumbphone does not support email. we know email is important to a lot of people, but leaving it out is one of the most intentional choices we made.\n\nwe want to move away from supercomputer expectations, so we've developed a communication device with a few essentials that helps lead people to decreased screen time and fewer notifications. the dumbphone is built to handle the essentials without becoming another device that's constantly pulling for your attention. for us, email crosses that line.",
+      "category": "tech",
+      "group": "general",
+      "hidden": false
+    },
+    {
+      "question": "does the dumbphone have a digital wallet or support banking apps?",
+      "answer": "the dumbphone 2 does not currently have a digital wallet or support any banking apps. having a dumbphone asks for lifestyle change in certain areas. for payments, we recommend going old school and carrying a wallet with physical cards and cash.\n\nif your bank requires multi-factor authentication, make sure it is SMS-enabled, so you do not need to grant approval through the app.",
+      "category": "tech",
+      "group": "general",
+      "hidden": false
+    },
+    {
+      "question": "i'm getting an influx of spam calls + texts",
+      "answer": "it's common to receive spam calls and texts on a \"new\" phone number because carriers often recycle numbers previously used by someone who left them on marketing lists.\n\nthese are our recommendations:\n\n1. register for free on the national [\"do not call\" registry](https://www.donotcall.gov/) by entering your phone number and email. this blocks telemarketers.\n2. block any unknown spam numbers that call or text.\n3. forward spam texts to 7726 (\"SPAM\" on most keypads). this reports scams to the phone carrier to help block them, and reporting enables providers to track threats and reduce the volume of spam.\n4. some cell providers offer \"call control\": callers calling for the first time are prompted to enter a number from the keypad before the call goes through.",
+      "category": "tech",
+      "group": "general",
+      "hidden": false
+    },
+    {
+      "question": "can i add multiple calendars to my smart cal?",
+      "answer": "we currently do not allow users to add multiple google calendars to smart cal. if you would like to see events from both calendars, we recommend sharing your personal calendar with your work account.",
+      "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
       "question": "weak battery or phone randomly shutting off",
-      "answer": "we are constantly improving the battery given all the features we’ve added to a dumbphone! try the steps below:\n1. go to all apps → updates and install the latest update.\n2. restart the phone.\n3. give 1-2 days to see if there is any improvement.\n4. if you do not notice any improvement, contact us!\n\n1. go to all apps → updates and install the latest update.\n2. remove the back of the phone.\n3. give 1-2 days to see if there is any improvement.\n4. if you do not notice any improvement, contact us!",
+      "answer": "we are constantly improving the battery given all the features we've added to a dumbphone! try the steps below:\n\n1. go to all apps → updates and install the latest update.\n2. restart the phone.\n3. give 1-2 days to see if there is any improvement.\n4. if you do not notice any improvement, contact us at [support@dumb.co](mailto:support@dumb.co).",
       "category": "tech",
+      "group": "general",
       "hidden": false
     },
     {
-      "question": "SIM doesn’t register on dumbphone",
-      "answer": "1. on the registration error screen on the dumbphone, use the up button + OK button to select skip.\n2. go to all apps → updates and install the latest update.\n3. if you don’t see an update, turn airplane mode on, then off, and check again.\n4. once updated, dial #686#. if the call connects, your dumbphone is successfully set up.\n\nif the above does not work, contact us at support@dumb.co.",
+      "question": "what is porting a number?",
+      "answer": "porting a phone number is the process of transferring your existing telephone number from one service provider to another. it allows you to keep your exact phone number when switching between wireless carriers.\n\nwhen you port your number, you lose service on your old smartphone. it is not currently possible to have one phone number associated with two phones or SIM cards.",
       "category": "tech",
+      "group": "porting",
       "hidden": false
     },
     {
-      "question": "contacts didn’t sync",
-      "answer": "this usually means your smartphone needs to be linked again.\n\n1. in the dumbdown app, go to settings → enter smartphone → enter dumbphone → unlink smartphone.\n2. on your dumbphone, go to all apps → device setup.\n3. when asked \"r u linking smartphone?\", choose yes.\n4. select link your smartphone (or unpair first if it’s still connected).\n5. link your smartphone again and let your contacts sync.",
+      "question": "i transferred my number and am not receiving some texts, why?",
+      "answer": "it takes anywhere from a few hours up to 48 hours for a transfer to fully update.\n\nafter transferring a number to a new service, you may encounter an issue in which you are not receiving all calls or texts. this indicates a partial port, or that the port is still being processed by your previous carrier.\n\nafter porting your number be sure to:\n- check your portal at [dumb.co/mobile](https://dumb.co/mobile) to see your porting status. if it says porting complete or porting incomplete, reach out to your old carrier for a status update.\n- if you transferred your number to the dumbphone from an iphone, confirm your number has been deregistered from imessage. see deregistering details [here](https://selfsolve.apple.com/deregister-imessage/).",
       "category": "tech",
+      "group": "porting",
       "hidden": false
     },
     {
-      "question": "spam calls",
-      "answer": "unfortunately, every carrier gets some spam. here are some things you can do to help:\n\n-add your number to the national do not call registry.\n-block any spam numbers that call or text you.\n-forward spam texts to 7726 (spam) to report them. this helps carriers identify and block future spam.",
+      "question": "can i port my number over on any plan?",
+      "answer": "yes! you can port your number over regardless of the plan you choose. before taking this action, remember that porting your number to the dumbphone ends service on your old phone.",
       "category": "tech",
+      "group": "porting",
       "hidden": false
     },
     {
-      "question": "can i use the dumb down app on an ipad?",
-      "answer": "contact sync and type sync will work with an ipad.\n\ncall forwarding will not work since it occurs at the cellular network level; this must be done on a smartphone.",
+      "question": "i'm missing group messages within dumb txt",
+      "answer": "1. open up the **dumb txt** app.\n2. go to options → settings → group messaging.\n3. make sure group messaging is turned on.",
       "category": "tech",
+      "group": "dumb txt",
       "hidden": false
     },
     {
-      "question": "missing group mms in dumb txt app",
-      "answer": "1. open up the dumb txt app.\n2. go to options --> settings --> group messaging.\n3. make sure group messaging is turned on.",
+      "question": "i'm having issues with call forwarding",
+      "answer": "make sure the dumb down app is completely up to date and that the selected forward setting is LIVE. if you're still having issues you can reset your forwarding setting by switching to smartphone only, verifying, and switching back to your preferred forwarding setting.",
       "category": "tech",
+      "group": "syncing",
       "hidden": false
     },
     {
-      "question": "Does the dumbphone work outside the US?",
-      "answer": "we expect to launch internationally in 2027",
-      "category": "general",
+      "question": "iphone: smart txt isn't syncing all messages",
+      "answer": "in your smartphone settings go to messages and confirm the following are selected:\n\n1. send & receive: both your number and email address should be selected under 'you can receive messages to and reply from'.\n2. if email is not there you'll need to log in to icloud with your email.\n3. under 'start new conversations from' you should only have your phone number selected.\n4. under 'text message forwarding' a MAC with a long serial number should be visible. make sure this is toggled on.\n5. under 'text messaging' MMS messaging and all RCS messaging should be toggled on.",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "iphone: not receiving android, sms, or \"green\" texts",
+      "answer": "if you're using an iphone to sync your dumbphone:\n\n1. open settings → apps → messages.\n2. tap text message forwarding.\n3. make sure forwarding is turned on for your dumbphone.\n\nyou can also find these steps in the dumb down app on your smartphone.",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "i'm getting a -6009 error: \"for security reasons iMessage has not authorized you to log in\"",
+      "answer": "to resolve the issue:\n\n1. open the **settings app on your iphone** (or system settings on mac), then select your name.\n2. scroll down and tap **contact key verification**.\n3. turn off verification in imessage and tap continue.\n4. open the **smart txt** app on your dumbphone and try signing in again.",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "i'm getting a \"failed to authenticate\" / \"this account needs to accept the TOS\" (MOBILEME_TERMS_OF_SERVICE_UPDATE) error",
+      "answer": "to resolve this you'll need to update to the latest update and accept the terms and conditions at [account.apple.com](https://account.apple.com/).",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "android: smart txt isn't syncing messages",
+      "answer": "make sure your phone is set up for android messages:\n\n1. on your dumbphone, open **all apps → device setup**.\n2. continue until you see **\"which texts r u syncing?\"**\n3. choose **android**.\n\nplease note: if you have an android phone running a de-googled operating system, text sync is not supported.",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "i ported my number and am unable to access smart txt",
+      "answer": "if you've transferred your number to the dumbphone from an android device, smart txt will not work.",
+      "category": "tech",
+      "group": "smart txt",
+      "hidden": false
+    },
+    {
+      "question": "i'm getting a registration failing error when trying to turn on call forwarding",
+      "answer": "the dumb down app is a circumvented process we've created to make adjusting forwarding easy! this function varies carrier to carrier, and this error indicates you'll need to reach out to your smartphone carrier directly to have the function enabled.",
+      "category": "tech",
+      "group": "call forwarding",
+      "hidden": false
+    },
+    {
+      "question": "i have verizon and am having issues turning on \"ring both phones\"",
+      "answer": "on iOS 17 and newer, live voicemail answers unanswered calls right on your phone, and it grabs the call before verizon's \"forward if no answer\" can send it to your dumbphone.\n\nto fix it:\n\n1. on your smartphone turn off live voicemail: settings → apps → phone → live voicemail and toggle it off. (on some iOS versions it's settings → phone → live voicemail.)\n2. reset forwarding: dial *73 and press call.\n3. go back to the dumb down app and try turning on the \"ring both phones\" option again.",
+      "category": "tech",
+      "group": "call forwarding",
+      "hidden": false
+    },
+    {
+      "question": "i can't tell if i set up call forwarding correctly",
+      "answer": "confirm your dumb down app on your smartphone is completely up to date. the word LIVE indicates the current forwarding option that's been selected. if you're still having issues or unsure if it's on, reset forwarding:\n\n1. reset the selection to smartphone only, confirmed by it showing as LIVE.\n2. you can now switch to 'ring both phones'. this will prompt you to go through a 3-step setup, verifying that forwarding has been turned on and is working!",
+      "category": "tech",
+      "group": "call forwarding",
+      "hidden": false
+    },
+    {
+      "question": "contacts aren't syncing at all or only partially synced",
+      "answer": "this usually means your smartphone needs to be linked again.\n\n1. in the dumb down app, go to **configuration and unlink your smartphone.**\n2. on your dumbphone, go to **all apps → device setup**.\n3. on the pairing page, enter the code from your smartphone.\n4. **link your smartphone again** and let your contacts sync.",
+      "category": "tech",
+      "group": "contact sync",
+      "hidden": false
+    },
+    {
+      "question": "i'm getting a green spinning wheel when trying to access WhatsApp, and it's being really buggy",
+      "answer": "1. be sure your dumbphone is completely up to date.\n2. go back into all apps and long-press the \"WhatsApp\" app.\n3. click the \"disable\" option (it should change to say \"enable\" after this step).\n4. click the \"clear cache/storage\" option.\n5. click the \"enable\" option.\n6. open up WhatsApp again and you're able to re-sync!",
+      "category": "tech",
+      "group": "whatsapp",
+      "hidden": false
+    },
+    {
+      "question": "i can't scan the WhatsApp QR code",
+      "answer": "1. update to the latest version of the phone.\n2. go back to WhatsApp where the QR code is.\n3. make sure the QR code is generated and press the # key. this should give you a big QR code and aid in scanning.\n4. once your smartphone says \"logging in\", hit the back button on your dumbphone!",
+      "category": "tech",
+      "group": "whatsapp",
+      "hidden": false
+    },
+    {
+      "question": "can i call internationally on WhatsApp?",
+      "answer": "yes! you can make international calls within WhatsApp. native international calls cannot be made on the dumbphone.",
+      "category": "tech",
+      "group": "whatsapp",
+      "hidden": false
+    },
+    {
+      "question": "how can i download music, photos, and videos onto the dumbphone and vice versa?",
+      "answer": "downloading music, images, or videos from or to your dumbphone can be done with computer software, commonly OpenMTP for mac users or Quick Share for windows.",
+      "category": "tech",
+      "group": "mp3",
+      "hidden": false
+    },
+    {
+      "question": "how can i easily get photos from my dumbphone to my smartphone?",
+      "answer": "if you don't want the hassle of downloading software onto your computer to retrieve photos or videos, you can simply text them to your smartphone number! all you need to do is:\n\n1. open your camera and view the gallery.\n2. slide through the photos you're looking to send, select 'options' → share → messages.",
+      "category": "tech",
+      "group": "mp3",
+      "hidden": false
+    },
+    {
+      "question": "is your 2FA application compatible with my school or job's required authentication?",
+      "answer": "some schools and workplaces require a specific MFA (multi-factor authenticator); in certain cases they may not be compatible with our 2FA app. our authenticator will only work with services that support 3rd-party MFAs.",
+      "category": "tech",
+      "group": "2fa",
       "hidden": false
     }
   ],

@@ -114,8 +114,7 @@
   }
   #home-copy{ flex:0 1 440px; min-width:0; }
   /* lowercase: the product is 'dumbphone 2', never DUMBPHONE 2 (Milk) */
-  #home-copy .kicker{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:none;opacity:.7;margin-bottom:10px;}
-  #home-copy h1{font-family:var(--headline); font-weight:700; font-size:66px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
+  #home-copy h1{font-family:var(--headline); font-weight:700; font-size:99px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
   #home-copy p{font-family:var(--body); font-size:17px; max-width:300px; margin:0 0 26px; opacity:.85; line-height:1.55;}
   #home-cta{
     display:inline-flex; gap:10px; align-items:center; background:var(--black); color:var(--yellow);
@@ -260,7 +259,14 @@
   .press-title{font-family:var(--headline); font-size:19px; line-height:1.15;}
 
   /* ---------- FAQ ---------- */
+  .faq-search{margin:0 0 12px;}
+  .faq-search input{width:100%; box-sizing:border-box; font-family:var(--body); font-size:15px; padding:10px 14px; border:2px solid var(--black); border-radius:100px; background:var(--white); color:var(--black); outline:none; -webkit-appearance:none; appearance:none;}
+  .faq-search input:focus{box-shadow:0 0 0 3px var(--yellow);}
   .faq-tabs2{display:flex; gap:8px; margin-bottom:18px;}
+  .faq-tabs2.searching{opacity:.35; pointer-events:none;}
+  .faq-group{font-family:var(--headline); font-size:22px; margin:22px 0 2px; text-transform:lowercase;}
+  .faq-group:first-child{margin-top:4px;}
+  #faq-nomatch{font-family:var(--body); font-size:14px; color:#555; padding:14px 0;}
   .faq-tab2{font-family:var(--body); font-weight:600; font-size:13px; padding:7px 14px; border-radius:100px; border:2px solid var(--black); cursor:pointer; background:var(--white);}
   .faq-tab2.on{background:var(--black); color:var(--yellow);}
   .faq-item2{border-bottom:1px solid #eee; padding:14px 0;}
@@ -381,6 +387,7 @@
   }
   #winmodal #wm-carousel img{
     position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+    object-position:var(--hero-pos, center);
   }
   #winmodal .wm-arrow{
     position:absolute; top:50%; transform:translateY(-50%); z-index:2;
@@ -391,6 +398,10 @@
   #winmodal .wm-prev{left:14px;}
   #winmodal .wm-next{right:14px;}
   #winmodal .wm-dots{position:absolute; bottom:14px; left:0; right:0; display:flex; gap:6px; justify-content:center; z-index:2;}
+  /* on a backing, so they never sit on the subject (Lucy) */
+  #winmodal .wm-dots{bottom:10px;}
+  #winmodal .wm-dots > *{position:relative;}
+  #winmodal .wm-dots::before{content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:20px; padding:0; width:calc(var(--ndots, 3) * 14px + 8px); background:rgba(255,255,255,.85); border:1px solid #000; border-radius:999px;}
   #winmodal .wm-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55); border:1px solid #000; cursor:pointer;}
   #winmodal .wm-dot.on{background:var(--yellow);}
   #winmodal .wm-resize{

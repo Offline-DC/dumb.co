@@ -2,15 +2,17 @@
  * The sections, in nav order: their addresses (dumb.co/<slug>), the label in
  * the sidebar and the phone's menu, and the window title they open under.
  */
+/* label: the sidebar. On the phone's menu every row is lowercase, and shop
+   reads "buy dumbphone 2" (Kunal, Oct 13) -- mlabel, where it differs. */
 export const NAV = [
-  { key: "shop", slug: "shop", label: "Shop" },
+  { key: "shop", slug: "shop", label: "Shop", mlabel: "buy dumbphone 2" },
   { key: "about", slug: "about", label: "About" },
   { key: "community", slug: "community", label: "Community" },
   { key: "press", slug: "press", label: "Press" },
   { key: "memories", slug: "memories", label: "Memories" },
   { key: "faq", slug: "faq", label: "FAQ" },
   { key: "contact", slug: "contact", label: "Contact" },
-] as const;
+] as const satisfies readonly { key: string; slug: string; label: string; mlabel?: string }[];
 
 export type SectionKey = (typeof NAV)[number]["key"];
 

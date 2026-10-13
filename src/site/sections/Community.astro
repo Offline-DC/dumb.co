@@ -16,8 +16,8 @@ const c = COPY.community;
         <details class="gi-drop">
           <summary>
             <span class="gi-sum">
-              {pg.kicker && <span class="gi-kicker">{pg.kicker}</span>}
               <span class="gi-name" set:html={lines(pg.name)} />
+              {pg.sub && <span class="gi-sub">{pg.sub}</span>}
             </span>
             <span class="gi-chev" aria-hidden="true">+</span>
           </summary>

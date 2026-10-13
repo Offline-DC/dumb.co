@@ -130,7 +130,6 @@ if (section === "shop") ld.push({
 
     <div id="home">
       <div id="home-copy">
-        {home.kicker && <div class="kicker">{home.kicker}</div>}
         {home.headline && <h1 set:html={lines(home.headline)} />}
         {home.body && <p>{home.body}</p>}
         <div id="home-cta" onclick="openSection('shop')">{home.button}</div>
@@ -171,7 +170,7 @@ if (section === "shop") ld.push({
     <div id="deskphone">
       <div class="phone-frame">
         <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
-          <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.label}</a>
+          <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.mlabel ?? n.label.toLowerCase()}</a>
         ))}</div></div></div>
         <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
         <div class="pf-keys">
@@ -198,7 +197,7 @@ if (section === "shop") ld.push({
         r.setProperty('--mtop', Math.round(10 - drawnTop * ratio * w) + 'px');
         var rowH = Math.max(11, Math.floor((screenH * ratio * w) / rows));
         r.setProperty('--pmn-rowh', rowH + 'px');
-        r.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
+        r.setProperty('--pmn-rowf', Math.max(7.5, Math.min(20, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
         r.setProperty('--pmn-barf', '6px');
         /* the wordmark onto the hinge now, not when site.js gets to it
            (logoHome): it painted at the top of the screen first and then

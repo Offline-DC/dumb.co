@@ -40,6 +40,7 @@ const DEFAULTS: Record<string, string> = {
   "faq.general_tab": "General",
   "faq.tech_tab": "Tech Help",
   "faq.videos_tab": "Phone Demo",
+  "faq.search_placeholder": "search the faq",
 };
 
 export const warnings: string[] = [];
@@ -114,12 +115,12 @@ export const COPY = {
       }];
     }),
   ) as Record<string, { title: string; description: string }>,
-  home: pick(home, "home", ["kicker", "headline", "body", "button"]),
+  home: pick(home, "home", ["headline", "body", "button"]),
   about: pick(about, "about", ["heading", "body", "sign_off"]),
   shop: {
     ...pick(shop, "shop", [
       "product_name", "buy_button", "price", "plan_line", "quiz_link",
-      "what_is_title", "what_is", "included_title", "essentials_title",
+      "included_title", "essentials_title",
       "specs_title", "specs_intro", "plans_title", "plans_sub", "plans_note",
       "quiz_button", "reviews_heading", "end_heading", "end_line",
     ]),
@@ -137,8 +138,8 @@ export const COPY = {
     programs: objs(community, "programs")
       .filter((x) => !hidden(x) && text(x, "name"))
       .map((x) => ({
-        kicker: text(x, "kicker"),
         name: text(x, "name"),
+        sub: text(x, "sub"),
         body: text(x, "body"),
         link_label: text(x, "link_label"),
         link_url: link(text(x, "link_url")),
@@ -156,13 +157,14 @@ export const COPY = {
   press: pick(press, "press", ["heading", "contact_email"]),
   memories: { heading: text(memories, "heading", "memories") },
   faq: {
-    ...pick(faq, "faq", ["heading", "sub", "general_tab", "tech_tab", "videos_tab"]),
+    ...pick(faq, "faq", ["heading", "sub", "general_tab", "tech_tab", "videos_tab", "search_placeholder"]),
     questions: objs(faq, "questions")
       .filter((x) => !hidden(x) && text(x, "question") && text(x, "answer"))
       .map((x) => ({
         question: text(x, "question"),
         answer: text(x, "answer"),
         category: text(x, "category").toLowerCase() === "tech" ? "tech" : "general",
+        group: text(x, "group").toLowerCase(),
       })),
     videos: objs(faq, "videos")
       .map((x) => ({ title: text(x, "title"), vimeoId: vimeoId(text(x, "link")) }))

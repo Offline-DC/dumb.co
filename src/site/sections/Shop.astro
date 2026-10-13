@@ -41,12 +41,26 @@ const avg = REVIEWS.avg && REVIEWS.count;
 
   <!-- Milk's drawers. Same .gi-drop furniture community.exe uses. -->
   <div class="gi-drops sh-drops">
-    <details class="gi-drop">
+    <!-- Marco's plan cards, first (Kunal, Oct 13), in a drawer: at full size they are taller than
+         the window twice over. On a phone plansDrawer() holds it open. "plan"
+         links anywhere on the page open this and scroll to it (showPlans). -->
+    <details class="gi-drop plans-drop">
       <summary>
-        <span class="gi-sum"><span class="gi-name">{c.what_is_title}</span></span>
+        <span class="gi-sum"><span class="gi-name">{c.plans_title}</span></span>
         <span class="gi-chev" aria-hidden="true">+</span>
       </summary>
-      <div class="gi-body" set:html={paras(c.what_is)} />
+      <div class="gi-body">
+        <div class="plans-sub">{c.plans_sub}</div>
+        <div class="plan-cards">
+          <img src={A.planDumb} alt="the dumb plan, $25.99 a month" loading="lazy" />
+          <img src={A.planDumber} alt="the dumber plan, $20.99 a month" loading="lazy" />
+          <img src={A.planDumbest} alt="the dumbest plan, $15.99 a month" loading="lazy" />
+        </div>
+        {c.plans_note && <div class="qr-min" style="margin-top:14px;" set:html={rich(c.plans_note)} />}
+        {c.quiz_button && (
+          <div class="quiz-foot" style="margin-top:14px;"><button type="button" class="quiz-link" onclick="openQuiz()">{c.quiz_button}</button></div>
+        )}
+      </div>
     </details>
 
     <details class="gi-drop">
@@ -82,27 +96,6 @@ const avg = REVIEWS.avg && REVIEWS.count;
       </div>
     </details>
 
-    <!-- Marco's plan cards, in a drawer: at full size they are taller than
-         the window twice over. On a phone plansDrawer() holds it open. "plan"
-         links anywhere on the page open this and scroll to it (showPlans). -->
-    <details class="gi-drop plans-drop">
-      <summary>
-        <span class="gi-sum"><span class="gi-name">{c.plans_title}</span></span>
-        <span class="gi-chev" aria-hidden="true">+</span>
-      </summary>
-      <div class="gi-body">
-        <div class="plans-sub">{c.plans_sub}</div>
-        <div class="plan-cards">
-          <img src={A.planDumb} alt="the dumb plan, $25.99 a month" loading="lazy" />
-          <img src={A.planDumber} alt="the dumber plan, $20.99 a month" loading="lazy" />
-          <img src={A.planDumbest} alt="the dumbest plan, $15.99 a month" loading="lazy" />
-        </div>
-        {c.plans_note && <div class="qr-min" style="margin-top:14px;" set:html={rich(c.plans_note)} />}
-        {c.quiz_button && (
-          <div class="quiz-foot" style="margin-top:14px;"><button type="button" class="quiz-link" onclick="openQuiz()">{c.quiz_button}</button></div>
-        )}
-      </div>
-    </details>
   </div>
 
   <div class="shop-sec" style="margin-bottom:6px;">

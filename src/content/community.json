@@ -1,30 +1,30 @@
 {
   "heading": "Community",
-  "lede": "everything we organize together — the challenge, the campus programme, and whatever you start next.",
+  "lede": "everything we organize together — the challenge, the campus program, and whatever you start next.",
   "programs": [
     {
-      "kicker": "the 30‑day challenge",
       "name": "Month Offline",
       "body": "a month without the smartphone, together. cohorts, meetups and a whole lot of people finding out what they do with the time.",
       "link_label": "go to Month Offline ↗",
       "link_url": "https://offline.community",
-      "hidden": false
+      "hidden": false,
+      "sub": "a 30-day challenge"
     },
     {
-      "kicker": "on campus",
       "name": "project xtraordinary",
       "body": "organize a dumb down at ur school and we'll **fund it** — money to break the shell, put on the event and get ur campus off the feed.",
       "link_label": "sign up on luma ↗",
       "link_url": "https://luma.com/user/dumbco",
-      "hidden": false
+      "hidden": false,
+      "sub": "for college campuses"
     },
     {
-      "kicker": "everyone else",
       "name": "group\ndumb down",
       "body": "bring ur crew, office, team or block and everyone **gets $ off** their dumbphone plan. no campus required.",
       "link_label": "organize@dumb.co",
       "link_url": "mailto:organize@dumb.co",
-      "hidden": true
+      "hidden": true,
+      "sub": "for everyone else"
     }
   ],
   "footer_text": "want to start something else? —",

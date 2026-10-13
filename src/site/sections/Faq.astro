@@ -4,21 +4,31 @@
 import { COPY } from "../lib/content";
 import { paras } from "../lib/html";
 const c = COPY.faq;
+/* the tech tab is segmented by issue bucket (Marlee): a heading goes in
+   front of the first question of each group */
+const groupBefore = (i: number) => {
+  const q = c.questions[i];
+  if (q.category !== "tech" || !q.group) return null;
+  const prev = c.questions[i - 1];
+  return prev && prev.category === "tech" && prev.group === q.group ? null : q.group;
+};
 ---
 <h2>{c.heading}</h2>
 {c.sub && <div class="sub">{c.sub}</div>}
+<div class="faq-search"><input id="faq-search" type="search" placeholder={c.search_placeholder} aria-label={c.search_placeholder} autocomplete="off" oninput="faqSearch(this.value)" /></div>
 <div class="faq-tabs2">
   <div class="faq-tab2 on" onclick="setFaqTab('general', this)">{c.general_tab}</div>
   <div class="faq-tab2" onclick="setFaqTab('tech', this)">{c.tech_tab}</div>
   {c.videos.length > 0 && <div class="faq-tab2" onclick="setFaqTab('demo', this)">{c.videos_tab}</div>}
 </div>
 <div id="faq-list2">
-  {c.questions.map((q, i) => (
-    <div class="faq-item2" id={`faq-i-${i}`} data-cat={q.category} style={q.category === "general" ? undefined : "display:none"}>
+  {c.questions.map((q, i) => (<>
+    {groupBefore(i) && <div class="faq-group" data-cat="tech" data-group={q.group} style="display:none">{groupBefore(i)}</div>}
+    <div class="faq-item2" id={`faq-i-${i}`} data-cat={q.category} data-group={q.group || undefined} style={q.category === "general" ? undefined : "display:none"}>
       <div class="faq-q2" onclick={`toggleFaq(${i})`}><span>{q.question}</span><span>+</span></div>
       <div class="faq-a2" set:html={paras(q.answer)} />
     </div>
-  ))}
+  </>))}
   <div class="faq-videos" data-cat="demo" style="display:none">
     {c.videos.map((v) => (
       <div class="faq-video-card">
@@ -34,4 +44,5 @@ const c = COPY.faq;
     ))}
   </div>
   <div id="faq-status" data-cat="none" style="display:none">nothing in this tab yet.</div>
+  <div id="faq-nomatch" style="display:none">no matches. try another word, or email <a href="mailto:support@dumb.co">support@dumb.co</a>.</div>
 </div>
