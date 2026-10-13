@@ -260,7 +260,7 @@
 
   /* ---------- FAQ ---------- */
   .faq-tabs2{display:flex; gap:8px; margin-bottom:18px;}
-  .faq-group{font-family:var(--headline); font-size:22px; margin:22px 0 2px; text-transform:lowercase;}
+  .faq-group{font-family:var(--headline); font-size:36px; margin:26px 0 4px; text-transform:lowercase;}
   .faq-group:first-child{margin-top:4px;}
 
   .faq-tab2{font-family:var(--body); font-weight:600; font-size:13px; padding:7px 14px; border-radius:100px; border:2px solid var(--black); cursor:pointer; background:var(--white);}
