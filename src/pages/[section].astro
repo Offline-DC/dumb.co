@@ -1,0 +1,10 @@
+---
+/* /shop, /about, /community, /press, /memories, /faq, /contact */
+import Site from "../site/Site.astro";
+import { NAV } from "../site/nav";
+export function getStaticPaths() {
+  return NAV.map((n) => ({ params: { section: n.slug }, props: { key: n.key } }));
+}
+const { key } = Astro.props;
+---
+<Site section={key} />

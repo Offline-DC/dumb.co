@@ -1,0 +1,23 @@
+---
+/* about.exe -- words from src/content/about.json */
+import { COPY } from "../lib/content";
+import { A } from "../lib/assets";
+import { lines, paras } from "../lib/html";
+const c = COPY.about;
+---
+<div id="about-pink">
+  <div id="about-top">
+    <div class="txt">
+      <h2 set:html={lines(c.heading)} />
+      <Fragment set:html={paras(c.body)} />
+      {c.sign_off && <p set:html={lines(c.sign_off)} />}
+      <div id="about-signatures">
+        {A.signatures.map((s) => <img src={s.src} alt={s.name} />)}
+      </div>
+    </div>
+    <div id="about-photo">
+      <img class="polaroid" src={A.polaroid} alt="dumb.co team polaroid" />
+      <img class="madeindc" src={A.madeInDc} alt="made in D.C." />
+    </div>
+  </div>
+</div>

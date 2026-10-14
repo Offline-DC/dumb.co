@@ -1,5 +1,8 @@
 import './OfflineMode.css';
-import ReactPlayer from 'react-player';
+import ReactPlayerModule from 'react-player';
+// react-player is CommonJS; under Astro's build the default import can arrive
+// as the module object, which React can't render (error #130). Unwrap it.
+const ReactPlayer = ((ReactPlayerModule as unknown as { default?: typeof ReactPlayerModule }).default ?? ReactPlayerModule);
 let s3URL = "https://offlinebucket1.s3.us-east-2.amazonaws.com";
 
 export default function OfflineMode() {

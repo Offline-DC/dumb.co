@@ -1,0 +1,149 @@
+
+  /* ---------------- shop.exe ---------------- */
+  /* the product shot steps with the arrows beside it now, not a strip of
+     thumbnails underneath (Milk). Wraps both ways, and the dots under the
+     photo are the only place the position is shown. */
+  function shopPhotoStep(dir){
+    const img = document.getElementById('sh-main-img');
+    if(!img || !SHOP_PHOTOS.length) return;
+    const n = SHOP_PHOTOS.length;
+    const i = ((Number(img.dataset.i || 0) + dir) % n + n) % n;
+    img.dataset.i = i;
+    img.src = SHOP_PHOTOS[i];
+    const dots = document.querySelectorAll('.hero-phone .hp-dots i');
+    dots.forEach((d, j) => d.classList.toggle('on', j === i));
+  }
+
+  /* horizontal carousels (users, reviews, event photos) share one stepper */
+  function railStep(id, dir){
+    const rail = document.getElementById(id);
+    if(!rail) return;
+    const first = rail.querySelector(':scope > *');
+    const step = first ? first.getBoundingClientRect().width + 14 : 260;
+    rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }
+
+  /* ---------------- the subscription quiz ----------------
+     This is the real thing: reference/subscription-quiz-FINAL-2026-08-18.html
+     (the final build that was sitting in Downloads as index_10.html), copied to
+     concept/quiz.html by the build and framed inside quiz.exe. Framing it
+     rather than re-typing its questions keeps one source of truth — when the
+     quiz is updated, drop the new file in reference/ and rebuild.
+     Opens from "shop dumbphone 2" and from the spec-panel link. */
+  function openQuiz(){
+    setExeTitle('quiz');
+    const host = document.getElementById('wm-section');
+    host.innerHTML = `
+      <div class="quizframe">
+        <div class="qf-bar">
+          <button type="button" class="wm-back" onclick="openSection('shop')">‹ back to shop.exe</button>
+          <a class="qf-open" href="quiz.html" target="_blank" rel="noopener">open on its own ↗</a>
+        </div>
+        <iframe class="qf-frame" src="quiz.html" title="dumb.co — find your plan"
+                loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <noscript></noscript>
+      </div>`;
+    host.scrollTop = 0;
+  }
+
+/* The plans drawer. Desktop gets a closed drawer beside specs; a phone gets
+   the cards, open, with no chevron to press -- that is the plans page there.
+   <details> cannot be held open from CSS (the content is in a UA slot that a
+   child display rule does not reliably reach), so the state is set here and
+   kept in step from the resize handler in 04_wm.js. */
+function plansDrawer(){
+  const d = document.querySelector('.plans-drop');
+  if(!d) return;
+  if(window.matchMedia('(max-width: 760px)').matches){
+    d.open = true;
+    d.dataset.held = '1';
+  }else if(d.dataset.held){
+    delete d.dataset.held;
+    d.open = false;          // only ever closes a drawer the phone had forced open
+  }
+}
+
+  /* "plan" and "Find out what plan works for you" open the plans drawer
+     in shop.exe and scroll to it, rather than swapping the window for a
+     separate page of plans you then had to back out of (Jack, Oct 9:
+     "it should just scroll you down to the plans dropdown, and then open
+     it"). From any other window it opens shop.exe first. */
+  function showPlans(){
+    if(openKey !== 'shop') openSection('shop');
+    const d = document.querySelector('#wm-section .plans-drop');
+    if(!d) return;
+    d.open = true;
+    requestAnimationFrame(() => d.scrollIntoView({behavior:'smooth', block:'start'}));
+  }
+
+  /* ---------------- memories.exe ----------------
+     Clicking a photo swaps the view inside this window, with a back button. */
+  let memView = { ei: 0, pi: 0 };
+  /* The two carousel arrows have called memScroll since the carousel was
+     built and NOTHING EVER DEFINED IT -- every press threw a ReferenceError,
+     which is exactly why dragging the strip worked and the buttons did
+     nothing at all.
+
+     It belongs here rather than beside the markup that calls it: the section
+     files are fragments of an object literal, so a function declaration in
+     one is a syntax error that takes the whole script down with it. (Found
+     that out by putting it there first -- the build does not parse the JS, so
+     nothing complained until openSection stopped existing.)
+
+     One tile plus the gap per press, both read off the DOM, so it still steps
+     by exactly one photo when the tile width changes at a breakpoint. */
+  function memScroll(ei, dir){
+    const strip = document.getElementById('mem-strip-' + ei);
+    if(!strip) return;
+    const tile = strip.querySelector('.mem-tile');
+    const cs   = getComputedStyle(strip);
+    const gap  = parseFloat(cs.columnGap || cs.gap) || 12;
+    const step = tile ? tile.getBoundingClientRect().width + gap
+                      : Math.round(strip.clientWidth * 0.8);
+    strip.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }
+
+  function openMemory(ei, pi){
+    memView = { ei, pi };
+    renderMemoryView();
+  }
+  function renderMemoryView(){
+    const ev = MEMORY_EVENTS[memView.ei];
+    const ph = ev.photos[memView.pi];
+    const host = document.getElementById('wm-section');
+    host.innerHTML = `
+      <div class="wm-pad memdetail-pad">
+        <div class="wm-back" onclick="openSection('memories')">‹ all memories</div>
+        <div class="memdetail">
+          <figure class="md-polaroid">
+            <div class="md-img"><img src="${esc(ph.src())}" alt="${esc(ev.name)}"/></div>
+            <figcaption class="md-cap">
+              <span class="md-capline">${esc(ph.cap || ev.name)}</span>
+              <span class="md-when">${esc(ev.when)} · ${esc(ev.where)}</span>
+            </figcaption>
+          </figure>
+          <div class="md-foot">
+            <button type="button" onclick="memStep(-1)" aria-label="previous photo">‹ prev</button>
+            <span class="md-count">${memView.pi + 1} / ${ev.photos.length}</span>
+            <button type="button" onclick="memStep(1)" aria-label="next photo">next ›</button>
+          </div>
+          ${paras(ev.blurb, 'md-blurb')}
+        </div>
+      </div>`;
+    host.scrollTop = 0;
+  }
+  function memStep(dir){
+    const ev = MEMORY_EVENTS[memView.ei];
+    memView.pi = (memView.pi + dir + ev.photos.length) % ev.photos.length;
+    renderMemoryView();
+  }
+
+  /* ---------------- about.exe: team ---------------- */
+  function setTeamPhoto(i){
+    if(typeof snake !== 'undefined' && snake) return;   // snake owns the screen
+    document.querySelectorAll('#tcl-screen img').forEach(img => img.classList.remove('on'));
+    const img = document.getElementById('tcl-photo-' + i);
+    if(img) img.classList.add('on');
+    const hint = document.getElementById('tcl-hint');
+    if(hint) hint.style.display = 'none';
+  }

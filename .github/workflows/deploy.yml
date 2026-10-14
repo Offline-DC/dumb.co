@@ -1,8 +1,15 @@
-name: Deploy Vite site to GitHub Pages
+name: Deploy dumb.co to GitHub Pages
+
+# Every push to main -- including every save in Pages CMS while it is pointed
+# at main -- builds the site with Astro and publishes dist/ to dumb.co.
 
 on:
   push:
     branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -14,16 +21,25 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22      # Astro needs 22.12+
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
 
-      - name: Create 404.html for SPA routing
-        run: cp dist/index.html dist/404.html
+      # `astro build` writes one HTML file per page (shop.html answers /shop
+      # with a 200 on GitHub Pages), plus the sitemap and a real 404 page.
+      - name: Check the build produced the pages
+        run: |
+          for f in index shop about community press memories faq contact internship support 404; do
+            test -f "dist/$f.html" || { echo "missing dist/$f.html"; exit 1; }
+          done
+          test -f dist/sitemap-index.xml
+          test -f dist/robots.txt
+          grep -q 'FAQPage' dist/faq.html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4

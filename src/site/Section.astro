@@ -1,0 +1,20 @@
+---
+/* one section's content, by key (src/site/sections/) */
+import About from "./sections/About.astro";
+import Shop from "./sections/Shop.astro";
+import Community from "./sections/Community.astro";
+import Press from "./sections/Press.astro";
+import Memories from "./sections/Memories.astro";
+import Faq from "./sections/Faq.astro";
+import Contact from "./sections/Contact.astro";
+import type { SectionKey } from "./nav";
+interface Props { name: SectionKey }
+const { name } = Astro.props;
+---
+{name === "about" && <About />}
+{name === "shop" && <Shop />}
+{name === "community" && <Community />}
+{name === "press" && <Press />}
+{name === "memories" && <Memories />}
+{name === "faq" && <Faq />}
+{name === "contact" && <Contact />}

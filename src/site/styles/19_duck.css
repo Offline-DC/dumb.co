@@ -1,0 +1,75 @@
+
+  /* ==========================================================================
+     the walking duck
+     Only appears once the .exe window has been shrunk into the egg — then it
+     migrates back and forth between the dumb.co logo and the egg, and leaves
+     again the moment the window is reopened.
+     ========================================================================== */
+  #walkduck{
+    /* z-index 60, above the .exe window and the egg (both 45). It used to be
+       19 and the far end of the walk vanished behind them, which read as the
+       duck disappearing. It turns before the egg now so it should not reach
+       either of them -- but if anything ever does overlap, the duck is on top
+       rather than swallowed. */
+    position:absolute; top:34px; left:0; width:62px; z-index:60;
+    display:none; pointer-events:none; will-change:transform;
+  }
+  #walkduck.on{display:block;}
+  #walkduck img{
+    width:100%; display:block;
+    animation:duckBob .34s ease-in-out infinite alternate;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.16));
+  }
+  @keyframes duckBob{
+    from{ transform:translateY(0) rotate(-1.5deg); }
+    to  { transform:translateY(-4px) rotate(1.5deg); }
+  }
+  @media (max-width:1000px){ #walkduck{display:none !important;} }
+
+  /* the phone duck: behind #deskphone (z-index 2) so the handset's ink always
+     covers it, visible through the illustration's transparent margins, and
+     clipped by #mstage's overflow:hidden at the edge of the screen */
+  #pokeduck{
+    /* fixed, not absolute: in index.html the handset is a position:fixed
+       #deskphone at z-index 2, so the duck has to be in the same stacking
+       context to land behind it. The viewport clips it at the edge. */
+    /* 46 -> 62px. The duck is a single-weight line drawing, so at 46px the
+       stroke read as too light against the handset's ink beside it -- the
+       drawing was not small, the LINE was. Scaling the whole thing is what
+       brings the weight back; thickening the stroke instead would make it a
+       different duck. */
+    position:fixed; z-index:1; width:62px; display:block;
+    pointer-events:none; will-change:transform;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.14));
+  }
+  @media (min-width:761px){ #pokeduck{display:none !important;} }
+
+  /* the power-on duck, on the handset's blank screen */
+  .phone-frame .pf-boot{
+    position:absolute; inset:0; display:flex;
+    align-items:center; justify-content:center;
+    pointer-events:none;
+    /* The handset sits on the RIGHT of the page, so a duck facing right is
+       looking off the edge, away from everything. Facing left it looks back
+       across the page at the content. Flipped on the CONTAINER, not the img:
+       the img's transform is already spoken for by phoneBoot and duckBob, and
+       a transform here would just be overwritten by them. */
+    transform:scaleX(-1);
+  }
+  /* .phone-frame .pf-screen img is the portrait slideshow: absolute, inset:0,
+     100% both, object-fit:cover. The boot duck is an img in that same screen,
+     so it inherited all of it and rendered 69x266 out of a 170x176 gif. */
+  .phone-frame .pf-boot img{
+    position:static; inset:auto; opacity:1; padding:0;
+    width:46%; max-width:120px; height:auto; max-height:56%;
+    object-fit:contain; display:block;
+    animation:phoneBoot 1.15s cubic-bezier(.34,1.42,.64,1) both,
+              duckBob .34s ease-in-out 1.15s infinite alternate;
+  }
+  /* comes up out of nothing like a screen waking, then settles and bobs */
+  @keyframes phoneBoot{
+    0%  { opacity:0; transform:scale(.18) translateY(14px); filter:blur(1px); }
+    55% { opacity:1; transform:scale(1.08) translateY(-3px); filter:blur(0); }
+    100%{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  .phone-frame .pf-screen.playing .pf-boot{display:none;}
