@@ -181,7 +181,6 @@
   #deskphone .phone-frame{flex:0 0 auto; width:218px; pointer-events:auto;}
   #deskphone .pf-art{filter:drop-shadow(0 8px 14px rgba(0,0,0,.14));}
   #deskphone .pf-keys button{cursor:pointer;}
-  @media (max-width:1000px){ #deskphone{display:none;} }
 
   /* Milk: no drawn phone on the home page. Above the phone breakpoint the
      handset only appears once a window has been minimised into the egg -- that

@@ -309,7 +309,9 @@
     #sidebar .navitem{font-size:27px; padding:4px 9px;}
     nav#navlist{gap:6px;}
 
-    #deskphone{display:none !important;}
+    /* the handset stays at every width (Jack, Oct 14): with the window
+       minimised it stands beside the headline, like on desktop, just closer */
+    #deskphone{left:58%; right:1%;}
 
     /* THE WINDOW GETS THE HERO'S SPACE. There isn't room for a headline and
        a window side by side here (Jack, Oct 14: "drop the 'your life is
@@ -317,9 +319,9 @@
        whatever the window is showing -- flipoff.exe or a section -- fills
        the page beside the sidebar. The hero only comes back when the window
        has been minimised into the egg, so the page is never blank. */
-    #home{left:290px; right:24px; padding:0 24px;}
-    #home-copy{max-width:min(520px, 100%);}
-    #home-copy h1{font-size:clamp(38px, 6vw, 64px);}
+    #home{left:290px; right:42%; padding:0 20px;}
+    #home-copy{max-width:min(420px, 100%);}
+    #home-copy h1{font-size:clamp(30px, 4.4vw, 52px);}
     body:has(#winmodal:not(.collapsed)) #home{display:none !important;}
     #winmodal:not(.collapsed){
       left:calc(var(--nav-ink, 260px) + 24px) !important;
