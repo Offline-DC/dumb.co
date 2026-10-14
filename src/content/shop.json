@@ -5,7 +5,7 @@
     "u need 2",
     "go out"
   ],
-  "buy_button": "click here to buy",
+  "buy_button": "buy dumbphone 2",
   "checkout_url": "https://buy.stripe.com/00w3cocK48f87HBakE8N20D",
   "price": "$20",
   "plan_line": "all phones come with a [plan](plans) starting at $15.99/mo + tax",

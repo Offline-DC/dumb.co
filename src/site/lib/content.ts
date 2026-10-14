@@ -27,7 +27,7 @@ type Obj = Record<string, unknown>;
 
 const DEFAULTS: Record<string, string> = {
   "shop.checkout_url": "https://buy.stripe.com/00w3cocK48f87HBakE8N20D",
-  "shop.buy_button": "click here to buy",
+  "shop.buy_button": "buy dumbphone 2",
   "shop.product_name": "dumbphone 2",
   "settings.support_email": "support@dumb.co",
   "settings.site_description":
