@@ -1795,6 +1795,15 @@ function plansDrawer(){}
        the handset is the only navigation down there. Going the other way it
        left the menu sitting on a screen that should have gone blank. */
     if(document.querySelector('#winmodal.collapsed')) phoneMirror(true);
+
+    /* Leaving phone width with the window minimised (which on a phone is
+       the normal resting state, the handset being the page) left a page
+       with nothing on it but the headline and an egg (Jack, Oct 14). Bring
+       the window up, showing whatever it last showed. */
+    if(!now && collapsed()){
+      if(openKey && typeof openSection === 'function') openSection(openKey);   // the section, with its address
+      else if(typeof expandModal === 'function') expandModal();                // flipoff.exe
+    }
   }
 
   /* Where the sidebar's INK actually ends.
