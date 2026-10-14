@@ -117,7 +117,7 @@
   }
   #home-copy{ flex:0 1 440px; min-width:0; }
   /* lowercase: the product is 'dumbphone 2', never DUMBPHONE 2 (Milk) */
-  #home-copy h1{font-family:var(--headline); font-weight:700; font-size:99px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
+  #home-copy .home-h1{font-family:var(--headline); font-weight:700; font-size:99px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
   #home-copy p{font-family:var(--body); font-size:17px; max-width:300px; margin:0 0 26px; opacity:.85; line-height:1.55;}
   #home-cta{
     display:inline-flex; gap:10px; align-items:center; background:var(--black); color:var(--yellow);

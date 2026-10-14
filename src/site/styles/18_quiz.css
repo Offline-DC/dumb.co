@@ -299,7 +299,7 @@
      filled that gap, so the copy read as pinned to the sidebar; sized to its
      content instead, #home's justify-content:center actually centres it. */
   #home-copy{ flex:0 1 auto; max-width:min(460px, 100%); }
-  #home-copy h1{ font-size:clamp(50px, 5.2vw, 99px); }   /* 50% bigger (Lucy) */
+  #home-copy .home-h1{ font-size:clamp(50px, 5.2vw, 99px); }   /* 50% bigger (Lucy) */
   #home-copy p{ max-width:none; font-size:clamp(14px, 1.15vw, 17px); }
 
   /* the sidebar gives ground on smaller screens so the hero keeps its column */

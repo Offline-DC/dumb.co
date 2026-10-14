@@ -321,7 +321,7 @@
        has been minimised into the egg, so the page is never blank. */
     #home{left:290px; right:42%; padding:0 20px;}
     #home-copy{max-width:min(420px, 100%);}
-    #home-copy h1{font-size:clamp(30px, 4.4vw, 52px);}
+    #home-copy .home-h1{font-size:clamp(30px, 4.4vw, 52px);}
     body:has(#winmodal:not(.collapsed)) #home{display:none !important;}
     #winmodal:not(.collapsed){
       left:calc(var(--nav-ink, 260px) + 24px) !important;

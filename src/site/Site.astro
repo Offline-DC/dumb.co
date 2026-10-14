@@ -128,7 +128,9 @@ if (section === "shop") ld.push({
 
     <div id="home">
       <div id="home-copy">
-        {home.headline && <h1 set:html={lines(home.headline)} />}
+        {home.headline && (section
+          ? <p class="home-h1" set:html={lines(home.headline)} />
+          : <h1 class="home-h1" set:html={lines(home.headline)} />)}
         {home.body && <p>{home.body}</p>}
         <div id="home-cta" onclick="openSection('shop')">{home.button}</div>
       </div>

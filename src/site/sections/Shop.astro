@@ -13,7 +13,7 @@ const avg = REVIEWS.avg && REVIEWS.count;
   <div class="dots dots-narrow" set:html={DOTS_SHOP_NARROW()} />
   <div class="hero-in">
     <div>
-      <h3>{c.product_name}</h3>
+      <h1>{c.product_name}</h1>
       <p class="hero-lines">{c.hero_lines.map((l) => <span>{l}</span>)}</p>
       <a class="sh-cta" href={c.checkout_url} target="_blank" rel="noopener">{c.buy_button}</a>
     </div>

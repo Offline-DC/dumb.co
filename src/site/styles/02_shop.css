@@ -15,7 +15,7 @@
   /* lowercase (Milk + Marlee): the product is "dumbphone 2", not "DUMBPHONE 2".
      text-transform was overriding the markup, so lowercasing the string alone
      changed nothing on screen. */
-  .sh-hero h3{
+  .sh-hero h1, .sh-hero h3{
     font-family:var(--headline); font-weight:700; font-size:52px; line-height:.94; margin:0 0 10px;
     letter-spacing:-.01em; text-transform:none;
   }
