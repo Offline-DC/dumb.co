@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && cp dist/sitemap-index.xml dist/sitemap.xml",
     "preview": "astro preview",
-    "build:preview": "SITE_BASE=/dumb.co-redesign-preview/ astro build",
+    "build:preview": "SITE_BASE=/dumb.co-redesign-preview/ astro build && cp dist/sitemap-index.xml dist/sitemap.xml",
     "check:routes": "node scripts/check-routes.mjs"
   },
   "dependencies": {

@@ -96,7 +96,8 @@
       "answer": "if you transfer your phone number to the dumbphone, your service will be cancelled on your current phone. we do not advise this if you intend to continue using your smartphone or are new to the dumbphone lifestyle. in these cases you need to get a new number.\n\nif you're ready to make the jump, you'll need to contact your current phone carrier and request your account number and transfer PIN to keep your current phone number on the dumbphone.",
       "category": "tech",
       "group": "setup",
-      "hidden": false
+      "hidden": false,
+      "slug": "how-do-i-put-my-current-phone-number-on-the-dumbphone"
     },
     {
       "question": "can i use the companion setup with my icloud login / on an ipad?",
@@ -220,13 +221,6 @@
     {
       "question": "i transferred my number and am not receiving some texts, why?",
       "answer": "it takes anywhere from a few hours up to 48 hours for a transfer to fully update.\n\nafter transferring a number to a new service, you may encounter an issue in which you are not receiving all calls or texts. this indicates a partial port, or that the port is still being processed by your previous carrier.\n\nafter porting your number be sure to:\n- check your portal at [dumb.co/mobile](https://dumb.co/mobile) to see your porting status. if it says porting complete or porting incomplete, reach out to your old carrier for a status update.\n- if you transferred your number to the dumbphone from an iphone, confirm your number has been deregistered from imessage. see deregistering details [here](https://selfsolve.apple.com/deregister-imessage/).",
-      "category": "tech",
-      "group": "porting",
-      "hidden": false
-    },
-    {
-      "question": "can i port my number over on any plan?",
-      "answer": "yes! you can port your number over regardless of the plan you choose. before taking this action, remember that porting your number to the dumbphone ends service on your old phone.",
       "category": "tech",
       "group": "porting",
       "hidden": false

@@ -66,6 +66,8 @@ export function link(v: string): string {
   if (/^[\w.-]+\.[a-z]{2,}(\/\S*)?$/i.test(v)) return "https://" + v;
   return "";
 }
+export const slugify = (v: string) =>
+  v.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 export function vimeoId(v: string): string | null {
   const m = (v || "").trim().match(/(?:vimeo\.com\/(?:video\/)?)?(\d{5,})/);
   return m ? m[1] : null;
@@ -164,6 +166,9 @@ export const COPY = {
         answer: text(x, "answer"),
         category: text(x, "category").toLowerCase() === "tech" ? "tech" : "general",
         group: text(x, "group").toLowerCase(),
+        /* the address of the question (dumb.co/faq#slug), shareable; the
+           CMS can pin one so an address keeps working after a rewording */
+        slug: text(x, "slug") || slugify(text(x, "question")),
       })),
     videos: objs(faq, "videos")
       .map((x) => ({ title: text(x, "title"), vimeoId: vimeoId(text(x, "link")) }))

@@ -23,8 +23,8 @@ const groupBefore = (i: number) => {
 <div id="faq-list2">
   {c.questions.map((q, i) => (<>
     {groupBefore(i) && <div class="faq-group" data-cat="tech" data-group={q.group} style="display:none">{groupBefore(i)}</div>}
-    <div class="faq-item2" id={`faq-i-${i}`} data-cat={q.category} data-group={q.group || undefined} style={q.category === "general" ? undefined : "display:none"}>
-      <div class="faq-q2" onclick={`toggleFaq(${i})`}><span>{q.question}</span><span>+</span></div>
+    <div class="faq-item2" id={q.slug} data-cat={q.category} data-group={q.group || undefined} style={q.category === "general" ? undefined : "display:none"}>
+      <div class="faq-q2" onclick="toggleFaq(this.parentElement)"><span>{q.question}</span><span>+</span></div>
       <div class="faq-a2" set:html={paras(q.answer)} />
     </div>
   </>))}

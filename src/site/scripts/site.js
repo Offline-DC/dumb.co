@@ -344,22 +344,10 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
     host.scrollTop = 0;
   }
 
-/* The plans drawer. Desktop gets a closed drawer beside specs; a phone gets
-   the cards, open, with no chevron to press -- that is the plans page there.
-   <details> cannot be held open from CSS (the content is in a UA slot that a
-   child display rule does not reliably reach), so the state is set here and
-   kept in step from the resize handler in 04_wm.js. */
-function plansDrawer(){
-  const d = document.querySelector('.plans-drop');
-  if(!d) return;
-  if(window.matchMedia('(max-width: 760px)').matches){
-    d.open = true;
-    d.dataset.held = '1';
-  }else if(d.dataset.held){
-    delete d.dataset.held;
-    d.open = false;          // only ever closes a drawer the phone had forced open
-  }
-}
+/* The plans drawer is a normal accordion everywhere, closed until pressed
+   (Jack, Oct 14: on a phone it was held open and could not be closed).
+   showPlans() still opens it when a "plan" link is followed. */
+function plansDrawer(){}
 
   /* "plan" and "Find out what plan works for you" open the plans drawer
      in shop.exe and scroll to it, rather than swapping the window for a
@@ -1953,7 +1941,7 @@ function plansDrawer(){
     return rows;
   }
 
-  function loadFaq(){ faqTab = 'general'; renderFaq(); }
+  function loadFaq(){ faqTab = 'general'; const t = document.querySelector('.faq-tab2'); if(t){ document.querySelectorAll('.faq-tab2').forEach(x => x.classList.remove('on')); t.classList.add('on'); } renderFaq(); faqOpenFromHash(); }
 
   function setFaqTab(tab, el){
     faqTab = tab;
@@ -1975,9 +1963,47 @@ function plansDrawer(){
     if(status) status.style.display = shown ? 'none' : '';
   }
 
-  function toggleFaq(idx){
-    document.getElementById('faq-i-'+idx).classList.toggle('open');
+  /* Every question has an address -- dumb.co/faq#<slug> -- so an answer can
+     be shared (Jack, Oct 14). Opening a question writes it into the address
+     bar; arriving with one in the address opens that question, on its tab,
+     and scrolls to it. The old site's addresses keep working through the
+     CMS "slug" field (content.ts). */
+  function faqBase(){ return location.pathname + location.search; }
+  function toggleFaq(el){
+    const open = !el.classList.contains('open');
+    el.parentElement.querySelectorAll('.faq-item2.open').forEach(o => { if(o !== el) o.classList.remove('open'); });
+    el.classList.toggle('open', open);
+    try{ history.replaceState(history.state, '', faqBase() + (open ? '#' + el.id : '')); }catch(e){}
   }
+  function faqItemFor(hash){
+    const want = decodeURIComponent((hash || '').replace(/^#\/?/, '')).toLowerCase();
+    if(!want) return null;
+    const items = [...document.querySelectorAll('#faq-list2 .faq-item2')];
+    let hit = items.find(el => el.id === want);
+    if(hit) return hit;
+    /* not an exact address: the question whose words overlap it most */
+    const words = want.split('-').filter(w => w.length > 2);
+    let best = null, score = 0;
+    items.forEach(el => {
+      const have = new Set(el.id.split('-'));
+      const n = words.filter(w => have.has(w)).length;
+      if(n > score){ score = n; best = el; }
+    });
+    return (best && score >= Math.max(2, Math.ceil(words.length * 0.6))) ? best : null;
+  }
+  function faqOpenFromHash(){
+    const el = faqItemFor(location.hash);
+    if(!el) return false;
+    const tab = el.dataset.cat;
+    const btn = [...document.querySelectorAll('.faq-tab2')].find(t => (t.getAttribute('onclick') || '').includes("'" + tab + "'"));
+    if(btn) setFaqTab(tab, btn);
+    el.parentElement.querySelectorAll('.faq-item2.open').forEach(o => o.classList.remove('open'));
+    el.classList.add('open');
+    if(el.id !== location.hash.slice(1)){ try{ history.replaceState(history.state, '', faqBase() + '#' + el.id); }catch(e){} }
+    requestAnimationFrame(() => el.scrollIntoView({block: 'start', behavior: 'smooth'}));
+    return true;
+  }
+  window.addEventListener('hashchange', () => { if(location.hash && document.getElementById('faq-list2')) faqOpenFromHash(); });
 
 
 /* the functions the markup's onclick="..." handlers call */

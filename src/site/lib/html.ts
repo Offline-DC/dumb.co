@@ -17,7 +17,7 @@ export const esc = (s: unknown) =>
 export const lines = (s: unknown) => esc(s).replace(/\n/g, "<br/>");
 
 export function rich(s: unknown): string {
-  return esc(s)
+  return autolink(esc(s)
     .replace(/\*\*\*(.+?)\*\*\*/g, "<b>$1</b>")
     .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, t: string, u: string) => {
@@ -27,7 +27,25 @@ export function rich(s: unknown): string {
       if (/^https?:\/\//i.test(raw)) return `<a href="${u}" target="_blank" rel="noopener">${t}</a>`;
       return t;
     })
-    .replace(/\n/g, "<br/>");
+    .replace(/\n/g, "<br/>"));
+}
+/* Anything that reads as an address is a link, even when an editor typed it
+   bare (Jack, Oct 14: "if there is a link it must be clickable"): emails,
+   http(s) URLs, dumb.co/paths and US phone numbers. Text already inside an
+   <a> is left alone. The bare brand name "dumb.co" is a name, not a link. */
+export function autolink(h: string): string {
+  return h.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i).map((part, i) => {
+    if (i % 2) return part;                                  // an existing link
+    return part
+      .replace(/(^|[^\w@"'=/])((?:https?:\/\/)[^\s<"']+?)([.,;:)!?]*)(?=$|[\s<])/g,
+        (_m, pre, url, tail) => `${pre}<a href="${url}" target="_blank" rel="noopener">${url}</a>${tail}`)
+      .replace(/(^|[^\w@"'=/.])(dumb\.co\/[\w\/-]+)/gi,
+        (_m, pre, url) => `${pre}<a href="https://${url}" target="_blank" rel="noopener">${url}</a>`)
+      .replace(/(^|[^\w@"'=/.])([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g,
+        (_m, pre, mail) => `${pre}<a href="mailto:${mail}">${mail}</a>`)
+      .replace(/(^|[^\w"'=/])(\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4})(?=$|[^\d])/g,
+        (_m, pre, tel) => `${pre}<a href="tel:${tel.replace(/\D/g, "")}">${tel}</a>`);
+  }).join("");
 }
 
 export const paras = (s: unknown, cls?: string) =>

@@ -195,6 +195,10 @@ content:
             type: select
             options:
               values: [setup, general, porting, dumb txt, syncing, smart txt, call forwarding, contact sync, whatsapp, mp3, 2fa]
+          - name: slug
+            label: Link address
+            description: Optional. The part after dumb.co/faq# for this question (letters, numbers, dashes). Set one to keep a shared link working after rewording the question.
+            type: string
           - name: hidden
             label: Hide this question
             type: boolean
