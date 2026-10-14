@@ -303,45 +303,26 @@
      becomes the whole interface. flipoff.exe still floats above, which is
      what a window is for. */
   @media (min-width: 761px) and (max-width: 1250px){
-    #sidebar{width:244px; padding:18px 18px;}
-    #logo{width:150px; margin-bottom:12px;}
-    #sidebar .navitem{font-size:23px; padding:3px 8px;}
-    nav#navlist{gap:5px;}
+    /* a little bigger than before (Jack, Oct 14), now that the hero has gone */
+    #sidebar{width:290px; padding:22px 22px;}
+    #logo{width:180px; margin-bottom:14px;}
+    #sidebar .navitem{font-size:27px; padding:4px 9px;}
+    nav#navlist{gap:6px;}
 
     #deskphone{display:none !important;}
-    /* keep a reserve for the window, just a smaller one than desktop's 54%,
-       so the hero and the window sit side by side instead of on top of each
-       other -- the same shape as desktop, only tighter */
-    #home{left:244px; right:40%; padding:0 24px;}
-    #home-copy{max-width:min(380px, 100%);}
-    #home-copy h1{font-size:clamp(30px, 4.6vw, 46px);}
 
-    /* the window's left/top are set inline by the drag code against the
-       desktop layout, so at this width it ran off the right edge. Pin it into
-       the reserve instead; dragging still works once it's open. */
+    /* THE WINDOW GETS THE HERO'S SPACE. There isn't room for a headline and
+       a window side by side here (Jack, Oct 14: "drop the 'your life is
+       waiting for you' column and let the modal take up that space"), so
+       whatever the window is showing -- flipoff.exe or a section -- fills
+       the page beside the sidebar. The hero only comes back when the window
+       has been minimised into the egg, so the page is never blank. */
+    #home{left:290px; right:24px; padding:0 24px;}
+    #home-copy{max-width:min(520px, 100%);}
+    #home-copy h1{font-size:clamp(38px, 6vw, 64px);}
+    body:has(#winmodal:not(.collapsed)) #home{display:none !important;}
     #winmodal:not(.collapsed){
-      left:auto !important;
-      right:2.5vw !important;
-      top:72px !important;
-      width:min(520px, 35vw) !important;
-      max-height:78vh;
-    }
-
-    /* A SECTION GETS THE HERO'S SPACE. At 35vw an open Shop.exe was 290px
-       wide on an iPad -- the hero photo, the buy button and the spec list all
-       crushed into a strip beside a headline nobody was reading any more
-       (Jack: "the modals for each page are too small and not navigable ...
-       maybe on medium screen-size you drop the 'your life is waiting for
-       you' and let the modal take up that space").
-
-       Only while a section is open. On the home state the hero IS the page
-       and flipoff.exe is the picture beside it, so nothing changes there; and
-       minimising the section brings the hero straight back, because the rule
-       is keyed off the window's own state rather than set by a handler that
-       has to be undone. */
-    body:has(#winmodal.sectionmode:not(.collapsed)) #home{display:none !important;}
-    #winmodal.sectionmode:not(.collapsed){
-      left:calc(var(--nav-ink, 220px) + 24px) !important;
+      left:calc(var(--nav-ink, 260px) + 24px) !important;
       right:20px !important;
       top:20px !important; bottom:20px !important;
       width:auto !important; height:auto !important;

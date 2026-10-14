@@ -1769,8 +1769,8 @@ function plansDrawer(){}
        is nothing else to subtract, so seven rows reach both drawn edges */
     const rowH = Math.max(11, Math.floor((screenH - bar) / n));
     root.style.setProperty('--pmn-rowh', rowH + 'px');
-    /* 20px (Kunal, Oct 13; it was 24). */
-    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(20, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
+    /* 24px (Jack, Oct 14; 20 was too small). */
+    root.style.setProperty('--pmn-rowf', Math.max(7.5, Math.min(24, Math.round(rowH * 0.52 * 10) / 10)) + 'px');
     root.style.setProperty('--pmn-barf', Math.max(6, Math.min(10, Math.round(bar * 0.62))) + 'px');
   }
 
