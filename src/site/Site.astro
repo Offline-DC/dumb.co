@@ -13,6 +13,7 @@
 import { COPY } from "./lib/content";
 import { A } from "./lib/assets";
 import { MEMORIES } from "./lib/data";
+import { REVIEWS } from "./lib/reviews";
 import { lines } from "./lib/html";
 import { NAV, EXE, BLEED, type SectionKey } from "./nav";
 import Section from "./Section.astro";
@@ -71,6 +72,17 @@ if (section === "shop") ld.push({
   name: COPY.shop.product_name, description: page.description, brand: { "@type": "Brand", name: "dumb.co" },
   image: A.shopPhotos.map((u) => new URL(u, Astro.site ?? "https://dumb.co").href),
   offers: { "@type": "Offer", price: "20.00", priceCurrency: "USD", url: COPY.shop.checkout_url, availability: "https://schema.org/InStock" },
+  /* the Google reviews the page shows (src/content/reviews_snapshot.csv);
+     Search Console asked for these two fields (Oct 15) */
+  ...(REVIEWS.avg && REVIEWS.count ? { aggregateRating: {
+    "@type": "AggregateRating", ratingValue: REVIEWS.avg, reviewCount: REVIEWS.count, bestRating: "5", worstRating: "1",
+  } } : {}),
+  review: REVIEWS.list.map((r) => ({
+    "@type": "Review",
+    author: { "@type": "Person", name: r.name },
+    reviewRating: { "@type": "Rating", ratingValue: String(r.stars), bestRating: "5", worstRating: "1" },
+    reviewBody: r.body,
+  })),
 });
 ---
 <!doctype html>
