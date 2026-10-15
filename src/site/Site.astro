@@ -48,6 +48,7 @@ const siteData = {
   dpadCluster: A.dpadCluster,
   checkout: COPY.shop.checkout_url,
   routes: Object.fromEntries(NAV.map((n) => [n.key, n.slug])),
+  titles: Object.fromEntries(Object.entries(COPY.pages).map(([k, pg]) => [k, pg.title])),
   memories: MEMORIES,
 };
 const json = JSON.stringify(siteData).replace(/</g, "\\u003c");

@@ -7,10 +7,12 @@
    the standard snippet goes in on every page. Tags are then managed in
    GTM, not here. Empty = not loaded.
 
-   GOOGLE ANALYTICS: the two properties the old site reported to, G-6J99WZC0Y0
-   (its index.html) and G-J6NFHL9D1L (App.tsx's react-ga4), loaded directly.
-   Once GA4 is set up as a tag inside GTM, delete the gtag block below so
-   nothing is counted twice. */
+   GOOGLE ANALYTICS: loaded HERE, directly, and only here -- the two
+   properties the old site reported to, G-6J99WZC0Y0 (its index.html) and
+   G-J6NFHL9D1L (App.tsx's react-ga4). Do NOT also add a GA4 / Google tag
+   for either id inside GTM, or every visit is counted twice. (Oct 15: the
+   GTM container has no tags in it.) If GA ever moves into GTM, add the
+   tags there and delete the gtag block below in the same release. */
 const GTM_ID = "GTM-KRDL288W";
 ---
 {GTM_ID && (

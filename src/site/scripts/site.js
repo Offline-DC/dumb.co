@@ -945,7 +945,15 @@ function plansDrawer(){}
     return rest.toLowerCase();
   }
 
+  /* the tab title follows the section, same as a fresh load of its address
+     (and so does the page title GA records for in-place navigation) */
+  function setTitle(key){
+    const t = SITE.titles && SITE.titles[key || 'home'];
+    if(t && document.title !== t) document.title = t;
+  }
+
   function setRoute(key){
+    setTitle(key);
     const next = hrefFor(key);
     if(USE_HASH){
       const slug = key ? ROUTES[key] : null;
@@ -961,6 +969,7 @@ function plansDrawer(){}
 
   function applyRoute(){
     const key = SLUG_TO_KEY[currentSlug()];
+    setTitle(key && sections[key] ? key : null);
     if(key && sections[key]) openSection(key, true);
     /* On a phone the handset IS home: back (or the iPhone swipe) from a
        section has to land on it, not on flipoff.exe, which is the desktop's
@@ -983,6 +992,7 @@ function plansDrawer(){}
     _collapseRoute.apply(this, arguments);
     if(fromRoute === true || USE_HASH) return;
     if(!window.matchMedia('(max-width: 760px)').matches || !currentSlug()) return;
+    setTitle(null);
     if(history.state && history.state.dc) history.back();
     else history.replaceState(null, '', BASE + location.search);
   };
