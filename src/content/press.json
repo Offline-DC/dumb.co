@@ -18,12 +18,11 @@
       "id": "BUSINESSINSIDERFALL2026"
     },
     {
-      "title": "dumb.co gives u back time",
-      "source": "VOX",
-      "link": "https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/",
-      "image": "/src/Press/images/voximage.jpg",
-      "hidden": false,
-      "id": "VOX2026"
+      "title": "dp2 connects u",
+      "source": "FOX",
+      "link": "https://www.fox5atlanta.com/video/fmc-pist68a6fzhz5m4f",
+      "image": "/src/Press/images/screenshot-2026-10-16-at-41157-pm.png",
+      "hidden": false
     },
     {
       "title": "gen z ditches smartphones 4 the dp2",
@@ -32,6 +31,14 @@
       "image": "/src/Press/images/cbs2026.webp",
       "hidden": false,
       "id": "CBS2026"
+    },
+    {
+      "title": "dumb.co gives u back time",
+      "source": "VOX",
+      "link": "https://www.vox.com/technology/502000/phones-meta-facebook-instagram-smartphones-screens/",
+      "image": "/src/Press/images/voximage.jpg",
+      "hidden": false,
+      "id": "VOX2026"
     },
     {
       "title": "ur neighbors all have dumbphones...",
