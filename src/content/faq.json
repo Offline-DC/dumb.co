@@ -25,7 +25,7 @@
     },
     {
       "question": "do i need a second phone number?",
-      "answer": "if you plan to continue using your smartphone, you DO need to get a secondary number. transferring your phone number will end active service on your current device.",
+      "answer": "if you plan to continue using your smartphone, you **DO** need to get a secondary number. transferring your phone number will end active service on your current device.",
       "category": "general",
       "hidden": false
     },
