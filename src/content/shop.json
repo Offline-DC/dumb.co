@@ -91,6 +91,92 @@
   ],
   "plans_title": "the plans",
   "plans_sub": "dumb, dumber, dumbest.",
+  "plan_cards": {
+    "dumb": {
+      "name": "dumb",
+      "price": "$25.99/month",
+      "tagline": "a companion device for ur smartphone"
+    },
+    "dumber": {
+      "name": "dumber",
+      "price": "$20.99/month",
+      "tagline": "a companion device for ur smartphone"
+    },
+    "dumbest": {
+      "name": "dumbest",
+      "price": "$15.99/month",
+      "tagline": "a standalone device; no connection to a smartphone"
+    }
+  },
+  "plan_price_suffix": "+ tax",
+  "plan_features": [
+    {
+      "label": "smart music",
+      "dumb": true,
+      "dumber": false,
+      "dumbest": false
+    },
+    {
+      "label": "podcasts",
+      "dumb": true,
+      "dumber": false,
+      "dumbest": false
+    },
+    {
+      "label": "fwd calls",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": false
+    },
+    {
+      "label": "sync txts/contacts",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": false
+    },
+    {
+      "label": "unlimited calls/sms",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": true
+    },
+    {
+      "label": "1g data",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": true
+    },
+    {
+      "label": "hotspot",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": true
+    },
+    {
+      "label": "rideshare",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": true
+    },
+    {
+      "label": "signal",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": false
+    },
+    {
+      "label": "whatsapp",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": false
+    },
+    {
+      "label": "2-factor authentication",
+      "dumb": true,
+      "dumber": true,
+      "dumbest": true
+    }
+  ],
   "plans_note": "4 month minimum, auto-renews monthly after that. u confirm the plan after ur purchase.",
   "quiz_button": "take the quiz",
   "reviews_heading": "what dumb ppl say",

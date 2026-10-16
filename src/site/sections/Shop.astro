@@ -51,10 +51,34 @@ const avg = REVIEWS.avg && REVIEWS.count;
       </summary>
       <div class="gi-body">
         <div class="plans-sub">{c.plans_sub}</div>
+        <!-- HTML, not pictures (Jack, Oct 16): the rows come from shop.json, so a
+             new row or a moved tick is a CMS edit, and a screen reader (or a
+             person copying the list) gets real text. Only Marco's lettering for the plan names and his phones are
+             images (the name image's alt is the name, so the heading still reads). -->
         <div class="plan-cards">
-          <img src={A.planDumb} alt="the dumb plan, $25.99 a month" loading="lazy" />
-          <img src={A.planDumber} alt="the dumber plan, $20.99 a month" loading="lazy" />
-          <img src={A.planDumbest} alt="the dumbest plan, $15.99 a month" loading="lazy" />
+          {c.plan_cards.map((p) => (
+            <article class={`plan-card pl-${p.key}`} aria-labelledby={`plan-${p.key}`}>
+              <div class="pl-head">
+                <h4 class="pl-name" id={`plan-${p.key}`}><img src={A.planNames[p.key]} alt={p.name} /></h4>
+                <p class="pl-price">{p.price}{c.plan_price_suffix && <> <span class="pl-tax">{c.plan_price_suffix}</span></>}</p>
+                <p class="pl-tag">{p.tagline}</p>
+              </div>
+              <ul class="pl-feats">
+                {c.plan_features.map((f) => f.has[p.key] ? (
+                  <li class="yes">
+                    <svg class="pl-mark" viewBox="0 0 24 24" role="img" aria-label="included"><path d="M2.5 13.2c2.4 1.6 4.2 3.7 5.6 7.3C11 13 15.6 7.2 21.8 2.6" /></svg>
+                    {f.label}
+                  </li>
+                ) : (
+                  <li class="no">
+                    <svg class="pl-mark" viewBox="0 0 24 24" role="img" aria-label="not included"><path d="M4.2 3.6c5 5.3 10 11 15.6 17.4M19.6 3.2C13.8 8.6 9 14 4 20.6" /></svg>
+                    {f.label}
+                  </li>
+                ))}
+              </ul>
+              <img class="pl-art" src={A.planArt[p.key]} alt="" loading="lazy" />
+            </article>
+          ))}
         </div>
         {c.plans_note && <div class="qr-min" style="margin-top:14px;" set:html={rich(c.plans_note)} />}
         {c.quiz_button && (

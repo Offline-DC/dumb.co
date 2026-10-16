@@ -336,6 +336,77 @@ content:
           - name: plans_sub
             label: Plans drawer subtitle
             type: string
+          - name: plan_cards
+            label: Plan cards
+            description: The three plans. Colours and Marco's phone drawings stay with each plan; the rows are below.
+            type: object
+            fields:
+              - name: dumb
+                label: dumb
+                type: object
+                fields:
+                  - name: name
+                    label: Name
+                    type: string
+                  - name: price
+                    label: Price
+                    description: e.g. $25.99/month
+                    type: string
+                  - name: tagline
+                    label: Line under the price
+                    type: string
+              - name: dumber
+                label: dumber
+                type: object
+                fields:
+                  - name: name
+                    label: Name
+                    type: string
+                  - name: price
+                    label: Price
+                    description: e.g. $25.99/month
+                    type: string
+                  - name: tagline
+                    label: Line under the price
+                    type: string
+              - name: dumbest
+                label: dumbest
+                type: object
+                fields:
+                  - name: name
+                    label: Name
+                    type: string
+                  - name: price
+                    label: Price
+                    description: e.g. $25.99/month
+                    type: string
+                  - name: tagline
+                    label: Line under the price
+                    type: string
+          - name: plan_price_suffix
+            label: After each price
+            description: e.g. + tax (shown smaller)
+            type: string
+          - name: plan_features
+            label: Plan card rows
+            description: One row per feature, in order. Tick a box if that plan includes it -- it gets a check; otherwise an X.
+            type: object
+            list:
+              collapsible:
+                summary: "{label}"
+            fields:
+              - name: label
+                label: Feature
+                type: string
+              - name: dumb
+                label: In dumb
+                type: boolean
+              - name: dumber
+                label: In dumber
+                type: boolean
+              - name: dumbest
+                label: In dumbest
+                type: boolean
           - name: plans_note
             label: Plans drawer small print
             type: string

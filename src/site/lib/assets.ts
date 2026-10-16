@@ -18,9 +18,12 @@ import madeInDc from "../assets/brand/made-in-dc.png";
 import polaroid from "../assets/brand/polaroid.png";
 import handset from "../assets/phone/handset.png";
 import dpadCluster from "../assets/phone/dpad-cluster.png";
-import planDumb from "../assets/plans/dumb.png";
-import planDumber from "../assets/plans/dumber.png";
-import planDumbest from "../assets/plans/dumbest.png";
+import artDumb from "../assets/plans/art/dumb.png";
+import artDumber from "../assets/plans/art/dumber.png";
+import artDumbest from "../assets/plans/art/dumbest.png";
+import nameDumb from "../assets/plans/art/dumb-name.png";
+import nameDumber from "../assets/plans/art/dumber-name.png";
+import nameDumbest from "../assets/plans/art/dumbest-name.png";
 
 const HEROES = import.meta.glob<{ default: ImageMetadata }>("../assets/photos/hero-*.jpg", { eager: true });
 const SHOP = import.meta.glob<{ default: ImageMetadata }>("../assets/photos/shop-*.jpg", { eager: true });
@@ -57,9 +60,19 @@ export const A = {
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
   handset: await webp(handset, { width: 1200, quality: 90 }),
   dpadCluster: await webp(dpadCluster, { width: 600 }),
-  planDumb: await webp(planDumb, { width: 1500, quality: 88 }),
-  planDumber: await webp(planDumber, { width: 1500, quality: 88 }),
-  planDumbest: await webp(planDumbest, { width: 1500, quality: 88 }),
+  /* Marco's phone drawings for the plan cards, cut out of his cards on a
+     transparent ground -- the words around them are HTML now (Shop.astro) */
+  planArt: {
+    dumb: await webp(artDumb, { quality: 90 }),
+    dumber: await webp(artDumber, { quality: 90 }),
+    dumbest: await webp(artDumbest, { quality: 90 }),
+  } as Record<"dumb" | "dumber" | "dumbest", string>,
+  /* and his lettering for the three plan names (Jack, Oct 16) */
+  planNames: {
+    dumb: await webp(nameDumb, { quality: 90 }),
+    dumber: await webp(nameDumber, { quality: 90 }),
+    dumbest: await webp(nameDumbest, { quality: 90 }),
+  } as Record<"dumb" | "dumber" | "dumbest", string>,
   signatures: await Promise.all(SIGNATURE_ORDER.map(async (n) => {
     const mod = SIGNATURES[`../assets/signatures/${n}.png`];
     return { name: n.charAt(0).toUpperCase() + n.slice(1), src: await webp(mod.default, { width: 400 }) };

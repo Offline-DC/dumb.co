@@ -95,6 +95,14 @@ function findImage<T>(path: unknown, table: Record<string, { default: T }>): T |
 }
 
 /* ------------------------------------------------------------------ copy */
+export const PLAN_KEYS = ["dumb", "dumber", "dumbest"] as const;
+export type PlanKey = (typeof PLAN_KEYS)[number];
+const PLAN_DEFAULTS: Record<PlanKey, { name: string; price: string; tagline: string }> = {
+  dumb: { name: "dumb", price: "$25.99/month", tagline: "a companion device for ur smartphone" },
+  dumber: { name: "dumber", price: "$20.99/month", tagline: "a companion device for ur smartphone" },
+  dumbest: { name: "dumbest", price: "$15.99/month", tagline: "a standalone device; no connection to a smartphone" },
+};
+
 const home = obj(homeJson), about = obj(aboutJson), shop = obj(shopJson);
 const community = obj(communityJson), settings = obj(settingsJson);
 const press = obj(pressJson), memories = obj(memoriesJson), faq = obj(faqJson);
@@ -132,6 +140,28 @@ export const COPY = {
     essentials: strings(shop, "essentials"),
     specs: objs(shop, "specs")
       .map((x) => ({ label: text(x, "label"), value: text(x, "value") }))
+      .filter((x) => x.label),
+    /* The plan cards are real HTML (Jack, Oct 16): words, ticks and crosses
+       come from here, so adding a row or moving a tick is a CMS edit, not a
+       new drawing -- and screen readers and copy/paste can read them. Only
+       the phone drawings are Marco's (assets/plans/art). The three plans are
+       fixed (colour + drawing go with the key); the rows are a free list. */
+    plan_cards: PLAN_KEYS.map((key) => {
+      const p = obj(obj(shop.plan_cards)[key]);
+      const d = PLAN_DEFAULTS[key];
+      return {
+        key,
+        name: text(p, "name") || d.name,
+        price: text(p, "price") || d.price,
+        tagline: text(p, "tagline") || d.tagline,
+      };
+    }),
+    plan_price_suffix: text(shop, "plan_price_suffix"),
+    plan_features: objs(shop, "plan_features")
+      .map((x) => ({
+        label: text(x, "label"),
+        has: Object.fromEntries(PLAN_KEYS.map((k) => [k, x[k] === true || x[k] === "true"])) as Record<PlanKey, boolean>,
+      }))
       .filter((x) => x.label),
   },
   community: {
