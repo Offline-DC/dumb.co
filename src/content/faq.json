@@ -19,7 +19,7 @@
     },
     {
       "question": "how does syncing work?",
-      "answer": "the syncing feature is only included with the dumb and dumber plans. using it is not required to use either plan.\n\nchoosing to sync the dumbphone 2 with your smartphone allows texts and calls to be forwarded to your dumbphone. due to current tech, outgoing calls are made from your dumbphone's number, while all incoming calls can be forwarded to your dumbphone. when texting from your dumbphone via smart txt, non-dumbphone users won't be able to tell the difference.",
+      "answer": "the syncing feature is **only** included with the dumb and dumber plans. using it is not required to use either plan.\n\nchoosing to sync the dumbphone 2 with your smartphone allows texts and calls to be forwarded to your dumbphone. due to current tech, outgoing calls are made from your dumbphone's number, while all incoming calls can be forwarded to your dumbphone. when texting from your dumbphone via smart txt, non-dumbphone users won't be able to tell the difference.",
       "category": "general",
       "hidden": false
     },
@@ -96,8 +96,8 @@
       "answer": "if you transfer your phone number to the dumbphone, your service will be cancelled on your current phone. we do not advise this if you intend to continue using your smartphone or are new to the dumbphone lifestyle. in these cases you need to get a new number.\n\nif you're ready to make the jump, you'll need to contact your current phone carrier and request your account number and transfer PIN to keep your current phone number on the dumbphone.",
       "category": "tech",
       "group": "setup",
-      "hidden": false,
-      "slug": "how-do-i-put-my-current-phone-number-on-the-dumbphone"
+      "slug": "how-do-i-put-my-current-phone-number-on-the-dumbphone",
+      "hidden": false
     },
     {
       "question": "can i use the companion setup with my icloud login / on an ipad?",
