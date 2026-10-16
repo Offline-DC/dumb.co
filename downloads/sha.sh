@@ -1,0 +1,1 @@
+shasum -a 256 ./DumbDown-Android-latest.apk

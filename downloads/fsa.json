@@ -1,0 +1,14 @@
+{
+  "latest_version": "0.1.0",
+  "published_at": "2026-07-23",
+  "macos": {
+    "url": "https://dumb.co/downloads/Dumb-Security-Key-macOS.zip",
+    "sha256": "a03829f56e0a70352dc3567f834ec58bdaf58c101808f81a0a98639cc6867866",
+    "min_os": "macOS 11"
+  },
+  "windows": {
+    "url": "https://dumb.co/downloads/Dumb-Security-Key-Windows.exe",
+    "sha256": "085836b387aa7ec44e16868dc86cf9e3920b0fb5f74aa77f6c16e6d7291a2271",
+    "min_os": "Windows 10"
+  }
+}
