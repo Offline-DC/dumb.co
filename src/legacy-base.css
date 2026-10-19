@@ -1,0 +1,41 @@
+/* Element defaults the older pages (downloads, internship, sign-in hand-offs)
+   have always been drawn with. They used to ride along in the retired
+   support page's stylesheet; kept here, in the same order, so those pages
+   look exactly as they did. */
+h2 {
+  font-size: 1.3em;
+}
+
+p {
+  font-size: 0.8em;
+}
+
+button {
+  font-family: "VT323", monospace;
+  font-size: 1.4em;
+  color: black;
+}
+
+button:active,
+button.active {
+  outline: none;
+  border: 2px dotted #000 !important;
+}
+
+p,
+h1,
+h2,
+h3 {
+  font-family: "VT323", monospace;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+  color: black;
+}

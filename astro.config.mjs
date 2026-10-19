@@ -33,6 +33,9 @@ export default defineConfig({
     // ("/faq/videos" -> /faq is in 404.astro: as a file here it would make a
     // faq/ folder, and GitHub Pages answers /faq with that folder, not faq.html)
     "/phone": `${base}shop`,
+    // the old Month Offline setup and support walkthroughs, retired Oct 2026
+    "/setup": `${base}faq`,
+    "/support": `${base}contact`,
   },
   integrations: [
     react({ include: ["**/legacy/**", "**/*.tsx"] }),
@@ -42,7 +45,7 @@ export default defineConfig({
       customSitemaps: [new URL(`${base}sitemap-products.xml`, site).href],
       filter: (page) => {
         const path = new URL(page).pathname.replace(base, "").replace(/^\/|\.html$/g, "");
-        return !hidden.has(path) && !["faqs", "phone", "404"].includes(path);
+        return !hidden.has(path) && !["faqs", "phone", "setup", "support", "404"].includes(path);
       },
     }),
   ],

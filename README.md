@@ -21,7 +21,7 @@ npm run preview        # serves dist/ to check a build
 src/pages/              one file per address
   index.astro           /
   [section].astro       /shop /about /community /press /memories /faq /contact
-  [...legacy].astro     /support /setup /internship /android ... (older React pages)
+  [...legacy].astro     /internship /android /apps ... (older React pages)
   404.astro             anything else
 src/site/               the new site
   Site.astro            the page: <head> (title, description, share cards,
@@ -54,12 +54,13 @@ points at one sitemap, `sitemap-index.xml`, which lists the pages
 `src/pages/sitemap-products.xml.ts`). A preview build (`SITE_BASE` set) marks
 every page `noindex`, so it never competes with dumb.co.
 
-**The older pages** -- support, setup, internship, the download hand-offs --
+**The older pages** -- the internship, the download hand-offs --
 are the same React components as before, mounted by Astro. `/internship` and
 `/dumbdown` are rendered to HTML at build time too. Adding one is a line in
 `src/legacy/routes.ts` and a `<Route>` in `src/legacy/LegacyApp.tsx`.
 
-**Old addresses** -- `/phone`, `/faqs`, `/faq/videos` -- redirect to their new
+**Old addresses** -- `/phone`, `/faqs`, `/faq/videos`, and the retired
+`/setup` (to /faq) and `/support` (to /contact) -- redirect to their new
 homes (`astro.config.mjs`, and `src/pages/404.astro` for `/faq/videos`).
 
 ## Deploying

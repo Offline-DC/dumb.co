@@ -4,11 +4,10 @@
  * The new site (/, /shop, /faq ...) is Astro and doesn't go through here.
  * Analytics is in the page head (src/site/Analytics.astro), not react-ga4.
  */
+import "../legacy-base.css";   // first, where the old support stylesheet sat (outside legacy/: the react plugin claims everything in there)
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import OfflineMode from "../OfflineMode";
-import Support from "../Support";
 import Internship from "../Internship/Internship.tsx";
 import NotFound from "../NotFound";
 import AndroidDownload from "../Android/AndroidDownload.tsx";
@@ -32,8 +31,6 @@ export default function LegacyApp() {
         <Routes>
           <Route element={<CenteredShell />}>
             <Route path="/dumbdown" element={<AppRedirect />} />
-            <Route path="/setup" element={<OfflineMode />} />
-            <Route path="/support" element={<Support />} />
             <Route path="/internship" element={<Internship />} />
             <Route path="/android" element={<AndroidDownload />} />
             <Route path="/apps" element={<AppsDownload />} />
