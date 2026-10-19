@@ -4,7 +4,7 @@ import { COPY } from "../lib/content";
 import { MEMORIES as events } from "../lib/data";
 import { paras } from "../lib/html";
 ---
-<h2>{COPY.memories.heading}</h2>
+<h1 class="sec-h">{COPY.memories.heading}</h1>
 {events.map((ev, ei) => (
   <div class="mem-event">
     <div class="mem-head">
@@ -20,7 +20,7 @@ import { paras } from "../lib/html";
           <div class="mem-strip" id={`mem-strip-${ei}`}>
             {ev.photos.map((ph, pi) => (
               <div class="mem-tile" onclick={`openMemory(${ei}, ${pi})`}>
-                <img src={ph.src} alt={ev.name} loading="lazy" />
+                <img src={ph.thumb} srcset={`${ph.thumb} 480w, ${ph.src} 900w`} sizes="240px" alt={ph.alt} loading="lazy" />
                 {ph.cap && <div class="mt-cap">{ph.cap}</div>}
               </div>
             ))}

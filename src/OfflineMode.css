@@ -12,7 +12,8 @@ img.om {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1.om {
+h1.om,
+h2.om.step {
   color: #f0f0f0;
   font-family: "Workbench", sans-serif;
   font-weight: 400;
@@ -22,6 +23,11 @@ h1.om {
     10em
   ); /* Minimum 16px, scales with 2vw, maximum 24px */
   padding: 0.5em;
+}
+
+/* the step headings: h2s (the page has one h1), drawn like the title */
+h2.om.step {
+  text-align: inherit;
 }
 
 h2.om {

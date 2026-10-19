@@ -70,6 +70,10 @@ content:
             required: true
             options:
               media: press
+          - name: alt
+            label: Image description (alt text)
+            description: Optional. What the image shows, for screen readers and Google. Left blank, the publication name is used.
+            type: string
           - name: hidden
             label: Hide this article
             type: boolean
@@ -134,6 +138,10 @@ content:
               - name: caption
                 label: Caption
                 description: Optional.
+                type: string
+              - name: alt
+                label: Photo description (alt text)
+                description: Optional. What the photo shows, for screen readers and Google. Left blank, the caption (or the event name) is used.
                 type: string
           - name: hidden
             label: Hide this event
@@ -240,6 +248,10 @@ content:
           - name: button
             label: Button
             type: string
+          - name: intro
+            label: More about dumb.co (under the button)
+            description: Optional. A few sentences on what the dumbphone 2 is and does. Shown small under the button, and gives Google words to read on the home page. Left blank, nothing is shown.
+            type: text
 
       - name: about
         label: about.exe

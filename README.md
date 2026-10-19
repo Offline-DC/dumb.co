@@ -47,6 +47,13 @@ description, canonical link and structured data (FAQPage on /faq, Product on
 happens in place (the other sections ride along as `<template>`s), with the
 address following.
 
+**Search engines.** Each page has one `<h1>`, about that page: the home
+tagline at `/`, the section's own heading everywhere else. `robots.txt`
+points at one sitemap, `sitemap-index.xml`, which lists the pages
+(`sitemap-0.xml`) and the products (`sitemap-products.xml`, from
+`src/pages/sitemap-products.xml.ts`). A preview build (`SITE_BASE` set) marks
+every page `noindex`, so it never competes with dumb.co.
+
 **The older pages** -- support, setup, internship, the download hand-offs --
 are the same React components as before, mounted by Astro. `/internship` and
 `/dumbdown` are rendered to HTML at build time too. Adding one is a line in

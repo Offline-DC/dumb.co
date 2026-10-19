@@ -6,7 +6,7 @@ const c = COPY.contact;
 const tel = c.support_phone.replace(/[^\d+]/g, "");
 ---
 <div class="contact-ground">
-  <h2>{c.contact_heading}</h2>
+  <h1 class="sec-h">{c.contact_heading}</h1>
   <div class="contact-card support">
     <div class="dots" set:html={DOTS_EDGE()} />
     <div class="cc-head">

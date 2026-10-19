@@ -2,10 +2,6 @@ import { IconTemperature } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import type { Dispatch, SetStateAction } from "react";
 import './Support.css';
-import ReactPlayerModule from 'react-player';
-// react-player is CommonJS; under Astro's build the default import can arrive
-// as the module object, which React can't render (error #130). Unwrap it.
-const ReactPlayer = ((ReactPlayerModule as unknown as { default?: typeof ReactPlayerModule }).default ?? ReactPlayerModule);
 import supportItemsData from './supportItems.json';
 const supportItems: SupportItem[] = supportItemsData as SupportItem[]; // Assuming support items are stored in a JSON file
 let s3URL = "https://offlinebucket1.s3.us-east-2.amazonaws.com";
@@ -130,7 +126,7 @@ const handleCloseModal = () => setShowHelpModal(false);
             {showHelpModal && (<Modal onClose={handleCloseModal} />)}
             <div className="setup-container">
                 <div className="title-bar">
-                    <h3>Offline Support</h3>
+                    <h1 className="support-title">Offline Support</h1>
                     <div className="title-bar-buttons">
                         <button className="title-bar-button" onClick={handleHelpClick}><img src="/img/windows95icons/Help 3D.ico"></img></button>
                     </div>

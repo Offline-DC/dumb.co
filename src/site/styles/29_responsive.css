@@ -266,8 +266,8 @@
     #about-pink{padding:40px 32px 36px !important;}
     .contact-ground{padding:20px 16px 22px;}
     .contact-card.support{padding:22px 16px;}
-    #wm-section .contact-ground h2{padding-left:16px;}
-    #wm-section h2{font-size:30px !important;}
+    #wm-section .contact-ground h2, #wm-section .contact-ground h1.sec-h{padding-left:16px;}
+    #wm-section h2, #wm-section h1.sec-h{font-size:30px !important;}
     #winmodal #wm-carousel .wm-arrow{width:34px; height:34px; font-size:22px;}
 
     /* Full-bleed highlight on a phone. The inset exists on desktop so the
@@ -321,7 +321,7 @@
        has been minimised into the egg, so the page is never blank. */
     #home{left:290px; right:42%; padding:0 20px;}
     #home-copy{max-width:min(420px, 100%);}
-    #home-copy h1{font-size:clamp(30px, 4.4vw, 52px);}
+    #home-copy .home-h1{font-size:clamp(30px, 4.4vw, 52px);}
     body:has(#winmodal:not(.collapsed)) #home{display:none !important;}
     #winmodal:not(.collapsed){
       left:calc(var(--nav-ink, 260px) + 24px) !important;

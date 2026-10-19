@@ -5,6 +5,8 @@
  */
 import LegacyApp from "../legacy/LegacyApp";
 import Internship from "../Internship/Internship.tsx";
+import Support from "../Support";
+import OfflineMode from "../OfflineMode";
 import Analytics from "../site/Analytics.astro";
 import "../App.css";
 
@@ -26,6 +28,7 @@ const canonical = new URL(path, new URL(base, Astro.site ?? "https://dumb.co")).
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
+  {base !== "/" && <meta name="robots" content="noindex, nofollow" />}
   <link rel="icon" type="image/png" href={`${base}favicon.png`} />
   <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,6 +43,8 @@ const canonical = new URL(path, new URL(base, Astro.site ?? "https://dumb.co")).
       <div id="root"><div style="height:100vh;width:100%;background-color:#F9F594;display:flex;margin:auto">
         <div style="display:flex;justify-content:center;align-items:center;margin:auto 0rem;background-color:#F9F594;max-width:100%;width:100%">
           {path === "internship" && <Internship client:load />}
+          {path === "support" && <Support client:load />}
+          {path === "setup" && <OfflineMode client:load />}
         </div>
       </div></div>
     )

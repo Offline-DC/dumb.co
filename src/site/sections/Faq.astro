@@ -13,7 +13,7 @@ const groupBefore = (i: number) => {
   return prev && prev.category === "tech" && prev.group === q.group ? null : q.group;
 };
 ---
-<h2>{c.heading}</h2>
+<h1 class="sec-h">{c.heading}</h1>
 {c.sub && <div class="sub">{c.sub}</div>}
 <div class="faq-tabs2">
   <div class="faq-tab2 on" onclick="setFaqTab('general', this)">{c.general_tab}</div>

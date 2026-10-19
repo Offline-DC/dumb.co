@@ -72,7 +72,7 @@ if (section === "shop") ld.push({
   "@context": "https://schema.org", "@type": "Product",
   name: COPY.shop.product_name, description: page.description, brand: { "@type": "Brand", name: "dumb.co" },
   image: A.shopPhotos.map((u) => new URL(u, Astro.site ?? "https://dumb.co").href),
-  offers: { "@type": "Offer", price: "20.00", priceCurrency: "USD", url: COPY.shop.checkout_url, availability: "https://schema.org/InStock" },
+  offers: { "@type": "Offer", price: "20.00", priceCurrency: "USD", url: canonical, availability: "https://schema.org/InStock" },
   /* the Google reviews the page shows (src/content/reviews_snapshot.csv);
      Search Console asked for these two fields (Oct 15) */
   ...(REVIEWS.avg && REVIEWS.count ? { aggregateRating: {
@@ -94,6 +94,8 @@ if (section === "shop") ld.push({
   <title>{page.title}</title>
   <meta name="description" content={page.description} />
   <link rel="canonical" href={canonical} />
+  {/* the preview build (SITE_BASE) is a copy of dumb.co: never index it */}
+  {base !== "/" && <meta name="robots" content="noindex, nofollow" />}
   <link rel="icon" type="image/png" href={`${base}favicon.png`} />
   <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
   <link rel="apple-touch-icon" href={`${base}favicon.png`} />
@@ -141,9 +143,14 @@ if (section === "shop") ld.push({
 
     <div id="home">
       <div id="home-copy">
-        {home.headline && <h1 set:html={lines(home.headline)} />}
+        {/* the tagline is the page's h1 only at /; on /shop, /about ... the
+            section's own heading is the h1 (one h1 per page, about that page) */}
+        {home.headline && (section
+          ? <div class="home-h1" set:html={lines(home.headline)} />
+          : <h1 class="home-h1" set:html={lines(home.headline)} />)}
         {home.body && <p>{home.body}</p>}
         <div id="home-cta" onclick="openSection('shop')">{home.button}</div>
+        {home.intro && <p class="home-intro">{home.intro}</p>}
       </div>
     </div>
 

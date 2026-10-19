@@ -9,7 +9,7 @@ const c = COPY.community;
 <div class="gi-page">
   <div class="dots" set:html={DOTS_PAGE()} />
   <div class="gi-in">
-    <h2>{c.heading}</h2>
+    <h1 class="sec-h">{c.heading}</h1>
     {c.lede && <p class="gi-lede" set:html={rich(c.lede)} />}
     <div class="gi-drops">
       {c.programs.map((pg) => (

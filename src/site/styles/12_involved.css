@@ -11,7 +11,7 @@
   .gi-page .dots{position:absolute; inset:0; pointer-events:none;}
   .gi-page .dots i{position:absolute; border-radius:50%; display:block;}
   .gi-in{position:relative; display:flex; flex-direction:column; flex:1 1 auto; min-height:0;}
-  .gi-in > h2{margin-bottom:20px; flex:0 0 auto;}
+  .gi-in > h2, .gi-in > h1.sec-h{margin-bottom:20px; flex:0 0 auto;}
 
   .gi-two{
     display:grid; grid-template-columns:1fr 1fr; gap:18px;

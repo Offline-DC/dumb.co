@@ -147,9 +147,15 @@ p {
   font-size: 0.8em;
 }
 
-.title-bar h3 {
+.title-bar h3,
+.title-bar h1.support-title {
   color: #fff;
   margin-left: 10px;
+}
+
+/* the page's h1, sized like the h3 it used to be */
+.title-bar h1.support-title {
+  font-size: 1.17em;
 }
 
 .bottom-navigation {

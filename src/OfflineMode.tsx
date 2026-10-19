@@ -1,8 +1,5 @@
 import './OfflineMode.css';
-import ReactPlayerModule from 'react-player';
-// react-player is CommonJS; under Astro's build the default import can arrive
-// as the module object, which React can't render (error #130). Unwrap it.
-const ReactPlayer = ((ReactPlayerModule as unknown as { default?: typeof ReactPlayerModule }).default ?? ReactPlayerModule);
+import ReactPlayer from './legacy/LazyPlayer';
 let s3URL = "https://offlinebucket1.s3.us-east-2.amazonaws.com";
 
 export default function OfflineMode() {
@@ -27,9 +24,9 @@ export default function OfflineMode() {
             The setup process is fairly straight-forward, but please read carefully and don't skip any steps!
             </p>
         <div className='center'>
-            <h1 className='om'>
+            <h2 className='om step'>
                 Step 1: Download
-            </h1>
+            </h2>
          </div>
         <p className='om'>
             Okay, let's get started. Download the <a href="https://apps.apple.com/us/app/data-jar/id1453273600" className="om" target="_blank" rel="noopener noreferrer">Data Jar app</a> from the iOS App Store.
@@ -65,9 +62,9 @@ export default function OfflineMode() {
     Make sure you have downloaded DataJar and have installed all FOUR shortcuts.
   </p>
   <div className="center">
-    <h1 className='om'>
+    <h2 className='om step'>
       Step 2: Focus Mode
-    </h1>
+    </h2>
     </div>
   <div className="flex-row">     
     <div className="flex-image">
@@ -80,9 +77,9 @@ export default function OfflineMode() {
       </div>
   </div>
 <div className="center">
-    <h1 className='om'>
+    <h2 className='om step'>
       Step 3: Automations
-    </h1>
+    </h2>
     </div>
   <p className='om'>
     Make sure you have the Shortcuts App installed on your iPhone. You can download it <a href="https://apps.apple.com/us/app/shortcuts/id915249334" className="om" target="_blank" rel="noopener noreferrer">here</a> if not.
@@ -171,9 +168,9 @@ export default function OfflineMode() {
         <img src="https://www.offline.community/img/message_automation.PNG" alt="Focus On Automation" className='image center'></img>     
         </div>
         <div className="center">
-    <h1 className='om'>
+    <h2 className='om step'>
       Step 4: Data Jar
-    </h1>
+    </h2>
     </div>
         <p className='om'>Now, it's time for the final step! Navigate back to all your shortcuts and click on the Shortcut that says "Initialize Offline Mode DataJar" once. Open up your Data Jar app. You can delete this shortcut after you have successfully initialized the data jar.</p>
 
@@ -187,7 +184,7 @@ export default function OfflineMode() {
         You may need to restart your device for the automations to take effect.
       </p>
       <div className='center'>
-      <h1 className='om'>Call Forwarding</h1>
+      <h2 className='om step'>Call Forwarding</h2>
       </div>
       <p className='om'>You can use the following links to find the shortcodes for your mobile provider to input into your datajar. You will need to include your dumbphone number in the input field for 'linkStartCallForward' e.g. '%2a%2a21%2a. '%2a' is the code for a '*' and '%23' is the code for a '#'.</p>
       <p className='om'>
@@ -200,21 +197,21 @@ export default function OfflineMode() {
         * <a href='https://www.att.com/support/article/u-verse-voice/KM1000459/' className="om" target="_blank" rel="noopener noreferrer">AT&T</a>
       </p>
       <div className='center'>
-      <h1 className='om'>Notifications</h1>
+      <h2 className='om step'>Notifications</h2>
       </div>
       <p className='om'>
         You can disable the notifications for shortcuts so that you don't get notified every time you recieve a text message that your shortcut is checking to see if Offline Mode is on or off. <br></br><br></br>Go to Settings &#8594; Screen Time &#8594; See All App & Website Activity &#8594; Scroll all the way to the bottom to see notifications, click on 'Shortcuts' &#8594; toggle the button that says 'Allow Notifications'.
       </p>
       <div className='center'>
-      <h1 className='om'>That's It!</h1>
+      <h2 className='om step'>That's It!</h2>
       </div>
       <p className='om'>
         You're all set up! To turn Offline Mode on, just turn on the Offline Focus mode you created. To turn it off, just turn off the Offline Focus mode.<br></br><br></br> Enjoy your Month Offline!
       </p>
       <div className="center">
-    <h1 className="om">
+    <h2 className='om step'>
       <a href="/" className="om">Less is M.O.</a>
-    </h1>
+    </h2>
     </div>
 <div className='center'>
 <p className='text-align om'>

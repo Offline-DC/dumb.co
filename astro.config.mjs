@@ -17,10 +17,11 @@ import sitemap from "@astrojs/sitemap";
 import { LEGACY_ROUTES } from "./src/legacy/routes.ts";
 
 const base = process.env.SITE_BASE || "/";
+const site = process.env.SITE_URL || "https://dumb.co";
 const hidden = new Set(LEGACY_ROUTES.filter((r) => r.sitemap === false).map((r) => r.path));
 
 export default defineConfig({
-  site: process.env.SITE_URL || "https://dumb.co",
+  site,
   base,
   output: "static",
   trailingSlash: "never",
@@ -35,7 +36,10 @@ export default defineConfig({
   },
   integrations: [
     react({ include: ["**/legacy/**", "**/*.tsx"] }),
+    // sitemap-index.xml is the one sitemap (robots.txt points at it): the
+    // pages (sitemap-0.xml) and the products (src/pages/sitemap-products.xml.ts)
     sitemap({
+      customSitemaps: [new URL(`${base}sitemap-products.xml`, site).href],
       filter: (page) => {
         const path = new URL(page).pathname.replace(base, "").replace(/^\/|\.html$/g, "");
         return !hidden.has(path) && !["faqs", "phone", "404"].includes(path);

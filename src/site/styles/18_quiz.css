@@ -237,7 +237,7 @@
   /* #wm-section h2 sets margin:0 0 6px, and an id beats a class however
      late this file loads -- so this needs the id too or the heading keeps
      hugging the pink card. */
-  #wm-section .contact-ground h2{margin-bottom:22px; flex:0 0 auto;}
+  #wm-section .contact-ground h2, #wm-section .contact-ground h1.sec-h{margin-bottom:22px; flex:0 0 auto;}
   .contact-card.support{
     max-width:none; flex:1 1 auto; display:flex; flex-direction:column;
     padding:24px 26px 24px; position:relative; overflow:hidden;
@@ -299,7 +299,7 @@
      filled that gap, so the copy read as pinned to the sidebar; sized to its
      content instead, #home's justify-content:center actually centres it. */
   #home-copy{ flex:0 1 auto; max-width:min(460px, 100%); }
-  #home-copy h1{ font-size:clamp(50px, 5.2vw, 99px); }   /* 50% bigger (Lucy) */
+  #home-copy .home-h1{ font-size:clamp(50px, 5.2vw, 99px); }   /* 50% bigger (Lucy) */
   #home-copy p{ max-width:none; font-size:clamp(14px, 1.15vw, 17px); }
 
   /* the sidebar gives ground on smaller screens so the hero keeps its column */

@@ -8,15 +8,15 @@ const c = COPY.about;
 <div id="about-pink">
   <div id="about-top">
     <div class="txt">
-      <h2 set:html={lines(c.heading)} />
+      <h1 class="sec-h" set:html={lines(c.heading)} />
       <Fragment set:html={paras(c.body)} />
       {c.sign_off && <p set:html={lines(c.sign_off)} />}
       <div id="about-signatures">
-        {A.signatures.map((s) => <img src={s.src} alt={s.name} />)}
+        {A.signatures.map((s) => <img src={s.src} srcset={s.srcset} sizes="120px" alt={s.name} />)}
       </div>
     </div>
     <div id="about-photo">
-      <img class="polaroid" src={A.polaroid} alt="dumb.co team polaroid" />
+      <img class="polaroid" src={A.polaroidSet.src} srcset={A.polaroidSet.srcset} sizes="(max-width: 760px) 90vw, 640px" alt="dumb.co team polaroid" />
       <img class="madeindc" src={A.madeInDc} alt="made in D.C." />
     </div>
   </div>

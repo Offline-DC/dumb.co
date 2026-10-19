@@ -10,7 +10,7 @@ const c = COPY.press;
   <div class="pm-list">
     {items.map((p) => (
       <a class="pm-row" href={p.href} target="_blank" rel="noopener">
-        <img class="pm-thumb" src={p.img} alt={p.source || p.title} loading="lazy" />
+        <img class="pm-thumb" src={p.img} alt={p.alt} loading="lazy" />
         <div class="pm-body">
           <div class="pm-head">{p.title}</div>
           <div>

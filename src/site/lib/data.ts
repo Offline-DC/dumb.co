@@ -9,11 +9,13 @@ import { webp } from "./assets";
 export const MEMORIES = await Promise.all(MEMORY_EVENTS.map(async (ev) => ({
   name: ev.name, when: ev.when, where: ev.where, blurb: ev.blurb, vimeoId: ev.vimeoId,
   photos: await Promise.all(ev.photos.map(async (ph) => ({
-    src: await webp(ph.image, { width: 900, quality: 72 }), cap: ph.caption,
+    src: await webp(ph.image, { width: 900, quality: 72 }), cap: ph.caption, alt: ph.alt,
+    /* the strip's tiles are ~230px; the full-size viewer uses src */
+    thumb: await webp(ph.image, { width: 480, quality: 72 }),
   }))),
 })));
 
 export const PRESS = await Promise.all(PRESS_ITEMS.map(async (p) => ({
-  id: p.id, title: p.title, source: p.source, href: p.href,
+  id: p.id, title: p.title, source: p.source, href: p.href, alt: p.alt,
   img: await webp(p.image, { width: 220, height: 220, fit: "cover", quality: 72 }),
 })));

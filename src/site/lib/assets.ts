@@ -44,6 +44,14 @@ export async function webp(src: ImageMetadata | string, o: Opts = {}): Promise<s
   return img.src;
 }
 
+/** the same image at several widths, for <img srcset>: the browser picks
+    the smallest that is still sharp at the size the stylesheet draws it */
+export async function webpSet(src: ImageMetadata, widths: number[], o: Opts = {}): Promise<{ src: string; srcset: string }> {
+  const ws = [...new Set(widths.map((w) => Math.min(w, src.width)))].sort((a, b) => a - b);
+  const urls = await Promise.all(ws.map((w) => webp(src, { ...o, width: w })));
+  return { src: urls[urls.length - 1], srcset: urls.map((u, i) => `${u} ${ws[i]}w`).join(", ") };
+}
+
 const sorted = (g: Record<string, { default: ImageMetadata }>) =>
   Object.keys(g).sort().map((k) => g[k].default);
 
@@ -55,14 +63,22 @@ export const A = {
   egg: await webp(egg, { width: 180 }),
   madeInDc: await webp(madeInDc, { width: 500 }),
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
+  polaroidSet: await webpSet(polaroid, [360, 640], { quality: 85 }),
   handset: await webp(handset, { width: 1200, quality: 90 }),
   dpadCluster: await webp(dpadCluster, { width: 600 }),
   planDumb: await webp(planDumb, { width: 1500, quality: 88 }),
   planDumber: await webp(planDumber, { width: 1500, quality: 88 }),
   planDumbest: await webp(planDumbest, { width: 1500, quality: 88 }),
+  /* the plan cards draw about 630px wide on a laptop, 310px on a phone */
+  planSets: {
+    dumb: await webpSet(planDumb, [400, 700, 1000, 1500], { quality: 88 }),
+    dumber: await webpSet(planDumber, [400, 700, 1000, 1500], { quality: 88 }),
+    dumbest: await webpSet(planDumbest, [400, 700, 1000, 1500], { quality: 88 }),
+  },
   signatures: await Promise.all(SIGNATURE_ORDER.map(async (n) => {
     const mod = SIGNATURES[`../assets/signatures/${n}.png`];
-    return { name: n.charAt(0).toUpperCase() + n.slice(1), src: await webp(mod.default, { width: 400 }) };
+    const set = await webpSet(mod.default, [200, 400]);
+    return { name: n.charAt(0).toUpperCase() + n.slice(1), src: set.src, srcset: set.srcset };
   })),
   /* flipoff.exe's carousel (lifestyle) and shop.exe's gallery (studio) */
   heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400 }))),

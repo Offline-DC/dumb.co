@@ -117,8 +117,9 @@
   }
   #home-copy{ flex:0 1 440px; min-width:0; }
   /* lowercase: the product is 'dumbphone 2', never DUMBPHONE 2 (Milk) */
-  #home-copy h1{font-family:var(--headline); font-weight:700; font-size:99px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
+  #home-copy .home-h1{font-family:var(--headline); font-weight:700; font-size:99px; line-height:.97; margin:0 0 18px; transform:rotate(-1deg);}
   #home-copy p{font-family:var(--body); font-size:17px; max-width:300px; margin:0 0 26px; opacity:.85; line-height:1.55;}
+  #home-copy .home-intro{font-size:14px; margin:24px 0 0; opacity:.7;}
   #home-cta{
     display:inline-flex; gap:10px; align-items:center; background:var(--black); color:var(--yellow);
     font-family:var(--body); font-weight:700; font-size:14px; padding:13px 22px; border-radius:100px;
@@ -163,7 +164,7 @@
   }
   .section-inner{padding:128px 56px 60px; max-width:1080px; margin:0 auto;}
   .section-inner.full-bleed{padding:0; max-width:none; margin:0;}
-  #section-body h2{font-family:var(--headline); font-size:46px; margin:0 0 6px; transform:rotate(-1.5deg); display:inline-block;}
+  #section-body h2, #section-body h1.sec-h{font-family:var(--headline); font-size:46px; margin:0 0 6px; transform:rotate(-1.5deg); display:inline-block;}
   #section-body .sub{font-family:var(--body); color:#555; max-width:640px; margin-bottom:28px; font-size:15px;}
   .placeholder-block{
     border:2px dashed var(--gray); border-radius:10px; padding:20px; max-width:760px;
@@ -192,7 +193,7 @@
   #about-pink{background:var(--hotpink); min-height:100%; padding:56px 60px 48px; display:flex; flex-direction:column;}
   #about-top{display:flex; gap:40px; align-items:center;}
   #about-pink .txt{flex:1; min-width:0; max-width:520px;}
-  #about-pink h2{font-family:var(--headline); font-size:50px; line-height:1; margin:0 0 16px;}
+  #about-pink h2, #about-pink h1.sec-h{font-family:var(--headline); font-size:50px; line-height:1; margin:0 0 16px;}
   #about-pink p{font-family:var(--body); font-weight:500; font-size:17px; line-height:1.5; margin:0 0 14px;}
   #about-photo{flex:0 0 38%; max-width:400px; position:relative;}
   #about-photo img.polaroid{width:100%; display:block; border-radius:2px;}

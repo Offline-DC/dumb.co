@@ -13,7 +13,7 @@ const avg = REVIEWS.avg && REVIEWS.count;
   <div class="dots dots-narrow" set:html={DOTS_SHOP_NARROW()} />
   <div class="hero-in">
     <div>
-      <h3>{c.product_name}</h3>
+      <h1>{c.product_name}</h1>
       <p class="hero-lines">{c.hero_lines.map((l) => <span>{l}</span>)}</p>
       <a class="sh-cta" href={c.checkout_url} target="_blank" rel="noopener">{c.buy_button}</a>
     </div>
@@ -52,9 +52,9 @@ const avg = REVIEWS.avg && REVIEWS.count;
       <div class="gi-body">
         <div class="plans-sub">{c.plans_sub}</div>
         <div class="plan-cards">
-          <img src={A.planDumb} alt="the dumb plan, $25.99 a month" loading="lazy" />
-          <img src={A.planDumber} alt="the dumber plan, $20.99 a month" loading="lazy" />
-          <img src={A.planDumbest} alt="the dumbest plan, $15.99 a month" loading="lazy" />
+          <img src={A.planSets.dumb.src} srcset={A.planSets.dumb.srcset} sizes="(max-width: 760px) 90vw, 640px" alt="the dumb plan, $25.99 a month" loading="lazy" />
+          <img src={A.planSets.dumber.src} srcset={A.planSets.dumber.srcset} sizes="(max-width: 760px) 90vw, 640px" alt="the dumber plan, $20.99 a month" loading="lazy" />
+          <img src={A.planSets.dumbest.src} srcset={A.planSets.dumbest.srcset} sizes="(max-width: 760px) 90vw, 640px" alt="the dumbest plan, $15.99 a month" loading="lazy" />
         </div>
         {c.plans_note && <div class="qr-min" style="margin-top:14px;" set:html={rich(c.plans_note)} />}
         {c.quiz_button && (

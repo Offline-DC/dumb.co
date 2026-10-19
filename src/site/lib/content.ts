@@ -116,7 +116,7 @@ export const COPY = {
       }];
     }),
   ) as Record<string, { title: string; description: string }>,
-  home: pick(home, "home", ["headline", "body", "button"]),
+  home: pick(home, "home", ["headline", "body", "button", "intro"]),
   about: pick(about, "about", ["heading", "body", "sign_off"]),
   shop: {
     ...pick(shop, "shop", [
@@ -178,7 +178,7 @@ export const COPY = {
 
 /* ----------------------------------------------------------------- press */
 export type PressItem = {
-  id: string; title: string; source: string; href: string;
+  id: string; title: string; source: string; href: string; alt: string;
   image: ImageMetadata | string;
 };
 export const PRESS_ITEMS: PressItem[] = (() => {
@@ -196,7 +196,8 @@ export const PRESS_ITEMS: PressItem[] = (() => {
     let id = text(x, "id") || title.toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-|-$/g, "");
     while (seen.has(id)) id += "-2";
     seen.add(id);
-    out.push({ id, title, source: text(x, "source"), href, image });
+    const source = text(x, "source");
+    out.push({ id, title, source, href, image, alt: text(x, "alt") || source || title });
   }
   return out;
 })();
@@ -204,7 +205,7 @@ export const PRESS_ITEMS: PressItem[] = (() => {
 /* -------------------------------------------------------------- memories */
 export type MemoryEvent = {
   name: string; when: string; where: string; blurb: string; vimeoId: string | null;
-  photos: { image: ImageMetadata; caption: string }[];
+  photos: { image: ImageMetadata; caption: string; alt: string }[];
 };
 export const MEMORY_EVENTS: MemoryEvent[] = objs(memories, "events")
   .filter((x) => !hidden(x) && text(x, "name"))
@@ -220,7 +221,8 @@ export const MEMORY_EVENTS: MemoryEvent[] = objs(memories, "events")
         warnings.push(`memories: ${text(x, "name")}: photo not found: ${ph.image}`);
         return [];
       }
-      return [{ image, caption: text(ph, "caption") }];
+      const caption = text(ph, "caption");
+      return [{ image, caption, alt: text(ph, "alt") || caption || text(x, "name") }];
     }),
   }));
 
