@@ -7,10 +7,11 @@
    the standard snippet goes in on every page. Tags are then managed in
    GTM, not here. Empty = not loaded.
 
-   GOOGLE ANALYTICS: loaded HERE, directly, and only here -- the two
-   properties the old site reported to, G-6J99WZC0Y0 (its index.html) and
-   G-J6NFHL9D1L (App.tsx's react-ga4). Do NOT also add a GA4 / Google tag
-   for either id inside GTM, or every visit is counted twice. (Oct 15: the
+   GOOGLE ANALYTICS: loaded HERE, directly, and only here -- G-6J99WZC0Y0,
+   the dumb.co property. (G-J6NFHL9D1L, the old "offline.community" property
+   in the Offline GA account that the old site's react-ga4 also reported to,
+   was retired Oct 2026 at Electric Orange's request.) Do NOT also add a
+   GA4 / Google tag for this id inside GTM, or every visit is counted twice. (Oct 15: the
    GTM container has no tags in it.) If GA ever moves into GTM, add the
    tags there and delete the gtag block below in the same release. */
 const GTM_ID = "GTM-KRDL288W";
@@ -34,6 +35,5 @@ const GTM_ID = "GTM-KRDL288W";
     window.gtag = function(){ dataLayer.push(arguments); };
     gtag("js", new Date());
     gtag("config", "G-6J99WZC0Y0");
-    gtag("config", "G-J6NFHL9D1L");
   }
 </script>
