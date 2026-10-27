@@ -950,6 +950,23 @@ function plansDrawer(){}
   function setTitle(key){
     const t = SITE.titles && SITE.titles[key || 'home'];
     if(t && document.title !== t) document.title = t;
+    setMeta(key);
+  }
+
+  /* ...and so does the rest of <head>: canonical, description and the share
+     tags point at the address now showing, as they would on a fresh load */
+  function setMeta(key){
+    const m = SITE.meta && SITE.meta[key || 'home'];
+    if(!m) return;
+    const set = (sel, attr, v) => { const el = document.head.querySelector(sel); if(el && v != null && el.getAttribute(attr) !== v) el.setAttribute(attr, v); };
+    set('link[rel="canonical"]', 'href', m.url);
+    set('meta[property="og:url"]', 'content', m.url);
+    set('meta[name="twitter:url"]', 'content', m.url);
+    set('meta[name="description"]', 'content', m.description);
+    set('meta[property="og:description"]', 'content', m.description);
+    set('meta[name="twitter:description"]', 'content', m.description);
+    set('meta[property="og:title"]', 'content', m.shareTitle);
+    set('meta[name="twitter:title"]', 'content', m.shareTitle);
   }
 
   function setRoute(key){
