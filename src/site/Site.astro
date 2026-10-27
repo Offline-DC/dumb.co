@@ -49,6 +49,14 @@ const siteData = {
   checkout: COPY.shop.checkout_url,
   routes: Object.fromEntries(NAV.map((n) => [n.key, n.slug])),
   titles: Object.fromEntries(Object.entries(COPY.pages).map(([k, pg]) => [k, pg.title])),
+  /* the rest of <head> that a fresh load of each address would have, so
+     switching sections in place keeps canonical/description/share tags on
+     the address being shown, not the one first loaded */
+  meta: Object.fromEntries(Object.entries(COPY.pages).map(([k, pg]) => [k, {
+    url: new URL(k === "home" ? "" : k, new URL(base, Astro.site ?? "https://dumb.co")).href,
+    description: pg.description,
+    shareTitle: k === "home" ? COPY.site.share_title : pg.title,
+  }])),
   memories: MEMORIES,
 };
 const json = JSON.stringify(siteData).replace(/</g, "\\u003c");
