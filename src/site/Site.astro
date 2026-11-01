@@ -122,6 +122,9 @@ if (section === "shop") ld.push({
   {section
     ? <link rel="preload" as="image" href={section === "shop" ? A.shopPhotos[0] : A.logo} fetchpriority="high" />
     : <link rel="preload" as="image" href={A.heroes[0]} media="(min-width: 761px)" fetchpriority="high" />}
+  {/* ...and on a phone, the handset IS the home page, and the menu waits for
+      it (.art-ready), so it goes first */}
+  {!section && <link rel="preload" as="image" href={A.handset} media="(max-width: 760px)" fetchpriority="high" />}
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonical} />
@@ -243,6 +246,22 @@ if (section === "shop") ld.push({
          this the phone arrived at a stock size and shrank into place. Same
          numbers as ART / phoneFit / setRowVars in site.js. -->
     <script is:inline define:vars={{ rows: NAV.length }}>
+      /* The menu and the hinge wordmark are text, so the browser draws them
+         at once -- but the handset around them is a 1200x3600 drawing that
+         takes a moment to decode and paint (Safari especially), so on every
+         load the options floated on bare yellow before the phone appeared
+         (Jack, Nov 1). They are held (29_responsive.css, html:not(.art-ready))
+         until the drawing is decoded, and appear with it. 3s floor so they
+         can never be stranded if the image fails. */
+      (function(){
+        var root = document.documentElement, art = document.querySelector('#deskphone .pf-art');
+        var done = false, ready = function(){ if(!done){ done = true; root.classList.add('art-ready'); } };
+        if (!art || (art.complete && art.naturalWidth)) return ready();
+        var decoded = function(){ art.decode ? art.decode().then(ready, ready) : ready(); };
+        art.addEventListener('load', decoded, { once: true });
+        art.addEventListener('error', ready, { once: true });
+        setTimeout(ready, 3000);
+      })();
       (function(){
         if (window.innerWidth > 760) return;
         var ratio = 3, drawnTop = 0.0128, drawnW = 0.8225, keysBottom = 0.6650, screenH = 0.3833;
@@ -270,6 +289,7 @@ if (section === "shop") ld.push({
   <!-- every section, ready to drop into the window without a page load -->
   {NAV.map((n) => <template id={`tpl-${n.key}`}><Section name={n.key} /></template>)}
 
+  <noscript><style>#tcl-screen .pmn, .phone-frame > #logo { visibility: visible !important; }</style></noscript>
   <script type="application/json" id="site-data" set:html={json} />
   <script src="./scripts/site.js"></script>
 </body>

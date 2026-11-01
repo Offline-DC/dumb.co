@@ -16,7 +16,12 @@ import duckWalk from "../assets/brand/duck-walk.gif";
 import egg from "../assets/brand/egg.png";
 import madeInDc from "../assets/brand/made-in-dc.png";
 import polaroid from "../assets/brand/polaroid.png";
-import handset from "../assets/phone/handset.png";
+/* handset.png pre-encoded as WebP q90 with alpha quality 70 (sharp,
+   effort 6). astro:assets can't set alphaQuality, so this file is used as
+   it is (?url: copied, hashed, not re-encoded). Re-make it if handset.png
+   changes:
+     node -e "require('sharp')('src/site/assets/phone/handset.png').webp({quality:90,alphaQuality:70,effort:6}).toFile('src/site/assets/phone/handset-art.webp')" */
+import handsetArt from "../assets/phone/handset-art.webp?url";
 import dpadCluster from "../assets/phone/dpad-cluster.png";
 import planDumb from "../assets/plans/dumb.png";
 import planDumber from "../assets/plans/dumber.png";
@@ -73,7 +78,10 @@ export const A = {
   madeInDc: await webp(madeInDc, { width: 500 }),
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
   polaroidSet: await webpSet(polaroid, [360, 640], { quality: 85 }),
-  handset: await webp(handset, { width: 1200, quality: 90 }),
+  /* alphaQuality 70: the drawing is ink on transparency, and the alpha
+     channel was most of the file -- 262 -> 174 KiB, no visible change (no
+     pixel off by more than 18/255 on the yellow). See handsetArt above. */
+  handset: handsetArt,
   /* ONE size on purpose -- no srcset. site.js (liveArt, keyStrokes) copies
      this drawing into a canvas at its naturalWidth and reads key pixels off
      it; with a w-descriptor srcset naturalWidth becomes the CSS size, not the
