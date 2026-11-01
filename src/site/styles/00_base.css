@@ -58,6 +58,9 @@
   html,body{margin:0;padding:0;height:100%;font-family:var(--body);background:var(--yellow);color:var(--text-strong);overflow:hidden;touch-action:manipulation;}
 
   #app{position:relative;height:100%;width:100%;overflow:hidden;background:var(--yellow);}
+  /* <main> is only the landmark for screen readers: it draws no box, so
+     #home / #winmodal / #deskphone still lay out against #app as before */
+  main#main{display:contents;}
 
   /* ---------- SIDEBAR (no divider line per feedback) ---------- */
   #sidebar{
@@ -73,7 +76,7 @@
     z-index:20;
   }
   #logo{ cursor:pointer; margin-bottom:34px; width:250px; transition:transform .18s ease; }
-  #logo img{width:100%;display:block;}
+  #logo img{width:100%;height:auto;display:block;}   /* height:auto -- the <img> carries width/height attributes now */
   #logo:hover{transform:rotate(-2deg) scale(1.02);}
 
   nav#navlist{display:flex;flex-direction:column;gap:22px; margin-top:12px;}
@@ -136,7 +139,7 @@
     z-index:30;
   }
   #topbar #logo-small{cursor:pointer;white-space:nowrap; flex:0 0 auto;}
-  #topbar #logo-small img{height:30px;display:block;}
+  #topbar #logo-small img{height:30px;width:auto;display:block;}
   #topbar-nav{display:flex; align-items:center; gap:6px; flex:0 0 auto;}
   #topbar .navitem{font-size:22px;padding:7px 13px;}
   #topbar-duck{

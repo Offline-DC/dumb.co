@@ -52,19 +52,32 @@ export async function webpSet(src: ImageMetadata, widths: number[], o: Opts = {}
   return { src: urls[urls.length - 1], srcset: urls.map((u, i) => `${u} ${ws[i]}w`).join(", ") };
 }
 
+/** width/height attributes for an image drawn from webp(src, { width }),
+    so the browser can reserve its box before the file arrives */
+const dims = (src: ImageMetadata, width: number) => {
+  const w = Math.min(width, src.width);
+  return { width: w, height: Math.round((src.height * w) / src.width) };
+};
+
 const sorted = (g: Record<string, { default: ImageMetadata }>) =>
   Object.keys(g).sort().map((k) => g[k].default);
 
 export const A = {
   logo: await webp(logo, { width: 520 }),
+  logoSize: dims(logo, 520),
   noX: noX.src, noInstagram: noInstagram.src, noFacebook: noFacebook.src,
   duckDance: await webp(duckDance, { width: 200 }),
+  duckDanceSize: dims(duckDance, 200),
   duckWalk: duckWalk.src,
   egg: await webp(egg, { width: 180 }),
   madeInDc: await webp(madeInDc, { width: 500 }),
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
   polaroidSet: await webpSet(polaroid, [360, 640], { quality: 85 }),
   handset: await webp(handset, { width: 1200, quality: 90 }),
+  /* the handset draws 218px wide on a laptop and roughly the screen's width
+     on a phone (--mpw in Site.astro), so a phone at 2x gets ~800w, not the
+     1200x3600 master (Lighthouse, Oct 28 audit) */
+  handsetSet: await webpSet(handset, [400, 600, 800, 1000, 1200], { quality: 90 }),
   dpadCluster: await webp(dpadCluster, { width: 600 }),
   planDumb: await webp(planDumb, { width: 1500, quality: 88 }),
   planDumber: await webp(planDumber, { width: 1500, quality: 88 }),
@@ -81,6 +94,9 @@ export const A = {
     return { name: n.charAt(0).toUpperCase() + n.slice(1), src: set.src, srcset: set.srcset };
   })),
   /* flipoff.exe's carousel (lifestyle) and shop.exe's gallery (studio) */
-  heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400 }))),
+  /* quality 70, not the default 80: hero-01 is a grainy denim shot and at 80
+     it was 348 KiB, the heaviest thing on the homepage (Oct 28 audit). 70 is
+     visually the same at the size the window draws it */
+  heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400, quality: 70 }))),
   shopPhotos: await Promise.all(sorted(SHOP).map((m) => webp(m, { width: 1200 }))),
 };

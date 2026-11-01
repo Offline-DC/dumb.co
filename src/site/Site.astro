@@ -18,6 +18,9 @@ import { lines } from "./lib/html";
 import { NAV, EXE, BLEED, type SectionKey } from "./nav";
 import Section from "./Section.astro";
 import Analytics from "./Analytics.astro";
+/* public/fonts.css, inlined: as a <link> it blocked the first paint and the
+   Helvetica file could only start once it had arrived (Oct 28 audit) */
+import fontsCss from "../../public/fonts.css?raw";
 
 import "./styles/00_base.css";
 import "./styles/01_wm.css";
@@ -39,6 +42,7 @@ const page = COPY.pages[section ?? "home"];
 const canonical = new URL((section ?? ""), new URL(base, Astro.site ?? "https://dumb.co")).href;
 const shareImage = new URL("og-image-wide.jpg", "https://dumb.co/").href;   // public/og-image-wide.jpg on dumb.co
 const home = COPY.home;
+const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
 const c = COPY.contact;
 
 /* what site.js needs that isn't in the markup */
@@ -107,8 +111,16 @@ if (section === "shop") ld.push({
   <link rel="icon" type="image/png" href={`${base}favicon.png`} />
   <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
   <link rel="apple-touch-icon" href={`${base}favicon.png`} />
-  <link rel="stylesheet" href={`${base}fonts.css`} />
-  <link rel="preload" as="image" href={section ? (section === "shop" ? A.shopPhotos[0] : A.logo) : A.heroes[0]} fetchpriority="high" />
+  <style is:inline set:html={fontFaces} />
+  {/* the weight the nav and headings are set in: fetch it with the HTML,
+      not after the CSS that names it has been parsed */}
+  <link rel="preload" as="font" type="font/woff2" href={`${base}fonts/HelveticaNowDisplay-Bold.woff2`} crossorigin />
+  {/* at / the hero is the window's photo on a laptop, but on a phone the
+      window starts closed and the handset is what shows -- don't spend the
+      phone's first bytes on a photo it isn't drawing */}
+  {section
+    ? <link rel="preload" as="image" href={section === "shop" ? A.shopPhotos[0] : A.logo} fetchpriority="high" />
+    : <link rel="preload" as="image" href={A.heroes[0]} media="(min-width: 761px)" fetchpriority="high" />}
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonical} />
@@ -134,7 +146,7 @@ if (section === "shop") ld.push({
   <div id="app">
 
     <aside id="sidebar">
-      <div id="logo" onclick="goHome()"><img src={A.logo} alt="dumb.co" /></div>
+      <div id="logo" onclick="goHome()"><img src={A.logo} width={A.logoSize.width} height={A.logoSize.height} alt="dumb.co" /></div>
       <nav id="navlist">
         {NAV.map((n) => <a class={`navitem${section === n.key ? " active" : ""}`} data-key={n.key} data-slug={n.slug} href={`${base}${n.slug}`}>{n.label}</a>)}
       </nav>
@@ -149,6 +161,10 @@ if (section === "shop") ld.push({
       </div>
     </aside>
 
+    {/* the page's main landmark (screen readers jump straight here). It is
+        display:contents (00_base.css), so the absolutely-placed pieces inside
+        lay out exactly as they did as direct children of #app */}
+    <main id="main">
     <div id="home">
       <div id="home-copy">
         {/* the tagline is the page's h1 only at /; on /shop, /about ... the
@@ -163,11 +179,11 @@ if (section === "shop") ld.push({
     </div>
 
     <div id="topbar">
-      <div id="logo-small" onclick="goHome()"><img src={A.logo} alt="dumb.co" /></div>
+      <div id="logo-small" onclick="goHome()"><img src={A.logo} width={A.logoSize.width} height={A.logoSize.height} alt="dumb.co" /></div>
       <div id="topbar-nav">
         {NAV.map((n) => <a class="navitem" data-key={n.key} data-slug={n.slug} href={`${base}${n.slug}`}>{n.label}</a>)}
       </div>
-      <div id="topbar-duck"><img src={A.duckDance} alt="dumb.co duck, dancing while you browse" /></div>
+      <div id="topbar-duck"><img src={A.duckDance} width={A.duckDanceSize.width} height={A.duckDanceSize.height} alt="dumb.co duck, dancing while you browse" /></div>
     </div>
 
     <!-- the .exe window: flipoff.exe's carousel at /, the section at /shop etc. -->
@@ -198,7 +214,7 @@ if (section === "shop") ld.push({
         <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
           <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.mlabel ?? n.label.toLowerCase()}</a>
         ))}</div></div></div>
-        <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
+        <img class="pf-art" src={A.handsetSet.src} srcset={A.handsetSet.srcset} sizes="(max-width: 760px) 100vw, 218px" width="1200" height="3600" alt="dumbphone 2" />
         <div class="pf-keys">
           <button type="button" class="k-up"    aria-label="up"     onclick="teamKey('up')">&#8593;</button>
           <button type="button" class="k-left"  aria-label="left"   onclick="teamKey('left')">&#8592;</button>
@@ -232,6 +248,7 @@ if (section === "shop") ld.push({
         if (logo && frame) { frame.appendChild(logo); logo.classList.add('on-hinge'); }
       })();
     </script>
+    </main>
     <div id="walkduck"><img src={A.duckWalk} alt="dumb.co duck" /></div>
     <div id="egg" onclick="expandModal()"><img src={A.egg} alt="tap to open" /></div>
   </div>
