@@ -33,9 +33,22 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
     dots.style.setProperty('--ndots', carouselImgs.length);
     dots.innerHTML = carouselImgs.map((_,i)=>`<span class="wm-dot ${i===carIdx?'on':''}" onclick="event.stopPropagation(); goToSlide(${i})"></span>`).join('');
   }
-  function carouselStep(dir){ carIdx = (carIdx + dir + carouselImgs.length) % carouselImgs.length; renderCarousel(); }
-  function goToSlide(i){ carIdx = i; renderCarousel(); }
+  function carouselStep(dir){ heroRelease(); carIdx = (carIdx + dir + carouselImgs.length) % carouselImgs.length; renderCarousel(); }
+  function goToSlide(i){ heroRelease(); carIdx = i; renderCarousel(); }
   renderCarousel();
+
+  /* Site.astro holds the carousel photo back behind a 1x1 placeholder
+     <source data-hold> where it isn't drawn at load (a phone's home, and
+     every section page). Dropping the source makes the <img> load its real
+     src. Done once the page has loaded and gone idle -- after the first
+     paint, so it no longer counts against LCP -- or straight away if the
+     carousel is used first. */
+  function heroRelease(){
+    document.querySelectorAll('#wm-carousel source[data-hold]').forEach(s => s.remove());
+  }
+  const heroIdle = () => (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(heroRelease, { timeout: 3000 });
+  if(document.readyState === 'complete') heroIdle();
+  else window.addEventListener('load', heroIdle, { once: true });
 
   function collapseModal(){
     // 1) modal shrinks/rotates down into the egg's resting spot (CSS transition on .collapsed)

@@ -42,6 +42,7 @@ const page = COPY.pages[section ?? "home"];
 const canonical = new URL((section ?? ""), new URL(base, Astro.site ?? "https://dumb.co")).href;
 const shareImage = new URL("og-image-wide.jpg", "https://dumb.co/").href;   // public/og-image-wide.jpg on dumb.co
 const home = COPY.home;
+const BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
 const c = COPY.contact;
 
@@ -195,7 +196,20 @@ if (section === "shop") ld.push({
       <div class="wm-body" id="wm-body">
         <div id="wm-carousel">
           <div class="wm-arrow wm-prev" onclick="carouselStep(-1)">‹</div>
-          <img id="wm-img" src={A.heroes[0]} alt="dumb.co" />
+          {/* The photo is held back where it isn't drawn at load: on a phone
+              (the window starts closed; the handset is the page) and on every
+              section page (the window shows the section, not the carousel).
+              Even at low priority, a 290 KiB photo in flight before the first
+              paint was being charged to LCP by Lighthouse's mobile simulation
+              (2.9-4.7s vs 1.9s without it). site.js removes the placeholder
+              source once the page has loaded (heroRelease), so it is there
+              by the time anyone opens the carousel. */}
+          <picture>
+            {section
+              ? <source data-hold srcset={BLANK_GIF} />
+              : <source data-hold media="(max-width: 760px)" srcset={BLANK_GIF} />}
+            <img id="wm-img" src={A.heroes[0]} alt="dumb.co" />
+          </picture>
           <div class="wm-arrow wm-next" onclick="carouselStep(1)">›</div>
           <div class="wm-dots" id="wm-dots"></div>
         </div>
