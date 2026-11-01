@@ -228,7 +228,7 @@ if (section === "shop") ld.push({
         <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
           <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.mlabel ?? n.label.toLowerCase()}</a>
         ))}</div></div></div>
-        <img class="pf-art" src={A.handsetSet.src} srcset={A.handsetSet.srcset} sizes="(max-width: 760px) 100vw, 218px" width="1200" height="3600" alt="dumbphone 2" />
+        <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
         <div class="pf-keys">
           <button type="button" class="k-up"    aria-label="up"     onclick="teamKey('up')">&#8593;</button>
           <button type="button" class="k-left"  aria-label="left"   onclick="teamKey('left')">&#8592;</button>

@@ -74,10 +74,10 @@ export const A = {
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
   polaroidSet: await webpSet(polaroid, [360, 640], { quality: 85 }),
   handset: await webp(handset, { width: 1200, quality: 90 }),
-  /* the handset draws 218px wide on a laptop and roughly the screen's width
-     on a phone (--mpw in Site.astro), so a phone at 2x gets ~800w, not the
-     1200x3600 master (Lighthouse, Oct 28 audit) */
-  handsetSet: await webpSet(handset, [400, 600, 800, 1000, 1200], { quality: 90 }),
+  /* ONE size on purpose -- no srcset. site.js (liveArt, keyStrokes) copies
+     this drawing into a canvas at its naturalWidth and reads key pixels off
+     it; with a w-descriptor srcset naturalWidth becomes the CSS size, not the
+     file's pixels, and Firefox drew the handset zoomed and cropped (Nov 1). */
   dpadCluster: await webp(dpadCluster, { width: 600 }),
   planDumb: await webp(planDumb, { width: 1500, quality: 88 }),
   planDumber: await webp(planDumber, { width: 1500, quality: 88 }),

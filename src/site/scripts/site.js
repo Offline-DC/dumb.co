@@ -1417,14 +1417,29 @@ function plansDrawer(){}
      handset with a mask and drawn again 2px lower, with the same shadow. No
      background is painted at all, so there is nothing to mismatch. */
   let artCanvas = null;
+  /* The canvases are made at the size the handset is SHOWN, in device
+     pixels -- not the 1200x3600 file. Copying and reading every pixel of the
+     full file (~17 MB of pixel data, twice, plus the stroke search below,
+     whose cost grows with the art-to-screen ratio) was a 500-700 ms task on a
+     throttled phone: the "Site.astro script" long task in the Oct 28
+     Lighthouse audit. At screen resolution nothing is lost -- this is
+     exactly as many pixels as get drawn. */
+  function artDims(art){
+    const w0 = art.getBoundingClientRect().width;
+    if(!w0 || !art.naturalWidth) return null;
+    const w = Math.min(art.naturalWidth, Math.ceil(w0 * (window.devicePixelRatio || 1)));
+    return {w, h: Math.round(art.naturalHeight * w / art.naturalWidth)};
+  }
   function artPixels(art){
-    if(artCanvas && artCanvas.src === art.currentSrc) return artCanvas;
     if(!art.complete || !art.naturalWidth) return null;
+    const dim = artDims(art);
+    if(!dim) return null;
+    if(artCanvas && artCanvas.src === art.currentSrc && artCanvas.w === dim.w) return artCanvas;
     try{
       const c = document.createElement('canvas');
-      c.width = art.naturalWidth; c.height = art.naturalHeight;
+      c.width = dim.w; c.height = dim.h;
       const g = c.getContext('2d', {willReadFrequently:true});
-      g.drawImage(art, 0, 0);
+      g.drawImage(art, 0, 0, dim.w, dim.h);
       g.getImageData(0, 0, 1, 1);               // throws now if the canvas is tainted
       artCanvas = {src: art.currentSrc, g, w: c.width, h: c.height, keys: new Map()};
       return artCanvas;
@@ -1513,17 +1528,28 @@ function plansDrawer(){}
      hidden (it still sets the size and every measurement), and a press
      repaints one small patch of the canvas. No mask, nothing to drop. */
   function liveArt(frame){
-    let cv = frame.querySelector('canvas.pf-live');
-    if(cv) return cv;
     const art = frame.querySelector('.pf-art');
-    if(!art || !art.complete || !art.naturalWidth || !artPixels(art)) return null;
-    cv = document.createElement('canvas');
-    cv.className = 'pf-live';
-    cv.width = art.naturalWidth; cv.height = art.naturalHeight;
-    cv.setAttribute('aria-hidden', 'true');
-    try{ cv.getContext('2d').drawImage(art, 0, 0); }catch(e){ return null; }
-    art.after(cv);
-    art.classList.add('pf-art-under');                 // hidden in the same frame the canvas appears
+    let cv = frame.querySelector('canvas.pf-live');
+    /* same pixel size as artPixels' copy: the key patches are cut from
+       that one and painted onto this one, so the two must match exactly */
+    const px = art && art.complete && art.naturalWidth ? artPixels(art) : null;
+    if(!px) return cv;                                  // can't size it now: keep what is there
+    if(cv && cv.width === px.w && cv.height === px.h) return cv;
+    const fresh = !cv;
+    if(fresh){
+      cv = document.createElement('canvas');
+      cv.className = 'pf-live';
+      cv.setAttribute('aria-hidden', 'true');
+    }
+    /* (re)sized: a key held down across the resize is let go, since its
+       patch was cut at the old size */
+    if(pressedBy){ pressedBy.classList.remove('down'); pressedBy = null; }
+    cv.width = px.w; cv.height = px.h;
+    try{ cv.getContext('2d').drawImage(art, 0, 0, px.w, px.h); }catch(e){ return fresh ? null : cv; }
+    if(fresh){
+      art.after(cv);
+      art.classList.add('pf-art-under');               // hidden in the same frame the canvas appears
+    }
     return cv;
   }
 
