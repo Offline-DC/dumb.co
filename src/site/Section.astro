@@ -8,13 +8,13 @@ import Memories from "./sections/Memories.astro";
 import Faq from "./sections/Faq.astro";
 import Contact from "./sections/Contact.astro";
 import type { SectionKey } from "./nav";
-interface Props { name: SectionKey }
-const { name } = Astro.props;
+interface Props { name: SectionKey; h1?: boolean }
+const { name, h1 = false } = Astro.props;
 ---
-{name === "about" && <About />}
-{name === "shop" && <Shop />}
-{name === "community" && <Community />}
-{name === "press" && <Press />}
-{name === "memories" && <Memories />}
-{name === "faq" && <Faq />}
-{name === "contact" && <Contact />}
+{name === "about" && <About h1={h1} />}
+{name === "shop" && <Shop h1={h1} />}
+{name === "community" && <Community h1={h1} />}
+{name === "press" && <Press h1={h1} />}
+{name === "memories" && <Memories h1={h1} />}
+{name === "faq" && <Faq h1={h1} />}
+{name === "contact" && <Contact h1={h1} />}

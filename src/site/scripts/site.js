@@ -269,6 +269,7 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
     host.innerHTML = '<div class="wm-pad' + (BLEED.includes(key) ? ' bleed' : '') + '">'
                    + sections[key]() + '</div>';
     host.scrollTop = 0;
+    pageHeading(host.querySelector('[data-page-h]'));
 
     document.querySelectorAll('.navitem').forEach(el => {
       el.classList.toggle('active', el.dataset.key === key);
@@ -279,6 +280,22 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
     if(key === 'shop' && typeof plansDrawer === 'function') plansDrawer();
   }
 
+  /* One h1 on the page, about the address showing (EO audit): the section's
+     heading in the window, or the home tagline at /. The templates hold the
+     sections' headings as h2s, so whichever one is opened is promoted here
+     and the rest step down to their data-page-h tag (h2, or div for the
+     tagline). The window copy is always the h1, so nothing on screen changes. */
+  function pageHeading(page){
+    document.querySelectorAll('#main [data-page-h]').forEach(el => {
+      const tag = el === page ? 'H1' : el.dataset.pageH.toUpperCase();
+      if(el.tagName === tag) return;
+      const n = document.createElement(tag);
+      for(const a of el.attributes) n.setAttribute(a.name, a.value);
+      n.innerHTML = el.innerHTML;
+      el.replaceWith(n);
+    });
+  }
+
   function goHome(){
     openKey = null;
     if(typeof stopSnake === 'function') stopSnake();
@@ -286,6 +303,7 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
     w.classList.remove('sectionmode');
     setExeTitle('home');
     sectionEl().innerHTML = '';
+    pageHeading(document.querySelector('#home [data-page-h]'));
     placeHome();
     document.getElementById('egg').classList.remove('show', 'pop');
     w.classList.remove('collapsed');

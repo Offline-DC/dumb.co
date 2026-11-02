@@ -7,13 +7,15 @@ import { REVIEWS, REVIEWS_PAGE } from "../lib/reviews";
 import { paras, rich, starRow, DOTS_EDGE, DOTS_SHOP_NARROW, DOTS_SHOP_END } from "../lib/html";
 const c = COPY.shop;
 const avg = REVIEWS.avg && REVIEWS.count;
+/* the page's h1 only in the window (Site.astro); h2 in the <template>s */
+const H = Astro.props.h1 ? "h1" : "h2";
 ---
 <div class="sh-hero">
   <div class="dots dots-wide" set:html={DOTS_EDGE()} />
   <div class="dots dots-narrow" set:html={DOTS_SHOP_NARROW()} />
   <div class="hero-in">
     <div>
-      <h1>{c.product_name}</h1>
+      <H data-page-h="h2">{c.product_name}</H>
       <p class="hero-lines">{c.hero_lines.map((l) => <span>{l}</span>)}</p>
       <a class="sh-cta" href={c.checkout_url} target="_blank" rel="noopener">{c.buy_button}</a>
     </div>

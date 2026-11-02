@@ -4,9 +4,11 @@ import { COPY } from "../lib/content";
 import { DOTS_EDGE } from "../lib/html";
 const c = COPY.contact;
 const tel = c.support_phone.replace(/[^\d+]/g, "");
+/* the page's h1 only in the window (Site.astro); h2 in the <template>s */
+const H = Astro.props.h1 ? "h1" : "h2";
 ---
 <div class="contact-ground">
-  <h1 class="sec-h">{c.contact_heading}</h1>
+  <H class="sec-h" data-page-h="h2">{c.contact_heading}</H>
   <div class="contact-card support">
     <div class="dots" set:html={DOTS_EDGE()} />
     <div class="cc-head">

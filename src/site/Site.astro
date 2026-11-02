@@ -172,10 +172,12 @@ if (section === "shop") ld.push({
     <div id="home">
       <div id="home-copy">
         {/* the tagline is the page's h1 only at /; on /shop, /about ... the
-            section's own heading is the h1 (one h1 per page, about that page) */}
+            section's own heading is the h1 (one h1 per page, about that page).
+            The other sections' headings are h2s in their <template>s, and
+            site.js (pageHeading) keeps it one h1 when moving in place */}
         {home.headline && (section
-          ? <div class="home-h1" set:html={lines(home.headline)} />
-          : <h1 class="home-h1" set:html={lines(home.headline)} />)}
+          ? <div class="home-h1" data-page-h="div" set:html={lines(home.headline)} />
+          : <h1 class="home-h1" data-page-h="div" set:html={lines(home.headline)} />)}
         {home.body && <p>{home.body}</p>}
         <div id="home-cta" onclick="openSection('shop')">{home.button}</div>
         {home.intro && <p class="home-intro">{home.intro}</p>}
@@ -217,7 +219,7 @@ if (section === "shop") ld.push({
           <div class="wm-dots" id="wm-dots"></div>
         </div>
         <div id="wm-section">{section && (
-          <div class={`wm-pad${BLEED.includes(section) ? " bleed" : ""}`}><Section name={section} /></div>
+          <div class={`wm-pad${BLEED.includes(section) ? " bleed" : ""}`}><Section name={section} h1 /></div>
         )}</div>
       </div>
       <div class="wm-resize wm-resize-br" id="wm-resize"></div>
