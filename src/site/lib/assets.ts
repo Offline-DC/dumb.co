@@ -16,7 +16,12 @@ import duckWalk from "../assets/brand/duck-walk.gif";
 import egg from "../assets/brand/egg.png";
 import madeInDc from "../assets/brand/made-in-dc.png";
 import polaroid from "../assets/brand/polaroid.png";
-import handset from "../assets/phone/handset.png";
+/* handset.png pre-encoded as WebP q90 with alpha quality 70 (sharp,
+   effort 6). astro:assets can't set alphaQuality, so this file is used as
+   it is (?url: copied, hashed, not re-encoded). Re-make it if handset.png
+   changes:
+     node -e "require('sharp')('src/site/assets/phone/handset.png').webp({quality:90,alphaQuality:70,effort:6}).toFile('src/site/assets/phone/handset-art.webp')" */
+import handsetArt from "../assets/phone/handset-art.webp?url";
 import dpadCluster from "../assets/phone/dpad-cluster.png";
 import planDumb from "../assets/plans/dumb.png";
 import planDumber from "../assets/plans/dumber.png";
@@ -52,19 +57,35 @@ export async function webpSet(src: ImageMetadata, widths: number[], o: Opts = {}
   return { src: urls[urls.length - 1], srcset: urls.map((u, i) => `${u} ${ws[i]}w`).join(", ") };
 }
 
+/** width/height attributes for an image drawn from webp(src, { width }),
+    so the browser can reserve its box before the file arrives */
+const dims = (src: ImageMetadata, width: number) => {
+  const w = Math.min(width, src.width);
+  return { width: w, height: Math.round((src.height * w) / src.width) };
+};
+
 const sorted = (g: Record<string, { default: ImageMetadata }>) =>
   Object.keys(g).sort().map((k) => g[k].default);
 
 export const A = {
   logo: await webp(logo, { width: 520 }),
+  logoSize: dims(logo, 520),
   noX: noX.src, noInstagram: noInstagram.src, noFacebook: noFacebook.src,
   duckDance: await webp(duckDance, { width: 200 }),
+  duckDanceSize: dims(duckDance, 200),
   duckWalk: duckWalk.src,
   egg: await webp(egg, { width: 180 }),
   madeInDc: await webp(madeInDc, { width: 500 }),
   polaroid: await webp(polaroid, { width: 640, quality: 85 }),
   polaroidSet: await webpSet(polaroid, [360, 640], { quality: 85 }),
-  handset: await webp(handset, { width: 1200, quality: 90 }),
+  /* alphaQuality 70: the drawing is ink on transparency, and the alpha
+     channel was most of the file -- 262 -> 174 KiB, no visible change (no
+     pixel off by more than 18/255 on the yellow). See handsetArt above. */
+  handset: handsetArt,
+  /* ONE size on purpose -- no srcset. site.js (liveArt, keyStrokes) copies
+     this drawing into a canvas at its naturalWidth and reads key pixels off
+     it; with a w-descriptor srcset naturalWidth becomes the CSS size, not the
+     file's pixels, and Firefox drew the handset zoomed and cropped (Nov 1). */
   dpadCluster: await webp(dpadCluster, { width: 600 }),
   planDumb: await webp(planDumb, { width: 1500, quality: 88 }),
   planDumber: await webp(planDumber, { width: 1500, quality: 88 }),
@@ -81,6 +102,9 @@ export const A = {
     return { name: n.charAt(0).toUpperCase() + n.slice(1), src: set.src, srcset: set.srcset };
   })),
   /* flipoff.exe's carousel (lifestyle) and shop.exe's gallery (studio) */
-  heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400 }))),
+  /* quality 70, not the default 80: hero-01 is a grainy denim shot and at 80
+     it was 348 KiB, the heaviest thing on the homepage (Oct 28 audit). 70 is
+     visually the same at the size the window draws it */
+  heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400, quality: 70 }))),
   shopPhotos: await Promise.all(sorted(SHOP).map((m) => webp(m, { width: 1200 }))),
 };

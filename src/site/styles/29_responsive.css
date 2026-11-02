@@ -236,6 +236,11 @@
        Nothing paints until the shell sets .m-ready, and collapsed is gone
        outright -- the egg it would shrink into does not exist here. */
     html:not(.m-ready) #winmodal{display:none !important;}
+    /* the menu and the wordmark wait for the handset drawing, so they never
+       show on bare yellow first (Site.astro sets .art-ready once it is
+       decoded) */
+    html:not(.art-ready) #tcl-screen .pmn,
+    html:not(.art-ready) .phone-frame > #logo{visibility:hidden;}
     #winmodal.collapsed{display:none !important; transition:none !important;}
 
     /* the .exe window becomes a sheet. !important beats the inline geometry
