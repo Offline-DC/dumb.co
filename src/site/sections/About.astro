@@ -4,11 +4,13 @@ import { COPY } from "../lib/content";
 import { A } from "../lib/assets";
 import { lines, paras } from "../lib/html";
 const c = COPY.about;
+/* the page's h1 only in the window (Site.astro); h2 in the <template>s */
+const H = Astro.props.h1 ? "h1" : "h2";
 ---
 <div id="about-pink">
   <div id="about-top">
     <div class="txt">
-      <h1 class="sec-h" set:html={lines(c.heading)} />
+      <H class="sec-h" data-page-h="h2" set:html={lines(c.heading)} />
       <Fragment set:html={paras(c.body)} />
       {c.sign_off && <p set:html={lines(c.sign_off)} />}
       <div id="about-signatures">

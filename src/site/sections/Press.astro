@@ -3,9 +3,11 @@
 import { COPY } from "../lib/content";
 import { PRESS as items } from "../lib/data";
 const c = COPY.press;
+/* the page's h1 only in the window (Site.astro); h2 in the <template>s */
+const H = Astro.props.h1 ? "h1" : "h2";
 ---
 <div id="press-mirror">
-  <h1 class="pm-title">{c.heading}</h1>
+  <H class="pm-title" data-page-h="h2">{c.heading}</H>
   {c.contact_email && <div class="pm-sub"><a href={`mailto:${c.contact_email}`}>{c.contact_email}</a></div>}
   <div class="pm-list">
     {items.map((p) => (

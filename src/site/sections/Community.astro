@@ -5,11 +5,13 @@
 import { COPY } from "../lib/content";
 import { esc, lines, paras, rich, DOTS_PAGE } from "../lib/html";
 const c = COPY.community;
+/* the page's h1 only in the window (Site.astro); h2 in the <template>s */
+const H = Astro.props.h1 ? "h1" : "h2";
 ---
 <div class="gi-page">
   <div class="dots" set:html={DOTS_PAGE()} />
   <div class="gi-in">
-    <h1 class="sec-h">{c.heading}</h1>
+    <H class="sec-h" data-page-h="h2">{c.heading}</H>
     {c.lede && <p class="gi-lede" set:html={rich(c.lede)} />}
     <div class="gi-drops">
       {c.programs.map((pg) => (
