@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sign in - dumb.co</title><meta name="description" content="Sign in to Google Messages on your dumbphone with the dumb.co Firefox extension."><link rel="canonical" href="https://dumb.co/signin"><meta name="theme-color" content="#0f0f0f"><link rel="icon" type="image/png" href="/favicon.png"><link rel="icon" type="image/x-icon" href="/favicon.ico"><!-- desktop Firefox only: phones (incl. KaiOS, which says Firefox) and
+       Seamonkey can't run the extension --><script>
+    (function () {
+      var ua = navigator.userAgent;
+      if (/Firefox\//.test(ua) && !/Seamonkey\/|Android|iPhone|iPad|iPod|Mobile|KAIOS/i.test(ua)) {
+        document.documentElement.className += " ff";
+      }
+      // iPhones only show :active (the button's pressed state) on a page
+      // that listens for touches
+      document.addEventListener("touchstart", function () {}, { passive: true });
+    })();
+  </script><style>@font-face{font-family:"Helvetica Now Display";src:url("/fonts/HelveticaNowDisplay-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("/fonts/HelveticaNowDisplay-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("/fonts/HelveticaNowDisplay-Bold.woff2") format("woff2");font-weight:600 700;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("/fonts/HelveticaNowDisplay-ExtraBold.woff2") format("woff2");font-weight:800;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("/fonts/HelveticaNowDisplay-Black.woff2") format("woff2");font-weight:900;font-style:normal;font-display:swap;}@font-face{font-family:"Cheltenham";src:url("/_astro/cheltenham-bold-extra-condensed.juOdRKA5.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap;}</style><!-- inline, so it ships exactly as written: the build's CSS minifier would
+       turn max-width queries into (width<=360px) and the state colours into
+       8-digit hex, which the flip phone's old Chromium can't read --><style>
+    /* tokens from the dumb design system, as the frames use them */
+    :root{
+      --bg:#0f0f0f;
+      --text-strong:#fafaf0;
+      --text-weak:#b4b4ad;
+      --brand:#faf594;
+      --on-brand:#14140c;
+      --state-hovered:rgba(15,15,15,.05);   /* primary/interaction/hovered */
+      --state-pressed:rgba(15,15,15,.1);    /* primary/interaction/pressed */
+      --headline:"Cheltenham", Georgia, serif;
+      --body:"Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    html,body{margin:0; padding:0; background:var(--bg); color:var(--text-strong);}
+    body{font-family:var(--body); font-weight:500; -webkit-text-size-adjust:100%;}
+    img{max-width:100%; height:auto; border:0;}
+    h1,h2,p,ol{margin:0;}
+
+    .logo{position:absolute; left:31px; top:32px; display:block; width:71px; line-height:0;}
+    .logo img{width:100%;}
+
+    /* which state shows */
+    .steps{display:none;}
+    .ff .get-ff{display:none;}
+    .ff .steps{display:block;}
+    .art-phones{display:none;}
+
+    /* the button (Figma: dumb design system > button, hierarchy=primary,
+       appearance=variable): device=smart here, device=dumb in the flip-phone
+       block. Hovered and pressed lay a dark layer over the brand fill, as the
+       component does. */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      background-color:var(--brand); color:var(--on-brand);
+      border-radius:96px; padding:12px 16px 16px; text-decoration:none;
+      font-family:var(--body); font-weight:800; font-size:20px; line-height:1.4;
+      text-transform:lowercase; white-space:nowrap;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn img{flex:none; width:24px; height:24px; margin-left:4px;}
+    @media (hover:hover){
+      .btn:hover{background-image:linear-gradient(var(--state-hovered), var(--state-hovered));}
+    }
+    .btn:active{background-image:linear-gradient(var(--state-pressed), var(--state-pressed));}
+    /* focused: a 2px brand ring, 2px out. Shadows rather than an outline so
+       the ring stays round in the flip phone's older browser; the inner one is
+       the gap, in the page colour. The transparent outline shows in Windows
+       high-contrast mode, which drops shadows. A browser without :focus-visible
+       keeps the ring for every focus, which is what a D-pad needs. */
+    .btn:focus{outline:2px solid transparent; outline-offset:2px; box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--brand);}
+    .btn:focus:not(:focus-visible){box-shadow:none; outline:none;}
+    /* disabled (nothing on this page uses it yet; drop the href too) */
+    .btn:disabled, .btn[aria-disabled="true"]{opacity:.38; pointer-events:none;}
+    /* the logo link: the flip phone moves focus with its D-pad, and the
+       focused link has to be unmistakable on a 2.8" screen */
+    .logo:focus{outline:3px solid var(--brand); outline-offset:4px;}
+
+    body{font-size:20px; line-height:28px;}
+    p{color:var(--text-weak);}
+
+    /* ---------- phone (Figma: dumb.co/signin (mobile), 390 wide) ---------- */
+    .get-ff{padding:96px 32px 24px;}
+    .get-ff h1{font-family:var(--body); font-weight:800; font-size:40px; line-height:1;}
+    .get-ff p{margin-top:24px;}
+    .get-ff .btn{margin-top:48px;}
+    .get-ff__art{margin-top:48px; padding:0 32px; text-align:center;}
+    .art-laptop{width:228px; max-height:240px;}
+
+    .steps{padding:96px 32px 48px;}
+    .steps h1{font-family:var(--headline); font-weight:700; font-size:48px; line-height:.9; text-align:center;}
+    .steps ol{list-style:none; padding:24px 0 0;}
+    .steps li{margin-top:48px;}
+    .steps h2{font-family:var(--headline); font-weight:700; font-size:32px; line-height:1.1; color:var(--text-strong);}
+    .step__txt{max-width:600px;}
+    .step__txt p{margin-top:16px;}
+    .step__txt .btn{margin-top:24px;}
+    .step__img{display:block; width:100%; margin-top:32px;}
+    .step__img.framed{border-radius:8px;}
+
+    /* ---------- flip phone: 240x320 (src/Link/SpotifyLink.tsx), D-pad, no
+       touch. The height keeps 360px-wide smartphones out. ---------- */
+    @media (max-width:360px) and (max-height:480px){
+      body{font-size:14px; line-height:20px;}
+      .logo{left:12px; top:12px; width:56px;}
+      .get-ff, .steps{padding:40px 12px 16px;}
+      .get-ff h1{font-size:24px;}
+      .get-ff p{margin-top:12px;}
+      .get-ff .btn{margin-top:16px;}
+      /* the button at device=dumb: smaller, a 1.5px ring 2.5px out, and the
+         pressed layer on focus (the D-pad's selection) and disabled */
+      .btn{font-size:16px; line-height:1.1; padding:8px 12px; text-transform:none; white-space:normal;}
+      .btn img{width:18px; height:18px;}
+      .btn:focus{box-shadow:inset 0 0 0 99px var(--state-pressed), 0 0 0 2.5px var(--bg), 0 0 0 4px var(--brand);}
+      .btn:disabled, .btn[aria-disabled="true"]{box-shadow:inset 0 0 0 99px var(--state-pressed);}
+      /* pressing a focused button shows one 10% layer, not two; where a
+         pointer focus has already dropped the inset, the pressed layer stays */
+      .btn:focus:active{background-image:none;}
+      .btn:focus:not(:focus-visible):active{background-image:linear-gradient(var(--state-pressed), var(--state-pressed));}
+      .get-ff__art{margin-top:20px; padding:0;}
+      .art-laptop{width:120px;}
+    }
+
+    /* ---------- computer (Figma: 1920 x 1080 frames) ---------- */
+    @media (min-width:760px){
+      .phone-only{display:none;}
+      .logo{left:96px; top:48px; width:133px;}
+
+      .get-ff{display:flex; align-items:center; min-height:100vh; padding:0; box-sizing:border-box;}
+      .get-ff__copy{flex:0 0 49.5%; box-sizing:border-box; padding:96px;}
+      .get-ff h1{font-family:var(--headline); font-weight:700; font-size:72px; line-height:.9;}
+      .get-ff__art{flex:1 1 auto; margin:0; padding:96px 48px 96px 0; text-align:center;}
+      .art-phones{display:inline-block; width:534px;}
+      .art-laptop{display:none;}
+
+      .steps{padding:120px 48px 96px;}
+      .steps h1{font-size:72px;}
+      .steps h2{font-size:40px;}
+    }
+
+    @media (min-width:1000px){
+      .steps{padding:120px 96px 227px;}
+      .steps ol{display:flex; padding-top:72px;}
+      /* the text grows so the three pictures line up when the copy wraps
+         to different heights */
+      .steps li{flex:1 1 0; min-width:0; margin:24px 0 0 48px; display:flex; flex-direction:column;}
+      .steps li:first-child{margin-left:0;}
+      .step__txt{min-height:196px; flex:1 0 auto;}
+      .step__img{margin-top:48px;}
+    }
+    /* Figma annotation: 96 between the steps, 48 below 1400 */
+    @media (min-width:1400px){
+      .steps li{margin-left:96px;}
+    }
+  </style><script>(function(){const GTM_ID = "GTM-KRDL288W";
+const GTM_LAYER = "gtmDataLayer";
+
+    if(/(^|\.)dumb\.co$/.test(location.hostname)){
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script',GTM_LAYER,GTM_ID);
+    }
+  })();</script><script>
+  if(/(^|\.)dumb\.co$/.test(location.hostname)){
+    var ga = document.createElement("script"); ga.async = true;
+    ga.src = "https://www.googletagmanager.com/gtag/js?id=G-6J99WZC0Y0";
+    document.head.appendChild(ga);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag("js", new Date());
+    gtag("config", "G-6J99WZC0Y0");
+  }
+</script></head><body><a class="logo" href="/"><img src="/_astro/logo-white.C923ggdd_6iEmd.webp" alt="dumb.co" width="133" height="28"></a><!-- every browser but desktop Firefox --><main class="get-ff"><div class="get-ff__copy"><h1>visit this page on a firefox browser<span class="phone-only"> on a laptop</span></h1><p>for security reasons,&nbsp; signing in to ur google messages is only supported on firefox browser.</p><a class="btn" href="https://www.mozilla.org/firefox/new/" rel="noopener">visit firefox website<img src="/_astro/arrow.Csyl67lO.svg" alt="" width="24" height="24"></a></div><div class="get-ff__art"><img class="art-phones" src="/_astro/phones.CObfGn0w_Zij9Cq.webp" alt="" width="534" height="494"><img class="art-laptop" src="/_astro/laptop.Dc7fvhx6.svg" alt="" width="228" height="240" loading="lazy"></div></main><!-- desktop Firefox --><main class="steps"><h1>signin to ur google messages on ur dumbphone</h1><ol><li><div class="step__txt"><h2>1. add our extension to ur browser</h2><p>make sure to press “Allow extension to run in private windows” and to pin the extension to ur toolbar</p><a class="btn" href="https://dumb.co/downloads/dumb-down-login-1.5.8.xpi">add extension<img src="/_astro/arrow.Csyl67lO.svg" alt="" width="24" height="24"></a></div><img class="step__img" src="/_astro/step1.CAqjqygy_DJ1Fu.webp" srcset="/_astro/step1.CAqjqygy_Z28U8fd.webp 480w, /_astro/step1.CAqjqygy_ZG5BUG.webp 800w, /_astro/step1.CAqjqygy_DJ1Fu.webp 1200w" sizes="(min-width: 1000px) 33vw, 100vw" alt="" width="1200" height="675" loading="lazy"></li><li><div class="step__txt"><h2>2. click extension to signin</h2><p>scan the qr code and follow google’s guidance. u’ll be asked to signin with the email u use for google messages. the qr code will be shown for 30 seconds only, after which you will have to sign in again.</p></div><img class="step__img framed" src="/_astro/step2.CCcvp86o_Z2ko3KD.webp" srcset="/_astro/step2.CCcvp86o_ZKIYWE.webp 480w, /_astro/step2.CCcvp86o_G5vlR.webp 800w, /_astro/step2.CCcvp86o_Z2ko3KD.webp 1200w" sizes="(min-width: 1000px) 33vw, 100vw" alt="" width="1200" height="675" loading="lazy"></li><li><div class="step__txt"><h2>3. enjoy chatting on ur dumbphone :)</h2><p>make sure to press “Allow extension to run in private windows” and to pin the extension to ur toolbar</p></div><img class="step__img framed" src="/_astro/step3.DKe4QDIf_2c6wev.webp" srcset="/_astro/step3.DKe4QDIf_Z16P5xX.webp 480w, /_astro/step3.DKe4QDIf_kYpKy.webp 800w, /_astro/step3.DKe4QDIf_2c6wev.webp 1200w" sizes="(min-width: 1000px) 33vw, 100vw" alt="" width="1200" height="675" loading="lazy"></li></ol></main></body></html>
