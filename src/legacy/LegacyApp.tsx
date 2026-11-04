@@ -12,7 +12,6 @@ import Internship from "../Internship/Internship.tsx";
 import NotFound from "../NotFound";
 import AndroidDownload from "../Android/AndroidDownload.tsx";
 import AppsDownload from "../Android/AppsDownload.tsx";
-import DesktopDownload from "../Desktop/DesktopDownload.tsx";
 import AppRedirect from "../AppRedirect.tsx";
 import FSADownload from "../FSA/FSADownload.tsx";
 import SpotifyLink from "../Link/SpotifyLink.tsx";
@@ -34,9 +33,6 @@ export default function LegacyApp() {
             <Route path="/internship" element={<Internship />} />
             <Route path="/android" element={<AndroidDownload />} />
             <Route path="/apps" element={<AppsDownload />} />
-            <Route path="/signin" element={<DesktopDownload />} />
-            <Route path="/desktop-signin" element={<DesktopDownload />} />
-            <Route path="/desktop" element={<DesktopDownload />} />
             <Route path="/app" element={<AppRedirect />} />
             <Route path="/fsa" element={<FSADownload />} />
             {/* Spotify sign-in hand-off for the dumbphone: the phone's WebView
