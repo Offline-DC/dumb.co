@@ -5,6 +5,7 @@
  * Adding one: a line here and a <Route> in LegacyApp.tsx.
  *
  * /mobile isn't here: it is public/mobile/index.html, the subscription quiz.
+ * /signin (and /desktop, /desktop-signin) aren't either: src/site/SignIn.astro.
  *
  * ssr: true renders the page's own component into the HTML at build time
  * (so search engines read it) and wakes it up in the browser; the rest are
@@ -17,9 +18,6 @@ export const LEGACY_ROUTES: { path: string; title: string; description: string; 
   { path: "internship", ssr: true, title: "Internships at dumb.co", description: "Work on dumb.co: what the internship involves, who we are looking for, and how to apply." },
   { path: "android", title: "Android downloads - dumb.co", description: "Download the dumb down launcher for Android.", sitemap: false },
   { path: "apps", title: "App downloads - dumb.co", description: "Downloads for dumb.co apps.", sitemap: false },
-  { path: "desktop", title: "Desktop sign in - dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
-  { path: "desktop-signin", title: "Desktop sign in - dumb.co", description: "Sign in to dumb.co on desktop.", sitemap: false },
-  { path: "signin", title: "Sign in - dumb.co", description: "Sign in to dumb.co.", sitemap: false },
   { path: "app", title: "dumb.co", description: "Opening the dumb down app.", sitemap: false },
   { path: "fsa", title: "Dumb Security Key - dumb.co", description: "The desktop helper that lets your dumbphone sign in to smart txt with a USB security key.", sitemap: false },
   { path: "link", title: "Connect Spotify - dumb.co", description: "Sign in to Spotify for your dumbphone.", sitemap: false },
