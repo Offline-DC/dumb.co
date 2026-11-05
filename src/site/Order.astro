@@ -1,0 +1,404 @@
+---
+/**
+ * /order -- after paying on the unified-checkout Stripe Payment Link, Stripe
+ * redirects every buyer here: dumb.co/order?session_id={CHECKOUT_SESSION_ID}.
+ *
+ * The buyer gives each phone on the order a name, email and plan. One phone:
+ * their own details are already filled in, to confirm or change for a gift.
+ * Two to five: one block per phone. Nothing is charged here; each plan's
+ * first payment is 7 days after that phone is delivered (confirmed Nov 5;
+ * was 10).
+ *
+ * Talks to offline-payments:
+ *   GET  /checkout/orders/:sessionId          the order's phones + plans on offer
+ *   POST /checkout/orders/:sessionId/phones   save them
+ * The session ID is the only key, so the API never returns an address and
+ * masks emails; an email left blank keeps the one already on file.
+ * 404 right after payment means Stripe's webhook hasn't landed yet, so the
+ * page polls for ~30 seconds before giving up.
+ *
+ * Plain HTML, CSS and a little JS, same tokens and button as /signin.
+ * Not in the sitemap and noindex: it only means anything with a session ID.
+ */
+import Analytics from "./Analytics.astro";
+import { webp } from "./lib/assets";
+import fontsCss from "../../public/fonts.css?raw";
+import cheltenham from "./assets/fonts/cheltenham-bold-extra-condensed.otf?url";
+import logo from "./assets/signin/logo-white.png";
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
+const cheltenhamFace = `@font-face{font-family:"Cheltenham";src:url("${cheltenham}") format("opentype");font-weight:700;font-style:normal;font-display:swap;}`;
+
+/* offline-payments. PUBLIC_PAYMENT_API_URL overrides it (e.g. a local
+   server while testing: PUBLIC_PAYMENT_API_URL=http://localhost:3000). */
+const API_URL = (import.meta.env.PUBLIC_PAYMENT_API_URL || "https://offline-payments-cf16686ef076.herokuapp.com").replace(/\/$/, "");
+
+/* Monthly prices shown beside each plan (Kunal's handoff, Nov 4). Only the
+   labels live here; what's billed comes from the Stripe price on the line. */
+const PLAN_INFO = {
+  dumb: { label: "dumb", price: "$25.99/mo" },
+  dumber: { label: "dumber", price: "$20.99/mo" },
+  dumbest: { label: "dumbest", price: "$15.99/mo" },
+};
+
+const img = { logo: await webp(logo, { width: 280 }) };
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ur order - dumb.co</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0f0f0f" />
+  <link rel="icon" type="image/png" href={`${base}favicon.png`} />
+  <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
+  <style set:html={fontFaces + cheltenhamFace}></style>
+  <style is:inline>
+    :root{
+      --bg:#0f0f0f;
+      --surface:#1c1c1a;
+      --line:#3a3a36;
+      --text-strong:#fafaf0;
+      --text-weak:#b4b4ad;
+      --brand:#faf594;
+      --on-brand:#14140c;
+      --error:#ff9b8a;
+      --state-hovered:rgba(15,15,15,.05);
+      --state-pressed:rgba(15,15,15,.1);
+      --headline:"Cheltenham", Georgia, serif;
+      --body:"Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    html,body{margin:0; padding:0; background:var(--bg); color:var(--text-strong);}
+    body{font-family:var(--body); font-weight:500; font-size:18px; line-height:26px; -webkit-text-size-adjust:100%;}
+    h1,h2,p,fieldset,legend{margin:0; padding:0;}
+    fieldset{border:0; min-width:0;}
+    p{color:var(--text-weak);}
+    a{color:var(--brand);}
+
+    .logo{position:absolute; left:31px; top:32px; display:block; width:71px; line-height:0;}
+    .logo img{width:100%;}
+    .logo:focus{outline:3px solid var(--brand); outline-offset:4px;}
+
+    main{max-width:640px; margin:0 auto; padding:112px 24px 64px;}
+    h1{font-family:var(--headline); font-weight:700; font-size:48px; line-height:.95;}
+    .lead{margin-top:16px;}
+
+    /* only the current state shows */
+    .state{display:none;}
+    .state.on{display:block;}
+
+    .phone{margin-top:32px; padding:24px; background:var(--surface); border-radius:16px;}
+    .phone legend{float:left; width:100%; margin-bottom:8px; font-family:var(--headline); font-weight:700; font-size:28px; line-height:1.1; color:var(--text-strong);}
+    .phone legend + *{clear:both;}
+
+    .field{display:block; margin-top:20px;}
+    .field__label{display:block; font-size:16px; line-height:22px; color:var(--text-strong);}
+    .field__hint{display:block; font-size:14px; line-height:20px; color:var(--text-weak);}
+    .field input{
+      display:block; width:100%; box-sizing:border-box; margin-top:8px;
+      background:var(--bg); color:var(--text-strong); border:1px solid var(--line); border-radius:12px;
+      padding:12px 14px; font:inherit; font-size:18px;
+    }
+    .field input:focus{outline:2px solid var(--brand); outline-offset:1px; border-color:transparent;}
+    .field input[aria-invalid="true"]{border-color:var(--error);}
+    .field__error{display:block; margin-top:6px; font-size:14px; line-height:20px; color:var(--error);}
+    .field__error:empty{display:none;}
+
+    .plans{margin-top:8px;}
+    .plan{display:flex; align-items:center; justify-content:space-between; margin-top:8px; padding:12px 16px;
+      border:1px solid var(--line); border-radius:12px; cursor:pointer;}
+    .plan input{position:absolute; opacity:0; width:1px; height:1px;}
+    .plan__name{font-weight:800; text-transform:lowercase;}
+    .plan__price{color:var(--text-weak); font-size:16px;}
+    .plan.checked{border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand);}
+    .plan.focus{outline:2px solid var(--brand); outline-offset:2px;}
+
+    .actions{margin-top:32px;}
+    .note{margin-top:16px; font-size:16px; line-height:22px;}
+    .form-error{margin-top:16px; color:var(--error);}
+    .form-error:empty{display:none;}
+
+    /* the dumb design system's primary button, as on /signin */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      background-color:var(--brand); color:var(--on-brand); border:0; cursor:pointer;
+      border-radius:96px; padding:12px 20px 14px; text-decoration:none;
+      font-family:var(--body); font-weight:800; font-size:20px; line-height:1.4;
+      text-transform:lowercase; white-space:nowrap; -webkit-tap-highlight-color:transparent;
+    }
+    @media (hover:hover){ .btn:hover{background-image:linear-gradient(var(--state-hovered), var(--state-hovered));} }
+    .btn:active{background-image:linear-gradient(var(--state-pressed), var(--state-pressed));}
+    .btn:focus{outline:2px solid transparent; outline-offset:2px; box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--brand);}
+    .btn:focus:not(:focus-visible){box-shadow:none; outline:none;}
+    .btn:disabled{opacity:.38; cursor:default;}
+
+    .summary{margin-top:32px;}
+    .summary li{margin-top:12px; color:var(--text-strong);}
+    .summary span{color:var(--text-weak);}
+
+    @media (min-width:760px){
+      .logo{left:96px; top:48px; width:133px;}
+      main{padding-top:160px;}
+      h1{font-size:72px; line-height:.9;}
+    }
+  </style>
+  <Analytics />
+</head>
+<body>
+  <a class="logo" href={base}><img src={img.logo} alt="dumb.co" width="133" height="28" /></a>
+
+  <main>
+    <section class="state on" data-state="loading" aria-live="polite">
+      <h1>finding ur order…</h1>
+      <p class="lead">one sec.</p>
+    </section>
+
+    <section class="state" data-state="waiting" aria-live="polite">
+      <h1>payment received</h1>
+      <p class="lead">we're still setting up ur order. this page will update in a moment.</p>
+    </section>
+
+    <section class="state" data-state="missing">
+      <h1>we couldn't find this order</h1>
+      <p class="lead">if u just paid, ur order is safe and we've emailed u a receipt. <a href={`${base}contact`}>get in touch</a> and we'll sort out who each phone is for.</p>
+    </section>
+
+    <section class="state" data-state="error">
+      <h1>something went wrong</h1>
+      <p class="lead">ur order is safe. <span data-error-detail>try again in a minute.</span></p>
+      <p class="actions"><button class="btn" type="button" data-retry>try again</button></p>
+    </section>
+
+    <section class="state" data-state="locked">
+      <h1>ur phone is on its way</h1>
+      <p class="lead">ur order is already being packed, so these details can't be changed here anymore. need a change? <a href={`${base}contact`}>get in touch</a>.</p>
+      <ul class="summary" data-summary></ul>
+    </section>
+
+    <section class="state" data-state="form">
+      <h1 data-form-title>thanks for ur order</h1>
+      <p class="lead" data-form-lead></p>
+      <form data-form novalidate>
+        <div data-phones></div>
+        <p class="form-error" data-form-error role="alert"></p>
+        <p class="actions"><button class="btn" type="submit" data-submit>save details</button></p>
+        <p class="note">no charge for plans today. each phone's first plan payment is 7 days after it arrives, then monthly.</p>
+      </form>
+    </section>
+
+    <section class="state" data-state="saved" aria-live="polite">
+      <h1>all set</h1>
+      <p class="lead" data-saved-lead></p>
+      <ul class="summary" data-saved-summary></ul>
+      <p class="actions"><button class="btn" type="button" data-edit>edit details</button></p>
+    </section>
+  </main>
+
+  <script is:inline define:vars={{ API_URL, PLAN_INFO }}>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var sessionId = params.get("session_id") || "";
+    var view = null;
+    var polls = 0;
+    var MAX_POLLS = 10; // ~30s at 3s
+
+    function $(sel, root) { return (root || document).querySelector(sel); }
+    function el(tag, attrs, text) {
+      var n = document.createElement(tag);
+      if (attrs) for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (text != null) n.textContent = text; // never innerHTML: names come from buyers
+      return n;
+    }
+    function show(state) {
+      var all = document.querySelectorAll("[data-state]");
+      for (var i = 0; i < all.length; i++) all[i].classList.toggle("on", all[i].getAttribute("data-state") === state);
+    }
+    function planLabel(t) { return (PLAN_INFO[t] && PLAN_INFO[t].label) || t; }
+    function fail(msg) {
+      $("[data-error-detail]").textContent = msg || "try again in a minute.";
+      show("error");
+    }
+
+    function summary(list, phones) {
+      list.textContent = "";
+      phones.forEach(function (p) {
+        var li = el("li", null, "phone " + p.position + ": " + (p.name || "no name yet") + " ");
+        li.appendChild(el("span", null, "· " + (p.plan ? planLabel(p.plan) : "no plan") + (p.email ? " · " + p.email : "")));
+        list.appendChild(li);
+      });
+    }
+
+    function field(name, label, hint, input) {
+      var wrap = el("label", { class: "field" });
+      wrap.appendChild(el("span", { class: "field__label" }, label));
+      if (hint) wrap.appendChild(el("span", { class: "field__hint" }, hint));
+      wrap.appendChild(input);
+      wrap.appendChild(el("span", { class: "field__error", "data-error-for": name }));
+      return wrap;
+    }
+
+    function renderForm() {
+      var one = view.quantity === 1;
+      $("[data-form-title]").textContent = one ? "thanks for ur order" : "who's each phone for?";
+      $("[data-form-lead]").textContent = one
+        ? "check the details for ur phone. buying it as a gift? put their name and email instead, and we'll send them the activation link when it arrives."
+        : "give each phone a name, email and plan. we'll send each person their activation link when their phone arrives.";
+
+      var box = $("[data-phones]");
+      box.textContent = "";
+      view.phones.forEach(function (p) {
+        var pos = p.position;
+        var fs = el("fieldset", { class: "phone" });
+        fs.appendChild(el("legend", null, one ? "ur phone" : "phone " + pos + " of " + view.quantity));
+
+        var name = el("input", { type: "text", name: "name-" + pos, autocomplete: one ? "name" : "off", maxlength: "100", required: "" });
+        name.value = p.name || "";
+        fs.appendChild(field("name-" + pos, "name", "who'll use this phone", name));
+
+        var email = el("input", { type: "email", name: "email-" + pos, autocomplete: one ? "email" : "off", maxlength: "255", placeholder: p.email || "" });
+        fs.appendChild(field("email-" + pos, "email",
+          p.email ? "leave blank to keep " + p.email : "where their activation link goes", email));
+
+        var group = el("div", { class: "field", role: "radiogroup", "aria-label": "plan for phone " + pos });
+        group.appendChild(el("span", { class: "field__label" }, "plan"));
+        var plans = el("div", { class: "plans" });
+        view.plans.forEach(function (t) {
+          var opt = el("label", { class: "plan" });
+          var radio = el("input", { type: "radio", name: "plan-" + pos, value: t });
+          if (p.plan === t) radio.checked = true;
+          opt.appendChild(radio);
+          opt.appendChild(el("span", { class: "plan__name" }, planLabel(t)));
+          opt.appendChild(el("span", { class: "plan__price" }, (PLAN_INFO[t] && PLAN_INFO[t].price) || ""));
+          plans.appendChild(opt);
+        });
+        group.appendChild(plans);
+        group.appendChild(el("span", { class: "field__error", "data-error-for": "plan-" + pos }));
+        fs.appendChild(group);
+        box.appendChild(fs);
+      });
+      syncPlans();
+      $("[data-form-error]").textContent = "";
+      show("form");
+    }
+
+    // radios are hidden; their label shows the state
+    function syncPlans() {
+      var radios = document.querySelectorAll(".plan input");
+      for (var i = 0; i < radios.length; i++) radios[i].parentNode.classList.toggle("checked", radios[i].checked);
+    }
+    document.addEventListener("change", function (e) { if (e.target.matches(".plan input")) syncPlans(); });
+    document.addEventListener("focusin", function (e) { if (e.target.matches(".plan input")) e.target.parentNode.classList.add("focus"); });
+    document.addEventListener("focusout", function (e) { if (e.target.matches(".plan input")) e.target.parentNode.classList.remove("focus"); });
+
+    function clearErrors() {
+      var errs = document.querySelectorAll("[data-error-for]");
+      for (var i = 0; i < errs.length; i++) errs[i].textContent = "";
+      var inputs = document.querySelectorAll("[aria-invalid]");
+      for (var j = 0; j < inputs.length; j++) inputs[j].removeAttribute("aria-invalid");
+      $("[data-form-error]").textContent = "";
+    }
+    function setError(name, msg) {
+      var slot = $('[data-error-for="' + name + '"]');
+      if (slot) slot.textContent = msg;
+      var input = $('[name="' + name + '"]');
+      if (input && input.type !== "radio") input.setAttribute("aria-invalid", "true");
+    }
+
+    function collect() {
+      var form = $("[data-form]");
+      var errors = 0;
+      var phones = view.phones.map(function (p) {
+        var pos = p.position;
+        var name = form.elements["name-" + pos].value.trim();
+        var email = form.elements["email-" + pos].value.trim();
+        var checked = $('input[name="plan-' + pos + '"]:checked');
+        if (!name) { setError("name-" + pos, "enter a name"); errors++; }
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("email-" + pos, "enter a valid email"); errors++; }
+        if (!checked) { setError("plan-" + pos, "choose a plan"); errors++; }
+        return { position: pos, name: name, email: email, plan: checked ? checked.value : null };
+      });
+      return errors ? null : phones;
+    }
+
+    function request(method, path, body) {
+      return fetch(API_URL + "/checkout/orders/" + encodeURIComponent(sessionId) + path, {
+        method: method,
+        headers: body ? { "Content-Type": "application/json" } : {},
+        body: body ? JSON.stringify(body) : undefined,
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) { return { status: res.status, data: data }; });
+      });
+    }
+
+    function load() {
+      request("GET", "").then(function (r) {
+        if (r.status === 200) {
+          view = r.data;
+          if (!view.editable) { summary($("[data-summary]"), view.phones); show("locked"); }
+          else renderForm();
+        } else if (r.status === 404 && polls < MAX_POLLS) {
+          polls++;
+          show("waiting");
+          setTimeout(load, 3000);
+        } else if (r.status === 404) {
+          show("missing");
+        } else if (r.status === 429) {
+          fail("too many tries from this connection. wait a bit and try again.");
+        } else {
+          fail();
+        }
+      }).catch(function () { fail("check ur connection and try again."); });
+    }
+
+    $("[data-form]").addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearErrors();
+      var phones = collect();
+      if (!phones) {
+        $("[data-form-error]").textContent = "check the highlighted details.";
+        return;
+      }
+      var btn = $("[data-submit]");
+      btn.disabled = true;
+      btn.textContent = "saving…";
+      request("POST", "/phones", { phones: phones }).then(function (r) {
+        if (r.status === 200) {
+          view = r.data;
+          $("[data-saved-lead]").textContent = view.quantity === 1
+            ? "we'll email the activation link when the phone arrives."
+            : "we'll email each person their activation link when their phone arrives.";
+          summary($("[data-saved-summary]"), view.phones);
+          show("saved");
+        } else if (r.status === 400 && r.data && r.data.details) {
+          r.data.details.forEach(function (d) {
+            if (d.position) setError(d.field + "-" + d.position, d.message.toLowerCase());
+          });
+          $("[data-form-error]").textContent = "check the highlighted details.";
+        } else if (r.status === 409) {
+          view.editable = false;
+          summary($("[data-summary]"), view.phones);
+          show("locked");
+        } else if (r.status === 429) {
+          $("[data-form-error]").textContent = "too many tries. wait a bit and try again.";
+        } else {
+          $("[data-form-error]").textContent = "couldn't save just now. try again in a minute.";
+        }
+      }).catch(function () {
+        $("[data-form-error]").textContent = "couldn't reach us. check ur connection and try again.";
+      }).then(function () {
+        btn.disabled = false;
+        btn.textContent = "save details";
+      });
+    });
+
+    $("[data-retry]").addEventListener("click", function () { polls = 0; show("loading"); load(); });
+    $("[data-edit]").addEventListener("click", function () { if (view.editable) renderForm(); else show("locked"); });
+
+    if (!/^cs_(test|live)_[A-Za-z0-9]{10,100}$/.test(sessionId)) show("missing");
+    else load();
+  })();
+  </script>
+</body>
+</html>
