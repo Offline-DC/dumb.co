@@ -9,7 +9,8 @@
  * first payment is 7 days after that phone is delivered (confirmed Nov 5;
  * was 10).
  *
- * Talks to offline-payments:
+ * Talks straight to offline-dc-twilio (the Dumbcare back end, which holds the
+ * order), from the browser:
  *   GET  /checkout/orders/:sessionId          the order's phones + plans on offer
  *   POST /checkout/orders/:sessionId/phones   save them
  * The session ID is the only key, so the API never returns an address and
@@ -30,9 +31,10 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
 const cheltenhamFace = `@font-face{font-family:"Cheltenham";src:url("${cheltenham}") format("opentype");font-weight:700;font-style:normal;font-display:swap;}`;
 
-/* offline-payments. PUBLIC_PAYMENT_API_URL overrides it (e.g. a local
-   server while testing: PUBLIC_PAYMENT_API_URL=http://localhost:3000). */
-const API_URL = (import.meta.env.PUBLIC_PAYMENT_API_URL || "https://offline-payments-cf16686ef076.herokuapp.com").replace(/\/$/, "");
+/* offline-dc-twilio (production). PUBLIC_ORDER_API_URL overrides it, e.g. the
+   sandbox while testing:
+   PUBLIC_ORDER_API_URL=https://offline-dc-backend-sandbox-52e95f5b884b.herokuapp.com npm run dev */
+const API_URL = (import.meta.env.PUBLIC_ORDER_API_URL || "https://offline-dc-backend-ba4815b2bcc8.herokuapp.com").replace(/\/$/, "");
 
 /* Monthly prices shown beside each plan (Kunal's handoff, Nov 4). Only the
    labels live here; what's billed comes from the Stripe price on the line. */
