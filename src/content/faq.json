@@ -19,7 +19,7 @@
     },
     {
       "question": "how does syncing work?",
-      "answer": "the syncing feature is **only** included with the dumb and dumber plans. using it is not required to use either plan.\n\nchoosing to sync the dumbphone 2 with your smartphone allows texts and calls to be forwarded to your dumbphone. due to current tech, outgoing calls are made from your dumbphone's number, while all incoming calls can be forwarded to your dumbphone. when texting from your dumbphone via smart txt, non-dumbphone users won't be able to tell the difference.",
+      "answer": "the syncing feature is **only** included with the dumb and dumber plans. \n\nchoosing to sync the dumbphone 2 with your smartphone allows texts and calls to be forwarded to your dumbphone. due to current tech, outgoing calls are made from your dumbphone's number, while all incoming calls can be forwarded to your dumbphone. when texting from your dumbphone via smart txt, non-dumbphone users won't be able to tell the difference.",
       "category": "general",
       "hidden": false
     },
@@ -31,7 +31,7 @@
     },
     {
       "question": "do i have to sync with my smartphone?",
-      "answer": "syncing is not required, but is an added feature that comes with our dumb and dumber plans. you do not have to use the syncing setup to access these plans. for those that want zero ties to their smartphone and limited apps, the dumbest plan is our most minimalistic.",
+      "answer": "syncing is an added feature that comes with our **dumb** and **dumber** plans. you do not have to use the syncing setup to access these plans, the dumbphone can be used as a standalone device on all plan tiers. for those that want zero ties to their smartphone and limited apps, the dumbest plan is our most minimalistic.",
       "category": "general",
       "hidden": false
     },
