@@ -18,6 +18,8 @@
  * every browser but desktop Firefox; a few lines of ES5 in <head> switch to
  * the steps there before the first paint, so there is no flash. Mobile-first
  * CSS without flex gap or grid, which the phone's engine may not have.
+ * Step 1's picture is a screen recording that only desktop Firefox loads
+ * (the script at the end of <body>).
  */
 import Analytics from "./Analytics.astro";
 import { webp, webpSet } from "./lib/assets";
@@ -31,6 +33,15 @@ import arrow from "./assets/signin/arrow.svg";
 import step1 from "./assets/signin/step1.png";
 import step2 from "./assets/signin/step2.png";
 import step3 from "./assets/signin/step3.png";
+/* step 1's screen recording, silent, cut down from the 2720x1530 original:
+   VP9 WebM first, which every desktop Firefox plays (Linux ones without
+   H.264 too), H.264 MP4 as the fallback. ?url: copied and hashed as they
+   are. Re-make them from the original with:
+     ffmpeg -i in.mp4 -an -vf scale=1280:-2:flags=lanczos -pix_fmt yuv420p -c:v libvpx-vp9 -b:v 0 -crf 38 -row-mt 1 -tile-columns 1 -g 150 -pass 1 -passlogfile /tmp/step1 -f null /dev/null
+     ffmpeg -i in.mp4 -an -vf scale=1280:-2:flags=lanczos -pix_fmt yuv420p -c:v libvpx-vp9 -b:v 0 -crf 38 -row-mt 1 -tile-columns 1 -g 150 -pass 2 -passlogfile /tmp/step1 -map_metadata -1 step1.webm
+     ffmpeg -i in.mp4 -an -vf scale=1280:-2:flags=lanczos -pix_fmt yuv420p -c:v libx264 -preset slow -crf 25 -level 4.0 -map_metadata -1 -movflags +faststart step1.mp4 */
+import step1Webm from "./assets/signin/step1.webm?url";
+import step1Mp4 from "./assets/signin/step1.mp4?url";
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const canonical = new URL("signin", new URL(base, Astro.site ?? "https://dumb.co")).href;
@@ -52,7 +63,7 @@ const STEP_SIZES = "(min-width: 1000px) 33vw, 100vw";
 const steps = [
   { h: "1. add our extension to ur browser",
     p: "make sure to press “Allow extension to run in private windows” and to pin the extension to ur toolbar",
-    button: true, framed: false },
+    button: true, framed: false, video: { webm: step1Webm, mp4: step1Mp4 } },
   { h: "2. click extension to signin",
     p: "scan the qr code and follow google’s guidance. u’ll be asked to signin with the email u use for google messages. the qr code will be shown for 30 seconds only, after which you will have to sign in again.",
     button: false, framed: true },
@@ -168,6 +179,13 @@ const steps = [
     .step__txt .btn{margin-top:24px;}
     .step__img{display:block; width:100%; margin-top:32px;}
     .step__img.framed{border-radius:8px;}
+    /* step 1's video: 16:9 before anything has loaded, and the brand ring
+       while it or any of its controls has focus. Not :focus-visible only:
+       once Tab moves into the controls, Firefox fades its control bar, and
+       its own ring with it, 2s later, which would leave nothing showing
+       where focus is. So a mouse click shows the ring too. */
+    .step__video{height:auto; aspect-ratio:16/9;}
+    .step__video:focus{outline:2px solid var(--brand); outline-offset:2px;}
 
     /* ---------- flip phone: 240x320 (src/Link/SpotifyLink.tsx), D-pad, no
        touch. The height keeps 360px-wide smartphones out. ---------- */
@@ -211,7 +229,9 @@ const steps = [
 
     @media (min-width:1000px){
       .steps{padding:120px 96px 227px;}
-      .steps ol{display:flex; padding-top:72px;}
+      /* Figma: 96 from the title to the steps, which have 24 of padding on
+         top (the li margin), so 120 in all */
+      .steps ol{display:flex; padding-top:96px;}
       /* the text grows so the three pictures line up when the copy wraps
          to different heights */
       .steps li{flex:1 1 0; min-width:0; margin:24px 0 0 48px; display:flex; flex-direction:column;}
@@ -253,11 +273,46 @@ const steps = [
             <p>{s.p}</p>
             {s.button && <a class="btn" href={XPI_URL}>add extension<img src={arrow.src} alt="" width="24" height="24" /></a>}
           </div>
-          <img class={s.framed ? "step__img framed" : "step__img"} src={img.steps[i].src} srcset={img.steps[i].srcset}
-               sizes={STEP_SIZES} alt="" width="1200" height="675" loading="lazy" />
+          {s.video
+            ? <video class="step__img step__video" width="1280" height="720" muted loop playsinline controls preload="none"
+                     aria-label="screen recording: adding the extension in firefox"
+                     data-poster={img.steps[i].src} data-webm={s.video.webm} data-mp4={s.video.mp4}></video>
+            : <img class={s.framed ? "step__img framed" : "step__img"} src={img.steps[i].src} srcset={img.steps[i].srcset}
+                   sizes={STEP_SIZES} alt="" width="1200" height="675" loading="lazy" />}
         </li>
       ))}
     </ol>
   </main>
+
+  <!-- step 1's video loads in desktop Firefox only, so no other browser (the
+       flip phone least of all) fetches it or its thumbnail. It plays muted on
+       a loop, like a gif, and its controls pause it or make it full screen.
+       When the computer asks for reduced motion, or Firefox is set to block
+       autoplay, it waits on the thumbnail (the Figma frame's "step 1
+       thumbnail") for the play button instead, and downloads no video until
+       it's pressed. -->
+  <script is:inline>
+    (function () {
+      if (!/(^|\s)ff(\s|$)/.test(document.documentElement.className)) return;
+      var still = (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+        (navigator.getAutoplayPolicy && navigator.getAutoplayPolicy("mediaelement") === "disallowed");
+      var kinds = [["webm", "video/webm"], ["mp4", "video/mp4"]];
+      var vids = document.querySelectorAll(".step__video");
+      for (var i = 0; i < vids.length; i++) {
+        var v = vids[i];
+        v.muted = true;
+        v.poster = v.getAttribute("data-poster");
+        // autoplay alone makes Firefox load the video; preload stays "none",
+        // so no video downloads while it waits for the play button
+        if (!still) v.autoplay = true;
+        for (var k = 0; k < kinds.length; k++) {
+          var s = document.createElement("source");
+          s.src = v.getAttribute("data-" + kinds[k][0]);
+          s.type = kinds[k][1];
+          v.appendChild(s);
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
