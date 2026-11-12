@@ -1,0 +1,9 @@
+/* Helvetica Now Display, the site's body face (licensed; the files live in
+   public/fonts, from the team's Google Drive "fonts" folder). Paths are
+   relative to this file so they work under the preview's sub-path too. A
+   weight whose file is missing simply falls back to Helvetica Neue. */
+@font-face{font-family:"Helvetica Now Display";src:url("fonts/HelveticaNowDisplay-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("fonts/HelveticaNowDisplay-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("fonts/HelveticaNowDisplay-Bold.woff2") format("woff2");font-weight:600 700;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("fonts/HelveticaNowDisplay-ExtraBold.woff2") format("woff2");font-weight:800;font-style:normal;font-display:swap;}
+@font-face{font-family:"Helvetica Now Display";src:url("fonts/HelveticaNowDisplay-Black.woff2") format("woff2");font-weight:900;font-style:normal;font-display:swap;}
