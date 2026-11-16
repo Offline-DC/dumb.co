@@ -515,10 +515,14 @@
     // two quick questions" and the DUMBEST card excludes streaming/sync
     // features entirely, which only makes sense if no-smartphone always
     // lands on DUMBEST.
-    if(state.smartphone === true){
-      return state.music ? 'DUMB' : 'DUMBER';
-    }
-    return 'DUMBEST';
+    //
+    // UPDATE (nov 2026, customer report): streaming (spotify / apple
+    // music / podcasts) is only on DUMB, so "dumbphone only + wants
+    // music" must land on DUMB, not DUMBEST -- DUMBEST can't stream.
+    // Music now wins first; the smartphone answer only splits the
+    // no-music case (DUMBER companion vs. DUMBEST standalone).
+    if(state.music) return 'DUMB';
+    return state.smartphone === true ? 'DUMBER' : 'DUMBEST';
   }
 
   function showResult(){
@@ -533,7 +537,15 @@
     document.getElementById('result-plan-name').className = 'plan-badge' + (titleClass ? ' ' + titleClass : '');
     document.getElementById('result-plan-name').textContent = plan;
     document.getElementById('result-price').textContent = data.price;
-    document.getElementById('result-subtitle').textContent = data.subtitle;
+    // dumbphone-only users can now land on DUMB (for music). The plan's
+    // smartphone-companion copy doesn't apply to them, so the subtitle,
+    // "does" list and number advice follow the smartphone answer.
+    const standalone = state.smartphone === false;
+    const numberSrc = standalone ? PLAN_DATA.DUMBEST : data;
+    const subtitle = (standalone && plan === 'DUMB')
+      ? "music + podcasts on ur dumbphone, no smartphone needed"
+      : data.subtitle;
+    document.getElementById('result-subtitle').textContent = subtitle;
 
     const illustEl = document.getElementById('result-illust');
     illustEl.src = ILLUST_SRC[data.illust];
@@ -541,12 +553,13 @@
 
     const doesEl = document.getElementById('result-does');
     doesEl.innerHTML = '';
-    data.does.forEach(txt => {
+    const does = standalone ? [] : data.does;
+    does.forEach(txt => {
       const li = document.createElement('li');
       li.textContent = txt;
       doesEl.appendChild(li);
     });
-    doesEl.style.display = data.does.length ? 'flex' : 'none';
+    doesEl.style.display = does.length ? 'flex' : 'none';
 
     const featEl = document.getElementById('result-features');
     featEl.innerHTML = '';
@@ -558,8 +571,8 @@
       featEl.appendChild(div);
     });
 
-    document.getElementById('result-number-headline').textContent = data.numberHeadline;
-    document.getElementById('result-number-body').innerHTML = data.numberBody;
+    document.getElementById('result-number-headline').textContent = numberSrc.numberHeadline;
+    document.getElementById('result-number-body').innerHTML = numberSrc.numberBody;
 
     const cta = document.getElementById('result-cta');
     cta.className = 'btn btn-primary';
