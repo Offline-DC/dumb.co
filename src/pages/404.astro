@@ -23,6 +23,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     var moved = { "faq/videos": "faq" };
     var here = location.pathname.slice(base.length).replace(/\/+$/, "");
     if (moved[here] !== undefined) location.replace(base + moved[here]);
+    /* activation links (dumb.co/activate/<token>, emailed at delivery, and
+       Gigs Connect's way back): one page serves every token, which it reads
+       from the fragment -- so the token never reaches a server or a Referer */
+    var act = /^activate\/([A-Za-z0-9_-]{43})$/.exec(here);
+    if (act) location.replace(base + "activate" + location.search + "#" + act[1]);
   </script>
 </head>
 <body>

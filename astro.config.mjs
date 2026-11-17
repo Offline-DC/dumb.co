@@ -45,7 +45,7 @@ export default defineConfig({
       customSitemaps: [new URL(`${base}sitemap-products.xml`, site).href],
       filter: (page) => {
         const path = new URL(page).pathname.replace(base, "").replace(/^\/|\.html$/g, "");
-        return !hidden.has(path) && !["faqs", "phone", "setup", "support", "404", "signin", "desktop", "desktop-signin", "order"].includes(path);
+        return !hidden.has(path) && !["faqs", "phone", "setup", "support", "404", "signin", "desktop", "desktop-signin", "order", "activate"].includes(path);
       },
     }),
   ],
