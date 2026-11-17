@@ -13,10 +13,13 @@
  * Talks straight to offline-dc-twilio from the browser (src/routes/
  * activationRoutes.js there). The token is the only key, so the API returns
  * no ICCID, IMEI, voucher code or full email:
- *   GET  /activate/:token              the page's view (status says which screen)
- *   POST /activate/:token/confirm      { confirmed: true, imei }   checkbox + IMEI ending
- *   POST /activate/:token/not_right    pauses activation, tells our team
- *   POST /activate/:token/session      { url } of a Gigs Connect Session: go there now
+ *   POST /activate/view             the page's view (status says which screen)
+ *   POST /activate/confirm          { confirmed: true, imei }   checkbox + IMEI ending
+ *   POST /activate/not_right        pauses activation, tells our team
+ *   POST /activate/session          { url } of a Gigs Connect Session: go there now
+ *   POST /activate/porting_session  { url } to finish keeping an old number
+ * The token always goes in the JSON body ({ token, ... }), never the API URL:
+ * request paths end up in the backend's access logs, bodies don't.
  *
  * Screens (agreed with Kunal, Nov 16): check the details and tick one box,
  * type the end of the IMEI from the box (5 tries), then activate in Connect
@@ -371,11 +374,13 @@ const img = { logo: await webp(logo, { width: 280 }) };
       show("live");
     }
 
-    function api(method, path, body) {
-      return fetch(API_URL + "/activate/" + encodeURIComponent(token) + path, {
-        method: method,
-        headers: body ? { "Content-Type": "application/json" } : {},
-        body: body ? JSON.stringify(body) : undefined,
+    // Every call is a POST with the token in the body (see the top of this file).
+    function api(action, body) {
+      var payload = Object.assign({}, body || {}, { token: token });
+      return fetch(API_URL + "/activate/" + action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
         referrerPolicy: "no-referrer",
         cache: "no-store",
       }).then(function (res) {
@@ -384,7 +389,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
     }
 
     function load() {
-      api("GET", "").then(function (r) {
+      api("view").then(function (r) {
         if (r.status === 200) {
           // Back from Connect with success: keep the "switching on" screen up
           // and poll until Gigs tells us the line is live.
@@ -424,7 +429,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
       }
       var btn = $("[data-confirm-submit]");
       btn.disabled = true;
-      api("POST", "/confirm", { confirmed: true, imei: imei }).then(function (r) {
+      api("confirm", { confirmed: true, imei: imei }).then(function (r) {
         if (r.status === 200 || r.status === 409 || r.status === 423) return render(r.data);
         if (r.status === 422 && r.data.error === "imei_mismatch") {
           input.setAttribute("aria-invalid", "true");
@@ -445,7 +450,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
     $("[data-wrong-send]").addEventListener("click", function () {
       var btn = this;
       btn.disabled = true;
-      api("POST", "/not_right").then(function (r) {
+      api("not_right").then(function (r) {
         if (r.status === 200 || r.status === 409) return render(r.data);
         fail("couldn't send that just now. call us instead.");
       }).catch(function () { fail("couldn't reach us. call us instead."); })
@@ -469,7 +474,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
       msg.textContent = "";
       btn.disabled = true;
       btn.textContent = "opening…";
-      api("POST", "/session").then(function (r) {
+      api("session").then(function (r) {
         // The url signs them in: go straight there, never keep it.
         if (r.status === 200 && r.data.url) return location.assign(r.data.url);
         btn.disabled = false;
@@ -495,7 +500,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
         var btn = this;
         btn.disabled = true;
         btn.textContent = "opening…";
-        api("POST", "/porting_session").then(function (r) {
+        api("porting_session").then(function (r) {
           if (r.status === 200 && r.data.url) return location.assign(r.data.url);
           btn.disabled = false;
           btn.textContent = "finish";
