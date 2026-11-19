@@ -27,16 +27,18 @@
  * tries pause activation until support sorts it out. Live: "manage ur plan"
  * goes to the Gigs portal.
  *
- * Same tokens, button and layout as /order. Not in the sitemap, noindex.
+ * Looks like Gigs Connect (white page, sans headings, bordered option cards,
+ * full-width dark button), so stepping from this page into Connect doesn't
+ * feel like a different site (Nov 19). Our voice, logo and duck stay.
+ * Not in the sitemap, noindex.
  */
 import { webp } from "./lib/assets";
 import fontsCss from "../../public/fonts.css?raw";
-import cheltenham from "./assets/fonts/cheltenham-bold-extra-condensed.otf?url";
-import logo from "./assets/signin/logo-white.png";
+import logo from "./assets/brand/logo.webp";
+import duck from "./assets/brand/duck-dance.png";
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
-const cheltenhamFace = `@font-face{font-family:"Cheltenham";src:url("${cheltenham}") format("opentype");font-weight:700;font-style:normal;font-display:swap;}`;
 
 /* offline-dc-twilio (production), as on /order. PUBLIC_ORDER_API_URL points
    both pages at the sandbox while testing:
@@ -46,7 +48,7 @@ const API_URL = (import.meta.env.PUBLIC_ORDER_API_URL || "https://offline-dc-bac
 /* Shown until the API answers, and if it can't. The API's view has the real ones. */
 const SUPPORT = { phone: "404-716-3605", email: "support@dumb.co" };
 
-const img = { logo: await webp(logo, { width: 280 }) };
+const img = { logo: await webp(logo, { width: 240 }), duck: await webp(duck, { width: 240 }) };
 ---
 <!doctype html>
 <html lang="en">
@@ -56,56 +58,60 @@ const img = { logo: await webp(logo, { width: 280 }) };
   <title>Activate ur phone - dumb.co</title>
   <meta name="robots" content="noindex, nofollow" />
   <meta name="referrer" content="no-referrer" />
-  <meta name="theme-color" content="#0f0f0f" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="icon" type="image/png" href={`${base}favicon.png`} />
   <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
-  <style set:html={fontFaces + cheltenhamFace}></style>
+  <style set:html={fontFaces}></style>
   <style is:inline>
+    /* Matched to Gigs Connect (dumb-co-test-lsr.gigs.com checkout, Nov 19). */
     :root{
-      --bg:#0f0f0f; --surface:#1c1c1a; --line:#3a3a36;
-      --text-strong:#fafaf0; --text-weak:#b4b4ad;
-      --brand:#faf594; --on-brand:#14140c; --error:#ff9b8a;
-      --state-hovered:rgba(15,15,15,.05); --state-pressed:rgba(15,15,15,.1);
-      --headline:"Cheltenham", Georgia, serif;
+      --bg:#ffffff; --surface:#ffffff; --muted-bg:#f6f6f6; --line:#e5e5e5; --line-strong:#cfcfcf;
+      --text-strong:#1f1f1f; --text-weak:#6b6b6b;
+      --brand:#2b2b2b; --on-brand:#ffffff; --error:#c4372b;
+      --radius:10px;
       --body:"Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
     html,body{margin:0; padding:0; background:var(--bg); color:var(--text-strong);}
-    body{font-family:var(--body); font-weight:500; font-size:18px; line-height:26px; -webkit-text-size-adjust:100%;}
+    body{font-family:var(--body); font-weight:400; font-size:17px; line-height:26px; -webkit-text-size-adjust:100%;}
     h1,h2,p,ul,dl,dd{margin:0; padding:0;}
     p{color:var(--text-weak);}
-    a{color:var(--brand);}
+    a{color:var(--text-strong);}
     [hidden]{display:none !important;}
 
-    .logo{position:absolute; left:31px; top:32px; display:block; width:71px; line-height:0;}
-    .logo img{width:100%;}
-    .logo:focus{outline:3px solid var(--brand); outline-offset:4px;}
+    main{max-width:600px; margin:0 auto; padding:32px 24px 32px;}
+    .logo{display:block; width:96px; line-height:0; margin-bottom:32px;}
+    .logo img{width:100%; height:auto;}
+    .logo:focus-visible{outline:2px solid var(--brand); outline-offset:4px;}
 
-    main{max-width:640px; margin:0 auto; padding:112px 24px 48px;}
-    h1{font-family:var(--headline); font-weight:700; font-size:48px; line-height:.95;}
-    h2{font-family:var(--headline); font-weight:700; font-size:28px; line-height:1.1;}
-    .lead{margin-top:16px;}
-    .test{display:inline-block; margin-bottom:16px; padding:2px 10px; border:1px solid var(--brand); border-radius:96px; color:var(--brand); font-size:14px;}
+    h1{font-weight:600; font-size:30px; line-height:1.2; letter-spacing:-.01em;}
+    h2{font-weight:600; font-size:22px; line-height:1.3; margin-top:32px;}
+    .lead{margin-top:12px;}
+    .test{display:inline-block; margin-bottom:16px; padding:2px 10px; border:1px solid var(--line-strong); border-radius:96px; color:var(--text-weak); font-size:13px; line-height:20px;}
 
     .state{display:none;}
     .state.on{display:block;}
 
-    .card{margin-top:32px; padding:24px; background:var(--surface); border-radius:16px;}
-    .details{display:grid; grid-template-columns:auto 1fr; gap:8px 16px;}
-    .details dt{color:var(--text-weak);}
-    .details dd{color:var(--text-strong); overflow-wrap:anywhere;}
+    .card{margin-top:24px; padding:20px 24px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);}
 
-    .check{display:flex; gap:12px; align-items:flex-start; margin-top:24px; cursor:pointer; color:var(--text-strong);}
-    .check input{width:22px; height:22px; margin:2px 0 0; accent-color:var(--brand); flex:none;}
+    /* Label over value, rows split by hairlines (Connect's "Account Details"). */
+    .details{display:block;}
+    .details dt{font-size:14px; line-height:20px; color:var(--text-weak); padding-top:14px;}
+    .details dt:first-child{padding-top:0;}
+    .details dd{color:var(--text-strong); padding:2px 0 14px; border-bottom:1px solid var(--line); overflow-wrap:anywhere;}
+    .details dd:last-child{border-bottom:0; padding-bottom:0;}
+
+    .check{display:flex; gap:12px; align-items:flex-start; margin-top:20px; cursor:pointer; color:var(--text-strong);}
+    .check input{width:20px; height:20px; margin:3px 0 0; accent-color:var(--brand); flex:none;}
 
     .field{display:block; margin-top:24px;}
-    .field__label{display:block; font-size:16px; line-height:22px; color:var(--text-strong);}
+    .field__label{display:block; font-size:16px; line-height:22px; font-weight:600; color:var(--text-strong);}
     .field__hint{display:block; font-size:14px; line-height:20px; color:var(--text-weak);}
     .field input{
       display:block; width:8em; box-sizing:border-box; margin-top:8px;
-      background:var(--bg); color:var(--text-strong); border:1px solid var(--line); border-radius:12px;
-      padding:12px 14px; font:inherit; font-size:22px; letter-spacing:.2em;
+      background:var(--bg); color:var(--text-strong); border:1px solid var(--line-strong); border-radius:8px;
+      padding:12px 14px; font:inherit; font-size:20px; letter-spacing:.2em;
     }
-    .field input:focus{outline:2px solid var(--brand); outline-offset:1px; border-color:transparent;}
+    .field input:focus{outline:2px solid var(--brand); outline-offset:1px;}
     .field input[aria-invalid="true"]{border-color:var(--error);}
 
     .msg{margin-top:16px; color:var(--error);}
@@ -113,45 +119,58 @@ const img = { logo: await webp(logo, { width: 280 }) };
     .info{margin-top:16px;}
     .info:empty{display:none;}
 
-    .actions{margin-top:32px; display:flex; flex-wrap:wrap; gap:16px; align-items:center;}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      background-color:var(--brand); color:var(--on-brand); border:0; cursor:pointer;
-      border-radius:96px; padding:12px 20px 14px; text-decoration:none;
-      font-family:var(--body); font-weight:800; font-size:20px; line-height:1.4;
-      text-transform:lowercase; white-space:nowrap; -webkit-tap-highlight-color:transparent;
-    }
-    @media (hover:hover){ .btn:hover{background-image:linear-gradient(var(--state-hovered), var(--state-hovered));} }
-    .btn:active{background-image:linear-gradient(var(--state-pressed), var(--state-pressed));}
-    .btn:focus{outline:2px solid transparent; outline-offset:2px; box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--brand);}
-    .btn:focus:not(:focus-visible){box-shadow:none; outline:none;}
-    .btn:disabled{opacity:.38; cursor:default;}
-    .link{background:none; border:0; padding:0; font:inherit; color:var(--brand); text-decoration:underline; cursor:pointer;}
+    /* Connect's info box: bordered, an (i) on the left, grey text. */
+    .note{display:flex; gap:14px; align-items:flex-start; margin-top:24px; padding:20px; border:1px solid var(--line); border-radius:var(--radius); color:var(--text-weak);}
+    .note svg{flex:none; width:22px; height:22px; margin-top:2px; color:var(--text-strong);}
 
-    .confirm-wrong{margin-top:24px; padding:16px; border:1px solid var(--line); border-radius:12px;}
+    /* One full-width dark button, like Connect's "Pay Now". */
+    .actions{margin-top:32px; display:flex; flex-direction:column; gap:16px; align-items:stretch;}
+    .btn{
+      display:flex; align-items:center; justify-content:center; box-sizing:border-box; width:100%; min-height:52px;
+      background-color:var(--brand); color:var(--on-brand); border:0; cursor:pointer;
+      border-radius:8px; padding:14px 20px; text-decoration:none;
+      font-family:var(--body); font-weight:600; font-size:17px; line-height:1.4;
+      -webkit-tap-highlight-color:transparent;
+    }
+    @media (hover:hover){ .btn:hover{background-color:#111;} }
+    .btn:active{background-color:#000;}
+    .btn:focus-visible{outline:2px solid var(--brand); outline-offset:3px;}
+    .btn:disabled{background-color:#d6d6d6; color:#ffffff; cursor:default;}
+    .link{align-self:center; background:none; border:0; padding:0; font:inherit; font-size:16px; color:var(--text-weak); text-decoration:underline; cursor:pointer;}
+
+    .confirm-wrong{margin-top:24px; padding:20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--muted-bg);}
     .confirm-wrong[hidden]{display:none;}
     .confirm-wrong p{color:var(--text-strong);}
 
-    .porting{margin-top:24px;}
-    .porting__choices{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
-    .choice{padding:10px 16px; border:1px solid var(--line); border-radius:96px; background:none; color:var(--text-strong); font:inherit; font-size:16px; cursor:pointer;}
-    .choice[aria-pressed="true"]{border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand);}
-    .porting__note{margin-top:12px;}
-    .porting__note:empty{display:none;}
+    /* Number choice: Connect's option cards (title, grey text, chevron). */
+    .options{display:flex; flex-direction:column; gap:16px; margin-top:16px;}
+    .option{
+      display:flex; align-items:center; gap:16px; width:100%; box-sizing:border-box; text-align:left;
+      padding:20px 20px 20px 24px; background:var(--surface); color:inherit; font:inherit;
+      border:1px solid var(--line); border-radius:var(--radius); cursor:pointer;
+    }
+    .option__text{flex:1; display:flex; flex-direction:column; gap:4px;}
+    .option__title{font-weight:600; color:var(--text-strong);}
+    .option__desc{color:var(--text-weak);}
+    .option svg{flex:none; width:20px; height:20px; color:var(--text-strong);}
+    @media (hover:hover){ .option:hover{border-color:var(--line-strong);} }
+    .option[aria-pressed="true"]{border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand);}
+    .option:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
 
-    footer{max-width:640px; margin:0 auto; padding:0 24px 64px; font-size:16px; line-height:22px; color:var(--text-weak);}
+    .duck{display:block; width:120px; height:auto; margin-top:24px;}
+
+    footer{max-width:600px; margin:0 auto; padding:0 24px 48px; font-size:15px; line-height:22px; color:var(--text-weak);}
+    footer a{color:var(--text-weak);}
 
     @media (min-width:760px){
-      .logo{left:96px; top:48px; width:133px;}
-      main{padding-top:160px;}
-      h1{font-size:72px; line-height:.9;}
+      main{padding-top:56px;}
+      h1{font-size:34px;}
     }
   </style>
 </head>
 <body>
-  <a class="logo" href={base}><img src={img.logo} alt="dumb.co" width="133" height="28" /></a>
-
   <main>
+    <a class="logo" href={base}><img src={img.logo} alt="dumb.co" width="96" height="21" /></a>
     <p class="test" data-test hidden>test order</p>
 
     <section class="state on" data-state="loading" aria-live="polite">
@@ -198,18 +217,31 @@ const img = { logo: await webp(logo, { width: 280 }) };
 
     <section class="state" data-state="ready">
       <h1>ready when u are</h1>
-      <p class="lead">tap activate to set up ur line. it opens our network partner's checkout, with ur plan and SIM already filled in. it's $0 there: ur plan is billed by us.</p>
       <p class="info" data-ready-note></p>
       <div class="card">
         <dl class="details" data-details-ready></dl>
-        <div class="porting">
-          <h2>keeping ur old number?</h2>
-          <div class="porting__choices">
-            <button class="choice" type="button" aria-pressed="false" data-port="yes">yes, keep my number</button>
-            <button class="choice" type="button" aria-pressed="false" data-port="no">no, give me a new one</button>
-          </div>
-          <p class="porting__note" data-port-note aria-live="polite"></p>
-        </div>
+      </div>
+      <h2>how will u use ur dumbphone?</h2>
+      <p class="lead">u'll pick one of these again on the next screen.</p>
+      <div class="options">
+        <button class="option" type="button" aria-pressed="false" data-port="new">
+          <span class="option__text">
+            <span class="option__title">get a new number</span>
+            <span class="option__desc">choose this option if u want to use ur dumbphone with a smartphone. ur dumbphone will have its own number and ur smartphone will continue working.</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="option" type="button" aria-pressed="false" data-port="transfer">
+          <span class="option__text">
+            <span class="option__title">transfer my existing number</span>
+            <span class="option__desc">only choose this option if u don't want to use a smartphone anymore. the dumbphone will be ur only device. once ur number is transferred, ur previous plan is cancelled on ur old phone.</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div class="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.5" r=".6" fill="currentColor"/></svg>
+        <p>tap activate to set up ur line. it opens our network partner's checkout, with ur plan and SIM already filled in. it's $0 there: ur plan is billed by us.</p>
       </div>
       <p class="msg" data-activate-msg role="alert"></p>
       <p class="actions"><button class="btn" type="button" data-activate>activate</button></p>
@@ -228,6 +260,7 @@ const img = { logo: await webp(logo, { width: 280 }) };
 
     <section class="state" data-state="live">
       <h1>ur live 🦆</h1>
+      <img class="duck" src={img.duck} alt="dumb.co duck" width="120" height="87" />
       <p class="lead" data-live-lead>ur phone's ready to use.</p>
       <p class="actions"><a class="btn" data-portal>manage ur plan</a></p>
       <p class="info" data-portal-note></p>
@@ -302,6 +335,8 @@ const img = { logo: await webp(logo, { width: 280 }) };
     var BLOCKED = {
       details_wrong: "thanks for flagging it. we've paused activation for this phone until our team fixes ur details.",
       imei_mismatch: "those digits didn't match the phone we sent for this link, so we've paused activation in case it's the wrong box.",
+      // Story 7: the plan's Stripe billing is over before activation.
+      payment_failed: "ur first payment didn't go through, so we've paused activation. reach out and we'll get it sorted.",
     };
 
     // Keeping their old number and the transfer needs them (account number,
@@ -457,14 +492,12 @@ const img = { logo: await webp(logo, { width: 280 }) };
         .then(function () { btn.disabled = false; });
     });
 
-    var PORT_NOTES = {
-      yes: "have these ready: ur old carrier's account number and number transfer PIN. ur old carrier can give u both. don't cancel ur old plan until the transfer's done.",
-      no: "u'll pick a new number in the next step.",
-    };
+    // New number: alongside a smartphone. Transfer: the dumbphone replaces it.
+    // Gigs can't preselect either in Connect, so this only explains the
+    // choice (the text is in the cards); Connect asks it again next.
     $$("[data-port]").forEach(function (b) {
       b.addEventListener("click", function () {
         $$("[data-port]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-        $("[data-port-note]").textContent = PORT_NOTES[b.getAttribute("data-port")];
       });
     });
 
