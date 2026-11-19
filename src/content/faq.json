@@ -49,7 +49,7 @@
     },
     {
       "question": "questions about personal data + security",
-      "answer": "the dumbphone's connection is end-to-end encrypted. we do not log, store, or have access to message content or personal information at any point.",
+      "answer": "the dumbphone supports end-to-end encryption.",
       "category": "general",
       "hidden": false
     },
