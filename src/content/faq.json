@@ -49,7 +49,7 @@
     },
     {
       "question": "questions about personal data + security",
-      "answer": "the dumbphone supports end-to-end encrypted messaging through smart txt, whatsapp, signal, type sync, and contact sync. with these apps and services, we do not log, store, or have access to message content or personal information. regular texts and calls work just like they do on any phone.",
+      "answer": "the dumbphone supports end-to-end encryption via smart txt, whatsapp, signal, type sync, and contact sync. with these apps and services, we do not log, store, or have access to message content or personal information. regular texts and calls work just like they do on any phone.",
       "category": "general",
       "hidden": false
     },
