@@ -1,0 +1,44 @@
+/* ============================================================================
+   BREVO EMAIL WEB FONTS  —  hosted on dumb.co
+   ----------------------------------------------------------------------------
+   This file is served live at:  https://dumb.co/brevo-fonts.css
+   The font files it points to live in this repo's public/fonts/ folder and are
+   served at https://dumb.co/fonts/<filename>.
+
+   USED BY: Brevo email editor only (Manage web fonts -> Custom Font ->
+   "Custom font link"). This is NOT loaded by the dumb.co website itself.
+
+   To apply a font in Brevo, use the exact font-family name shown above each
+   block. Always set a fallback font in the email design — some clients
+   (e.g. Outlook on Windows) ignore custom web fonts.
+   ============================================================================ */
+
+/* --- Helvetica Now Text ExtraBold (weight 800) --------------------------- */
+@font-face {
+  font-family: 'Helvetica Now Text ExtraBold';
+  src: url('https://dumb.co/fonts/HelveticaNowText-ExtraBold.woff2') format('woff2'),
+       url('https://dumb.co/fonts/HelveticaNowText-ExtraBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Max Fett Black (weight 900) ----------------------------------------- */
+@font-face {
+  font-family: 'Max Fett Black';
+  src: url('https://dumb.co/fonts/MaxFett-Black.woff2') format('woff2'),
+       url('https://dumb.co/fonts/MaxFett-Black.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Cheltenham Bold Extra Condensed ------------------------------------- */
+@font-face {
+  font-family: 'Cheltenham Bold Extra Condensed';
+  src: url('https://dumb.co/fonts/Cheltenham-BoldExtraCondensed.woff2') format('woff2'),
+       url('https://dumb.co/fonts/Cheltenham-BoldExtraCondensed.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
