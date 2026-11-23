@@ -1,0 +1,17 @@
+---
+/**
+ * Quiz question 1: "will you keep using a smartphone alongside your
+ * dumbphone?" (dumb.co/mobile, and the start of /activate).
+ * yes / no: attributes for each answer button, e.g. { onclick: "…" } on
+ * /mobile, { "data-answer": "yes" } on /activate.
+ */
+import "./quiz.css";
+import QuizButton from "./QuizButton.astro";
+const { yes = {}, no = {} } = Astro.props;
+---
+<h1 class="quiz-question">will you keep using a smartphone alongside your dumbphone?</h1>
+<div class="quiz-choices">
+  <QuizButton class="quiz-choice" {...yes}>yes, i'm keeping my smartphone</QuizButton>
+  <QuizButton class="quiz-choice" {...no}>no, i'm only going to use the dumbphone</QuizButton>
+</div>
+

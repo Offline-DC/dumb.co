@@ -1,0 +1,58 @@
+/*
+ * Styles for the shared quiz pieces (dumb.co/mobile and /activate). One
+ * place: edit here and both pages change. Values are /mobile's originals.
+ * Every class starts with "quiz-" so it can't clash with either page.
+ */
+/* /mobile's fonts, so the pieces look the same on every page:
+   headings and buttons in Helvetica Now Text Black, card text in the
+   phone's own system font. */
+@font-face{
+  font-family:'Helvetica Now Text';
+  src:url("./fonts/HelveticaNowText-Black.ttf") format("truetype");
+  font-weight:900; font-style:normal; font-display:swap;
+}
+.quiz-question, .quiz-btn{font-family:'Helvetica Now Text', "Helvetica Neue", Helvetica, Arial, sans-serif;}
+.quiz-eyebrow, .quiz-card{font-family:-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;}
+/* line spacing too, so the page around them doesn't change it */
+.quiz-btn, .quiz-card, .quiz-eyebrow{line-height:normal;}
+/* /mobile draws its text with this smoothing (on its body); set it here so
+   Macs render the shared pieces the same on every page */
+.quiz-question, .quiz-btn, .quiz-card, .quiz-eyebrow{-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+
+.quiz-logo{display:flex; align-items:center; height:28px; color:var(--black, #000);}
+.quiz-logo svg{height:100%; width:auto; display:block;}
+
+.quiz-eyebrow{font-size:13px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin:0 0 14px; opacity:.65; text-align:center;}
+.quiz-question{
+  font-weight:800;
+  font-size:clamp(24px,4.4vw,40px); line-height:1.14; letter-spacing:-.01em; margin:0 0 14px;
+  text-transform:lowercase; text-align:center;
+}
+
+.quiz-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;
+  font-weight:800; font-size:16px;
+  padding:17px 30px; border-radius:12px; border:3px solid #000; cursor:pointer; text-decoration:none;
+  box-shadow:5px 5px 0 #000; transition:transform .12s ease, box-shadow .12s ease;
+  background:var(--yellow, #faf594); color:#000; text-transform:lowercase; -webkit-tap-highlight-color:transparent;
+}
+.quiz-btn:hover{transform:translate(-2px,-2px); box-shadow:7px 7px 0 #000;}
+.quiz-btn:active{transform:translate(1px,1px); box-shadow:2px 2px 0 #000;}
+.quiz-btn:focus-visible{outline:2px solid #000; outline-offset:4px;}
+.quiz-btn[disabled]{opacity:.4; cursor:not-allowed; transform:none; box-shadow:5px 5px 0 #000;}
+
+.quiz-choices{display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:8px;}
+.quiz-choice{flex:0 1 auto; min-width:0; max-width:100%; min-height:64px; font-size:17px; white-space:normal; text-align:center;}
+
+.quiz-card{
+  text-align:left; background:rgba(0,0,0,.05); border:3px solid #000; border-radius:16px;
+  padding:24px clamp(18px,4vw,32px); margin:0 0 28px; color:#000;
+}
+.quiz-card p{margin:0 0 14px; line-height:1.55; font-size:15.5px; color:#000;}
+.quiz-card p:last-child{margin-bottom:0;}
+.quiz-list{list-style:none; margin:16px 0 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.quiz-list li{display:flex; align-items:flex-start; gap:10px; font-size:15.5px; font-weight:600; text-align:left;}
+.quiz-list li::before{
+  content:"\2713"; flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%; background:var(--green, #2f9e44); color:#fff; font-size:13px; font-weight:900;
+}

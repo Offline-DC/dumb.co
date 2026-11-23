@@ -4,7 +4,7 @@
  * each built as its own page and run in the browser (src/pages/[...legacy].astro).
  * Adding one: a line here and a <Route> in LegacyApp.tsx.
  *
- * /mobile isn't here: it is public/mobile/index.html, the subscription quiz.
+ * /mobile isn't here: it is src/pages/mobile.astro, the subscription quiz.
  * /signin (and /desktop, /desktop-signin) aren't either: src/site/SignIn.astro.
  *
  * ssr: true renders the page's own component into the HTML at build time

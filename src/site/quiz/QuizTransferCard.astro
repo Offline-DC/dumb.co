@@ -1,0 +1,12 @@
+---
+/**
+ * "we recommend transferring your current phone number." and its card
+ * (/activate after "no, i'm only going to use the dumbphone"). The card text
+ * is the same one dumb.co/mobile's result screen shows (quizCopy.js).
+ */
+import "./quiz.css";
+import { TRANSFER_BODY_HTML } from "./quizCopy.js";
+---
+<h1 class="quiz-question">we recommend transferring your current phone number.</h1>
+<div class="quiz-card" set:html={TRANSFER_BODY_HTML} />
+

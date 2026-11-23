@@ -1,0 +1,22 @@
+---
+/**
+ * "we recommend getting a brand new number on your dumbphone." and its card
+ * (dumb.co/mobile's info screen after "yes, i'm keeping my smartphone"; the
+ * same on /activate). eyebrow: optional line above the heading.
+ */
+import "./quiz.css";
+const { eyebrow } = Astro.props;
+---
+{eyebrow && <p class="quiz-eyebrow">{eyebrow}</p>}
+<h1 class="quiz-question">we recommend getting a brand new number on your dumbphone.</h1>
+<div class="quiz-card">
+  <p>since you'll still have your smartphone, we recommend setting up your dumbphone with a <b>new number</b> instead of transferring your current one over.</p>
+  <p>why: if you transfer your current number to your dumbphone, that number will no longer be on your smartphone. this will cancel your smartphone's cellular plan and it will no longer have service.</p>
+  <p>don't worry, you can still:</p>
+  <ul class="quiz-list">
+    <li>send and receive texts with your current phone number via our smart txt app</li>
+    <li>forward calls from your smartphone</li>
+    <li>sync contacts from your smartphone</li>
+  </ul>
+</div>
+

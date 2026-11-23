@@ -1,0 +1,12 @@
+---
+/**
+ * The quiz's yellow button with the black drop shadow (dumb.co/mobile).
+ * Renders a <button> (default type="button") or, with href, an <a>. Any other
+ * attribute (onclick, data-*, id, disabled…) is passed through.
+ */
+import "./quiz.css";
+const { href, class: extra, type = "button", ...rest } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+<Tag class:list={["quiz-btn", extra]} href={href} type={href ? undefined : type} {...rest}><slot /></Tag>
+
