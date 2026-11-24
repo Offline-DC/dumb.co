@@ -71,8 +71,13 @@ const json = JSON.stringify(siteData).replace(/</g, "\\u003c");
 const strip = (s: string) => s.replace(/\*\*\*?|\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
 const ld: object[] = [{
   "@context": "https://schema.org", "@type": "Organization",
-  name: "dumb.co", url: "https://dumb.co/", email: c.support_email,
+  name: "dumb.co", alternateName: ["Dumbco", "Dumb Co"], legalName: "Offline DC Inc.",
+  url: "https://dumb.co/", email: c.support_email,
   logo: new URL(A.logo, Astro.site ?? "https://dumb.co").href,
+  /* Month Offline is run by dumb.co (SEO agency schema map, Nov 2026) */
+  subOrganization: { "@type": "Organization", name: "Month Offline", url: "https://offline.community/" },
+  /* sameAs: add official third-party profiles here once they exist
+     (Wikipedia, Wikidata, Crunchbase) -- dumb.co has no social profiles */
 }];
 if (section === "faq") ld.push({
   "@context": "https://schema.org", "@type": "FAQPage",
