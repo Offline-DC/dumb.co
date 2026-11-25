@@ -156,7 +156,10 @@ const img = { duck: await webp(duck, { width: 240 }) };
     .quiz{text-align:center;}
     .quiz-actions{display:flex; flex-direction:column; gap:18px; align-items:center; margin-top:4px;}
 
-    .duck{display:block; width:120px; height:auto; margin-top:24px;}
+    .duck{display:block; width:120px; height:auto; margin:4px auto 28px;}
+    .quiz-card.live-porting{margin:40px 0 0;}
+    .live-porting .quiz-actions{margin-top:18px;}
+    [data-portal-note]:empty{display:none;}
 
 
     @media (min-width:760px){
@@ -225,17 +228,25 @@ const img = { duck: await webp(duck, { width: 240 }) };
       </div>
     </section>
 
-    <section class="state" data-state="live">
-      <h1>ur live 🦆</h1>
-      <img class="duck" src={img.duck} alt="dumb.co duck" width="120" height="87" />
-      <p class="lead" data-live-lead>ur phone's ready to use.</p>
-      <p class="actions"><a class="btn" data-portal>manage ur plan</a></p>
-      <p class="info" data-portal-note></p>
-      <div class="card" data-porting-live hidden>
-        <h2>finish keeping ur number</h2>
-        <p class="info" data-porting-live-lead></p>
-        <p class="actions"><button class="btn" type="button" data-porting-go>finish</button></p>
+    <section class="state quiz" data-state="live">
+      <div class="quiz-body">
+        <h1 class="quiz-question">ur live!</h1>
+        <img class="duck" src={img.duck} alt="dumb.co duck" width="120" height="87" />
+        <div class="quiz-card">
+          <p data-live-lead>ur phone's ready to use.</p>
+          <p data-portal-note></p>
+        </div>
+        <div class="quiz-actions">
+          <QuizButton href="#" data-portal>manage ur plan</QuizButton>
+        </div>
+        <div class="quiz-card live-porting" data-porting-live hidden>
+          <p><b>finish keeping ur number</b></p>
+          <p data-porting-live-lead></p>
+          <div class="quiz-actions"><QuizButton data-porting-go>finish</QuizButton></div>
+        </div>
       </div>
+      <!-- same height as the link on the quiz screens, so everything sits where they do -->
+      <div class="quiz-bottom" aria-hidden="true"><span class="quiz-back quiz-back--spacer">&nbsp;</span></div>
     </section>
 
     <section class="state" data-state="blocked">
