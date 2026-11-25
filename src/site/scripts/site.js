@@ -28,6 +28,10 @@ const SITE = JSON.parse(document.getElementById('site-data').textContent);
   function renderCarousel(){
     const img = document.getElementById('wm-img');
     img.src = carouselImgs[carIdx];
+    /* the AVIF <source> wins over img.src wherever AVIF is supported, so it
+       has to follow the slide too */
+    const av = document.getElementById('wm-avif');
+    if(av && SITE.heroesAvif) av.srcset = SITE.heroesAvif[carIdx];
     img.style.setProperty('--hero-pos', HERO_POS[carIdx] || 'center');
     const dots = document.getElementById('wm-dots');
     dots.style.setProperty('--ndots', carouselImgs.length);
@@ -1627,7 +1631,7 @@ function plansDrawer(){}
     const art = frame && frame.querySelector('.pf-art');
     if(!art) return;
     /* one reference to the inlined drawing, not a second copy of it */
-    frame.style.setProperty('--pf-art', 'url("' + art.getAttribute('src') + '")');
+    frame.style.setProperty('--pf-art', 'url("' + (art.currentSrc || art.getAttribute('src')) + '")');
     if(art.complete) warmKeysSoon(300); else art.addEventListener('load', () => warmKeysSoon(300), {once: true});
     window.addEventListener('resize', () => warmKeysSoon(400));
     frame.querySelectorAll('.pf-keys button').forEach(btn => {
