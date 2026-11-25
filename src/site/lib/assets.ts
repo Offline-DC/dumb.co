@@ -22,6 +22,11 @@ import polaroid from "../assets/brand/polaroid.png";
    changes:
      node -e "require('sharp')('src/site/assets/phone/handset.png').webp({quality:90,alphaQuality:70,effort:6}).toFile('src/site/assets/phone/handset-art.webp')" */
 import handsetArt from "../assets/phone/handset-art.webp?url";
+/* the same drawing at 800x2400, made the same way with .resize({width:800})
+   before .webp(). Desktop draws the handset ~218px wide and a phone under
+   2x density at most ~457px, so 800 covers both without upscaling; 2x+
+   phones (455px x 3 = 1365 device px on an iPhone) still get the 1200. */
+import handsetArt800 from "../assets/phone/handset-art-800.webp?url";
 import dpadCluster from "../assets/phone/dpad-cluster.png";
 import planDumb from "../assets/plans/dumb.png";
 import planDumber from "../assets/plans/dumber.png";
@@ -46,6 +51,13 @@ export async function webp(src: ImageMetadata | string, o: Opts = {}): Promise<s
     ...(width ? { width } : {}),
     ...(o.height ? { height: o.height, fit: o.fit ?? "cover" } : {}),
   });
+  return img.src;
+}
+
+/** an optimised AVIF URL, never wider than the original */
+export async function avif(src: ImageMetadata, o: Opts = {}): Promise<string> {
+  const width = o.width ? Math.min(o.width, src.width) : undefined;
+  const img = await getImage({ src, format: "avif", quality: o.quality ?? 50, ...(width ? { width } : {}) });
   return img.src;
 }
 
@@ -82,6 +94,7 @@ export const A = {
      channel was most of the file -- 262 -> 174 KiB, no visible change (no
      pixel off by more than 18/255 on the yellow). See handsetArt above. */
   handset: handsetArt,
+  handset800: handsetArt800,
   /* ONE size on purpose -- no srcset. site.js (liveArt, keyStrokes) copies
      this drawing into a canvas at its naturalWidth and reads key pixels off
      it; with a w-descriptor srcset naturalWidth becomes the CSS size, not the
@@ -106,5 +119,12 @@ export const A = {
      it was 348 KiB, the heaviest thing on the homepage (Oct 28 audit). 70 is
      visually the same at the size the window draws it */
   heroes: await Promise.all(sorted(HEROES).map((m) => webp(m, { width: 1400, quality: 70 }))),
+  /* the same photos as AVIF, served first through <source type="image/avif">
+     with the WebP above as the fallback. The window draws hero-01 730-936px
+     wide (~1460 device px on a retina laptop), so the 960px original can't
+     shrink; the bytes are the denim grain, which WebP spends 287 KiB on. AVIF
+     q50 keeps the weave and glitter at about half that (Nov 25); WebP at a
+     lower quality or with the grain softened visibly flattened the denim. */
+  heroesAvif: await Promise.all(sorted(HEROES).map((m) => avif(m, { width: 1400, quality: 50 }))),
   shopPhotos: await Promise.all(sorted(SHOP).map((m) => webp(m, { width: 1200 }))),
 };

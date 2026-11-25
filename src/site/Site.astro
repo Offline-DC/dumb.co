@@ -45,10 +45,13 @@ const home = COPY.home;
 const BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 const fontFaces = fontsCss.replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("fonts\//g, `url("${base}fonts/`).trim();
 const c = COPY.contact;
+/* where the handset is drawn big enough to need the 1200px file */
+const HANDSET_HI = "(max-width: 760px) and (min-resolution: 2dppx)";
 
 /* what site.js needs that isn't in the markup */
 const siteData = {
   heroes: A.heroes,
+  heroesAvif: A.heroesAvif,
   shopPhotos: A.shopPhotos,
   dpadCluster: A.dpadCluster,
   checkout: COPY.shop.checkout_url,
@@ -117,6 +120,11 @@ if (section === "shop") ld.push({
   <link rel="icon" type="image/png" href={`${base}favicon.png`} />
   <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
   <link rel="apple-touch-icon" href={`${base}favicon.png`} />
+  {/* gtag.js comes from googletagmanager.com and sends its hits to
+      google-analytics.com: open both connections up front (Lighthouse,
+      Nov 17: ~140ms of desktop LCP) */}
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://www.google-analytics.com" />
   <style is:inline set:html={fontFaces} />
   {/* the weight the nav and headings are set in: fetch it with the HTML,
       not after the CSS that names it has been parsed */}
@@ -126,10 +134,12 @@ if (section === "shop") ld.push({
       phone's first bytes on a photo it isn't drawing */}
   {section
     ? <link rel="preload" as="image" href={section === "shop" ? A.shopPhotos[0] : A.logo} fetchpriority="high" />
-    : <link rel="preload" as="image" href={A.heroes[0]} media="(min-width: 761px)" fetchpriority="high" />}
+    : <link rel="preload" as="image" href={A.heroesAvif[0]} type="image/avif" media="(min-width: 761px)" fetchpriority="high" />}
   {/* ...and on a phone, the handset IS the home page, and the menu waits for
       it (.art-ready), so it goes first */}
-  {!section && <link rel="preload" as="image" href={A.handset} media="(max-width: 760px)" fetchpriority="high" />}
+  {/* same split as the <picture> around .pf-art: the 1200 only for 2x+ phones */}
+  {!section && <link rel="preload" as="image" href={A.handset} media={HANDSET_HI} fetchpriority="high" />}
+  {!section && <link rel="preload" as="image" href={A.handset800} media="(max-width: 760px) and (max-resolution: 1.99dppx)" fetchpriority="high" />}
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonical} />
@@ -218,6 +228,7 @@ if (section === "shop") ld.push({
             {section
               ? <source data-hold srcset={BLANK_GIF} />
               : <source data-hold media="(max-width: 760px)" srcset={BLANK_GIF} />}
+            <source id="wm-avif" type="image/avif" srcset={A.heroesAvif[0]} />
             <img id="wm-img" src={A.heroes[0]} alt="dumb.co" />
           </picture>
           <div class="wm-arrow wm-next" onclick="carouselStep(1)">›</div>
@@ -238,7 +249,13 @@ if (section === "shop") ld.push({
         <div class="pf-screen" id="tcl-screen"><div class="pmn"><div class="pmn-list">{NAV.map((n, i) => (
           <a class={`pmn-row${i === 0 ? " on" : ""}`} data-key={n.key} href={`${base}${n.slug}`} onclick={`phonePick(${i}, event)`}>{n.mlabel ?? n.label.toLowerCase()}</a>
         ))}</div></div></div>
-        <img class="pf-art" src={A.handset} width="1200" height="3600" alt="dumbphone 2" />
+        {/* 800x2400 everywhere but a 2x+ phone. No w-descriptors (see
+            A.handset in lib/assets.ts): each source is 1x, so naturalWidth
+            stays the file's pixels and site.js's canvas maths still holds. */}
+        <picture>
+          <source media={HANDSET_HI} srcset={A.handset} />
+          <img class="pf-art" src={A.handset800} width="1200" height="3600" alt="dumbphone 2" />
+        </picture>
         <div class="pf-keys">
           <button type="button" class="k-up"    aria-label="up"     onclick="teamKey('up')">&#8593;</button>
           <button type="button" class="k-left"  aria-label="left"   onclick="teamKey('left')">&#8592;</button>
