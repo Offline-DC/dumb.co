@@ -109,6 +109,8 @@
   /* Danny's line is the real fine print; the redesign watermark sits under it,
      dimmer, and comes out when this stops being a prototype. */
   .ns-label.ns-wip{margin-top:2px; color:var(--text-weak);}
+  /* legal-entity line: present for GSMA, meant to be barely there */
+  .ns-legal{color:var(--text-weak);}
 
   /* ---------- HOME ---------- */
   #home{
